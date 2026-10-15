@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Campaign",
+    "slug": "campaign-amplification",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FAF8F3"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.campaignamplification.mobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#185544"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.campaignamplification.mobile"
+    },
+    "web": {
+      "favicon": "./assets/icon.png",
+      "name": "Campaign Amplification",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Choose campaign and advertising images from your library.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ],
+      "expo-font"
+    ],
+    "scheme": "amplify",
+    "description": "Community-funded message amplification. All payments and advertising results are simulated."
+  }
+}

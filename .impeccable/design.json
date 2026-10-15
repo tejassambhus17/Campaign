@@ -1,0 +1,332 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-15T20:57:19.267446+00:00",
+  "title": "Design System: Campaign",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Primary",
+        "canonical": "#2D4ED8",
+        "tonalRamp": [
+          "oklch(15% 0.2137 267.17)",
+          "oklch(26% 0.2137 267.17)",
+          "oklch(38% 0.2137 267.17)",
+          "oklch(49% 0.2137 267.17)",
+          "oklch(61% 0.2137 267.17)",
+          "oklch(72% 0.2137 267.17)",
+          "oklch(84% 0.2137 267.17)",
+          "oklch(95% 0.2137 267.17)"
+        ]
+      },
+      "primary-container": {
+        "role": "primary",
+        "displayName": "Primary Container",
+        "canonical": "#EEF1FC",
+        "tonalRamp": [
+          "oklch(15% 0.0151 273.85)",
+          "oklch(26% 0.0151 273.85)",
+          "oklch(38% 0.0151 273.85)",
+          "oklch(49% 0.0151 273.85)",
+          "oklch(61% 0.0151 273.85)",
+          "oklch(72% 0.0151 273.85)",
+          "oklch(84% 0.0151 273.85)",
+          "oklch(95% 0.0151 273.85)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Background",
+        "canonical": "#F6F5F0",
+        "tonalRamp": [
+          "oklch(15% 0.0067 97.35)",
+          "oklch(26% 0.0067 97.35)",
+          "oklch(38% 0.0067 97.35)",
+          "oklch(49% 0.0067 97.35)",
+          "oklch(61% 0.0067 97.35)",
+          "oklch(72% 0.0067 97.35)",
+          "oklch(84% 0.0067 97.35)",
+          "oklch(95% 0.0067 97.35)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "#FFFFFF",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#17252E",
+        "tonalRamp": [
+          "oklch(15% 0.0257 237.30)",
+          "oklch(26% 0.0257 237.30)",
+          "oklch(38% 0.0257 237.30)",
+          "oklch(49% 0.0257 237.30)",
+          "oklch(61% 0.0257 237.30)",
+          "oklch(72% 0.0257 237.30)",
+          "oklch(84% 0.0257 237.30)",
+          "oklch(95% 0.0257 237.30)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Text",
+        "canonical": "#24333E",
+        "tonalRamp": [
+          "oklch(15% 0.0281 240.57)",
+          "oklch(26% 0.0281 240.57)",
+          "oklch(38% 0.0281 240.57)",
+          "oklch(49% 0.0281 240.57)",
+          "oklch(61% 0.0281 240.57)",
+          "oklch(72% 0.0281 240.57)",
+          "oklch(84% 0.0281 240.57)",
+          "oklch(95% 0.0281 240.57)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#59666D",
+        "tonalRamp": [
+          "oklch(15% 0.0194 231.25)",
+          "oklch(26% 0.0194 231.25)",
+          "oklch(38% 0.0194 231.25)",
+          "oklch(49% 0.0194 231.25)",
+          "oklch(61% 0.0194 231.25)",
+          "oklch(72% 0.0194 231.25)",
+          "oklch(84% 0.0194 231.25)",
+          "oklch(95% 0.0194 231.25)"
+        ]
+      },
+      "separator": {
+        "role": "neutral",
+        "displayName": "Separator",
+        "canonical": "#DDE1E5",
+        "tonalRamp": [
+          "oklch(15% 0.0070 247.90)",
+          "oklch(26% 0.0070 247.90)",
+          "oklch(38% 0.0070 247.90)",
+          "oklch(49% 0.0070 247.90)",
+          "oklch(61% 0.0070 247.90)",
+          "oklch(72% 0.0070 247.90)",
+          "oklch(84% 0.0070 247.90)",
+          "oklch(95% 0.0070 247.90)"
+        ]
+      },
+      "outline": {
+        "role": "neutral",
+        "displayName": "Outline",
+        "canonical": "#7B868E",
+        "tonalRamp": [
+          "oklch(15% 0.0177 239.29)",
+          "oklch(26% 0.0177 239.29)",
+          "oklch(38% 0.0177 239.29)",
+          "oklch(49% 0.0177 239.29)",
+          "oklch(61% 0.0177 239.29)",
+          "oklch(72% 0.0177 239.29)",
+          "oklch(84% 0.0177 239.29)",
+          "oklch(95% 0.0177 239.29)"
+        ]
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "Accent",
+        "canonical": "#B83F2C",
+        "tonalRamp": [
+          "oklch(15% 0.1599 31.54)",
+          "oklch(26% 0.1599 31.54)",
+          "oklch(38% 0.1599 31.54)",
+          "oklch(49% 0.1599 31.54)",
+          "oklch(61% 0.1599 31.54)",
+          "oklch(72% 0.1599 31.54)",
+          "oklch(84% 0.1599 31.54)",
+          "oklch(95% 0.1599 31.54)"
+        ]
+      },
+      "accent-container": {
+        "role": "secondary",
+        "displayName": "Accent Container",
+        "canonical": "#F9EEE8",
+        "tonalRamp": [
+          "oklch(15% 0.0144 50.80)",
+          "oklch(26% 0.0144 50.80)",
+          "oklch(38% 0.0144 50.80)",
+          "oklch(49% 0.0144 50.80)",
+          "oklch(61% 0.0144 50.80)",
+          "oklch(72% 0.0144 50.80)",
+          "oklch(84% 0.0144 50.80)",
+          "oklch(95% 0.0144 50.80)"
+        ]
+      },
+      "error": {
+        "role": "secondary",
+        "displayName": "Error",
+        "canonical": "#B3261E",
+        "tonalRamp": [
+          "oklch(15% 0.1783 28.70)",
+          "oklch(26% 0.1783 28.70)",
+          "oklch(38% 0.1783 28.70)",
+          "oklch(49% 0.1783 28.70)",
+          "oklch(61% 0.1783 28.70)",
+          "oklch(72% 0.1783 28.70)",
+          "oklch(84% 0.1783 28.70)",
+          "oklch(95% 0.1783 28.70)"
+        ]
+      },
+      "success": {
+        "role": "secondary",
+        "displayName": "Success",
+        "canonical": "#216146",
+        "tonalRamp": [
+          "oklch(15% 0.0793 162.20)",
+          "oklch(26% 0.0793 162.20)",
+          "oklch(38% 0.0793 162.20)",
+          "oklch(49% 0.0793 162.20)",
+          "oklch(61% 0.0793 162.20)",
+          "oklch(72% 0.0793 162.20)",
+          "oklch(84% 0.0793 162.20)",
+          "oklch(95% 0.0793 162.20)"
+        ]
+      },
+      "warning": {
+        "role": "secondary",
+        "displayName": "Warning",
+        "canonical": "#785616",
+        "tonalRamp": [
+          "oklch(15% 0.0893 78.59)",
+          "oklch(26% 0.0893 78.59)",
+          "oklch(38% 0.0893 78.59)",
+          "oklch(49% 0.0893 78.59)",
+          "oklch(61% 0.0893 78.59)",
+          "oklch(72% 0.0893 78.59)",
+          "oklch(84% 0.0893 78.59)",
+          "oklch(95% 0.0893 78.59)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Editorial display",
+        "purpose": "Home and selected reading moments."
+      },
+      "title": {
+        "displayName": "Functional title",
+        "purpose": "Native utility screen identity."
+      }
+    },
+    "shadows": [],
+    "motion": [],
+    "breakpoints": [
+      {
+        "name": "content-max",
+        "value": "640px"
+      },
+      {
+        "name": "creation-header-wrap",
+        "value": "350px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Native 48dp action translated for the documentation panel.",
+      "html": "<button class=\"ds-button-primary\">Continue</button>",
+      "css": ".ds-button-primary { background:#2D4ED8; color:#FFFFFF; min-height:48px; padding:12px 18px; border:0; border-radius:9px; font:700 15px Manrope,sans-serif; } .ds-button-primary:hover { opacity:.9; } .ds-button-primary:active { opacity:.75; } .ds-button-primary:focus-visible { outline:2px solid #2D4ED8; outline-offset:3px; }"
+    },
+    {
+      "name": "Secondary button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Native 48dp action translated for the documentation panel.",
+      "html": "<button class=\"ds-button-secondary\">Continue</button>",
+      "css": ".ds-button-secondary { background:#EEF1FC; color:#2D4ED8; min-height:48px; padding:12px 18px; border:0; border-radius:9px; font:700 15px Manrope,sans-serif; } .ds-button-secondary:hover { opacity:.9; } .ds-button-secondary:active { opacity:.75; } .ds-button-secondary:focus-visible { outline:2px solid #2D4ED8; outline-offset:3px; }"
+    },
+    {
+      "name": "Ghost button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Native 48dp action translated for the documentation panel.",
+      "html": "<button class=\"ds-button-ghost\">Continue</button>",
+      "css": ".ds-button-ghost { background:transparent; color:#2D4ED8; min-height:48px; padding:12px 18px; border:0; border-radius:9px; font:700 15px Manrope,sans-serif; } .ds-button-ghost:hover { opacity:.9; } .ds-button-ghost:active { opacity:.75; } .ds-button-ghost:focus-visible { outline:2px solid #2D4ED8; outline-offset:3px; }"
+    },
+    {
+      "name": "Labeled input",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Persistent label, stronger boundary, focused primary outline and native 52dp minimum.",
+      "html": "<label class=\"ds-label\">Campaign title<input class=\"ds-field\" placeholder=\"Give your message a title\"></label>",
+      "css": ".ds-label { display:grid; gap:7px; color:#17252E; font:600 14px Manrope,sans-serif; } .ds-field { min-height:52px; padding:0 15px; border:1px solid #7B868E; border-radius:8px; background:#FFFFFF; color:#17252E; font:400 16px Manrope,sans-serif; } .ds-field::placeholder { color:#59666D; } .ds-field:hover { border-color:#17252E; } .ds-field:focus-visible { outline:none; border-color:#2D4ED8; }"
+    },
+    {
+      "name": "Category chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "48dp discovery category, selected through primary color.",
+      "html": "<button class=\"ds-chip\" aria-pressed=\"true\">Education</button>",
+      "css": ".ds-chip { min-height:48px; padding:12px 14px; border:1px solid #DDE1E5; border-radius:8px; background:#FFFFFF; color:#17252E; font:600 13px Manrope,sans-serif; } .ds-chip[aria-pressed=\"true\"] { background:#2D4ED8; border-color:#2D4ED8; color:#FFFFFF; } .ds-chip:hover { opacity:.9; } .ds-chip:active { opacity:.75; } .ds-chip:focus-visible { outline:2px solid #2D4ED8; outline-offset:3px; }"
+    },
+    {
+      "name": "Campaign card",
+      "kind": "card",
+      "refersTo": "campaign-card",
+      "description": "Real content grouping; photography supplied by campaign data in the app.",
+      "html": "<article class=\"ds-card\"><span>Education</span><h3>A wider audience for learning</h3><p>By Open Chapter Demo</p><a href=\"#campaign\">Read the campaign</a></article>",
+      "css": ".ds-card { max-width:353px; padding:16px; border:1px solid #DDE1E5; border-radius:14px; background:#FFFFFF; color:#17252E; font:400 14px/1.5 Manrope,sans-serif; } .ds-card span,.ds-card p { color:#59666D; } .ds-card h3 { margin:8px 0; font:600 26px/29px Newsreader,Georgia,serif; } .ds-card a { display:inline-flex; align-items:center; min-height:48px; color:#2D4ED8; font-weight:700; } .ds-card a:hover { text-decoration-thickness:2px; } .ds-card a:focus-visible { outline:2px solid #2D4ED8; }"
+    },
+    {
+      "name": "Five tab navigation",
+      "kind": "nav",
+      "description": "Stable native destinations; selected tonal indicator shown in the panel translation.",
+      "html": "<nav class=\"ds-tabs\" aria-label=\"Main\"><a href=\"#home\" aria-current=\"page\">Home</a><a href=\"#explore\">Explore</a><a href=\"#create\">Create</a><a href=\"#activity\">Activity</a><a href=\"#profile\">Profile</a></nav>",
+      "css": ".ds-tabs { display:flex; padding:8px; background:#FFFFFF; border-top:1px solid #DDE1E5; font:600 10px Manrope,sans-serif; } .ds-tabs a { display:flex; flex:1; min-height:48px; align-items:center; justify-content:center; color:#59666D; text-decoration:none; } .ds-tabs a[aria-current] { color:#2D4ED8; background:#EEF1FC; border-radius:8px; } .ds-tabs a:hover { color:#2D4ED8; } .ds-tabs a:focus-visible { outline:2px solid #2D4ED8; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Civic Publication",
+    "overview": "Stories use a Read mode; discovery combines content-led persuasion with browsing; creation, checkout, Activity, Profile, review and reports use Operate. Personality comes from photographs, Newsreader story typography, ultramarine actions and precise rules, rather than repeated slogans, decorative labels or nested panels.",
+    "keyCharacteristics": [
+      "Real campaign photography and selective editorial typography.",
+      "Ultramarine actions on warm paper, with quiet structural separators.",
+      "Compact utilities, persistent context and explicit financial provenance.",
+      "Native safe areas, scalable text and touch targets of at least 48dp."
+    ],
+    "rules": [
+      {
+        "name": "The Boundary Rule",
+        "body": "Use the stronger outline token for input boundaries. The pale separator belongs to decorative rules and containers. Focus uses primary; errors use error.",
+        "section": "colors"
+      },
+      {
+        "name": "The Task Rule",
+        "body": "Reserve editorial display type for reading and selected discovery moments. Payment, editing, account and reporting controls use functional type.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "Do preserve authored story structure, public evidence and mandatory funding disclosures.",
+      "Do reserve dock and tab space so essential content remains reachable.",
+      "Do pair monetary and delivery figures with truthful estimated or simulated provenance.",
+      "Do verify Android composition at 360, 393 and 411 logical pixels and font scale 1.3."
+    ],
+    "donts": [
+      "Don't use oversized editorial headings on utility screens.",
+      "Don't replace campaign photography with unrelated decorative illustrations.",
+      "Don't add repeated slogans, nested panels or labels without a useful purpose.",
+      "Don't treat screenshot review as physical-device, screen-reader or human-usability certification."
+    ]
+  }
+}

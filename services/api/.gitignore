@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+data/
+.demo-credentials.json
+.env
+

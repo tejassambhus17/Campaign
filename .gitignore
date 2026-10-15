@@ -1,41 +1,76 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
-# dependencies
+# Dependencies and generated output
 node_modules/
-
-# Expo
 .expo/
 dist/
+dist-android/
 web-build/
-expo-env.d.ts
-
-# Native
+build/
+.gradle/
 .kotlin/
-*.orig.*
-*.jks
+*.tsbuildinfo
+expo-env.d.ts
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage/
+
+# Secrets and private environment configuration (sanitized examples are source)
+.env
+.env.*
+!.env.example
+!.env.*.example
+.demo-credentials.json
+*.pem
+*.key
 *.p8
 *.p12
-*.key
+*.pfx
+*.jks
+*.keystore
 *.mobileprovision
+credentials.json
 
-# Metro
-.metro-health-check*
-
-# debug
+# Local state, SQLite data/sidecars, logs and browser/device data
+/services/api/data/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.sqlite3-*
+*.log
 npm-debug.*
 yarn-debug.*
 yarn-error.*
-
-# macOS
+.metro-health-check*
 .DS_Store
-*.pem
+Thumbs.db
+.idea/
+.vscode/
 
-# local env files
-.env*.local
+# Machine-local tools, emulator images, captures, builds and test evidence
+/tools/
+/tmp/
+/artifacts/
+*.apk
+*.aab
+*.ipa
+*.mp4
+*.mov
+*.webm
+*.zip
+*.7z
+local.properties
 
-# typescript
-*.tsbuildinfo
+# Expo Continuous Native Generation; app config + plugins reproduce these
+/apps/mobile/android/
+/apps/mobile/ios/
 
-# generated native folders
-/ios
-/android
+# Organizer material stays local until redistribution permission is confirmed
+/Hackathon_Requirements.pdf
