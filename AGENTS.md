@@ -56,6 +56,8 @@ The October 16 attached autonomous redesign directive supersedes the earlier vis
 
 Cloud accounts, paid resources and external hosting remain deferred. An INTERNAL-TEST artifact signed with the Android Debug certificate is not a production release. Verify its installed Metro-independent launch and separate backend reachability before claiming either. This authorization does not include Telegram messages or submission.
 
+The later October 16 source-backup task established root Git on `main`, tracking `origin/main` in the existing private `tejassambhus17/Campaign` repository. The original mobile scaffold remains in its ancestry; old nested Git metadata is preserved under ignored `tmp/github-backup/mobile-original.git`. Use root Git for future commits. Keep organizer PDF/video, credentials, local databases/uploads, toolchains and generated artifacts excluded as documented in `docs/GITHUB_BACKUP.md`. No application behavior, global Git setting, hosting or deployment was changed by the backup; preserve history and never force-push.
+
 ## Documentation and completion
 
 - `AGENTS.md` holds durable behavioral instructions; `INIT.md` holds startup and environment guidance; `PROJECT_CONTEXT.md` holds product knowledge, requirements, architecture, and the decision log.

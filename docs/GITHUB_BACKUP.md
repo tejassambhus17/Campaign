@@ -58,6 +58,30 @@ blobs. No live secrets were found; exact staged-file coverage and byte compariso
 pass. Existing upstream license whitespace and API trailing blank lines were left
 unchanged. Auditing source disclosure does not establish production security.
 
+## Completed upload
+
+The first source push succeeded on October 16, 2026. GitHub's API and remote
+references verified commit `42b7edbe953b0c6b9f9faa3c11d14d1ffd68b9b0`, with
+the original scaffold commit as its parent and all 102 source files included.
+`main` tracks `origin/main`. A normal follow-up documentation commit records this
+result; no commit was amended and no force-push was used. Current state is visible
+at the repository URL above and through ordinary root Git commands:
+
+```powershell
+git status --short --branch
+git log -3 --oneline
+git remote -v
+git rev-parse HEAD
+git ls-remote --heads origin main
+```
+
+Repository-local author configuration uses the authenticated account's GitHub
+no-reply address for new commits. Original author metadata remains unchanged.
+Existing Git Credential Manager handles Git authentication; no new credential is
+stored in project source or global Git settings. Local audit/verification reports
+are under ignored `tmp/github-backup/`. There is no remaining backup blocker.
+The API and preview were left running. No CI, deployment or hosting was enabled.
+
 ## Git safety
 
 The pre-existing mobile scaffold history must be preserved when consolidating the

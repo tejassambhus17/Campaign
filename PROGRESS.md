@@ -2,7 +2,7 @@
 
 Updated October 16, 2026 (Asia/Calcutta).
 
-## GitHub source backup: verified local preparation
+## Completed GitHub source backup
 
 The latest user instruction authorizes connecting this existing project to the
 already-created **private Campaign** repository, with no application development,
@@ -15,10 +15,17 @@ commit and no remote. Root `main` now retains that exact commit
 under ignored `tmp/github-backup/mobile-original.git`. GitHub CLI was absent, so
 an official portable CLI was installed and checksum-verified under ignored `tools/`.
 Existing Git Credential Manager authentication verifies owner `tejassambhus17`
-and <https://github.com/tejassambhus17/Campaign> as **private**. The repository has
-no branches or remote references, so there is no remote history to reconcile.
+and <https://github.com/tejassambhus17/Campaign> as **private**. Before the initial
+push, the repository had no branches or remote references, so there was no remote
+history to reconcile.
 The redundant device-login flow was cancelled; no new login or global Git change
-is needed. Remote connection and the initial push remain the next Git steps.
+was needed. `origin` points to the verified existing repository and the source
+push succeeded. Local `main` tracks `origin/main`; Git remote references and the
+GitHub API both verified source commit
+`42b7edbe953b0c6b9f9faa3c11d14d1ffd68b9b0`, whose parent is the exact original
+scaffold commit. The repository remains private. A follow-up documentation commit
+records this completed milestone; the latest local/remote hash is available with
+`git rev-parse HEAD` and `git ls-remote --heads origin main`.
 
 The source-only ignore rules exclude credentials, database/uploads, toolchains,
 generated native/build/test artifacts, APKs, video and the organizer PDF. Local
@@ -30,8 +37,12 @@ with only normal Git CRLF normalization, no gitlinks and no missing/extra source
 Normal author email metadata remains in the preserved original commit. All 46
 frozen application inputs still match their accepted hashes;
 TypeScript and ESLint pass for this backup preparation. No app logic, UI, APIs,
-database records, services or unrelated projects were changed. Security/staging
-and remote verification are tracked in [the backup guide](docs/GITHUB_BACKUP.md).
+database records, services or unrelated projects were changed. API and preview
+health checks pass without restarting either service. No GitHub Actions,
+deployment, new repository or hackathon submission was created. There is no
+remaining GitHub backup blocker. Security/staging and remote verification are
+tracked in [the backup guide](docs/GITHUB_BACKUP.md); detailed audit and remote
+proofs remain local under ignored `tmp/github-backup/`.
 
 ## Completed local milestone: native redesign and delivery preparation
 
