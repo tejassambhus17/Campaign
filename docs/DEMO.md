@@ -1,5 +1,22 @@
 # Complete product demonstration
 
+## Active reference redesign
+
+The subsequent product-quality pass has implemented the connected creation/correction/backing/receipt/report flow and completed selected source/native verification. Its current artifacts and exact verification scope are in [PROGRESS.md](../PROGRESS.md) and [PRODUCT_QUALITY.md](PRODUCT_QUALITY.md). Functional QA screenshots do not resume filming; no current-quality video is claimed.
+
+The subsequent product-quality pass has implemented the connected creation/correction/backing/receipt/report flow and completed selected source/native verification. Its current artifacts and exact verification scope are in [PROGRESS.md](../PROGRESS.md) and [PRODUCT_QUALITY.md](PRODUCT_QUALITY.md). Functional QA screenshots do not resume filming; no current-quality video is claimed.
+
+**USER HOLD — recording and demo production stopped.** Further application
+changes are forthcoming. The replacement film is incomplete; partial footage and
+the saved Story draft are preserved. Do not resume recording, narration, encoding,
+assembly or demo campaign mutations until explicit human authorization. Current
+black-pass2 Android checks are scoped in [PROGRESS.md](../PROGRESS.md). Existing
+APKs and visual reviews are checkpoint evidence before forthcoming changes. None
+of the historical video results below verifies the replacement UI. Keep the
+original MP4 unchanged.
+
+## Historical civic-publication demonstration
+
 Updated October 16, 2026. The [complete 22-scene native demo](../artifacts/demo/campaign-native-demo-INTERNAL-TEST.mp4) is recorded, assembled and played through to the end. It follows one fictional campaign from creation to final reporting on the accepted x86_64 INTERNAL-TEST APK. Read [metadata](../artifacts/demo/campaign-native-demo-INTERNAL-TEST.mp4.json), [REQUIREMENTS.md](../REQUIREMENTS.md) and [DELIVERY.md](DELIVERY.md) for exact evidence and delivery limits.
 
 The current authorized work includes the redesigned native application, local embedded-JavaScript INTERNAL-TEST APK and complete demo production. Cloud accounts and external hosting remain deferred. Both final x86_64 and ARM64 internal artifacts are packaged. The exact final x86_64 APK passed Metro-off cold launch, internal connection controls, offline device-draft save/recovery and compact/font-scale checks on the owned AVD; see [final native acceptance](../artifacts/android/internal-acceptance/final-build/NATIVE_RESULTS.md). ARM64 physical-device testing remains unverified. Exact artifact hashes and signing/backend boundaries are maintained in [RELEASE_READINESS.md](../RELEASE_READINESS.md).

@@ -1,5 +1,68 @@
 # Native redesign execution
 
+**User hold, October 16:** Recording and demo production are stopped pending further application changes. Partial footage and the saved Story draft are preserved. Resume only on explicit human authorization; earlier recording plans below are superseded. Existing builds and visual reviews retain their exact checkpoint scope.
+
+## Current iteration: compact Light and pure-black Dark
+
+The later Product Quality Addendum reopens source for targeted workflow refinements within this same design. Creation checklist/field guidance, truthful persistence, editorial/ad preview separation, source readability, configured checkout and private receipt/report actions are tracked in [docs/PRODUCT_QUALITY.md](docs/PRODUCT_QUALITY.md) and [PROGRESS.md](PROGRESS.md). All black-pass2 artifact/verdict claims below retain their historical checkpoint scope. Recording remains held.
+
+The bounded quality pass now passes source gates and selected native confirmation. The [first addendum workflow](artifacts/product-quality/after/NATIVE_RESULTS.md) covers correction through simulated completion/report; the [corrected quality-pass2 checks](artifacts/product-quality/pass2/NATIVE_RESULTS.md) cover the exact updated APK's keyboard/footer, receipt and Metro-off restore. The [fresh pictured review](artifacts/product-quality/FLOW_REVIEW.md) confirms the editor footer correction in both themes at normal/enlarged text. Physical/human/judge-backend and current-video gates remain open; no new visual direction or filming is authorized by these results.
+
+October 16: the user's reference replaces the rejected civic-publication look.
+The subsequent explicit correction also rejects green-tinted Dark: current Dark
+uses pure black #000000 and neutral charcoal surfaces/header/containers, with
+mint confined to accents/actions. Light retains the mint-and-charcoal reference.
+The PDF remains authoritative. The 102-file clean source checkpoint is
+`artifacts/checkpoints/before-reference-redesign-20261016-101133`, root baseline
+`b300d55`. Fresh incumbent captures remain in `artifacts/reference-redesign/before/`.
+
+Source preserves Expo/FastAPI, five tabs, exact creation order, financial/privacy
+and lifecycle rules. Shared semantic colors/styles and one persisted device store
+provide System/Light/Dark above existing session/query/navigation. Discovery,
+reading/backing, creation/preview, Activity/account/review and reports consume it.
+New helpers provide safe scoped Continue draft, approved audience content, live
+fee/net-budget/reach context and a journey with real available dates.
+
+Actual Impeccable `context` ran successfully through its project-local cache.
+Product Design reference translation/preflight and screenshot audit plus native
+Operate/Android/craft-floor guidance were used. No HTML/CSS detector runs on RN.
+Fresh documenter extraction replaces DESIGN.md and its sidecar with source-based
+Light/black-Dark tokens; its render comparison covers Home/Detail only so far.
+The fresh independent [finish review](artifacts/reference-redesign/FINISH_REVIEW.md)
+returned **ship** for all 12 supplied core phone captures; no material fixes remain
+within that visual scope. Unpictured workflows and video retain separate gates.
+
+The [first installed batch](artifacts/reference-redesign/after-pass1/NATIVE_RESULTS.md)
+found four P1s: Home funding below the fold, scaled checkout label clipping,
+collapsed scaled detail funding and actual Gboard hiding a focused field. The
+green-Dark images are explicitly rejected visual evidence. One correction batch
+compacts the required Home hero, removes row-only flex from column docks, enables
+Android keyboard height avoidance, and applies pure-black Dark/native splash.
+Source review found no material regression within these corrections.
+
+Corrected checks: frontend **50/50** (final run 499.9563ms), backend **30/30**
+(12.032s), TypeScript, lint, online Expo compatibility, Doctor **20/20**, web and
+Android/Hermes exports pass. Both tagged [black pass2 APKs](artifacts/reference-redesign/BUILD_INSPECTION.json)
+are built with embedded byte-identical Hermes and verified fonts/licenses/signing.
+Their 50 source inputs match digest
+`31def764edeefb1d1d3a03cdecfadb9353e2ae5992b03fe0cbf8969d8376d543`.
+
+Current installed x86 `45F0D82B…` proof: pure-black Home at 393dp shows full photo,
+identity, funding, progress and estimated reach above five tabs; scaled 360dp
+detail and checkout docks show full context/labels; actual Gboard leaves focused
+summary/cursor and Back/Continue visible. Root personally opened captures
+01/06/08/10 under `artifacts/reference-redesign/after-pass2/`. Its exact Metro-off
+force-stop/cold launch loads local API data and restores Black/ordinary identity;
+[cold-launch proof](artifacts/reference-redesign/after-pass2/cold-launch.json)
+records the scope. Metro was then restored; later QA is not all Metro-off.
+
+Remaining local work: broader appearance/state continuity, connected new native
+journey and updated actual video. ARM64 is packaged but
+uninstalled. Physical devices, screen readers/human tests, external connectivity,
+production signing/hosting and Telegram confirmation remain separate gates.
+
+## Historical civic-publication iteration
+
 Updated October 16, 2026. Full source redesign, bounded corrections and targeted native retest passed. Both final INTERNAL-TEST APKs are built; final x86_64 Metro-off native acceptance passes. The complete 22-scene native video is encoded and passes full playback plus bounded frame/privacy review.
 
 Recoverable checkpoint: artifacts/checkpoints/before-redesign-20261016-014052 contains73 source/config/document files, original Git HEAD, binary working-tree diff, status and SHA256 manifest. The existing mobile repository's modified/untracked work was preserved; no reset/clean/commit/global Git setting was used. Root/API are not Git repositories.

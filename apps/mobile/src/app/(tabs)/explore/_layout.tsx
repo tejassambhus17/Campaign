@@ -1,4 +1,6 @@
 import { Stack } from "expo-router";
+import { useTheme } from "../../../components/ui";
 export default function ExploreLayout() {
-  return <Stack screenOptions={{ headerShown: false }} />;
+  const { colors } = useTheme();
+  return <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }} />;
 }

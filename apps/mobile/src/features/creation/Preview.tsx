@@ -5,15 +5,14 @@ import {
   Accordion,
   Notice,
   Picture,
+  Pill,
   Text,
-  colors,
   fonts,
-  styles,
+  useTheme,
 } from "../../components/ui";
 import {
   Campaign,
   Config,
-  estimate,
   quote,
   money,
   number,
@@ -27,13 +26,15 @@ export function AdPreview({
   draft: Campaign;
   placement?: string;
 }) {
+  const { colors, styles } = useTheme();
   return (
     <View style={[styles.card, { borderRadius: 14 }]}>
       <View style={{ padding: 14, gap: 3 }}>
         <Text style={{ fontWeight: "700", color: colors.ink }}>
           {draft.creatorName || "Your organization"}
         </Text>
-        <Text style={styles.muted}>Sponsored · {placement} preview</Text>
+        <Text style={styles.muted}>Advertisement preview · {placement}</Text>
+        <Text style={styles.muted}>Illustrative placement · no live advertising</Text>
       </View>
       <Picture
         uri={draft.adImages[0]}
@@ -82,6 +83,7 @@ export function StoryPreview({
   draft: Campaign;
   campaignHeader?: Pick<Campaign, "title" | "summary">;
 }) {
+  const { colors, styles } = useTheme();
   const [linkError, setLinkError] = useState("");
   async function open(url: string) {
     if (!isPublicUrl(url)) {
@@ -106,9 +108,9 @@ export function StoryPreview({
           <Text
             accessibilityRole="header"
             style={{
-              fontFamily: fonts.editorial,
-              fontSize: 28,
-              lineHeight: 34,
+              fontFamily: fonts.bold,
+              fontSize: 23,
+              lineHeight: 30,
               color: colors.ink,
             }}
           >
@@ -117,7 +119,7 @@ export function StoryPreview({
         )}
       {!!draft.intro &&
         draft.intro.trim() !== campaignHeader?.summary.trim() && (
-          <Text style={[styles.body, { fontSize: 17, lineHeight: 27 }]}>
+          <Text style={[styles.body, { fontSize: 16, lineHeight: 25 }]}>
             {draft.intro}
           </Text>
         )}
@@ -130,7 +132,7 @@ export function StoryPreview({
                 <Text style={styles.muted}>{section.caption}</Text>
               )}
               {!!section.credit && (
-                <Text style={[styles.muted, { fontSize: 12 }]}>
+                <Text style={styles.muted}>
                   Image credit: {section.credit}
                 </Text>
               )}
@@ -139,9 +141,9 @@ export function StoryPreview({
             <Text
               accessibilityRole="header"
               style={{
-                fontFamily: fonts.editorialStrong,
-                fontSize: 24,
-                lineHeight: 30,
+                fontFamily: fonts.semibold,
+                fontSize: 20,
+                lineHeight: 27,
                 color: colors.ink,
               }}
             >
@@ -158,8 +160,8 @@ export function StoryPreview({
             >
               <Text
                 style={{
-                  fontSize: 28,
-                  lineHeight: 35,
+                  fontSize: 24,
+                  lineHeight: 31,
                   fontWeight: "700",
                   color: colors.green,
                 }}
@@ -212,12 +214,13 @@ export function StoryPreview({
           <Text style={styles.muted}>
             {campaignHeader
               ? "Public sources provided by the creator for context and evidence."
-              : "These sources will be visible to everyone reading the campaign."}
+              : "These sources will be visible to everyone reading the campaign."} Source links provide supporting context; they do not establish independent verification.
           </Text>
           {draft.sources.map((source, index) => (
             <Pressable
               accessibilityRole="link"
-              accessibilityLabel={`Open source ${source.title || index + 1}`}
+              accessibilityLabel={`Open source ${source.title || index + 1}. ${source.url || "Missing URL"}. Opens outside Campaign.`}
+              accessibilityHint="Opens the creator-provided public source in your browser."
               onPress={() => {
                 void open(source.url);
               }}
@@ -243,14 +246,15 @@ export function StoryPreview({
                 </Text>
                 <Ionicons name="open-outline" size={18} color={colors.green} />
               </View>
-              <Text numberOfLines={2} style={styles.muted}>
+              {isPublicUrl(source.url) && <Text style={[styles.muted, { fontWeight: "600" }]}>{new URL(source.url).hostname}</Text>}
+              <Text selectable style={styles.muted}>
                 {source.url || "Add a source URL"}
               </Text>
             </Pressable>
           ))}
         </Accordion>
       )}
-      {!!linkError && <Notice tone="error">{linkError}</Notice>}
+      {!!linkError && <View accessibilityLiveRegion="polite"><Notice tone="error">{linkError} The source URL remains visible above so you can copy it.</Notice></View>}
     </View>
   );
 }
@@ -262,14 +266,21 @@ export function CampaignPreview({
   draft: Campaign;
   config?: Config;
 }) {
-  const rate = config?.feeRate ?? 0.05;
-  const fee = quote(draft.goal, config).fee;
+  const { colors, styles } = useTheme();
+  const [view, setView] = useState<"campaign" | "advertisement">("campaign");
+  const funding = config ? quote(draft.goal, config) : null;
   return (
-    <View style={{ gap: 24 }}>
+    <View style={{ gap: 20 }}>
       <Text style={styles.muted}>
         Draft preview · Approval is required before publication. Contributions
         fund message distribution, rather than direct support for the cause.
       </Text>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+        <Pill title="Campaign page" selected={view === "campaign"} onPress={() => setView("campaign")} />
+        <Pill title="Advertisement" selected={view === "advertisement"} onPress={() => setView("advertisement")} />
+      </View>
+      <Text style={styles.muted}>{view === "campaign" ? "The editorial page readers open: your story, identity and sources, followed by funding and audience details." : "The creative people may see before opening your campaign page. Advertising copy and images stay separate from the story."}</Text>
+      {view === "campaign" && <>
       <View style={styles.card}>
         {!!draft.coverImage && <Picture uri={draft.coverImage} height={185} />}
         <View style={{ padding: 18, gap: 9 }}>
@@ -278,9 +289,9 @@ export function CampaignPreview({
           </Text>
           <Text
             style={{
-              fontFamily: fonts.editorialStrong,
-              fontSize: 28,
-              lineHeight: 34,
+              fontFamily: fonts.bold,
+              fontSize: 24,
+              lineHeight: 31,
               color: colors.ink,
             }}
           >
@@ -292,7 +303,9 @@ export function CampaignPreview({
           {!!draft.summary && <Text style={styles.body}>{draft.summary}</Text>}
         </View>
       </View>
-      <StoryPreview draft={draft} />
+      <StoryPreview draft={draft} campaignHeader={draft} />
+      </>}
+      {view === "advertisement" &&
       <View
         style={{
           borderTopWidth: 1,
@@ -312,6 +325,7 @@ export function CampaignPreview({
           </View>
         )}
       </View>
+      }
       <View style={{ gap: 12 }}>
         <Text style={styles.h2}>Audience & distribution</Text>
         <Text style={styles.body}>
@@ -329,10 +343,8 @@ export function CampaignPreview({
           >
             <Text style={styles.body}>{channel}</Text>
             <Text style={styles.body}>
-              {draft.allocation[channel] || 0}% ·{" "}
-              {money(
-                ((draft.goal - fee) * (draft.allocation[channel] || 0)) / 100,
-              )}
+              {draft.allocation[channel] || 0}%
+              {funding && draft.goal > 0 ? ` · ${money((funding.adBudget * (draft.allocation[channel] || 0)) / 100)}` : ""}
             </Text>
           </View>
         ))}
@@ -364,7 +376,7 @@ export function CampaignPreview({
         </View>
         <View style={{ ...styles.row, justifyContent: "space-between" }}>
           <Text style={styles.body}>Platform fee</Text>
-          <Text style={styles.body}>{money(fee)}</Text>
+          <Text style={styles.body}>{funding ? money(funding.fee) : "Unavailable"}</Text>
         </View>
         <View
           style={{
@@ -375,19 +387,16 @@ export function CampaignPreview({
         >
           <Text style={styles.body}>Advertising budget</Text>
           <Text style={{ ...styles.body, fontWeight: "700" }}>
-            {money(draft.goal - fee)}
+            {funding ? money(funding.adBudget) : "Unavailable"}
           </Text>
         </View>
         <Text
           style={{ ...styles.body, fontWeight: "700", color: colors.green }}
         >
-          Est. {number(estimate(draft.goal, config))} people
+          {funding && draft.goal > 0 ? `Est. ${number(funding.reach)} people` : draft.goal > 0 ? "Reach estimate unavailable" : "Set your goal at Submit for a reach estimate"}
         </Text>
         <Text style={styles.muted}>
-          Demo model: {config?.peoplePerAdDollar ?? 27} people per advertising
-          dollar after the {(rate * 100).toFixed(0)}% fee. Reach depends on
-          prices, inventory, targeting, delivery, and performance; it is never
-          guaranteed.
+          {config ? `Demo model: ${config.peoplePerAdDollar} people per advertising dollar after the ${(config.feeRate * 100).toFixed(0)}% fee. Reach depends on prices, inventory, targeting, delivery, and performance; it is never guaranteed.` : "Connect to load current fees, funding policies and estimate assumptions. Your draft remains editable; no fee or audience estimate is assumed."}
         </Text>
       </View>
       <Accordion title="Funding policies & campaign rules" initiallyOpen>

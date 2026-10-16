@@ -50,13 +50,19 @@ export function notificationAction(item: Notification) {
     destination?.type === "payments" ||
     (!destination && item.category === "payments")
   ) {
+    if (destination?.paymentId) {
+      return {
+        title: "View payment & receipt",
+        href: `/profile?section=Payments&payment=${encodeURIComponent(destination.paymentId)}`,
+      };
+    }
     return { title: "Payment history", href: "/profile?section=Payments" };
   }
   if (destination?.type === "creator" && id) {
-    return { title: "Review & edit", href: `/create?draft=${id}` };
+    return { title: "Review & edit", href: `/create?draft=${id}&context=review` };
   }
   if (destination?.type === "report" && id) {
-    return { title: "View report", href: `/explore/${id}/report` };
+    return { title: "View progress & report", href: `/explore/${id}/report` };
   }
   if (!id) {
     return { title: "Account settings", href: "/profile?section=Settings" };

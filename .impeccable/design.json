@@ -1,332 +1,854 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-15T20:57:19.267446+00:00",
+  "generatedAt": "2026-10-16T05:37:08.316903+00:00",
   "title": "Design System: Campaign",
   "extensions": {
     "colorMeta": {
-      "primary": {
+      "light-bg": {
+        "role": "neutral",
+        "displayName": "Light Application Ground",
+        "tonalRamp": [
+          "oklch(15% 0.00411 157.18)",
+          "oklch(26% 0.00411 157.18)",
+          "oklch(38% 0.00411 157.18)",
+          "oklch(49% 0.00411 157.18)",
+          "oklch(61% 0.00411 157.18)",
+          "oklch(72% 0.00411 157.18)",
+          "oklch(84% 0.00411 157.18)",
+          "oklch(95% 0.00411 157.18)"
+        ]
+      },
+      "light-paper": {
+        "role": "neutral",
+        "displayName": "Light Paper Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "light-surface-raised": {
+        "role": "neutral",
+        "displayName": "Light Raised Surface Role",
+        "tonalRamp": [
+          "oklch(15% 0.00826 157.09)",
+          "oklch(26% 0.00826 157.09)",
+          "oklch(38% 0.00826 157.09)",
+          "oklch(49% 0.00826 157.09)",
+          "oklch(61% 0.00826 157.09)",
+          "oklch(72% 0.00826 157.09)",
+          "oklch(84% 0.00826 157.09)",
+          "oklch(95% 0.00826 157.09)"
+        ]
+      },
+      "light-ink": {
+        "role": "neutral",
+        "displayName": "Light Title Ink",
+        "tonalRamp": [
+          "oklch(15% 0.01829 165.26)",
+          "oklch(26% 0.01829 165.26)",
+          "oklch(38% 0.01829 165.26)",
+          "oklch(49% 0.01829 165.26)",
+          "oklch(61% 0.01829 165.26)",
+          "oklch(72% 0.01829 165.26)",
+          "oklch(84% 0.01829 165.26)",
+          "oklch(95% 0.01829 165.26)"
+        ]
+      },
+      "light-text": {
+        "role": "neutral",
+        "displayName": "Light Body Text",
+        "tonalRamp": [
+          "oklch(15% 0.03068 157.28)",
+          "oklch(26% 0.03068 157.28)",
+          "oklch(38% 0.03068 157.28)",
+          "oklch(49% 0.03068 157.28)",
+          "oklch(61% 0.03068 157.28)",
+          "oklch(72% 0.03068 157.28)",
+          "oklch(84% 0.03068 157.28)",
+          "oklch(95% 0.03068 157.28)"
+        ]
+      },
+      "light-muted": {
+        "role": "neutral",
+        "displayName": "Light Secondary Text",
+        "tonalRamp": [
+          "oklch(15% 0.02890 159.73)",
+          "oklch(26% 0.02890 159.73)",
+          "oklch(38% 0.02890 159.73)",
+          "oklch(49% 0.02890 159.73)",
+          "oklch(61% 0.02890 159.73)",
+          "oklch(72% 0.02890 159.73)",
+          "oklch(84% 0.02890 159.73)",
+          "oklch(95% 0.02890 159.73)"
+        ]
+      },
+      "light-line": {
+        "role": "neutral",
+        "displayName": "Light Separator",
+        "tonalRamp": [
+          "oklch(15% 0.01511 158.22)",
+          "oklch(26% 0.01511 158.22)",
+          "oklch(38% 0.01511 158.22)",
+          "oklch(49% 0.01511 158.22)",
+          "oklch(61% 0.01511 158.22)",
+          "oklch(72% 0.01511 158.22)",
+          "oklch(84% 0.01511 158.22)",
+          "oklch(95% 0.01511 158.22)"
+        ]
+      },
+      "light-outline": {
+        "role": "neutral",
+        "displayName": "Light Field Outline",
+        "tonalRamp": [
+          "oklch(15% 0.02757 160.09)",
+          "oklch(26% 0.02757 160.09)",
+          "oklch(38% 0.02757 160.09)",
+          "oklch(49% 0.02757 160.09)",
+          "oklch(61% 0.02757 160.09)",
+          "oklch(72% 0.02757 160.09)",
+          "oklch(84% 0.02757 160.09)",
+          "oklch(95% 0.02757 160.09)"
+        ]
+      },
+      "light-primary": {
         "role": "primary",
-        "displayName": "Primary",
-        "canonical": "#2D4ED8",
+        "displayName": "Light Action",
         "tonalRamp": [
-          "oklch(15% 0.2137 267.17)",
-          "oklch(26% 0.2137 267.17)",
-          "oklch(38% 0.2137 267.17)",
-          "oklch(49% 0.2137 267.17)",
-          "oklch(61% 0.2137 267.17)",
-          "oklch(72% 0.2137 267.17)",
-          "oklch(84% 0.2137 267.17)",
-          "oklch(95% 0.2137 267.17)"
+          "oklch(15% 0.01829 165.26)",
+          "oklch(26% 0.01829 165.26)",
+          "oklch(38% 0.01829 165.26)",
+          "oklch(49% 0.01829 165.26)",
+          "oklch(61% 0.01829 165.26)",
+          "oklch(72% 0.01829 165.26)",
+          "oklch(84% 0.01829 165.26)",
+          "oklch(95% 0.01829 165.26)"
         ]
       },
-      "primary-container": {
+      "light-on-primary": {
+        "role": "neutral",
+        "displayName": "Light On Action",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "light-mint": {
+        "role": "neutral",
+        "displayName": "Light Context Surface",
+        "tonalRamp": [
+          "oklch(15% 0.01906 162.93)",
+          "oklch(26% 0.01906 162.93)",
+          "oklch(38% 0.01906 162.93)",
+          "oklch(49% 0.01906 162.93)",
+          "oklch(61% 0.01906 162.93)",
+          "oklch(72% 0.01906 162.93)",
+          "oklch(84% 0.01906 162.93)",
+          "oklch(95% 0.01906 162.93)"
+        ]
+      },
+      "light-header": {
+        "role": "neutral",
+        "displayName": "Light Identity / Estimate Header",
+        "tonalRamp": [
+          "oklch(15% 0.04949 168.66)",
+          "oklch(26% 0.04949 168.66)",
+          "oklch(38% 0.04949 168.66)",
+          "oklch(49% 0.04949 168.66)",
+          "oklch(61% 0.04949 168.66)",
+          "oklch(72% 0.04949 168.66)",
+          "oklch(84% 0.04949 168.66)",
+          "oklch(95% 0.04949 168.66)"
+        ]
+      },
+      "light-header-text": {
+        "role": "neutral",
+        "displayName": "Light Header Text",
+        "tonalRamp": [
+          "oklch(15% 0.01829 165.26)",
+          "oklch(26% 0.01829 165.26)",
+          "oklch(38% 0.01829 165.26)",
+          "oklch(49% 0.01829 165.26)",
+          "oklch(61% 0.01829 165.26)",
+          "oklch(72% 0.01829 165.26)",
+          "oklch(84% 0.01829 165.26)",
+          "oklch(95% 0.01829 165.26)"
+        ]
+      },
+      "light-on-header-muted": {
+        "role": "neutral",
+        "displayName": "Light Header Secondary",
+        "tonalRamp": [
+          "oklch(15% 0.05148 161.52)",
+          "oklch(26% 0.05148 161.52)",
+          "oklch(38% 0.05148 161.52)",
+          "oklch(49% 0.05148 161.52)",
+          "oklch(61% 0.05148 161.52)",
+          "oklch(72% 0.05148 161.52)",
+          "oklch(84% 0.05148 161.52)",
+          "oklch(95% 0.05148 161.52)"
+        ]
+      },
+      "light-peach": {
+        "role": "feedback",
+        "displayName": "Light Context Notice",
+        "tonalRamp": [
+          "oklch(15% 0.01716 67.62)",
+          "oklch(26% 0.01716 67.62)",
+          "oklch(38% 0.01716 67.62)",
+          "oklch(49% 0.01716 67.62)",
+          "oklch(61% 0.01716 67.62)",
+          "oklch(72% 0.01716 67.62)",
+          "oklch(84% 0.01716 67.62)",
+          "oklch(95% 0.01716 67.62)"
+        ]
+      },
+      "light-red": {
+        "role": "feedback",
+        "displayName": "Light Error / Danger",
+        "tonalRamp": [
+          "oklch(15% 0.16836 26.33)",
+          "oklch(26% 0.16836 26.33)",
+          "oklch(38% 0.16836 26.33)",
+          "oklch(49% 0.16836 26.33)",
+          "oklch(61% 0.16836 26.33)",
+          "oklch(72% 0.16836 26.33)",
+          "oklch(84% 0.16836 26.33)",
+          "oklch(95% 0.16836 26.33)"
+        ]
+      },
+      "light-error-surface": {
+        "role": "feedback",
+        "displayName": "Light Error Surface",
+        "tonalRamp": [
+          "oklch(15% 0.01739 17.46)",
+          "oklch(26% 0.01739 17.46)",
+          "oklch(38% 0.01739 17.46)",
+          "oklch(49% 0.01739 17.46)",
+          "oklch(61% 0.01739 17.46)",
+          "oklch(72% 0.01739 17.46)",
+          "oklch(84% 0.01739 17.46)",
+          "oklch(95% 0.01739 17.46)"
+        ]
+      },
+      "light-warning": {
+        "role": "feedback",
+        "displayName": "Light Exceptional Status",
+        "tonalRamp": [
+          "oklch(15% 0.08974 76.64)",
+          "oklch(26% 0.08974 76.64)",
+          "oklch(38% 0.08974 76.64)",
+          "oklch(49% 0.08974 76.64)",
+          "oklch(61% 0.08974 76.64)",
+          "oklch(72% 0.08974 76.64)",
+          "oklch(84% 0.08974 76.64)",
+          "oklch(95% 0.08974 76.64)"
+        ]
+      },
+      "light-focus": {
         "role": "primary",
-        "displayName": "Primary Container",
-        "canonical": "#EEF1FC",
+        "displayName": "Light Field Focus",
         "tonalRamp": [
-          "oklch(15% 0.0151 273.85)",
-          "oklch(26% 0.0151 273.85)",
-          "oklch(38% 0.0151 273.85)",
-          "oklch(49% 0.0151 273.85)",
-          "oklch(61% 0.0151 273.85)",
-          "oklch(72% 0.0151 273.85)",
-          "oklch(84% 0.0151 273.85)",
-          "oklch(95% 0.0151 273.85)"
+          "oklch(15% 0.09469 158.26)",
+          "oklch(26% 0.09469 158.26)",
+          "oklch(38% 0.09469 158.26)",
+          "oklch(49% 0.09469 158.26)",
+          "oklch(61% 0.09469 158.26)",
+          "oklch(72% 0.09469 158.26)",
+          "oklch(84% 0.09469 158.26)",
+          "oklch(95% 0.09469 158.26)"
         ]
       },
-      "background": {
+      "light-progress": {
+        "role": "primary",
+        "displayName": "Light Progress Fill",
+        "tonalRamp": [
+          "oklch(15% 0.09277 160.66)",
+          "oklch(26% 0.09277 160.66)",
+          "oklch(38% 0.09277 160.66)",
+          "oklch(49% 0.09277 160.66)",
+          "oklch(61% 0.09277 160.66)",
+          "oklch(72% 0.09277 160.66)",
+          "oklch(84% 0.09277 160.66)",
+          "oklch(95% 0.09277 160.66)"
+        ]
+      },
+      "light-progress-track": {
         "role": "neutral",
-        "displayName": "Background",
-        "canonical": "#F6F5F0",
+        "displayName": "Light Progress Track",
         "tonalRamp": [
-          "oklch(15% 0.0067 97.35)",
-          "oklch(26% 0.0067 97.35)",
-          "oklch(38% 0.0067 97.35)",
-          "oklch(49% 0.0067 97.35)",
-          "oklch(61% 0.0067 97.35)",
-          "oklch(72% 0.0067 97.35)",
-          "oklch(84% 0.0067 97.35)",
-          "oklch(95% 0.0067 97.35)"
+          "oklch(15% 0.02670 163.16)",
+          "oklch(26% 0.02670 163.16)",
+          "oklch(38% 0.02670 163.16)",
+          "oklch(49% 0.02670 163.16)",
+          "oklch(61% 0.02670 163.16)",
+          "oklch(72% 0.02670 163.16)",
+          "oklch(84% 0.02670 163.16)",
+          "oklch(95% 0.02670 163.16)"
         ]
       },
-      "surface": {
+      "light-subtle": {
         "role": "neutral",
-        "displayName": "Surface",
-        "canonical": "#FFFFFF",
+        "displayName": "Light Read Activity Surface",
         "tonalRamp": [
-          "oklch(15% 0.0000 89.88)",
-          "oklch(26% 0.0000 89.88)",
-          "oklch(38% 0.0000 89.88)",
-          "oklch(49% 0.0000 89.88)",
-          "oklch(61% 0.0000 89.88)",
-          "oklch(72% 0.0000 89.88)",
-          "oklch(84% 0.0000 89.88)",
-          "oklch(95% 0.0000 89.88)"
+          "oklch(15% 0.00827 157.09)",
+          "oklch(26% 0.00827 157.09)",
+          "oklch(38% 0.00827 157.09)",
+          "oklch(49% 0.00827 157.09)",
+          "oklch(61% 0.00827 157.09)",
+          "oklch(72% 0.00827 157.09)",
+          "oklch(84% 0.00827 157.09)",
+          "oklch(95% 0.00827 157.09)"
         ]
       },
-      "ink": {
+      "light-disabled-surface": {
         "role": "neutral",
-        "displayName": "Ink",
-        "canonical": "#17252E",
+        "displayName": "Light Disabled Surface",
         "tonalRamp": [
-          "oklch(15% 0.0257 237.30)",
-          "oklch(26% 0.0257 237.30)",
-          "oklch(38% 0.0257 237.30)",
-          "oklch(49% 0.0257 237.30)",
-          "oklch(61% 0.0257 237.30)",
-          "oklch(72% 0.0257 237.30)",
-          "oklch(84% 0.0257 237.30)",
-          "oklch(95% 0.0257 237.30)"
+          "oklch(15% 0.01003 155.09)",
+          "oklch(26% 0.01003 155.09)",
+          "oklch(38% 0.01003 155.09)",
+          "oklch(49% 0.01003 155.09)",
+          "oklch(61% 0.01003 155.09)",
+          "oklch(72% 0.01003 155.09)",
+          "oklch(84% 0.01003 155.09)",
+          "oklch(95% 0.01003 155.09)"
         ]
       },
-      "text": {
+      "light-disabled-text": {
         "role": "neutral",
-        "displayName": "Text",
-        "canonical": "#24333E",
+        "displayName": "Light Disabled Text",
         "tonalRamp": [
-          "oklch(15% 0.0281 240.57)",
-          "oklch(26% 0.0281 240.57)",
-          "oklch(38% 0.0281 240.57)",
-          "oklch(49% 0.0281 240.57)",
-          "oklch(61% 0.0281 240.57)",
-          "oklch(72% 0.0281 240.57)",
-          "oklch(84% 0.0281 240.57)",
-          "oklch(95% 0.0281 240.57)"
+          "oklch(15% 0.02956 157.48)",
+          "oklch(26% 0.02956 157.48)",
+          "oklch(38% 0.02956 157.48)",
+          "oklch(49% 0.02956 157.48)",
+          "oklch(61% 0.02956 157.48)",
+          "oklch(72% 0.02956 157.48)",
+          "oklch(84% 0.02956 157.48)",
+          "oklch(95% 0.02956 157.48)"
         ]
       },
-      "muted": {
+      "dark-bg": {
         "role": "neutral",
-        "displayName": "Muted",
-        "canonical": "#59666D",
+        "displayName": "Dark Application Ground",
         "tonalRamp": [
-          "oklch(15% 0.0194 231.25)",
-          "oklch(26% 0.0194 231.25)",
-          "oklch(38% 0.0194 231.25)",
-          "oklch(49% 0.0194 231.25)",
-          "oklch(61% 0.0194 231.25)",
-          "oklch(72% 0.0194 231.25)",
-          "oklch(84% 0.0194 231.25)",
-          "oklch(95% 0.0194 231.25)"
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
         ]
       },
-      "separator": {
+      "dark-paper": {
         "role": "neutral",
-        "displayName": "Separator",
-        "canonical": "#DDE1E5",
+        "displayName": "Dark Paper Surface",
         "tonalRamp": [
-          "oklch(15% 0.0070 247.90)",
-          "oklch(26% 0.0070 247.90)",
-          "oklch(38% 0.0070 247.90)",
-          "oklch(49% 0.0070 247.90)",
-          "oklch(61% 0.0070 247.90)",
-          "oklch(72% 0.0070 247.90)",
-          "oklch(84% 0.0070 247.90)",
-          "oklch(95% 0.0070 247.90)"
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
         ]
       },
-      "outline": {
+      "dark-surface-raised": {
         "role": "neutral",
-        "displayName": "Outline",
-        "canonical": "#7B868E",
+        "displayName": "Dark Raised Surface Role",
         "tonalRamp": [
-          "oklch(15% 0.0177 239.29)",
-          "oklch(26% 0.0177 239.29)",
-          "oklch(38% 0.0177 239.29)",
-          "oklch(49% 0.0177 239.29)",
-          "oklch(61% 0.0177 239.29)",
-          "oklch(72% 0.0177 239.29)",
-          "oklch(84% 0.0177 239.29)",
-          "oklch(95% 0.0177 239.29)"
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
         ]
       },
-      "accent": {
-        "role": "secondary",
-        "displayName": "Accent",
-        "canonical": "#B83F2C",
+      "dark-ink": {
+        "role": "neutral",
+        "displayName": "Dark Title Ink",
         "tonalRamp": [
-          "oklch(15% 0.1599 31.54)",
-          "oklch(26% 0.1599 31.54)",
-          "oklch(38% 0.1599 31.54)",
-          "oklch(49% 0.1599 31.54)",
-          "oklch(61% 0.1599 31.54)",
-          "oklch(72% 0.1599 31.54)",
-          "oklch(84% 0.1599 31.54)",
-          "oklch(95% 0.1599 31.54)"
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
         ]
       },
-      "accent-container": {
-        "role": "secondary",
-        "displayName": "Accent Container",
-        "canonical": "#F9EEE8",
+      "dark-text": {
+        "role": "neutral",
+        "displayName": "Dark Body Text",
         "tonalRamp": [
-          "oklch(15% 0.0144 50.80)",
-          "oklch(26% 0.0144 50.80)",
-          "oklch(38% 0.0144 50.80)",
-          "oklch(49% 0.0144 50.80)",
-          "oklch(61% 0.0144 50.80)",
-          "oklch(72% 0.0144 50.80)",
-          "oklch(84% 0.0144 50.80)",
-          "oklch(95% 0.0144 50.80)"
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
         ]
       },
-      "error": {
-        "role": "secondary",
-        "displayName": "Error",
-        "canonical": "#B3261E",
+      "dark-muted": {
+        "role": "neutral",
+        "displayName": "Dark Secondary Text",
         "tonalRamp": [
-          "oklch(15% 0.1783 28.70)",
-          "oklch(26% 0.1783 28.70)",
-          "oklch(38% 0.1783 28.70)",
-          "oklch(49% 0.1783 28.70)",
-          "oklch(61% 0.1783 28.70)",
-          "oklch(72% 0.1783 28.70)",
-          "oklch(84% 0.1783 28.70)",
-          "oklch(95% 0.1783 28.70)"
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
         ]
       },
-      "success": {
-        "role": "secondary",
-        "displayName": "Success",
-        "canonical": "#216146",
+      "dark-line": {
+        "role": "neutral",
+        "displayName": "Dark Separator",
         "tonalRamp": [
-          "oklch(15% 0.0793 162.20)",
-          "oklch(26% 0.0793 162.20)",
-          "oklch(38% 0.0793 162.20)",
-          "oklch(49% 0.0793 162.20)",
-          "oklch(61% 0.0793 162.20)",
-          "oklch(72% 0.0793 162.20)",
-          "oklch(84% 0.0793 162.20)",
-          "oklch(95% 0.0793 162.20)"
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
         ]
       },
-      "warning": {
-        "role": "secondary",
-        "displayName": "Warning",
-        "canonical": "#785616",
+      "dark-outline": {
+        "role": "neutral",
+        "displayName": "Dark Field Outline",
         "tonalRamp": [
-          "oklch(15% 0.0893 78.59)",
-          "oklch(26% 0.0893 78.59)",
-          "oklch(38% 0.0893 78.59)",
-          "oklch(49% 0.0893 78.59)",
-          "oklch(61% 0.0893 78.59)",
-          "oklch(72% 0.0893 78.59)",
-          "oklch(84% 0.0893 78.59)",
-          "oklch(95% 0.0893 78.59)"
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "dark-primary": {
+        "role": "primary",
+        "displayName": "Dark Action",
+        "tonalRamp": [
+          "oklch(15% 0.06335 166.43)",
+          "oklch(26% 0.06335 166.43)",
+          "oklch(38% 0.06335 166.43)",
+          "oklch(49% 0.06335 166.43)",
+          "oklch(61% 0.06335 166.43)",
+          "oklch(72% 0.06335 166.43)",
+          "oklch(84% 0.06335 166.43)",
+          "oklch(95% 0.06335 166.43)"
+        ]
+      },
+      "dark-on-primary": {
+        "role": "neutral",
+        "displayName": "Dark On Action",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "dark-mint": {
+        "role": "neutral",
+        "displayName": "Dark Context Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "dark-header": {
+        "role": "neutral",
+        "displayName": "Dark Identity / Estimate Header",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "dark-header-text": {
+        "role": "neutral",
+        "displayName": "Dark Header Text",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "dark-on-header-muted": {
+        "role": "neutral",
+        "displayName": "Dark Header Secondary",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "dark-peach": {
+        "role": "feedback",
+        "displayName": "Dark Context Notice",
+        "tonalRamp": [
+          "oklch(15% 0.02465 61.51)",
+          "oklch(26% 0.02465 61.51)",
+          "oklch(38% 0.02465 61.51)",
+          "oklch(49% 0.02465 61.51)",
+          "oklch(61% 0.02465 61.51)",
+          "oklch(72% 0.02465 61.51)",
+          "oklch(84% 0.02465 61.51)",
+          "oklch(95% 0.02465 61.51)"
+        ]
+      },
+      "dark-red": {
+        "role": "feedback",
+        "displayName": "Dark Error / Danger",
+        "tonalRamp": [
+          "oklch(15% 0.09316 21.67)",
+          "oklch(26% 0.09316 21.67)",
+          "oklch(38% 0.09316 21.67)",
+          "oklch(49% 0.09316 21.67)",
+          "oklch(61% 0.09316 21.67)",
+          "oklch(72% 0.09316 21.67)",
+          "oklch(84% 0.09316 21.67)",
+          "oklch(95% 0.09316 21.67)"
+        ]
+      },
+      "dark-error-surface": {
+        "role": "feedback",
+        "displayName": "Dark Error Surface",
+        "tonalRamp": [
+          "oklch(15% 0.03971 22.09)",
+          "oklch(26% 0.03971 22.09)",
+          "oklch(38% 0.03971 22.09)",
+          "oklch(49% 0.03971 22.09)",
+          "oklch(61% 0.03971 22.09)",
+          "oklch(72% 0.03971 22.09)",
+          "oklch(84% 0.03971 22.09)",
+          "oklch(95% 0.03971 22.09)"
+        ]
+      },
+      "dark-warning": {
+        "role": "feedback",
+        "displayName": "Dark Exceptional Status",
+        "tonalRamp": [
+          "oklch(15% 0.08901 88.90)",
+          "oklch(26% 0.08901 88.90)",
+          "oklch(38% 0.08901 88.90)",
+          "oklch(49% 0.08901 88.90)",
+          "oklch(61% 0.08901 88.90)",
+          "oklch(72% 0.08901 88.90)",
+          "oklch(84% 0.08901 88.90)",
+          "oklch(95% 0.08901 88.90)"
+        ]
+      },
+      "dark-focus": {
+        "role": "primary",
+        "displayName": "Dark Field Focus",
+        "tonalRamp": [
+          "oklch(15% 0.06335 166.43)",
+          "oklch(26% 0.06335 166.43)",
+          "oklch(38% 0.06335 166.43)",
+          "oklch(49% 0.06335 166.43)",
+          "oklch(61% 0.06335 166.43)",
+          "oklch(72% 0.06335 166.43)",
+          "oklch(84% 0.06335 166.43)",
+          "oklch(95% 0.06335 166.43)"
+        ]
+      },
+      "dark-progress": {
+        "role": "primary",
+        "displayName": "Dark Progress Fill",
+        "tonalRamp": [
+          "oklch(15% 0.06335 166.43)",
+          "oklch(26% 0.06335 166.43)",
+          "oklch(38% 0.06335 166.43)",
+          "oklch(49% 0.06335 166.43)",
+          "oklch(61% 0.06335 166.43)",
+          "oklch(72% 0.06335 166.43)",
+          "oklch(84% 0.06335 166.43)",
+          "oklch(95% 0.06335 166.43)"
+        ]
+      },
+      "dark-progress-track": {
+        "role": "neutral",
+        "displayName": "Dark Progress Track",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "dark-subtle": {
+        "role": "neutral",
+        "displayName": "Dark Read Activity Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "dark-disabled-surface": {
+        "role": "neutral",
+        "displayName": "Dark Disabled Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "dark-disabled-text": {
+        "role": "neutral",
+        "displayName": "Dark Disabled Text",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
         ]
       }
     },
     "typographyMeta": {
-      "display": {
-        "displayName": "Editorial display",
-        "purpose": "Home and selected reading moments."
+      "page-title": {
+        "displayName": "Page Title",
+        "purpose": "Shared PageHeader title: theme-styles.ts title."
       },
-      "title": {
-        "displayName": "Functional title",
-        "purpose": "Native utility screen identity."
+      "section-title": {
+        "displayName": "Section Title",
+        "purpose": "Shared h2: theme-styles.ts."
+      },
+      "detail-title": {
+        "displayName": "Detail Title",
+        "purpose": "CampaignDetail campaign identity."
+      },
+      "campaign-title": {
+        "displayName": "Campaign Title",
+        "purpose": "Full CampaignCard title."
+      },
+      "editor-title": {
+        "displayName": "Editor Title",
+        "purpose": "Creation contextual title: create.tsx local.editorTitle."
+      },
+      "story-body": {
+        "displayName": "Story Body",
+        "purpose": "Ordered editorial paragraph: creation/Preview.tsx."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Shared body: theme-styles.ts."
+      },
+      "secondary": {
+        "displayName": "Secondary",
+        "purpose": "Shared muted copy: theme-styles.ts."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Shared label: theme-styles.ts."
+      },
+      "button-label": {
+        "displayName": "Button Label",
+        "purpose": "Button title: components/ui.tsx."
       }
     },
     "shadows": [],
     "motion": [],
     "breakpoints": [
       {
-        "name": "content-max",
-        "value": "640px"
+        "name": "narrow-stack",
+        "value": "350px"
       },
       {
-        "name": "creation-header-wrap",
-        "value": "350px"
+        "name": "content-max",
+        "value": "640px"
       }
     ]
   },
   "components": [
     {
-      "name": "Primary button",
+      "name": "Primary Button · Light / Dark",
       "kind": "button",
-      "refersTo": "button-primary",
-      "description": "Native 48dp action translated for the documentation panel.",
-      "html": "<button class=\"ds-button-primary\">Continue</button>",
-      "css": ".ds-button-primary { background:#2D4ED8; color:#FFFFFF; min-height:48px; padding:12px 18px; border:0; border-radius:9px; font:700 15px Manrope,sans-serif; } .ds-button-primary:hover { opacity:.9; } .ds-button-primary:active { opacity:.75; } .ds-button-primary:focus-visible { outline:2px solid #2D4ED8; outline-offset:3px; }"
+      "refersTo": "button-primary-light",
+      "description": "Native Button primary variant from components/ui.tsx in both palettes. Browser automatic focus outline is preview-only; pressed opacity matches native.",
+      "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><button type=\"button\" class=\"ds-btn\">Continue</button></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><button type=\"button\" class=\"ds-btn\">Continue</button></section></div>",
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:9px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:#17221D;color:#FFFFFF}.ds-dark .ds-btn{background:#A9DEC7;color:#111111}"
     },
     {
-      "name": "Secondary button",
+      "name": "Secondary Button · Light / Dark",
       "kind": "button",
-      "refersTo": "button-secondary",
-      "description": "Native 48dp action translated for the documentation panel.",
-      "html": "<button class=\"ds-button-secondary\">Continue</button>",
-      "css": ".ds-button-secondary { background:#EEF1FC; color:#2D4ED8; min-height:48px; padding:12px 18px; border:0; border-radius:9px; font:700 15px Manrope,sans-serif; } .ds-button-secondary:hover { opacity:.9; } .ds-button-secondary:active { opacity:.75; } .ds-button-secondary:focus-visible { outline:2px solid #2D4ED8; outline-offset:3px; }"
+      "refersTo": "button-secondary-light",
+      "description": "Native Button secondary variant from components/ui.tsx in both palettes. Browser automatic focus outline is preview-only; pressed opacity matches native.",
+      "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><button type=\"button\" class=\"ds-btn\">Save campaign</button></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><button type=\"button\" class=\"ds-btn\">Save campaign</button></section></div>",
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:9px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:#E4F3EB;color:#17221D}.ds-dark .ds-btn{background:#1E1E1E;color:#A9DEC7}"
     },
     {
-      "name": "Ghost button",
+      "name": "Ghost Button · Light / Dark",
       "kind": "button",
-      "refersTo": "button-ghost",
-      "description": "Native 48dp action translated for the documentation panel.",
-      "html": "<button class=\"ds-button-ghost\">Continue</button>",
-      "css": ".ds-button-ghost { background:transparent; color:#2D4ED8; min-height:48px; padding:12px 18px; border:0; border-radius:9px; font:700 15px Manrope,sans-serif; } .ds-button-ghost:hover { opacity:.9; } .ds-button-ghost:active { opacity:.75; } .ds-button-ghost:focus-visible { outline:2px solid #2D4ED8; outline-offset:3px; }"
+      "refersTo": "button-ghost-light",
+      "description": "Native Button ghost variant from components/ui.tsx in both palettes. Browser automatic focus outline is preview-only; pressed opacity matches native.",
+      "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><button type=\"button\" class=\"ds-btn\">Back to campaign</button></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><button type=\"button\" class=\"ds-btn\">Back to campaign</button></section></div>",
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:9px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:transparent;color:#17221D}.ds-dark .ds-btn{background:transparent;color:#A9DEC7}"
     },
     {
-      "name": "Labeled input",
+      "name": "Danger Button · Light / Dark",
+      "kind": "button",
+      "refersTo": "button-danger-light",
+      "description": "Native Button danger variant from components/ui.tsx in both palettes. Browser automatic focus outline is preview-only; pressed opacity matches native.",
+      "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><button type=\"button\" class=\"ds-btn\">Delete draft</button></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><button type=\"button\" class=\"ds-btn\">Delete draft</button></section></div>",
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:9px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:#A82424;color:#FFFFFF}.ds-dark .ds-btn{background:#FFB0AD;color:#121212}"
+    },
+    {
+      "name": "Field · Light / Dark",
       "kind": "input",
-      "refersTo": "field",
-      "description": "Persistent label, stronger boundary, focused primary outline and native 52dp minimum.",
-      "html": "<label class=\"ds-label\">Campaign title<input class=\"ds-field\" placeholder=\"Give your message a title\"></label>",
-      "css": ".ds-label { display:grid; gap:7px; color:#17252E; font:600 14px Manrope,sans-serif; } .ds-field { min-height:52px; padding:0 15px; border:1px solid #7B868E; border-radius:8px; background:#FFFFFF; color:#17252E; font:400 16px Manrope,sans-serif; } .ds-field::placeholder { color:#59666D; } .ds-field:hover { border-color:#17252E; } .ds-field:focus-visible { outline:none; border-color:#2D4ED8; }"
+      "refersTo": "field-light",
+      "description": "Visible label, field outline and hint from Field and theme-styles.ts; focus uses the semantic focus border.",
+      "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><label class=\"ds-field-label\" for=\"ds-title-light\">Campaign title</label><input class=\"ds-field\" id=\"ds-title-light\" placeholder=\"Give your message a clear title\" /><p class=\"ds-hint\">A short, specific title helps people understand.</p></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><label class=\"ds-field-label\" for=\"ds-title-dark\">Campaign title</label><input class=\"ds-field\" id=\"ds-title-dark\" placeholder=\"Give your message a clear title\" /><p class=\"ds-hint\">A short, specific title helps people understand.</p></section></div>",
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-field-label{display:block;font-family:ManropeSemiBold,sans-serif;font-size:14px;margin-bottom:7px}.ds-field{width:100%;min-height:52px;padding:12px 15px;border-radius:10px;border:1px solid;font-family:ManropeRegular,sans-serif;font-size:16px;box-sizing:border-box}.ds-hint{font-family:ManropeRegular,sans-serif;font-size:14px;line-height:21px;margin:7px 0 0}.ds-light .ds-field-label{color:#17221D}.ds-light .ds-field{background:#FFFFFF;color:#17221D;border-color:#73867B}.ds-light .ds-field::placeholder{color:#52655A}.ds-light .ds-field:focus{outline:0;border-color:#176541}.ds-light .ds-hint{color:#52655A}.ds-dark .ds-field-label{color:#F5F5F5}.ds-dark .ds-field{background:#121212;color:#F5F5F5;border-color:#7D7D7D}.ds-dark .ds-field::placeholder{color:#B0B0B0}.ds-dark .ds-field:focus{outline:0;border-color:#A9DEC7}.ds-dark .ds-hint{color:#B0B0B0}"
     },
     {
-      "name": "Category chip",
+      "name": "Category Pill · Light / Dark",
       "kind": "chip",
-      "refersTo": "chip",
-      "description": "48dp discovery category, selected through primary color.",
-      "html": "<button class=\"ds-chip\" aria-pressed=\"true\">Education</button>",
-      "css": ".ds-chip { min-height:48px; padding:12px 14px; border:1px solid #DDE1E5; border-radius:8px; background:#FFFFFF; color:#17252E; font:600 13px Manrope,sans-serif; } .ds-chip[aria-pressed=\"true\"] { background:#2D4ED8; border-color:#2D4ED8; color:#FFFFFF; } .ds-chip:hover { opacity:.9; } .ds-chip:active { opacity:.75; } .ds-chip:focus-visible { outline:2px solid #2D4ED8; outline-offset:3px; }"
+      "refersTo": "pill-light",
+      "description": "Resting and selected Pill states from components/ui.tsx. Browser automatic focus outline is preview-only.",
+      "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><div class=\"ds-pills\"><button class=\"ds-pill ds-selected\" type=\"button\" aria-pressed=\"true\">All</button><button class=\"ds-pill\" type=\"button\" aria-pressed=\"false\">Environment</button></div></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><div class=\"ds-pills\"><button class=\"ds-pill ds-selected\" type=\"button\" aria-pressed=\"true\">All</button><button class=\"ds-pill\" type=\"button\" aria-pressed=\"false\">Environment</button></div></section></div>",
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-pills{display:flex;flex-wrap:wrap;gap:8px}.ds-pill{min-height:48px;padding:12px 14px;border:1px solid;border-radius:8px;font-family:ManropeSemiBold,sans-serif;font-size:13px;font-weight:600}.ds-pill:hover{cursor:pointer}.ds-pill:focus-visible{outline:auto}.ds-light .ds-pill{background:#FFFFFF;color:#24362B;border-color:#D5E0D9}.ds-light .ds-selected{background:#17221D;color:#FFFFFF;border-color:#17221D}.ds-dark .ds-pill{background:#121212;color:#E5E5E5;border-color:#303030}.ds-dark .ds-selected{background:#A9DEC7;color:#111111;border-color:#A9DEC7}"
     },
     {
-      "name": "Campaign card",
+      "name": "Campaign Card and Funding · Light / Dark",
       "kind": "card",
-      "refersTo": "campaign-card",
-      "description": "Real content grouping; photography supplied by campaign data in the app.",
-      "html": "<article class=\"ds-card\"><span>Education</span><h3>A wider audience for learning</h3><p>By Open Chapter Demo</p><a href=\"#campaign\">Read the campaign</a></article>",
-      "css": ".ds-card { max-width:353px; padding:16px; border:1px solid #DDE1E5; border-radius:14px; background:#FFFFFF; color:#17252E; font:400 14px/1.5 Manrope,sans-serif; } .ds-card span,.ds-card p { color:#59666D; } .ds-card h3 { margin:8px 0; font:600 26px/29px Newsreader,Georgia,serif; } .ds-card a { display:inline-flex; align-items:center; min-height:48px; color:#2D4ED8; font-weight:700; } .ds-card a:hover { text-decoration-thickness:2px; } .ds-card a:focus-visible { outline:2px solid #2D4ED8; }"
+      "refersTo": "campaign-card-light",
+      "description": "CampaignCard content shell and compact Funding from features/campaign.tsx. Documentation omits the 150-unit remote photograph; example figures are illustrative.",
+      "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><article class=\"ds-card\"><div class=\"ds-card-body\"><p class=\"ds-meta\">Environment · Demo campaign</p><h3 class=\"ds-card-title\">A message worth sharing</h3><p class=\"ds-meta\">By Campaign creator</p><p class=\"ds-funding\">$1,845 <span>of $5,000 goal</span></p><div class=\"ds-track\" role=\"progressbar\" aria-label=\"Funding progress\" aria-valuenow=\"37\" aria-valuemin=\"0\" aria-valuemax=\"100\"><div class=\"ds-fill\"></div></div><p class=\"ds-meta\">Estimated reach at goal · demo</p></div></article></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><article class=\"ds-card\"><div class=\"ds-card-body\"><p class=\"ds-meta\">Environment · Demo campaign</p><h3 class=\"ds-card-title\">A message worth sharing</h3><p class=\"ds-meta\">By Campaign creator</p><p class=\"ds-funding\">$1,845 <span>of $5,000 goal</span></p><div class=\"ds-track\" role=\"progressbar\" aria-label=\"Funding progress\" aria-valuenow=\"37\" aria-valuemin=\"0\" aria-valuemax=\"100\"><div class=\"ds-fill\"></div></div><p class=\"ds-meta\">Estimated reach at goal · demo</p></div></article></section></div>",
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-card{border:1px solid;border-radius:14px;overflow:hidden}.ds-card-body{padding:14px;display:flex;flex-direction:column;gap:9px}.ds-meta{font-family:ManropeRegular,sans-serif;font-size:12px;line-height:18px;margin:0}.ds-card-title{font-family:ManropeBold,sans-serif;font-size:20px;line-height:26px;font-weight:700;margin:0}.ds-funding{font-family:ManropeBold,sans-serif;font-size:17px;margin:0}.ds-funding span{font-family:ManropeRegular,sans-serif;font-size:13px}.ds-track,.ds-fill{height:6px;border-radius:3px}.ds-track{overflow:hidden}.ds-fill{width:37%}.ds-light .ds-card{background:#FFFFFF;border-color:#D5E0D9}.ds-light .ds-card-title,.ds-light .ds-funding{color:#17221D}.ds-light .ds-meta,.ds-light .ds-funding span{color:#52655A}.ds-light .ds-track{background:#D4E9DE}.ds-light .ds-fill{background:#287452}.ds-dark .ds-card{background:#121212;border-color:#303030}.ds-dark .ds-card-title,.ds-dark .ds-funding{color:#F5F5F5}.ds-dark .ds-meta,.ds-dark .ds-funding span{color:#B0B0B0}.ds-dark .ds-track{background:#363636}.ds-dark .ds-fill{background:#A9DEC7}"
     },
     {
-      "name": "Five tab navigation",
+      "name": "Five-Tab Labels · Light / Dark",
       "kind": "nav",
-      "description": "Stable native destinations; selected tonal indicator shown in the panel translation.",
-      "html": "<nav class=\"ds-tabs\" aria-label=\"Main\"><a href=\"#home\" aria-current=\"page\">Home</a><a href=\"#explore\">Explore</a><a href=\"#create\">Create</a><a href=\"#activity\">Activity</a><a href=\"#profile\">Profile</a></nav>",
-      "css": ".ds-tabs { display:flex; padding:8px; background:#FFFFFF; border-top:1px solid #DDE1E5; font:600 10px Manrope,sans-serif; } .ds-tabs a { display:flex; flex:1; min-height:48px; align-items:center; justify-content:center; color:#59666D; text-decoration:none; } .ds-tabs a[aria-current] { color:#2D4ED8; background:#EEF1FC; border-radius:8px; } .ds-tabs a:hover { color:#2D4ED8; } .ds-tabs a:focus-visible { outline:2px solid #2D4ED8; }"
+      "description": "Text-only documentation view of the five native tab labels and tint states. Native Ionicons, active icon containers and device bottom inset are intentionally omitted; this is not a navigation implementation.",
+      "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><nav class=\"ds-nav\" aria-label=\"Primary navigation\"><button type=\"button\" class=\"ds-tab ds-current\" aria-current=\"page\"><span>Home</span></button><button type=\"button\" class=\"ds-tab\"><span>Explore</span></button><button type=\"button\" class=\"ds-tab\"><span>Create</span></button><button type=\"button\" class=\"ds-tab\"><span>Activity</span></button><button type=\"button\" class=\"ds-tab\"><span>Profile</span></button></nav></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><nav class=\"ds-nav\" aria-label=\"Primary navigation\"><button type=\"button\" class=\"ds-tab ds-current\" aria-current=\"page\"><span>Home</span></button><button type=\"button\" class=\"ds-tab\"><span>Explore</span></button><button type=\"button\" class=\"ds-tab\"><span>Create</span></button><button type=\"button\" class=\"ds-tab\"><span>Activity</span></button><button type=\"button\" class=\"ds-tab\"><span>Profile</span></button></nav></section></div>",
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-nav{display:flex;border-top:1px solid;padding-top:5px;padding-bottom:8px;min-height:68px}.ds-tab{flex:1;min-width:0;background:transparent;border:0;padding:0;font-family:ManropeSemiBold,sans-serif;font-size:10px}.ds-tab span{display:block}.ds-tab:hover{cursor:pointer}.ds-tab:focus-visible{outline:auto}.ds-light .ds-nav{background:#FFFFFF;border-color:#D5E0D9}.ds-light .ds-tab{color:#52655A}.ds-light .ds-current{color:#17221D}.ds-dark .ds-nav{background:#121212;border-color:#303030}.ds-dark .ds-tab{color:#B0B0B0}.ds-dark .ds-current{color:#A9DEC7}"
+    },
+    {
+      "name": "Appearance Choices · Light / Dark",
+      "kind": "custom",
+      "description": "Profile appearance radio-group shape and surfaces in both schemes. Icons are omitted. Preview state is illustrative and does not persist a real preference.",
+      "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><div class=\"ds-appearance\" role=\"radiogroup\" aria-label=\"Appearance\"><button type=\"button\" role=\"radio\" aria-checked=\"false\" class=\"ds-choice\">System</button><button type=\"button\" role=\"radio\" aria-checked=\"true\" class=\"ds-choice ds-choice-selected\">Light</button><button type=\"button\" role=\"radio\" aria-checked=\"false\" class=\"ds-choice\">Dark</button></div></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><div class=\"ds-appearance\" role=\"radiogroup\" aria-label=\"Appearance\"><button type=\"button\" role=\"radio\" aria-checked=\"false\" class=\"ds-choice\">System</button><button type=\"button\" role=\"radio\" aria-checked=\"false\" class=\"ds-choice\">Light</button><button type=\"button\" role=\"radio\" aria-checked=\"true\" class=\"ds-choice ds-choice-selected\">Dark</button></div></section></div>",
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-appearance{display:flex;flex-wrap:wrap;gap:8px}.ds-choice{flex:1;min-width:88px;min-height:64px;padding:10px 8px;border:1px solid;border-radius:12px;font-family:ManropeMedium,sans-serif;font-size:14px;text-align:center}.ds-choice-selected{font-family:ManropeBold,sans-serif}.ds-choice:active{opacity:.75}.ds-choice:hover{cursor:pointer}.ds-choice:focus-visible{outline:auto}.ds-light .ds-choice{background:#FFFFFF;color:#17221D;border-color:#73867B}.ds-light .ds-choice-selected{background:#E4F3EB;border-color:#17221D}.ds-dark .ds-choice{background:#121212;color:#F5F5F5;border-color:#7D7D7D}.ds-dark .ds-choice-selected{background:#1E1E1E;border-color:#A9DEC7}"
     }
   ],
   "narrative": {
-    "northStar": "The Civic Publication",
-    "overview": "Stories use a Read mode; discovery combines content-led persuasion with browsing; creation, checkout, Activity, Profile, review and reports use Operate. Personality comes from photographs, Newsreader story typography, ultramarine actions and precise rules, rather than repeated slogans, decorative labels or nested panels.",
+    "northStar": "The Clear Signal",
+    "overview": "Campaign uses a compact consumer mobile composition: campaign photographs lead discovery, clear sans-serif type gives a message its identity, and concise funding groups make the next action legible. Light pairs a mint identity area with charcoal actions. Dark uses pure black and neutral charcoal grounds, with mint reserved for accents, progress and actions.\n\nThis is the source-derived replacement for the rejected civic-publication ultramarine and large-serif system. The supplied three-screen reference informed proportions and hierarchy; its photographs, people, banking language and donation claims are not Campaign assets or product claims. The user subsequently rejected green-tinted Dark surfaces; that correction is binding while the existing Light palette stays unchanged.\n\nThis document records the React Native implementation on October 16, 2026, not user approval or completed native acceptance. It is grounded in `apps/mobile/src/lib/appearance.ts`, `theme-styles.ts`, `theme.tsx`, `components/ui.tsx` and sampled routes. The prior system remains in `artifacts/checkpoints/before-reference-redesign-20261016-101133`. Current build, capture and acceptance evidence belongs in `PROGRESS.md` and `RELEASE_READINESS.md`.",
     "keyCharacteristics": [
-      "Real campaign photography and selective editorial typography.",
-      "Ultramarine actions on warm paper, with quiet structural separators.",
-      "Compact utilities, persistent context and explicit financial provenance.",
-      "Native safe areas, scalable text and touch targets of at least 48dp."
+      "Compact Manrope hierarchy and image-led campaign discovery.",
+      "Unchanged mint-and-charcoal Light; black-and-neutral-charcoal Dark.",
+      "Shared semantic surfaces, visible fields and restrained native feedback.",
+      "Five persistent tabs, content-aware docks and scalable native text."
     ],
     "rules": [
       {
-        "name": "The Boundary Rule",
-        "body": "Use the stronger outline token for input boundaries. The pale separator belongs to decorative rules and containers. Focus uses primary; errors use error.",
+        "name": "The Neutral Dark Rule",
+        "body": "Dark backgrounds, headers and large containers use their neutral semantic roles. Mint belongs to restrained accents, progress and actions; never replace the neutral grounds with green-tinted surfaces.",
         "section": "colors"
       },
       {
-        "name": "The Task Rule",
-        "body": "Reserve editorial display type for reading and selected discovery moments. Payment, editing, account and reporting controls use functional type.",
+        "name": "The Shared Appearance Rule",
+        "body": "Resolve colors through the existing theme provider. Appearance is a device preference independent of identity, drafts and payments; a theme change must preserve the current workflow.",
+        "section": "colors"
+      },
+      {
+        "name": "The Compact Type Rule",
+        "body": "Use the implemented Manrope hierarchy for both storytelling and tasks. Do not restore the superseded large-serif or ultramarine direction.",
         "section": "typography"
+      },
+      {
+        "name": "The Flat Surface Rule",
+        "body": "Establish hierarchy with semantic surfaces, one-pixel boundaries, spacing and photography. The shared native components define no shadow or motion scale.",
+        "section": "elevation"
       }
     ],
     "dos": [
-      "Do preserve authored story structure, public evidence and mandatory funding disclosures.",
-      "Do reserve dock and tab space so essential content remains reachable.",
-      "Do pair monetary and delivery figures with truthful estimated or simulated provenance.",
-      "Do verify Android composition at 360, 393 and 411 logical pixels and font scale 1.3."
+      "Do use the shared semantic Light/Dark palette and preserve the existing Light design.",
+      "Do keep Dark grounds neutral, including headers and contribution panels, with mint confined to accents and actions.",
+      "Do use Manrope static font files through the shared Text wrapper and let native text scale.",
+      "Do retain the five tabs and five visible creation steps, with space for docks, keyboard and system insets.",
+      "Do keep campaign identity, funding, estimated reach and the next action coherent, with truthful simulated or estimated labels.",
+      "Do verify the actual installed candidate at 360, 393 and 411 logical widths, font scale 1.3 and critical keyboard states before claiming visual acceptance."
     ],
     "donts": [
-      "Don't use oversized editorial headings on utility screens.",
-      "Don't replace campaign photography with unrelated decorative illustrations.",
-      "Don't add repeated slogans, nested panels or labels without a useful purpose.",
-      "Don't treat screenshot review as physical-device, screen-reader or human-usability certification."
+      "Don't reintroduce green-tinted Dark grounds, oversized serif discovery headings or ultramarine actions from rejected directions.",
+      "Don't create parallel per-screen themes, remount navigation to change appearance, or store the preference in account data.",
+      "Don't copy the reference's people, photographs, donation wording, banking balances or unsupported trust claims.",
+      "Don't add decorative gradients, nested panels, repeated slogans or new motion/shadow tokens that the native system does not define.",
+      "Don't treat old green-Dark captures, a successful build, browser snippets or source token checks as acceptance of the corrected installed appearance."
     ]
   }
 }

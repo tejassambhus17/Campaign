@@ -28,11 +28,11 @@ import {
 } from "../../lib/session";
 import {
   Text,
+  useTheme,
   Accordion,
   Button,
   IconButton,
   PageHeader,
-  colors,
   Empty,
   ErrorState,
   Loading,
@@ -40,10 +40,10 @@ import {
   Pill,
   Progress,
   Screen,
-  styles,
 } from "../../components/ui";
 
 export default function Activity() {
+  const { colors, styles } = useTheme();
   const { user } = useSession();
   const me = useMe();
   const q = useActivity();
@@ -146,6 +146,10 @@ export default function Activity() {
           ...styles.row,
           justifyContent: "space-between",
           flexWrap: "wrap",
+          paddingVertical: 10,
+          paddingHorizontal: 12,
+          borderRadius: 12,
+          backgroundColor: colors.mint,
         }}
       >
         <Text
@@ -154,7 +158,7 @@ export default function Activity() {
         >
           {q.data ? `${unread} unread` : "Recent updates"}
         </Text>
-        <Text style={styles.muted}>Private to your account</Text>
+        <Text style={[styles.muted, { fontSize: 12 }]}>Private to your account</Text>
       </View>
       {!!error && <Notice tone="error">{error}</Notice>}
       {q.isError && !!q.data && (
@@ -229,7 +233,7 @@ export default function Activity() {
           width: "100%",
           maxWidth: 640,
           alignSelf: "center",
-          padding: 20,
+          padding: 18,
           paddingBottom: 28,
           flexGrow: 1,
         }}
@@ -240,6 +244,8 @@ export default function Activity() {
             <RefreshControl
               refreshing={q.isRefetching}
               tintColor={colors.green}
+              colors={[colors.green]}
+              progressBackgroundColor={colors.paper}
               onRefresh={() => void q.refetch()}
             />
           )
@@ -247,7 +253,7 @@ export default function Activity() {
         renderSectionHeader={({ section }) => (
           <Text
             accessibilityRole="header"
-            style={{ ...styles.label, paddingTop: 24, paddingBottom: 8 }}
+            style={{ ...styles.label, paddingTop: 20, paddingBottom: 8 }}
           >
             {section.title}
           </Text>
@@ -323,6 +329,7 @@ function ActivityCard({
   onRead: () => void;
   onOpen: () => void;
 }) {
+  const { colors, styles } = useTheme();
   const icon =
     item.category === "payments"
       ? "receipt-outline"
@@ -332,80 +339,97 @@ function ActivityCard({
   return (
     <View
       style={{
-        paddingVertical: 17,
-        gap: 7,
+        paddingVertical: 14,
+        flexDirection: "row",
+        gap: 12,
         borderBottomWidth: 1,
         borderColor: colors.line,
       }}
     >
       <View
+        accessible={false}
         style={{
-          ...styles.row,
-          justifyContent: "space-between",
-          flexWrap: "wrap",
+          width: 38,
+          height: 38,
+          borderRadius: 12,
+          backgroundColor: item.read ? colors.subtle : colors.mint,
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 2,
         }}
       >
-        <View style={styles.row}>
-          <Ionicons name={icon} size={18} color={colors.green} />
-          <Text style={{ ...styles.muted, fontSize: 12 }}>
-            {activityCategory(item.category)}
+        <Ionicons name={icon} size={19} color={item.read ? colors.muted : colors.green} />
+      </View>
+      <View style={{ flex: 1, gap: 6 }}>
+        <View
+          style={{
+            ...styles.row,
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+          }}
+        >
+          <View style={styles.row}>
+            <Text style={{ ...styles.muted, fontSize: 12 }}>
+              {activityCategory(item.category)}
+            </Text>
+          </View>
+          <Text
+            style={{
+              ...styles.muted,
+              fontSize: 12,
+              color: item.read ? colors.muted : colors.green,
+              fontWeight: item.read ? "400" : "700",
+            }}
+          >
+            {item.read ? "Read" : "Unread"}
           </Text>
         </View>
         <Text
+          accessibilityRole="header"
           style={{
-            ...styles.muted,
-            color: item.read ? colors.muted : colors.green,
-            fontWeight: item.read ? "400" : "700",
+            ...styles.h2,
+            fontSize: 16,
+            lineHeight: 23,
+            letterSpacing: -0.2,
           }}
         >
-          {item.read ? "Read" : "Unread"}
+          {item.title}
         </Text>
-      </View>
-      <Text
-        accessibilityRole="header"
-        style={{
-          ...styles.h2,
-          fontSize: 17,
-          lineHeight: 23,
-          letterSpacing: -0.2,
-        }}
-      >
-        {item.title}
-      </Text>
-      {!!campaignTitle && (
-        <Text style={{ ...styles.muted, fontWeight: "700" }}>
-          {campaignTitle}
-        </Text>
-      )}
-      <Text style={{ ...styles.body, fontSize: 14, lineHeight: 21 }}>
-        {item.body}
-      </Text>
-      <Text style={{ ...styles.muted, fontSize: 12 }}>
-        {activityTime(item.createdAt)}
-      </Text>
-      <View
-        style={{
-          ...styles.row,
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-        }}
-      >
-        <Button
-          title={notificationAction(item).title}
-          icon="arrow-forward-outline"
-          variant="ghost"
-          onPress={onOpen}
-          style={{ paddingHorizontal: 0 }}
-        />
-        {!item.read && (
-          <Button
-            title="Mark read"
-            variant="secondary"
-            loading={marking}
-            onPress={onRead}
-            style={{ paddingHorizontal: 13 }}
-          />
+        {!!campaignTitle && (
+          <Text style={{ ...styles.muted, fontSize: 13, fontWeight: "700" }}>
+            {campaignTitle}
+          </Text>
         )}
+        <Text style={{ ...styles.body, fontSize: 14, lineHeight: 21 }}>
+          {item.body}
+        </Text>
+        <Text style={{ ...styles.muted, fontSize: 12 }}>
+          {activityTime(item.createdAt)}
+        </Text>
+        <View
+          style={{
+            ...styles.row,
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button
+            title={notificationAction(item).title}
+            icon="arrow-forward-outline"
+            variant="ghost"
+            onPress={onOpen}
+            style={{ paddingHorizontal: 0 }}
+          />
+          {!item.read && (
+            <Button
+              title="Mark read"
+              variant="secondary"
+              loading={marking}
+              onPress={onRead}
+              style={{ paddingHorizontal: 13 }}
+            />
+          )}
+        </View>
       </View>
     </View>
   );

@@ -1,5 +1,56 @@
 # Native product audit and redesign decisions
 
+**Current evidence:** the subsequent targeted Product Quality Addendum is recorded in [PRODUCT_QUALITY.md](docs/PRODUCT_QUALITY.md) and its [independent native picture review](artifacts/product-quality/FLOW_REVIEW.md). Corrected editor keyboard/footer pictures pass their bounded scope in both themes at normal/enlarged text. The older reference audit below is history; it does not verify the later workflow changes, all native states, physical/human acceptance or a current video. Recording remains held.
+
+## Current reference audit, October 16
+
+The user rejects the earlier visual result. The new attached reference is the
+authority for composition and appearance, while the PDF remains the authority for
+business workflows. Its donation/banking terminology, provider balances, people,
+organizations, photographs and four-destination navigation are not copied.
+
+The image was opened directly and compared with fresh native incumbent captures
+under `artifacts/reference-redesign/before/`: identity/search and compact mint
+context, photography leading discovery, clear funding alongside campaign identity,
+and a focused contribution summary are the useful relationships.
+
+1. Home: `01-home.png` shows a large serif slogan and introductory controls before
+   the first photo; featured funding is outside the first viewport. Replace the
+   composition with compact identity/search/category discovery and deliberate
+   featured/regular campaign presentations. Retain the actual product explanation,
+   Explore/Create actions, configurable estimate and How It Works.
+2. Detail: `03-detail.png` shows separate large navigation, photo, serif identity
+   and distant story funding. Bring compact identity/funding close to the image,
+   keep native share and retain public story/source/policy information and dock.
+3. Checkout: `04-checkout.png` shows large repeated framing before the selected
+   amount. Give the amount, included fee, ad budget and uncertain reach one compact
+   financial composition with concise actions and explicit simulation language.
+4. Appearance: actual source was fixed light mode. Both themes need semantic text,
+   surface, action, boundary and feedback roles; settings must persist independently
+   of authentication without remounting forms or navigation.
+
+The first new installed batch is under `artifacts/reference-redesign/after-pass1/`,
+bound to x86 candidate C451DDE4…. Root opened Light/Dark Home, Dark Detail and
+Dark Checkout. The semantic dark surfaces and compact sans hierarchy are visible;
+Home still fails the explicit first-viewport funding requirement at 393dp because
+the mint intro/actions occupy too much height. This is a material correction,
+not visual acceptance. An initially misnamed large-text checkout capture was
+flagged for recapture rather than treated as valid evidence.
+
+Source inspection is not native acceptance. The captured batch must test both
+themes, 360/393/411 logical widths, normal and enlarged text, final-field
+reachability, errors/privacy and the connected journey. A scoped actual Metro-off
+cold launch loaded API data and retained Dark; later QA uses the restored preview.
+The bounded correction is now confirmed in the installed black pass2 build.
+Its 393dp Home shows funding above tabs, 360dp/font1.3 docks preserve full labels
+and funding, and actual Gboard leaves the focused summary/cursor and actions
+visible. The fresh independent [finish review](artifacts/reference-redesign/FINISH_REVIEW.md)
+returned **ship** for all 12 supplied core phone captures with no material fixes.
+This covers those visual surfaces, not unpictured workflows or refreshed video.
+Human and screen-reader claims remain unverified. Historical findings stay scoped.
+
+## Historical audit
+
 October16,2026. Scope: current installed React Native APK/API36 emulator, existing source, and live reference website. Product Design audit uses screenshots captured in this run, not remembered screens. Impeccable critique/craft/native guidance informs the fixes. Full human/screen-reader usability is not inferred from images.
 
 ## Captured flow and findings

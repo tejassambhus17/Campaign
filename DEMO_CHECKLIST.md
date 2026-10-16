@@ -1,5 +1,22 @@
 # Demo recording checklist
 
+## Active reference redesign
+
+The latest product-quality pass has separate [source/native evidence](docs/PRODUCT_QUALITY.md) and corrected tagged APKs. None of these functional tests or screenshots resumes recording or verifies a current video. See [release readiness](RELEASE_READINESS.md) for the actual installed-build scope.
+
+The latest product-quality pass has separate [source/native evidence](docs/PRODUCT_QUALITY.md) and corrected tagged APKs. None of these functional tests or screenshots resumes recording or verifies a current video. See [release readiness](RELEASE_READINESS.md) for the actual installed-build scope.
+
+**USER HOLD — recording and demo production stopped.** The user has further
+application changes planned. No recording, narration, encoding, assembly or demo
+campaign mutations may resume until explicit human authorization. Preserve the
+partial files under `artifacts/reference-redesign/` and saved Story draft. The
+replacement film is incomplete. Current scoped black-pass2 Android evidence is
+in [PROGRESS.md](PROGRESS.md); existing artifacts predate the forthcoming changes.
+The completed checks below belong to the historical civic build and unchanged
+MP4, and do not verify the current design.
+
+## Historical 22-scene checklist
+
 Completed October 16, 2026 for the redesigned local prototype. The original PDF pp. 23–24 requires a complete demo; the user's section 19 supplies the 22-step sequence below. See [journey and evidence](docs/DEMO.md) and [release readiness](RELEASE_READINESS.md).
 
 **Current status: VERIFIED local film within the stated review scopes.** The [final MP4](artifacts/demo/campaign-native-demo-INTERNAL-TEST.mp4) covers all 22 scenes, 580.121354 seconds (9:40), 28,581,318 bytes, H.264 720×1520 / AAC 48kHz mono. SHA-256: `63D6DAA6823BCEC6E1F8E166977C0880E043BDD5A2A57612EBC30D57730F1358`. The stable file is byte-identical to the timestamped assembly. [Metadata](artifacts/demo/campaign-native-demo-INTERNAL-TEST.mp4.json), [proof](artifacts/demo/campaign-native-demo-INTERNAL-TEST.proof.json) and [chapters](artifacts/demo/campaign-native-demo-INTERNAL-TEST.chapters.txt) retain exact provenance.

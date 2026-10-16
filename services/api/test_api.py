@@ -225,6 +225,9 @@ class ApiTests(unittest.TestCase):
         milestones = [item['title'] for item in self.client.get('/activity', headers=self.headers()).json()
                       if item['campaignId'] == campaign_id and 'funding milestone' in item['title']]
         self.assertEqual(milestones, ['100% funding milestone'])
+        activity = self.client.get('/activity', headers=self.headers()).json()
+        milestone = next(item for item in activity if item['campaignId'] == campaign_id and 'funding milestone' in item['title'])
+        self.assertEqual(milestone['destination'], {'type': 'report', 'campaignId': campaign_id})
         incremental_id = self.publish(goal=1000)['id']
         self.contribute(incremental_id, 260)
         self.contribute(incremental_id, 10)
@@ -272,6 +275,11 @@ class ApiTests(unittest.TestCase):
         self.assertTrue(report['final'])
         self.assertTrue(report['simulated'])
         self.assertEqual((report['raised'], report['fees'], report['allocated'], report['spent'], report['refunded']), (100, 5, 95, 90.25, 4.75))
+        self.assertEqual((report['unspentBeforeRefund'], report['refundedAdvertising'], report['refundedFees'],
+                          report['remainingAdvertisingBudget'], report['retainedFees'], report['refundPendingAmount']),
+                         (4.75, 4.75, 0, 0, 5, 0))
+        self.assertEqual(report['refundState'], 'completed')
+        self.assertEqual(report['raised'], report['retainedFees'] + report['spent'] + report['refunded'] + report['remainingAdvertisingBudget'])
         self.assertIsNone(report['measuredReach'])
         self.assertEqual(self.transition(campaign_id, 'Completed').json()['report']['refunded'], 4.75)
 
@@ -372,11 +380,37 @@ class ApiTests(unittest.TestCase):
         self.contribute(campaign_id, 10)
         self.assertEqual(self.transition(campaign_id, 'Cancelled').status_code, 422)
         self.assertEqual(self.transition(campaign_id, 'Cancelled', reason='Demonstration cancellation.').status_code, 200)
-        self.assertEqual(self.transition(campaign_id, 'Refund Pending').status_code, 200)
+        pending = self.transition(campaign_id, 'Refund Pending')
+        self.assertEqual(pending.status_code, 200)
+        self.assertEqual(pending.json()['report']['refundState'], 'pending')
+        self.assertEqual(pending.json()['report']['refundPendingAmount'], 10)
+        self.assertEqual(pending.json()['report']['refunded'], 0)
         self.assertEqual(self.transition(campaign_id, 'Cancelled').status_code, 200)
         report = self.client.get(f'/campaigns/{campaign_id}/report').json()
         self.assertEqual(report['refunded'], 10)
+        self.assertEqual((report['refundedFees'], report['refundedAdvertising'], report['retainedFees'],
+                          report['remainingAdvertisingBudget'], report['refundPendingAmount']), (.5, 9.5, 0, 0, 0))
+        self.assertEqual(report['refundState'], 'completed')
         self.assertEqual(self.client.get('/me', headers=self.headers()).json()['payments'][0]['refunded'], 10)
+        self.assertEqual(self.transition(campaign_id, 'Refund Pending').status_code, 409)
+        self.assertEqual(self.client.get(f'/campaigns/{campaign_id}/report').json()['refundState'], 'completed')
+
+    def test_failed_promotion_refund_separates_spend_and_pending_net_balance(self):
+        campaign_id = self.publish()['id']
+        self.contribute(campaign_id, 100)
+        self.transition(campaign_id, 'Distribution Preparation')
+        self.transition(campaign_id, 'Promoting', setupReady=True)
+        progress = self.client.post(f'/campaigns/{campaign_id}/progress', headers=self.headers(self.reviewer)).json()
+        self.transition(campaign_id, 'Failed', reason='Controlled simulation failure.')
+        pending = self.transition(campaign_id, 'Refund Pending').json()['report']
+        self.assertEqual(pending['refundState'], 'pending')
+        self.assertEqual(pending['refundPendingAmount'], pending['allocated'] - progress['spent'])
+        self.assertEqual(pending['refunded'], 0)
+        done = self.transition(campaign_id, 'Cancelled').json()['report']
+        self.assertEqual(done['refundState'], 'completed')
+        self.assertEqual(done['refundedFees'], 0)
+        self.assertEqual(done['remainingAdvertisingBudget'], 0)
+        self.assertEqual(done['raised'], done['retainedFees'] + done['spent'] + done['refunded'])
 
     def test_many_backers_refund_rounding_never_over_refunds_final_payment(self):
         campaign_id = self.publish(goal=130)['id']
@@ -494,9 +528,13 @@ class ApiTests(unittest.TestCase):
         self.client.post(endpoint+'/progress', headers=self.headers(self.reviewer))
         self.transition(campaign_id, 'Completed')
         final_activity = self.client.get('/activity', headers=self.headers(self.other)).json()
-        for title in ('Distribution progress', 'Campaign completed', 'Final report available'):
+        for title in ('Distribution progress', 'Campaign completed · final report available'):
             item = next(item for item in final_activity if item['title'] == title)
             self.assertEqual(item['destination'], {'type': 'report', 'campaignId': campaign_id})
+        completion = [item for item in final_activity if item['campaignId'] == campaign_id and 'final report' in item['title'].lower()]
+        self.assertEqual(len(completion), 1)
+        self.transition(campaign_id, 'Completed')
+        self.assertEqual(len(self.client.get('/activity', headers=self.headers(self.other)).json()), len(final_activity))
         security = next(item for item in final_activity if item['category'] == 'security')
         self.assertEqual(security['destination'], {'type': 'profile'})
 

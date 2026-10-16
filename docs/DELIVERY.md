@@ -1,5 +1,22 @@
 # Delivery and Android release
 
+## Active reference replacement
+
+The latest candidate is the targeted product-quality pass, preserving Light and pure-black Dark. Corrected APKs are under `artifacts/android/quality-addendum-pass2-20261016/`; [release readiness](../RELEASE_READINESS.md) identifies their exact hashes and installed evidence. Cloud setup and a judge-reachable backend remain deferred; the emulator API default is not an external release arrangement. Functional QA screenshots do not constitute a new demo film.
+
+The latest candidate is the targeted product-quality pass, preserving Light and pure-black Dark. Corrected APKs are under `artifacts/android/quality-addendum-pass2-20261016/`; [release readiness](../RELEASE_READINESS.md) identifies their exact hashes and installed evidence. Cloud setup and a judge-reachable backend remain deferred; the emulator API default is not an external release arrangement. Functional QA screenshots do not constitute a new demo film.
+
+**USER HOLD — recording and demo production stopped.** Further application
+changes are forthcoming. Partial footage and the saved Story draft are preserved;
+the replacement film is incomplete. Resume production only on explicit human
+authorization. Black-pass2 x86_64 and ARM64 APKs exist, with scoped installed x86
+checks and uninstalled ARM64. These are checkpoint snapshots before forthcoming
+changes. See [PROGRESS.md](../PROGRESS.md) and
+[RELEASE_READINESS.md](../RELEASE_READINESS.md). Earlier artifact tables and video
+acceptance below retain their historical scope. No external submission occurred.
+
+## Historical delivery preparation
+
 Updated October 16, 2026. Workspace: `E:\Campaign`. Working target: Monday, October 19. User-reported organizer maximum: Tuesday, October 20 at 11:59 AM; timezone and current Telegram confirmation remain unverified. Asia/Calcutta is the planning timezone, not a confirmed organizer cutoff timezone.
 
 This is a delivery checklist with separate current INTERNAL-TEST and historical debug evidence. Original product/submission source: [Hackathon_Requirements.pdf](../Hackathon_Requirements.pdf), pp. 23-24. Requirement evidence is maintained in [REQUIREMENTS.md](../REQUIREMENTS.md).

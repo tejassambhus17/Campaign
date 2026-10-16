@@ -1,10 +1,10 @@
 import { discoverCampaigns } from "../../../lib/discovery";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ScrollView, Switch, View } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 import {
   Text,
   Button,
-  colors,
   PageHeader,
   Empty,
   ErrorState,
@@ -12,12 +12,14 @@ import {
   Loading,
   Pill,
   Screen,
-  styles,
+  useTheme,
 } from "../../../components/ui";
 import { categories } from "../../../lib/types";
 import { useCampaigns, useConfig } from "../../../lib/session";
 import { CampaignCard } from "../../../features/campaign";
 export default function Explore() {
+  const { colors, styles } = useTheme();
+  const params = useLocalSearchParams<{ q?: string; category?: string }>();
   const q = useCampaigns();
   const config = useConfig();
   const [search, setSearch] = useState("");
@@ -25,16 +27,31 @@ export default function Explore() {
   const [sort, setSort] = useState("Featured");
   const [sortOpen, setSortOpen] = useState(false);
   const [funding, setFunding] = useState(false);
+  useEffect(() => {
+    if (params.q !== undefined) setSearch(Array.isArray(params.q) ? params.q[0] : params.q);
+    if (params.category !== undefined) {
+      const value = Array.isArray(params.category) ? params.category[0] : params.category;
+      setCategory(categories.includes(value) ? value : "All");
+    }
+  }, [params.q, params.category]);
   const filtered = useMemo(
     () => discoverCampaigns(q.data || [], { search, category, sort, funding }),
     [q.data, search, category, sort, funding],
   );
+  const filtersActive = !!search.trim() || category !== "All" || funding || sort !== "Featured";
+  const reset = () => {
+    setSearch("");
+    setCategory("All");
+    setFunding(false);
+    setSort("Featured");
+    setSortOpen(false);
+  };
   return (
     <Screen>
-      <PageHeader title="Explore" />
+      <PageHeader title="Explore" description="Find a message worth taking further." />
       <Field
         label="Search campaigns"
-        placeholder="A topic, a message, a creator…"
+        placeholder="Search messages, topics, creators"
         value={search}
         onChangeText={setSearch}
       />
@@ -103,6 +120,7 @@ export default function Explore() {
             )}
           </View>
         )}
+        {filtersActive && <View style={{ ...styles.row, justifyContent: "space-between" }}><Text style={{ ...styles.muted, fontSize: 12, flex: 1 }}>{[search.trim() ? `“${search.trim()}”` : "", category !== "All" ? category : "", funding ? "Open for backing" : "", sort !== "Featured" ? sort : ""].filter(Boolean).join(" · ")}</Text><Button title="Reset" icon="close" variant="ghost" onPress={reset} style={{ paddingHorizontal: 8 }} /></View>}
       </View>
       {q.isPending ? (
         <Loading />
@@ -110,13 +128,13 @@ export default function Explore() {
         <ErrorState error={q.error} retry={() => q.refetch()} />
       ) : (
         <>
-          <Text style={styles.muted}>
+          <Text style={{ ...styles.muted, fontSize: 12 }}>
             {filtered.length} {filtered.length === 1 ? "campaign" : "campaigns"}{" "}
             · demonstration data
           </Text>
           {filtered.length ? (
             filtered.map((c) => (
-              <CampaignCard key={c.id} campaign={c} config={config.data} />
+              <CampaignCard key={c.id} campaign={c} config={config.data} compact />
             ))
           ) : (
             <Empty
@@ -128,11 +146,7 @@ export default function Explore() {
                 <Button
                   title="Clear search & filters"
                   variant="secondary"
-                  onPress={() => {
-                    setSearch("");
-                    setCategory("All");
-                    setFunding(false);
-                  }}
+                  onPress={reset}
                 />
               }
             />

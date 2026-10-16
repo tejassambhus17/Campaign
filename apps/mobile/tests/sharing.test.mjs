@@ -6,6 +6,12 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const ts = require('typescript');
 const shared = [];
+const publicModule = { exports: {} };
+const publicSource = ts.transpileModule(
+  readFileSync(new URL('../src/lib/public-campaign.ts', import.meta.url), 'utf8'),
+  { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } },
+).outputText;
+new Function('module', 'exports', publicSource)(publicModule, publicModule.exports);
 const module = { exports: {} };
 const source = ts.transpileModule(
   readFileSync(new URL('../src/features/campaign.tsx', import.meta.url), 'utf8'),
@@ -14,12 +20,12 @@ const source = ts.transpileModule(
 new Function('require', 'module', 'exports', source)(
   (name) => name === 'react-native'
     ? { Platform: { OS: 'android' }, Share: { share: async (value) => { shared.push(value); } } }
-    : {},
+    : name === '../lib/public-campaign' ? publicModule.exports : {},
   module,
   module.exports,
 );
 const { shareCampaign } = module.exports;
-const published = { id: 'campaign-public', title: 'The approved public message', publishedAt: '2026-10-15T12:00:00Z', status: 'Available for Funding' };
+const published = { id: 'campaign-public', title: 'The approved public message', publishedAt: '2026-10-15T12:00:00Z', status: 'Available for Funding', campaignState: 'Available for Funding' };
 
 test('published Android shares include the public message and working app route', async () => {
   await shareCampaign(published);
@@ -44,4 +50,13 @@ test('sharing a private revision excludes its unapproved title and keeps the app
   // The same pending revision does not hide the already approved title from a public reader.
   await shareCampaign({ ...published, revisionPending: true });
   assert.equal(shared.at(-1).title, published.title);
+});
+
+test('a managed revision with an approved snapshot shares the approved title, never the private draft', async () => {
+  await shareCampaign({
+    ...published, title: 'Private draft title', status: 'Submitted for Review', revisionPending: true,
+    publishedVersion: { title: published.title, goal: 100, sources: [], sections: [] },
+  });
+  assert.equal(shared.at(-1).title, published.title);
+  assert.equal(JSON.stringify(shared.at(-1)).includes('Private draft'), false);
 });

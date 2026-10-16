@@ -198,7 +198,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             return result
         if category == 'security' or not campaign_id:
             return {'type': 'profile'}
-        if key and (key.startswith(('final-report:', 'progress-midpoint:')) or
+        if key and (key.startswith(('final-report:', 'progress-midpoint:', 'milestone:')) or
                     (key.startswith('transition:') and ':Completed:' in key)):
             return {'type': 'report'}
         if key and key.startswith(('submitted:', 'review:')):
@@ -262,6 +262,8 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             COALESCE(SUM(CASE WHEN kind='contribution' THEN fee_cents ELSE 0 END),0) fees,
             COALESCE(SUM(CASE WHEN kind='contribution' THEN ad_cents ELSE 0 END),0) allocated,
             COALESCE(SUM(CASE WHEN kind='refund' THEN -gross_cents ELSE 0 END),0) refunded,
+            COALESCE(SUM(CASE WHEN kind='refund' THEN -fee_cents ELSE 0 END),0) refunded_fees,
+            COALESCE(SUM(CASE WHEN kind='refund' THEN -ad_cents ELSE 0 END),0) refunded_advertising,
             COALESCE(SUM(ad_cents),0) available FROM ledger WHERE campaign_id=?''', (campaign_id,)).fetchone()
         return dict(result)
 
@@ -341,6 +343,39 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
         if delivery:
             result.update(delivery)
             result['refunded'] = dollars(money['refunded'])
+        # Original allocation and its unspent portion are historical figures.
+        # Completed refunds are already removed from the remaining budget; they
+        # must never appear to be another spendable pot alongside unspent funds.
+        spent = cents(result['spent'], allow_zero=True, maximum=10**15)
+        remaining = max(money['available'] - spent, 0)
+        pending = 0
+        if campaign['status'] == 'Refund Pending':
+            pending = remaining if delivery else max(money['raised'] - money['refunded'], 0)
+            refund_state, refund_status = 'pending', 'Simulated refund pending'
+        elif money['refunded']:
+            refund_state, refund_status = 'completed', 'Simulated refund complete'
+        elif campaign['status'] in {'Cancelled', 'Failed'} and money['raised']:
+            refund_state, refund_status = 'review_required', 'Refund review required'
+        elif result['final']:
+            refund_state, refund_status = 'not_due', 'No refund due'
+        else:
+            refund_state, refund_status = 'not_started', 'Calculated on completion or cancellation'
+        result.update({'refundedFees': dollars(money['refunded_fees']),
+                       'refundedAdvertising': dollars(money['refunded_advertising']),
+                       'retainedFees': dollars(money['fees'] - money['refunded_fees']),
+                       'remainingAdvertisingBudget': dollars(remaining),
+                       'unspentBeforeRefund': dollars(max(money['allocated'] - spent, 0)),
+                       'refundPendingAmount': dollars(pending),
+                       'refundState': refund_state, 'refundStatus': refund_status})
+        result['definitions'].update({
+            'fees': 'Original included platform fees, before any fee refunds.',
+            'retainedFees': 'Original platform fees less completed fee refunds.',
+            'unspentBeforeRefund': 'Original advertising allocation less recorded spend; includes any portion already refunded.',
+            'refunded': 'Completed simulated refunds, including any refunded platform fees. Not an additional available budget.',
+            'refundedAdvertising': 'The advertising portion of completed simulated refunds.',
+            'refundedFees': 'The platform-fee portion of completed simulated refunds.',
+            'remainingAdvertisingBudget': 'Original advertising allocation less spend and completed advertising refunds.',
+            'refundPendingAmount': 'Awaiting simulated refund processing; not included in completed refunds. Before promotion this includes the fee.'})
         return result
 
     def session(connection, user):
@@ -671,21 +706,23 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             if target == 'Cancelled' and source == 'Refund Pending':
                 promoted = bool(campaign['report_json'])
                 refund(connection, campaign, full=not promoted)
-            if target == 'Refund Pending' and money['raised'] == 0:
-                raise HTTPException(409, 'There are no successful payments to refund.')
+            if target == 'Refund Pending':
+                delivery = json.loads(campaign['report_json']) if campaign['report_json'] else None
+                refundable = (max(money['available'] - cents(delivery.get('spent', 0), allow_zero=True, maximum=10**15), 0)
+                              if delivery else max(money['raised'] - money['refunded'], 0))
+                if refundable <= 0:
+                    raise HTTPException(409, 'There are no remaining refundable funds. Completed refunds are already recorded.')
             connection.execute('UPDATE campaigns SET status=?,updated_at=? WHERE id=?', (target, stamp(), campaign_id))
             event(connection, campaign, user['id'], 'transition', target, payload.reason or 'Reviewer explicitly authorized this demo lifecycle step.')
             messages = {
                 'Available for Funding': ('Available for backing', 'The reviewed campaign can now receive simulated contributions.'),
                 'Distribution Preparation': ('Distribution preparation', 'Funding is separate from advertising. The platform is preparing the approved campaign.'),
                 'Promoting': ('Campaign promotion began', 'Simulated distribution has started; no live ads were purchased.'),
-                'Completed': ('Campaign completed', 'The final simulated report is available, including unspent funds and refunds.'),
+                'Completed': ('Campaign completed · final report available', 'Simulated distribution is complete. Open the final report for recorded spend, unspent funds and refunds.'),
             }
             title, body = messages.get(target, (f'Campaign: {target}', payload.reason or 'The campaign lifecycle was updated.'))
             campaign_notice(connection, campaign, title, body, f'transition:{campaign_id}:{target}:{campaign["version"]}',
                             destination_type='report' if target == 'Completed' else 'campaign')
-            if target == 'Completed':
-                campaign_notice(connection, campaign, 'Final report available', 'Review the final report and metric definitions. All delivery results are simulated.', f'final-report:{campaign_id}', destination_type='report')
             return campaign_json(connection, get_campaign(connection, campaign_id), user)
 
     def payment_json(payment, *, include_receipt=True):
@@ -736,7 +773,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
                 if crossed:
                     percent = max(crossed)
                     campaign_notice(connection, campaign, f'{percent}% funding milestone',
-                                    'Successful simulated contributions reached this milestone. Advertising has not launched.', f'milestone:{campaign["id"]}:{percent}')
+                                    'Successful simulated contributions reached this milestone. Advertising has not launched.', f'milestone:{campaign["id"]}:{percent}', destination_type='report')
                 if new >= goal:
                     connection.execute("UPDATE campaigns SET status='Funding Goal Reached',updated_at=? WHERE id=?", (stamp(), campaign['id']))
                     event(connection, campaign, None, 'funding', 'Funding Goal Reached', 'Successful simulated payments reached the goal. Distribution requires a separate reviewer action.')

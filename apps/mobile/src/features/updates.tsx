@@ -7,16 +7,16 @@ import { refresh, useRefreshOnFocus, useSession } from "../lib/session";
 import {
   Accordion,
   Button,
-  colors,
   ErrorState,
   Field,
   Notice,
   Text,
-  styles,
+  useTheme,
 } from "../components/ui";
 import { AdPreview } from "./creation/Preview";
 
 export function CampaignUpdates({ campaign: c }: { campaign: Campaign }) {
+  const { colors, styles } = useTheme();
   const { user } = useSession();
   const q = useQuery({
     queryKey: ["updates", c.id],
@@ -30,6 +30,7 @@ export function CampaignUpdates({ campaign: c }: { campaign: Campaign }) {
   const [body, setBody] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
   const canPublish =
     !!c.publishedAt &&
     !!user &&
@@ -37,6 +38,7 @@ export function CampaignUpdates({ campaign: c }: { campaign: Campaign }) {
   async function publish() {
     setBusy(true);
     setMessage("");
+    setFailed(false);
     try {
       await api(`/campaigns/${c.id}/updates`, {
         method: "POST",
@@ -47,6 +49,7 @@ export function CampaignUpdates({ campaign: c }: { campaign: Campaign }) {
       await refresh();
       setMessage("Update published. Followers can now read it.");
     } catch (e) {
+      setFailed(true);
       setMessage((e as Error).message);
     } finally {
       setBusy(false);
@@ -117,7 +120,7 @@ export function CampaignUpdates({ campaign: c }: { campaign: Campaign }) {
           />
         </Accordion>
       )}
-      {!!message && <Notice>{message}</Notice>}
+      {!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}
       <Accordion title="Advertising creative preview">
         <Text style={styles.muted}>
           Intended advertising placement. This preview does not indicate a live

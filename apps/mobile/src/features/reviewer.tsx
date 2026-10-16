@@ -8,14 +8,13 @@ import { refresh, useRefreshOnFocus } from "../lib/session";
 import {
   Accordion,
   Button,
-  colors,
   Empty,
   ErrorState,
   Field,
   Loading,
   Notice,
   Text,
-  styles,
+  useTheme,
 } from "../components/ui";
 
 const exceptionalTargets: Record<string, string[]> = {
@@ -31,6 +30,7 @@ const exceptionalTargets: Record<string, string[]> = {
 };
 
 export function Reviewer() {
+  const { colors, styles } = useTheme();
   const q = useQuery({
     queryKey: ["review-queue"],
     queryFn: () => api<Campaign[]>("/review-queue"),
@@ -67,8 +67,7 @@ export function Reviewer() {
         </Text>
       </View>
       <Notice>
-        Restricted prototype controls. The server checks permissions and records
-        decisions. Advertising delivery is simulated.
+        Restricted review controls. Decisions are recorded; advertising is simulated.
       </Notice>
       {!!message && (
         <Notice tone={failed ? "error" : "success"}>{message}</Notice>
@@ -107,7 +106,7 @@ export function Reviewer() {
                         : ""}
                     </Text>
                     <Button
-                      title="Inspect story, sources & settings"
+                      title="Inspect campaign"
                       variant="secondary"
                       icon="arrow-forward"
                       onPress={() => router.push(`/explore/${c.id}`)}
@@ -224,7 +223,7 @@ export function Reviewer() {
                           starting.
                         </Text>
                         <Button
-                          title="Confirm setup & start simulated promotion"
+                          title="Start promotion · demo"
                           loading={busy === c.id}
                           disabled={!!busy || revisionBlocked}
                           onPress={() =>
@@ -246,7 +245,7 @@ export function Reviewer() {
                           </Text>
                         )}
                         <Button
-                          title="Reconfirm setup for approved revision"
+                          title="Reconfirm approved setup"
                           variant="secondary"
                           disabled={
                             !!busy || c.setupReady === true || revisionBlocked
@@ -261,13 +260,13 @@ export function Reviewer() {
                           }
                         />
                         <Button
-                          title="Record simulated delivery progress"
+                          title="Record demo progress"
                           variant="secondary"
                           disabled={!!busy || !c.setupReady || revisionBlocked}
                           onPress={() => run(c, "progress", {})}
                         />
                         <Button
-                          title="Complete simulated distribution"
+                          title="Complete distribution · demo"
                           loading={busy === c.id}
                           disabled={!!busy || !c.setupReady || revisionBlocked}
                           onPress={() =>

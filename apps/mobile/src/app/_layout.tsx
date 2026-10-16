@@ -1,10 +1,17 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
-import { ActivityIndicator, View } from "react-native";
+import { useEffect } from "react";
+import { ActivityIndicator, Platform, View } from "react-native";
+import * as SplashScreen from "expo-splash-screen";
 import { Providers } from "../lib/session";
-import { colors } from "../components/ui";
-export default function RootLayout() {
+import { useTheme } from "../components/ui";
+import { ThemeProvider } from "../lib/theme";
+
+if (Platform.OS !== "web") void SplashScreen.preventAutoHideAsync().catch(() => undefined);
+
+function AppContent() {
+  const { colors, scheme, ready } = useTheme();
   const [loaded, error] = useFonts({
     ManropeRegular: require("../../assets/fonts/Manrope-Regular.ttf"),
     ManropeMedium: require("../../assets/fonts/Manrope-Medium.ttf"),
@@ -13,7 +20,10 @@ export default function RootLayout() {
     NewsreaderMedium: require("../../assets/fonts/Newsreader-Medium.ttf"),
     NewsreaderSemiBold: require("../../assets/fonts/Newsreader-SemiBold.ttf"),
   });
-  if (!loaded && !error)
+  useEffect(() => {
+    if (ready && (loaded || error)) void SplashScreen.hideAsync().catch(() => undefined);
+  }, [ready, loaded, error]);
+  if (!ready || (!loaded && !error))
     return (
       <View
         style={{
@@ -31,8 +41,12 @@ export default function RootLayout() {
     );
   return (
     <Providers>
-      <StatusBar style="dark" />
-      <Stack screenOptions={{ headerShown: false }} />
+      <StatusBar style={scheme === "dark" ? "light" : "dark"} />
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }} />
     </Providers>
   );
+}
+
+export default function RootLayout() {
+  return <ThemeProvider><AppContent /></ThemeProvider>;
 }

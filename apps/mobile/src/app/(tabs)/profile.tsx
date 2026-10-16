@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Linking, ScrollView, Switch, View } from "react-native";
+import { Linking, Pressable, ScrollView, Switch, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api, getApiUrl, normalizeApiUrl, setApiUrl } from "../../lib/api";
-import { Campaign, Config, estimate, money, number } from "../../lib/types";
+import { Campaign, Config, Payment, estimate, money, number } from "../../lib/types";
+import { useQuery } from "@tanstack/react-query";
 import {
   refresh,
   queryClient,
@@ -15,11 +17,11 @@ import {
 import {
   Accordion,
   Button,
-  colors,
   Empty,
   ErrorState,
   Field,
   fonts,
+  IconButton,
   Loading,
   Notice,
   PageHeader,
@@ -28,7 +30,7 @@ import {
   Progress,
   Screen,
   Text,
-  styles,
+  useTheme,
 } from "../../components/ui";
 import { AuthForm } from "../../features/auth";
 import { Reviewer } from "../../features/reviewer";
@@ -78,7 +80,8 @@ const information: Record<string, string> = {
 };
 
 export default function Profile() {
-  const params = useLocalSearchParams<{ section?: string }>();
+  const { colors, styles } = useTheme();
+  const params = useLocalSearchParams<{ section?: string; payment?: string }>();
   const session = useSession();
   const me = useMe();
   const campaigns = useCampaigns();
@@ -87,27 +90,40 @@ export default function Profile() {
   const [filter, setFilter] = useState("Drafts");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [address, setAddress] = useState(getApiUrl());
   const [name, setName] = useState("");
+  const [focusedPayment, setFocusedPayment] = useState<{
+    id: string;
+    userId: string;
+  } | null>(null);
   useEffect(() => {
     setMessage("");
     setName("");
+    setFocusedPayment(null);
   }, [session.user?.id]);
   useEffect(() => {
     if (params.section === "Payments" || params.section === "Settings") {
       setSection(params.section);
       setMessage("");
-      router.setParams({ section: undefined });
+      if (params.section === "Payments" && params.payment && session.user) {
+        setFocusedPayment({ id: params.payment, userId: session.user.id });
+      } else {
+        setFocusedPayment(null);
+      }
+      router.setParams({ section: undefined, payment: undefined });
     }
-  }, [params.section]);
+  }, [params.section, params.payment, session.user]);
   async function run(action: () => Promise<unknown>, success: string) {
     setBusy(true);
     setMessage("");
+    setFailed(false);
     try {
       await action();
       await refresh();
       setMessage(success);
     } catch (e) {
+      setFailed(true);
       setMessage((e as Error).message);
     } finally {
       setBusy(false);
@@ -127,15 +143,14 @@ export default function Profile() {
             )
           : [];
   return (
-    <Screen key={section}>
+    <Screen key={`${section}:${focusedPayment?.id || ""}`}>
       <PageHeader
         title="Profile"
         action={
           session.user ? (
-            <Button
-              title="Refresh"
+            <IconButton
+              label="Refresh your profile"
               icon="refresh-outline"
-              variant="ghost"
               loading={me.isFetching || campaigns.isFetching}
               onPress={() => {
                 void refresh();
@@ -144,23 +159,45 @@ export default function Profile() {
           ) : undefined
         }
       />
-      {!!message && <Notice>{message}</Notice>}
+      {!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}
+      {session.ready && !session.user && <AppearanceSettings />}
       {!session.ready ? (
         <Loading />
       ) : !session.user ? (
         <AuthForm />
       ) : (
         <>
-          <View style={{ gap: 5, paddingBottom: 2 }}>
-            <Text style={styles.h2}>
-              {me.data?.user.name || session.user.name}
-            </Text>
-            <Text style={styles.muted}>{session.user.email}</Text>
-            <Text style={[styles.muted, { color: colors.green }]}>
-              {session.user.role === "reviewer"
-                ? "Reviewer · creator · backer"
-                : "Creator · backer"}
-            </Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+            <View
+              accessible={false}
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 24,
+                backgroundColor: colors.mint,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={{ fontFamily: fonts.bold, color: colors.green, fontSize: 18 }}>
+                {(me.data?.user.name || session.user.name)
+                  .trim()
+                  .split(/\s+/)
+                  .slice(0, 2)
+                  .map((part) => part.charAt(0).toUpperCase())
+                  .join("")}
+              </Text>
+            </View>
+            <View style={{ flex: 1, gap: 3 }}>
+              <Text style={[styles.h2, { fontSize: 20, lineHeight: 27 }]}>
+                {me.data?.user.name || session.user.name}
+              </Text>
+              <Text style={[styles.muted, { fontSize: 12 }]}>
+                {session.user.role === "reviewer"
+                  ? "Reviewer · creator · backer"
+                  : "One account to create, back and follow"}
+              </Text>
+            </View>
           </View>
           <ScrollView
             horizontal
@@ -181,6 +218,7 @@ export default function Profile() {
                 selected={section === s}
                 onPress={() => {
                   setSection(s);
+                  setFocusedPayment(null);
                   setMessage("");
                   void me.refetch();
                   void campaigns.refetch();
@@ -188,6 +226,7 @@ export default function Profile() {
               />
             ))}
           </ScrollView>
+          {section === "Settings" && <AppearanceSettings />}
           {section === "Review" ? (
             <Reviewer />
           ) : me.isPending ? (
@@ -199,6 +238,7 @@ export default function Profile() {
               <Text accessibilityRole="header" style={styles.h2}>
                 Account settings
               </Text>
+              <Text style={styles.muted}>{session.user.email}</Text>
               <Field
                 label="Display name"
                 value={name}
@@ -261,7 +301,8 @@ export default function Profile() {
                           me.data.preferences.categories[category] !== false
                         }
                         disabled={busy}
-                        trackColor={{ false: "#B5BEC5", true: colors.green }}
+                        trackColor={{ false: colors.outline, true: colors.green }}
+                        thumbColor={colors.onPrimary}
                         onValueChange={(value) => {
                           void run(
                             () =>
@@ -302,7 +343,15 @@ export default function Profile() {
                 Simulated payments for message distribution. No real money has
                 moved.
               </Text>
-              {!me.data.payments.length ? (
+              {focusedPayment?.userId === session.user.id && (
+                <PrivatePayment
+                  paymentId={focusedPayment.id}
+                  payments={me.data.payments}
+                  userId={session.user.id}
+                  onClose={() => setFocusedPayment(null)}
+                />
+              )}
+              {focusedPayment?.userId === session.user.id ? null : !me.data.payments.length ? (
                 <Empty
                   title="No contributions yet"
                   body="Your simulated contributions and private receipts will appear here."
@@ -342,7 +391,7 @@ export default function Profile() {
                         >
                           {p.title}
                         </Text>
-                        <Text style={[styles.h2, { fontSize: 22 }]}>
+                        <Text style={[styles.h2, { fontSize: 22, fontVariant: ["tabular-nums"] }]}>
                           {money(p.amount)}
                         </Text>
                       </View>
@@ -365,15 +414,7 @@ export default function Profile() {
                         <Button
                           title="Open private receipt"
                           variant="ghost"
-                          disabled={busy}
-                          onPress={() =>
-                            run(
-                              async () => {
-                                await api(p.receipt!.url);
-                              },
-                              `Receipt ${p.receipt?.id}: ${money(p.total)} total simulated payment; fee ${money(p.fee)}; advertising ${money(p.adBudget)}.`,
-                            )
-                          }
+                          onPress={() => setFocusedPayment({ id: p.id, userId: session.user!.id })}
                         />
                       )}
                     </View>
@@ -542,6 +583,93 @@ export default function Profile() {
   );
 }
 
+function PrivatePayment({
+  paymentId,
+  payments,
+  userId,
+  onClose,
+}: {
+  paymentId: string;
+  payments: Payment[];
+  userId: string;
+  onClose: () => void;
+}) {
+  const { colors, styles } = useTheme();
+  // Only the signed-in account's /me records may open a receipt. The receipt
+  // endpoint checks ownership again; its capability token never enters a route.
+  const payment = payments.find((item) => item.id === paymentId);
+  const receipt = useQuery({
+    queryKey: ["receipt", userId, paymentId],
+    queryFn: () => api<Payment & { refunded?: number; note?: string }>(
+      `/receipts/${encodeURIComponent(paymentId)}`,
+    ),
+    enabled: payment?.status === "successful" && !!payment.receipt,
+  });
+  const verified = receipt.data?.id === payment?.id &&
+    receipt.data?.campaignId === payment?.campaignId ? receipt.data : null;
+  return (
+    <View style={{ gap: 14 }}>
+      <View style={{ gap: 4 }}>
+        <Text accessibilityRole="header" style={styles.h2}>
+          {payment?.status === "successful" ? "Private receipt" : "Payment details"}
+        </Text>
+        <Text style={styles.muted}>
+          Available only to the account that made this contribution.
+        </Text>
+      </View>
+      {!payment ? (
+        <Notice tone="error">
+          This payment is not available in your account. Refresh your profile or
+          return to payment history. No private receipt has been opened.
+        </Notice>
+      ) : payment.status !== "successful" || !payment.receipt ? (
+        <>
+          <Text style={styles.body}>{payment.title}</Text>
+          <Notice>
+            This simulated payment is {payment.status}. A receipt is issued only
+            after confirmed success. This attempt has not increased campaign funding.
+          </Notice>
+          <Text style={styles.body}>Attempted payment · {money(payment.total)}</Text>
+        </>
+      ) : receipt.isPending ? (
+        <View style={{ gap: 8 }}>
+          <Text style={styles.muted}>Loading your private receipt…</Text>
+          <Loading />
+        </View>
+      ) : receipt.isError ? (
+        <ErrorState error={receipt.error} retry={() => receipt.refetch()} />
+      ) : !verified ? (
+        <Notice tone="error">
+          This receipt could not be verified against your payment. Refresh your profile and try again.
+        </Notice>
+      ) : (
+        <>
+          <View style={{ backgroundColor: colors.paper, borderWidth: 1, borderColor: colors.line, borderRadius: 14, padding: 16, gap: 12 }}>
+            <Text style={[styles.h2, { fontSize: 18, lineHeight: 25 }]}>{verified.title}</Text>
+            <Text style={styles.muted}>Receipt {verified.id}</Text>
+            <Text style={styles.muted}>{new Date(verified.createdAt).toLocaleString()}</Text>
+            <Text style={styles.body}>Contribution · {money(verified.amount)}</Text>
+            <Text style={styles.body}>Included platform fee · {money(verified.fee)}</Text>
+            <Text style={styles.body}>Original advertising allocation · {money(verified.adBudget)}</Text>
+            <Text style={[styles.h2, { fontSize: 20, lineHeight: 27 }]}>Total simulated payment · {money(verified.total)}</Text>
+            <Text style={styles.muted}>Estimated audience at payment · {number(verified.reach)} people. Model estimate, not guaranteed or measured delivery.</Text>
+            {typeof verified.refunded === "number" && (
+              <Text style={styles.body}>Completed simulated refund · {money(verified.refunded)}</Text>
+            )}
+          </View>
+          <Notice>{verified.note || "Simulated transaction receipt. No real funds moved; this is not a charitable donation receipt."}</Notice>
+          <Button
+            title="View campaign progress & report"
+            variant="secondary"
+            onPress={() => router.push(`/explore/${encodeURIComponent(verified.campaignId)}/report`)}
+          />
+        </>
+      )}
+      <Button title="Back to payment history" variant="ghost" onPress={onClose} />
+    </View>
+  );
+}
+
 function DashboardCard({
   c,
   config,
@@ -555,6 +683,7 @@ function DashboardCard({
   owner: boolean;
   revision: () => void;
 }) {
+  const { colors, styles } = useTheme();
   const state = c.campaignState || c.status;
   const editable = owner && ["Draft", "Changes Requested"].includes(c.status);
   const activePublished =
@@ -573,8 +702,10 @@ function DashboardCard({
       style={{
         backgroundColor: colors.paper,
         borderRadius: 14,
-        padding: 16,
-        gap: 14,
+        borderWidth: 1,
+        borderColor: colors.line,
+        padding: 14,
+        gap: 12,
       }}
     >
       <View style={{ flexDirection: "row", gap: 14, alignItems: "flex-start" }}>
@@ -582,10 +713,10 @@ function DashboardCard({
           <Picture uri={c.coverImage} height={76} />
         </View>
         <View style={{ flex: 1, gap: 5 }}>
-          <Text style={[styles.h2, { fontSize: 18, lineHeight: 25 }]}>
+          <Text style={[styles.h2, { fontSize: 17, lineHeight: 24 }]}>
             {c.title || "Untitled draft"}
           </Text>
-          <Text style={styles.muted}>{state}</Text>
+          <Text style={[styles.muted, { fontSize: 12, color: colors.green }]}>{state}</Text>
           {c.revisionPending && (
             <Text style={[styles.muted, { color: colors.green }]}>
               Private revision: {c.status}
@@ -595,14 +726,15 @@ function DashboardCard({
       </View>
       {c.goal > 0 ? (
         <>
-          <Text style={[styles.body, { fontFamily: fonts.semibold }]}>
+          <Text style={[styles.body, { fontFamily: fonts.semibold, fontVariant: ["tabular-nums"] }]}>
             {money(c.raised)}{" "}
             <Text style={styles.muted}>of {money(c.goal)}</Text>
           </Text>
           <Progress raised={c.raised} goal={c.goal} />
           <Text style={styles.muted}>
-            Est. {number(estimate(c.goal, config))} people at goal · demo
-            estimate
+            {config
+              ? `Est. ${number(estimate(c.goal, config))} people at goal · demo estimate`
+              : "Reach estimate unavailable until settings load"}
           </Text>
         </>
       ) : (
@@ -641,10 +773,125 @@ function DashboardCard({
         />
       )}
       <Button
-        title="Funding, promotion & report"
+        title="Progress & report"
         variant="ghost"
         onPress={() => router.push(`/explore/${c.id}/report`)}
       />
+    </View>
+  );
+}
+
+function AppearanceSettings() {
+  const {
+    colors,
+    styles,
+    preference,
+    scheme,
+    setPreference,
+    ready,
+    appearanceError,
+  } = useTheme();
+  const [saving, setSaving] = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [error, setError] = useState("");
+  const choices = [
+    { value: "system", title: "System", icon: "phone-portrait-outline" },
+    { value: "light", title: "Light", icon: "sunny-outline" },
+    { value: "dark", title: "Dark", icon: "moon-outline" },
+  ] as const;
+  async function change(value: "system" | "light" | "dark") {
+    if (saving) return;
+    setSaving(true);
+    setFeedback("");
+    setError("");
+    try {
+      await setPreference(value);
+      setFeedback("Appearance saved on this device.");
+    } catch {
+      setError("Appearance changed, but could not be saved. Try again.");
+    } finally {
+      setSaving(false);
+    }
+  }
+  return (
+    <View style={{ gap: 10 }}>
+      <View style={{ gap: 3 }}>
+        <Text
+          accessibilityRole="header"
+          style={[styles.h2, { fontSize: 19, lineHeight: 26 }]}
+        >
+          Appearance
+        </Text>
+        <Text style={styles.muted}>
+          {preference === "system"
+            ? `Follows your device · ${scheme === "dark" ? "Dark" : "Light"}`
+            : `${preference === "dark" ? "Dark" : "Light"} on this device`}
+        </Text>
+      </View>
+      <View
+        accessibilityRole="radiogroup"
+        accessibilityLabel="Appearance"
+        style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}
+      >
+        {choices.map((choice) => {
+          const selected = preference === choice.value;
+          return (
+            <Pressable
+              key={choice.value}
+              accessibilityRole="radio"
+              accessibilityLabel={`${choice.title} appearance`}
+              accessibilityState={{ checked: selected, disabled: saving || !ready }}
+              disabled={saving || !ready}
+              onPress={() => void change(choice.value)}
+              style={({ pressed }) => ({
+                flex: 1,
+                minWidth: 88,
+                minHeight: 64,
+                paddingVertical: 10,
+                paddingHorizontal: 8,
+                borderRadius: 12,
+                borderWidth: 1,
+                borderColor: selected ? colors.green : colors.outline,
+                backgroundColor: selected ? colors.mint : colors.paper,
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 5,
+                opacity: pressed ? 0.75 : saving ? 0.6 : 1,
+              })}
+            >
+              <Ionicons
+                name={selected ? "checkmark-circle" : choice.icon}
+                size={20}
+                color={selected ? colors.green : colors.muted}
+              />
+              <Text
+                style={[
+                  styles.body,
+                  {
+                    fontSize: 14,
+                    fontFamily: selected ? fonts.bold : fonts.medium,
+                    color: colors.ink,
+                    textAlign: "center",
+                  },
+                ]}
+              >
+                {choice.title}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+      {(saving || !!feedback) && (
+        <Text
+          accessibilityLiveRegion="polite"
+          style={[styles.muted, { fontSize: 12 }]}
+        >
+          {saving ? "Saving appearance…" : feedback}
+        </Text>
+      )}
+      {(!!error || !!appearanceError) && (
+        <Notice tone="error">{appearanceError || error}</Notice>
+      )}
     </View>
   );
 }

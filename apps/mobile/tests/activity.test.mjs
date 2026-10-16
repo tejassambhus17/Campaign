@@ -39,14 +39,25 @@ test('unread and category filters reflect actual events and supported plural cat
 
 test('resolved server destinations open the editor, report, payments or account context', () => {
   for (const [type, title, href] of [
-    ['creator', 'Review & edit', '/create?draft=campaign-one'],
-    ['report', 'View report', '/explore/campaign-one/report'],
+    ['creator', 'Review & edit', '/create?draft=campaign-one&context=review'],
+    ['report', 'View progress & report', '/explore/campaign-one/report'],
     ['campaign', 'Read campaign', '/explore/campaign-one'],
     ['payments', 'Payment history', '/profile?section=Payments'],
     ['profile', 'Account settings', '/profile?section=Settings'],
   ]) {
     assert.deepEqual(notificationAction({ destination: { type, campaignId: 'campaign-one' } }), { title, href });
   }
+});
+
+test('owned payment destinations retain the exact private receipt context without a capability token', () => {
+  assert.deepEqual(notificationAction({
+    category: 'payments', campaignId: 'campaign-one',
+    destination: { type: 'payments', paymentId: 'pay-one' },
+  }), { title: 'View payment & receipt', href: '/profile?section=Payments&payment=pay-one' });
+  assert.equal(notificationAction({ destination: { type: 'payments', paymentId: 'one?token=secret&section=Settings' } }).href,
+    '/profile?section=Payments&payment=one%3Ftoken%3Dsecret%26section%3DSettings');
+  assert.equal(notificationAction({ destination: { type: 'profile', paymentId: 'not-owned' } }).href,
+    '/profile?section=Settings');
 });
 
 test('safe server fallbacks override stale IDs and legacy notifications have useful destinations', () => {

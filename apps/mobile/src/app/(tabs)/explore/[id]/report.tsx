@@ -1,23 +1,28 @@
 import { View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
-import { useRefreshOnFocus } from "../../../../lib/session";
+import { useConfig, useRefreshOnFocus } from "../../../../lib/session";
 import { api } from "../../../../lib/api";
 import { Campaign, money, number } from "../../../../lib/types";
+import { audienceCampaign } from "../../../../lib/public-campaign";
 import {
   Button,
-  colors,
   ErrorState,
   fonts,
+  IconButton,
   Loading,
   Notice,
   PageHeader,
+  Picture,
   Screen,
   Text,
-  styles,
+  useTheme,
 } from "../../../../components/ui";
+import { CampaignJourney } from "../../../../features/campaign";
 
 export default function Report() {
+  const { colors, styles } = useTheme();
+  const config = useConfig();
   const { id } = useLocalSearchParams<{ id: string }>();
   const c = useQuery({
     queryKey: ["campaign", id],
@@ -29,6 +34,7 @@ export default function Report() {
   });
   useRefreshOnFocus(c.refetch);
   useRefreshOnFocus(report.refetch);
+  const audience = c.data ? audienceCampaign(c.data) : null;
   return (
     <Screen>
       <View style={{ gap: 2 }}>
@@ -36,15 +42,14 @@ export default function Report() {
           title="Back to campaign"
           variant="ghost"
           icon="arrow-back"
-          onPress={() => router.replace(`/explore/${id}`)}
+          onPress={() => router.dismissTo(`/explore/${id}`)}
           style={{ alignSelf: "flex-start", paddingHorizontal: 0 }}
         />
         <PageHeader
           title="Campaign report"
           action={
-            <Button
-              title="Refresh"
-              variant="ghost"
+            <IconButton
+              label="Refresh campaign report"
               icon="refresh-outline"
               loading={c.isFetching || report.isFetching}
               onPress={() => {
@@ -59,35 +64,50 @@ export default function Report() {
         <Loading />
       ) : c.isError ? (
         <ErrorState error={c.error} retry={() => c.refetch()} />
+      ) : !audience ? (
+        <Notice tone="error">
+          Approved campaign details are unavailable. Refresh before viewing its report.
+        </Notice>
       ) : (
         <View style={{ gap: 14 }}>
-          <View style={{ gap: 6 }}>
-            <Text
-              style={{
-                fontFamily: fonts.semibold,
-                fontSize: 20,
-                lineHeight: 27,
-                color: colors.ink,
-              }}
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+            <View
+              style={{ width: 64, height: 64, borderRadius: 10, overflow: "hidden" }}
             >
-              {c.data.title}
-            </Text>
-            <Text style={styles.muted}>
-              {c.data.campaignState || c.data.status}
-            </Text>
-            {c.data.revisionPending && (
-              <Text style={styles.muted}>
-                Private revision: {c.data.status}. Funding and delivery below
-                reflect the campaign ledger.
+              <Picture uri={audience.coverImage} height={64} />
+            </View>
+            <View style={{ flex: 1, gap: 4 }}>
+              <Text
+                style={{
+                  fontFamily: fonts.semibold,
+                  fontSize: 18,
+                  lineHeight: 25,
+                  color: colors.ink,
+                }}
+              >
+                {audience.title}
               </Text>
-            )}
+              <Text style={styles.muted}>
+                {audience.campaignState || audience.status}
+              </Text>
+            </View>
           </View>
+          {audience.revisionPending && (
+            <Text style={styles.muted}>
+              A private revision exists. This report uses the approved public
+              campaign and recorded ledger.
+            </Text>
+          )}
           {report.isPending ? (
             <Loading />
           ) : report.isError ? (
             <ErrorState error={report.error} retry={() => report.refetch()} />
           ) : (
-            <ReportMetrics data={report.data || {}} campaign={c.data} />
+            <ReportMetrics
+              data={report.data || {}}
+              campaign={audience}
+              refundPolicy={config.data?.policies.refunds}
+            />
           )}
         </View>
       )}
@@ -98,10 +118,13 @@ export default function Report() {
 function ReportMetrics({
   data: r,
   campaign: c,
+  refundPolicy,
 }: {
   data: Record<string, unknown>;
   campaign: Campaign;
+  refundPolicy?: string;
 }) {
+  const { colors, styles } = useTheme();
   const numeric = (key: string) =>
     typeof r[key] === "number" && Number.isFinite(r[key])
       ? (r[key] as number)
@@ -114,65 +137,120 @@ function ReportMetrics({
   return (
     <>
       <Notice>
-        Demonstration report. Payments and advertising delivery are simulated.
-        Delivery figures are not verified real-world results.
+        Demo report. Payments and delivery are simulated; no live advertising results are verified.
       </Notice>
+      <CampaignJourney campaign={c} report={r} />
       <View style={{ gap: 5 }}>
         <Text accessibilityRole="header" style={styles.h2}>
-          {final ? "Final funding breakdown" : "Funding breakdown"}
+          Original contribution allocation
         </Text>
         <Text style={styles.muted}>
-          Contributions fund message distribution. All amounts are USD.
+          Contributions pay for message distribution. These original amounts
+          stay visible after refunds. All amounts are USD.
         </Text>
       </View>
       <View
         style={{
           backgroundColor: colors.paper,
           borderRadius: 14,
+          borderWidth: 1,
+          borderColor: colors.line,
           paddingHorizontal: 16,
         }}
       >
         <Metric
-          label="Funds raised"
+          label="Successful contributions"
           value={currency("raised")}
-          description="Successful simulated contributions before fees."
+          description="Original total before included fees or completed refunds."
           prominent
         />
         <Metric
-          label="Platform fees"
+          label="Original included fees"
           value={currency("fees")}
-          description="Included fees recorded for successful contributions."
+          description="Already included in the contribution total; not an additional payment."
         />
         <Metric
-          label="Advertising budget allocated"
+          label="Original advertising allocation"
           value={currency("allocated")}
-          description="The recorded budget after included fees."
+          description="Original contributions less original included fees, before spend or refunds."
+          last
         />
+      </View>
+      <View style={{ gap: 5 }}>
+        <Text accessibilityRole="header" style={styles.h2}>
+          Where the funds stand
+        </Text>
+        <Text style={styles.muted}>
+          Spend, retained fees, completed refunds and remaining advertising budget
+          account for the original contributions. A refund awaiting completion
+          has not been deducted yet.
+        </Text>
+      </View>
+      <View
+        style={{
+          backgroundColor: colors.paper,
+          borderRadius: 14,
+          borderWidth: 1,
+          borderColor: colors.line,
+          paddingHorizontal: 16,
+        }}
+      >
         <Metric
-          label="Advertising spend"
+          label="Simulated advertising spend"
           value={currency("spent")}
-          description="Simulated expenditure, separate from funds raised."
+          description="Recorded modelled expenditure. No live advertising was purchased."
         />
         <Metric
-          label="Simulated refunds"
+          label="Platform fees retained"
+          value={currency("retainedFees")}
+          description={numeric("refundedFees") === null
+            ? "The server has not supplied the retained fee breakdown."
+            : `${currency("refundedFees")} of the original fees has been refunded. Retained fees may still be included in a pending full refund.`}
+        />
+        <Metric
+          label="Completed simulated refunds"
           value={currency("refunded")}
-          description="Refunds recorded in the demo ledger."
+          description={numeric("refundedAdvertising") === null || numeric("refundedFees") === null
+            ? "Completed refunds in the demo ledger. Their advertising/fee split is unavailable."
+            : `${currency("refundedAdvertising")} from advertising and ${currency("refundedFees")} from fees. These portions are already included in this refund total.`}
         />
         <Metric
-          label="Unspent advertising budget"
-          value={
-            numeric("unspent") === null
-              ? "Not calculated yet"
-              : currency("unspent")
-          }
-          description="Handled under the disclosed refund policy."
+          label="Advertising budget remaining"
+          value={currency("remainingAdvertisingBudget")}
+          description="Original advertising allocation less simulated spend and completed advertising refunds. Already-refunded funds are not available to spend again."
         />
         <Metric
-          label="Successful contributions"
+          label="Contribution records"
           value={count("contributionCount")}
           description="Payment records; backer identities remain private. Guest uniqueness is not measured."
           last
         />
+      </View>
+      <View style={{ gap: 8 }}>
+        <Text accessibilityRole="header" style={styles.h2}>Refund status</Text>
+        <Notice tone={r.refundState === "completed" || r.refundState === "not_due" ? "success" : "info"}>
+          {typeof r.refundStatus === "string" ? r.refundStatus : "A current refund status has not been supplied by the server."}
+        </Notice>
+        {r.refundState === "pending" && (
+          <Text style={styles.body}>
+            Awaiting simulated refund · {currency("refundPendingAmount")}. This
+            is pending, not a completed refund or an additional fund balance.
+          </Text>
+        )}
+        {numeric("unspentBeforeRefund") !== null && (
+          <Text style={styles.muted}>
+            {currency("unspentBeforeRefund")} of the original advertising
+            allocation was unspent before refunds. This includes any advertising
+            amount already refunded above; do not add it to the remaining budget.
+          </Text>
+        )}
+        {!!refundPolicy && <Text style={styles.muted}>{refundPolicy}</Text>}
+        {numeric("remainingAdvertisingBudget") === null && (
+          <Text style={styles.muted}>
+            This server does not provide the current balance after refunds.
+            Historical unspent figures are not presented as an available balance.
+          </Text>
+        )}
       </View>
       <View style={{ gap: 5 }}>
         <Text accessibilityRole="header" style={styles.h2}>
@@ -186,18 +264,20 @@ function ReportMetrics({
         style={{
           backgroundColor: colors.paper,
           borderRadius: 14,
+          borderWidth: 1,
+          borderColor: colors.line,
           paddingHorizontal: 16,
         }}
       >
         <Metric
           label="Estimated unique reach"
           value={count("estimatedReach")}
-          description="Model estimate based on the funded budget. Not guaranteed."
+          description="Model estimate for the original advertising allocation, before refunds. Not guaranteed delivery."
         />
         <Metric
           label="Simulated reach"
           value={count("simulatedReach")}
-          description="People reached in the controlled advertising simulation."
+          description="Modelled audience in the controlled simulation. These are not measured people."
         />
         <Metric
           label="Measured unique reach"
@@ -251,11 +331,12 @@ function Metric({
   prominent?: boolean;
   last?: boolean;
 }) {
+  const { colors, styles } = useTheme();
   return (
     <View
       style={{
-        paddingVertical: 16,
-        gap: 7,
+        paddingVertical: 13,
+        gap: 4,
         borderBottomWidth: last ? 0 : 1,
         borderColor: colors.line,
       }}
@@ -278,14 +359,15 @@ function Metric({
           style={{
             fontFamily: fonts.bold,
             color: colors.ink,
-            fontSize: prominent ? 27 : 18,
-            lineHeight: prominent ? 34 : 26,
+            fontSize: prominent ? 24 : 17,
+            lineHeight: prominent ? 31 : 25,
+            fontVariant: ["tabular-nums"],
           }}
         >
           {value}
         </Text>
       </View>
-      <Text style={styles.muted}>{description}</Text>
+      <Text style={[styles.muted, { fontSize: 13, lineHeight: 20 }]}>{description}</Text>
     </View>
   );
 }

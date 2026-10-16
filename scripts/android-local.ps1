@@ -4,17 +4,21 @@ param(
   [ValidateRange(1,4)][int]$Workers = 2,
   [ValidateSet('Debug','InternalTest')]
   [string]$Mode = 'Debug',
-  [string]$ApiUrl = 'http://10.0.2.2:8787'
+  [string]$ApiUrl = 'http://10.0.2.2:8787',
+  [ValidatePattern('^$|^[a-z0-9][a-z0-9-]{0,63}$')]
+  [string]$ArtifactTag = ''
 )
 $ErrorActionPreference = 'Stop'
 $campaignRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
 if ($campaignRoot -ne 'E:\Campaign') { throw 'The authorized project root must resolve to E:\Campaign.' }
 $mobileRoot = Join-Path $campaignRoot 'apps/mobile'
 $buildRoot = Join-Path $campaignRoot 'tmp/android-build'
+$javaTemp = Join-Path $campaignRoot 'tmp/java'
 $sdkRoot = Join-Path $campaignRoot 'tools/android-sdk'
 $jdkRoot = Join-Path $sdkRoot 'jdk17'
 $nativeRoot = Join-Path $mobileRoot 'android'
 $artifactRoot = Join-Path $campaignRoot 'artifacts/android'
+if ($ArtifactTag) { $artifactRoot = Join-Path $artifactRoot $ArtifactTag }
 $internalTest = $Mode -eq 'InternalTest'
 $variant = if ($internalTest) { 'release' } else { 'debug' }
 $artifactLabel = if ($internalTest) { 'INTERNAL-TEST' } else { 'debug' }
@@ -42,7 +46,7 @@ if ([version](& $campaignNode -p 'process.versions.node') -lt [version]'20.19.4'
 }
 $nodeVersion = & $campaignNode -p 'process.versions.node'
 if ([version]$nodeVersion -lt [version]'20.19.4') { throw 'Use Node 20.19.4+ or set CAMPAIGN_NODE to a compatible executable.' }
-New-Item -ItemType Directory -Path $buildRoot,$artifactRoot -Force | Out-Null
+New-Item -ItemType Directory -Path $buildRoot,$artifactRoot,$javaTemp -Force | Out-Null
 $temporaryEnvironment = @{
   JAVA_HOME = $jdkRoot
   ANDROID_HOME = $sdkRoot
@@ -50,6 +54,10 @@ $temporaryEnvironment = @{
   ANDROID_SDK_HOME = $buildRoot
   ANDROID_USER_HOME = (Join-Path $buildRoot '.android')
   GRADLE_USER_HOME = (Join-Path $buildRoot 'gradle')
+  # Windows AF_UNIX selector wakeups fail through this host's aliased user TEMP.
+  # Use a tested, project-local canonical path for client and daemon JVMs.
+  # The existing value is restored in finally, like the other process variables.
+  JAVA_TOOL_OPTIONS = "-Djava.io.tmpdir=$($javaTemp.Replace('\','/')) -Djdk.net.unixdomain.tmpdir=$($javaTemp.Replace('\','/'))"
   PATH = ((Split-Path $campaignNode) + ';' + (Join-Path $jdkRoot 'bin') + ';' + $env:PATH)
   EXPO_NO_TELEMETRY = '1'
   CI = '1'
@@ -64,7 +72,8 @@ foreach ($name in $temporaryEnvironment.Keys) {
 }
 $started = [DateTime]::UtcNow.ToString('o')
 $architectureLabel = $Architecture.Replace('arm64-v8a','arm64').Replace(',','-')
-$buildLog = Join-Path $buildRoot "assemble-$artifactLabel-$architectureLabel.log"
+$logTag = if ($ArtifactTag) { "-$ArtifactTag" } else { '' }
+$buildLog = Join-Path $buildRoot "assemble-$artifactLabel-$architectureLabel$logTag.log"
 $buildExitCode = 1
 Push-Location -LiteralPath $mobileRoot
 try {
@@ -204,6 +213,8 @@ try {
   $checksum = (Get-FileHash -LiteralPath $artifact -Algorithm SHA256).Hash
   $metadata = @{
     architecture = $Architecture; apk = $artifact; bytes = (Get-Item -LiteralPath $artifact).Length
+    artifactTag = $ArtifactTag
+    jvmTemporaryDirectory = $javaTemp
     sha256 = $checksum; startedUtc = $started; finishedUtc = [DateTime]::UtcNow.ToString('o')
     node = $nodeVersion; sdk = 36; buildTools = '36.0.0'; ndk = '27.1.12297006'
     jdk = '17.0.20.1'; gradle = '9.0.0'; developmentOnly = $true; requiresMetro = $true

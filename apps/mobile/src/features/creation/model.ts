@@ -138,6 +138,8 @@ export type LocalDraft = {
   updatedAt: string;
   assistance?: Assistance;
   entryMode?: "voice" | "edit";
+  /** Written only after a confirmed account write; older device drafts have no sync claim. */
+  accountSavedToken?: string;
 };
 export function normalizeDraft(
   value: Partial<Campaign> & { currentStep?: number },

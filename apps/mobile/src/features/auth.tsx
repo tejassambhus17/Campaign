@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { View } from "react-native";
-import { Button, Field, Notice, Pill, Text, styles } from "../components/ui";
+import { Button, Field, Notice, Pill, Text, useTheme } from "../components/ui";
 import { useSession } from "../lib/session";
 export function AuthForm() {
+  const { styles } = useTheme();
   const session = useSession();
   const [mode, setMode] = useState<"login" | "register">("register");
   const [name, setName] = useState("");
@@ -23,12 +24,16 @@ export function AuthForm() {
     }
   }
   return (
-    <View style={{ gap: 18 }}>
-      <Text style={styles.body}>
-        One account to create campaigns, back messages and follow their
-        progress. You can browse without signing in.
-      </Text>
-      <View style={styles.row}>
+    <View style={{ gap: 14 }}>
+      <View style={{ gap: 5 }}>
+        <Text accessibilityRole="header" style={styles.h2}>
+          {mode === "register" ? "Create your account" : "Welcome back"}
+        </Text>
+        <Text style={styles.muted}>
+          One account to create, back and follow. Browse freely as a guest.
+        </Text>
+      </View>
+      <View style={[styles.row, { flexWrap: "wrap" }]}>
         <Pill
           title="Create account"
           selected={mode === "register"}
@@ -88,9 +93,8 @@ export function AuthForm() {
         }
         onPress={submit}
       />
-      <Text style={styles.muted}>
-        Demonstration account. Payments and advertising are simulated. Public
-        backer names stay private by default.
+      <Text style={[styles.muted, { fontSize: 13, lineHeight: 20 }]}>
+        Demo payments and advertising. Your public backer identity stays private.
       </Text>
     </View>
   );

@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Tabs } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { colors, fonts } from "../../components/ui";
+import { useTheme, fonts } from "../../components/ui";
 import { useActivity } from "../../lib/session";
 const icons: Record<string, React.ComponentProps<typeof Ionicons>["name"]> = {
   index: "home-outline",
@@ -12,6 +12,7 @@ const icons: Record<string, React.ComponentProps<typeof Ionicons>["name"]> = {
   profile: "person-circle-outline",
 };
 export default function TabLayout() {
+  const { colors } = useTheme();
   const activity = useActivity();
   const insets = useSafeAreaInsets();
   const bottom = Math.max(insets.bottom, 8);
@@ -58,7 +59,7 @@ export default function TabLayout() {
         options={{
           title: "Activity",
           tabBarBadge: unread ? (unread > 99 ? "99+" : unread) : undefined,
-          tabBarBadgeStyle: { backgroundColor: colors.green, color: "white" },
+          tabBarBadgeStyle: { backgroundColor: colors.primary, color: colors.onPrimary },
           tabBarAccessibilityLabel: unread
             ? `Activity, ${unread} unread updates`
             : "Activity",

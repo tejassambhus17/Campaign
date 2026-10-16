@@ -7,31 +7,35 @@ import {
 } from "../../../../lib/session";
 import { CampaignUpdates } from "../../../../features/updates";
 import { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, useWindowDimensions, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../../../../lib/api";
 import { Campaign } from "../../../../lib/types";
+import { audienceCampaign } from "../../../../lib/public-campaign";
 
 import {
   Text,
   Button,
-  colors,
   fonts,
   ErrorState,
   Loading,
   Notice,
   Picture,
   Screen,
-  styles,
+  useTheme,
 } from "../../../../components/ui";
 import {
   Disclosures,
   Funding,
   ShareButton,
   Story,
+  CampaignJourney,
 } from "../../../../features/campaign";
 export default function CampaignDetail() {
+  const { colors, styles } = useTheme();
+  const { fontScale, width } = useWindowDimensions();
+  const stackDock = fontScale > 1.15 || width < 350;
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user } = useSession();
   const q = useQuery({
@@ -81,12 +85,14 @@ export default function CampaignDetail() {
         <Button
           title="Back to Explore"
           variant="ghost"
-          onPress={() => router.replace("/explore")}
+          onPress={() => router.dismissTo("/explore")}
         />
         <ErrorState error={q.error} retry={() => q.refetch()} />
       </Screen>
     );
-  const c = q.data;
+  const c = audienceCampaign(q.data);
+  if (!c) return <Screen><Button title="Back to Explore" variant="ghost" icon="arrow-back" onPress={() => router.dismissTo("/explore")} /><Notice>The approved public campaign could not be loaded. Private edits cannot be backed. Open Profile to manage your campaign.</Notice></Screen>;
+  const publicState = c.campaignState || c.status;
   const days = c.deadline
     ? Math.max(0, Math.ceil((Date.parse(c.deadline) - Date.now()) / 86400000))
     : undefined;
@@ -94,22 +100,23 @@ export default function CampaignDetail() {
     <Screen scroll={false}>
       <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
         <View style={{ width: "100%", maxWidth: 640, alignSelf: "center" }}>
-          <View style={{ paddingHorizontal: 16, alignItems: "flex-start" }}>
+          <View style={{ paddingHorizontal: 16, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
             <Button
-              title="Back to Explore"
+              title="Explore"
               variant="ghost"
               icon="arrow-back"
-              onPress={() => router.replace("/explore")}
+              onPress={() => router.dismissTo("/explore")}
             />
+            <ShareButton campaign={c} compact />
           </View>
-          <Picture uri={c.coverImage} height={210} />
-          <View style={{ padding: 20, gap: 16 }}>
+          <Picture uri={c.coverImage} height={220} />
+          <View style={{ padding: 18, gap: 14 }}>
             <View style={{ ...styles.row, justifyContent: "space-between" }}>
               <Text
                 style={{
                   fontSize: 12,
                   fontWeight: "600",
-                  color: colors.orange,
+                  color: colors.muted,
                 }}
               >
                 {c.category}
@@ -120,15 +127,14 @@ export default function CampaignDetail() {
             </View>
             <Text
               style={{
-                fontFamily: fonts.editorialStrong,
-                fontSize: 32,
-                lineHeight: 35,
+                fontFamily: fonts.bold,
+                fontSize: 26,
+                lineHeight: 33,
                 color: colors.ink,
               }}
             >
               {c.title || "Untitled campaign"}
             </Text>
-            <Text style={styles.body}>{c.summary}</Text>
             <Text style={styles.muted}>
               By {c.creatorName} ·{" "}
               {c.publishedAt
@@ -152,12 +158,11 @@ export default function CampaignDetail() {
                   fontWeight: "600",
                 }}
               >
-                {c.status}
+                {publicState}
                 {c.revisionPending
-                  ? " · An updated version is awaiting review."
+                  ? " · Showing the approved public version; private changes are not included."
                   : ""}
               </Text>
-              <ShareButton campaign={c} />
             </View>
             <View
               style={{
@@ -170,8 +175,8 @@ export default function CampaignDetail() {
             >
               <Funding campaign={c} config={config.data} />
               <Text style={styles.muted}>
-                {c.status !== "Available for Funding"
-                  ? `${c.durationDays}-day delivery plan · ${c.status === "Completed" ? "Distribution complete" : c.status === "Promoting" ? "Promotion in progress" : "Funding is not open"}`
+                {publicState !== "Available for Funding"
+                  ? `${c.durationDays}-day delivery plan · ${publicState === "Completed" ? "Distribution complete" : publicState === "Promoting" ? "Promotion in progress" : "Funding is not open"}`
                   : days === undefined
                     ? `${c.durationDays}-day campaign`
                     : days > 0
@@ -180,8 +185,10 @@ export default function CampaignDetail() {
                 . Figures are demonstration data.
               </Text>
             </View>
+            {!!c.summary && <Text style={styles.body}>{c.summary}</Text>}
             {!!c.feedback && <Notice>Review feedback: {c.feedback}</Notice>}
             <Story campaign={c} />
+            <CampaignJourney campaign={c} />
             <Disclosures campaign={c} config={config.data} />
             <CampaignUpdates campaign={c} />
             <View style={styles.row}>
@@ -228,25 +235,25 @@ export default function CampaignDetail() {
         <View
           style={{ width: "100%", maxWidth: 608, alignSelf: "center", gap: 6 }}
         >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-            <View style={{ flex: 1 }}>
+          <View style={{ flexDirection: stackDock ? "column" : "row", alignItems: "stretch", gap: 10 }}>
+            <View style={stackDock ? undefined : { flex: 1 }}>
               <Funding campaign={c} config={config.data} compact />
             </View>
             <Button
               title={
-                c.status === "Available for Funding"
+                publicState === "Available for Funding"
                   ? "Back campaign"
-                  : c.status === "Completed"
+                  : publicState === "Completed"
                     ? "Final report"
                     : "Not open"
               }
-              style={{ width: 136, paddingHorizontal: 10 }}
+              style={{ minWidth: 136, paddingHorizontal: 10 }}
               disabled={
-                !["Available for Funding", "Completed"].includes(c.status)
+                !["Available for Funding", "Completed"].includes(publicState)
               }
               onPress={() =>
                 router.push(
-                  `/explore/${id}/${c.status === "Completed" ? "report" : "back"}`,
+                  `/explore/${id}/${publicState === "Completed" ? "report" : "back"}`,
                 )
               }
             />

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -14,35 +15,15 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useTheme } from "../lib/theme";
+import { fonts } from "../lib/appearance";
 import { mediaUrl } from "../lib/api";
-export const fonts = {
-  sans: "ManropeRegular",
-  medium: "ManropeMedium",
-  semibold: "ManropeSemiBold",
-  bold: "ManropeBold",
-  editorial: "NewsreaderMedium",
-  editorialStrong: "NewsreaderSemiBold",
-};
-export const colors = {
-  bg: "#F6F5F0",
-  paper: "#FFFFFF",
-  ink: "#17252E",
-  text: "#24333E",
-  muted: "#59666D",
-  line: "#DDE1E5",
-  outline: "#7B868E",
-  green: "#2D4ED8",
-  mint: "#EEF1FC",
-  orange: "#B83F2C",
-  peach: "#F9EEE8",
-  red: "#B3261E",
-  success: "#216146",
-  warning: "#785616",
-  focus: "#2D4ED8",
-};
+export { useTheme } from "../lib/theme";
+export { fonts } from "../lib/appearance";
 export function Text({ style, ...props }: TextProps) {
+  const { colors } = useTheme();
   const flat = StyleSheet.flatten(style) || {};
   const weight = Number(flat.fontWeight || 400);
   const family =
@@ -74,6 +55,7 @@ export function PageHeader({
   description?: string;
   action?: React.ReactNode;
 }) {
+  const { styles } = useTheme();
   return (
     <View style={{ gap: 6, paddingTop: 8, paddingBottom: 4 }}>
       <View
@@ -93,69 +75,37 @@ export function PageHeader({
     </View>
   );
 }
-export const styles = StyleSheet.create({
-  body: { fontSize: 15, lineHeight: 23, color: colors.text },
-  muted: { fontSize: 14, lineHeight: 21, color: colors.muted },
-  title: {
-    fontFamily: fonts.bold,
-    fontSize: 24,
-    lineHeight: 31,
-    letterSpacing: -0.6,
-    color: colors.ink,
-  },
-  h2: {
-    fontSize: 20,
-    lineHeight: 27,
-    fontFamily: fonts.bold,
-    fontWeight: "700",
-    color: colors.ink,
-    letterSpacing: -0.5,
-  },
-  label: {
-    fontSize: 11,
-    lineHeight: 16,
-    fontWeight: "600",
-    letterSpacing: 0.5,
-    color: colors.muted,
-  },
-  card: {
-    backgroundColor: colors.paper,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.line,
-    overflow: "hidden",
-  },
-  row: { flexDirection: "row", alignItems: "center", gap: 10 },
-  input: {
-    minHeight: 52,
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    borderRadius: 8,
-    borderColor: colors.outline,
-    borderWidth: 1,
-    fontSize: 16,
-    color: colors.ink,
-    backgroundColor: colors.paper,
-    fontFamily: fonts.sans,
-  },
-  error: { color: colors.red, fontSize: 14, lineHeight: 21 },
-  stack: { gap: 16 },
-});
 export function Screen({
   children,
   scroll = true,
+  backgroundColor,
 }: {
   children: React.ReactNode;
   scroll?: boolean;
+  backgroundColor?: string;
 }) {
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
+  const [keyboardVisible, setKeyboardVisible] = useState(
+    () => Platform.OS === "android" && Keyboard.isVisible(),
+  );
+  useEffect(() => {
+    if (Platform.OS !== "android") return;
+    const show = Keyboard.addListener("keyboardDidShow", () => setKeyboardVisible(true));
+    const hide = Keyboard.addListener("keyboardDidHide", () => setKeyboardVisible(false));
+    return () => { show.remove(); hide.remove(); };
+  }, []);
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: colors.bg }}
+      style={{ flex: 1, backgroundColor: backgroundColor || colors.bg }}
       edges={["top", "left", "right"]}
     >
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        // Android may retain a residual height after IME dismissal. Returning
+        // to flex layout clears it while preserving this view and its children.
+        behavior={Platform.OS === "ios" ? "padding" : keyboardVisible ? "height" : undefined}
+        keyboardVerticalOffset={Platform.OS === "android" ? insets.top : 0}
       >
         {scroll ? (
           <ScrollView
@@ -167,9 +117,9 @@ export function Screen({
                 width: "100%",
                 maxWidth: 640,
                 alignSelf: "center",
-                padding: 20,
+                padding: 18,
                 paddingBottom: 28,
-                gap: 20,
+                gap: 18,
               }}
             >
               {children}
@@ -199,6 +149,7 @@ export function Button({
   icon?: React.ComponentProps<typeof Ionicons>["name"];
   style?: ViewStyle;
 }) {
+  const { colors } = useTheme();
   const bg =
     variant === "primary"
       ? colors.green
@@ -207,8 +158,7 @@ export function Button({
         : variant === "secondary"
           ? colors.mint
           : "transparent";
-  const fg =
-    variant === "primary" || variant === "danger" ? "white" : colors.green;
+  const fg = disabled ? colors.disabledText : variant === "primary" ? colors.onPrimary : variant === "danger" ? colors.paper : colors.green;
   return (
     <Pressable
       accessibilityRole="button"
@@ -221,8 +171,8 @@ export function Button({
         paddingHorizontal: 18,
         paddingVertical: 12,
         borderRadius: 9,
-        backgroundColor: bg,
-        opacity: disabled ? 0.45 : pressed ? 0.75 : 1,
+        backgroundColor: disabled ? colors.disabledSurface : bg,
+        opacity: pressed ? 0.8 : 1,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
@@ -262,6 +212,7 @@ export function IconButton({
   disabled?: boolean;
   loading?: boolean;
 }) {
+  const { colors } = useTheme();
   return (
     <Pressable
       accessibilityRole="button"
@@ -291,8 +242,10 @@ export function Field({
   label,
   hint,
   error,
+  inputRef,
   ...props
-}: TextInputProps & { label: string; hint?: string; error?: string }) {
+}: TextInputProps & { label: string; hint?: string; error?: string; inputRef?: React.Ref<TextInput> }) {
+  const { colors, styles, scheme } = useTheme();
   const [focused, setFocused] = useState(false);
   return (
     <View style={{ gap: 7 }}>
@@ -300,7 +253,9 @@ export function Field({
         {label}
       </Text>
       <TextInput
+        ref={inputRef}
         accessibilityLabel={label}
+        keyboardAppearance={scheme}
         placeholderTextColor={colors.muted}
         selectionColor={colors.green}
         {...props}
@@ -333,15 +288,22 @@ export function Pill({
   title,
   selected,
   onPress,
+  disabled = false,
+  accessibilityLabel,
 }: {
   title: string;
   selected?: boolean;
   onPress?: () => void;
+  disabled?: boolean;
+  accessibilityLabel?: string;
 }) {
+  const { colors } = useTheme();
   return (
     <Pressable
       accessibilityRole={onPress ? "button" : "text"}
-      accessibilityState={{ selected }}
+      accessibilityLabel={accessibilityLabel || title}
+      accessibilityState={{ selected, disabled }}
+      disabled={disabled}
       onPress={onPress}
       style={{
         minHeight: 48,
@@ -352,13 +314,14 @@ export function Pill({
         backgroundColor: selected ? colors.green : colors.paper,
         borderWidth: 1,
         borderColor: selected ? colors.green : colors.line,
+        opacity: disabled ? 0.6 : 1,
       }}
     >
       <Text
         style={{
           fontSize: 13,
           fontWeight: "600",
-          color: selected ? "white" : colors.text,
+          color: selected ? colors.onPrimary : colors.text,
         }}
       >
         {title}
@@ -373,6 +336,7 @@ export function Notice({
   children: React.ReactNode;
   tone?: "info" | "error" | "success";
 }) {
+  const { colors, styles } = useTheme();
   return (
     <View
       accessibilityRole={tone === "error" ? "alert" : "text"}
@@ -381,7 +345,7 @@ export function Notice({
         borderRadius: 8,
         backgroundColor:
           tone === "error"
-            ? "#FCECEC"
+            ? colors.errorSurface
             : tone === "success"
               ? colors.mint
               : colors.peach,
@@ -407,6 +371,7 @@ export function Empty({
   body: string;
   action?: React.ReactNode;
 }) {
+  const { colors, styles } = useTheme();
   return (
     <View
       style={{
@@ -424,6 +389,7 @@ export function Empty({
   );
 }
 export function Loading() {
+  const { colors } = useTheme();
   return (
     <View accessibilityLabel="Loading campaigns" style={{ gap: 14 }}>
       {[1, 2].map((v) => (
@@ -466,6 +432,7 @@ export function Accordion({
   children: React.ReactNode;
   initiallyOpen?: boolean;
 }) {
+  const { colors, styles } = useTheme();
   const [open, setOpen] = useState(initiallyOpen);
   return (
     <View style={{ borderBottomWidth: 1, borderColor: colors.line }}>
@@ -516,6 +483,7 @@ export function Picture({
   uri?: string;
   height?: number;
 }) {
+  const { colors } = useTheme();
   const [failed, setFailed] = useState(false);
   useEffect(() => setFailed(false), [uri]);
   return uri && !failed ? (
@@ -540,6 +508,7 @@ export function Picture({
   );
 }
 export function Progress({ raised, goal }: { raised: number; goal: number }) {
+  const { colors } = useTheme();
   const percentage = goal
     ? Math.min(100, Math.round((raised / goal) * 100))
     : 0;
@@ -550,7 +519,7 @@ export function Progress({ raised, goal }: { raised: number; goal: number }) {
       style={{
         height: 6,
         borderRadius: 3,
-        backgroundColor: colors.line,
+        backgroundColor: colors.progressTrack,
         overflow: "hidden",
       }}
     >
@@ -558,7 +527,7 @@ export function Progress({ raised, goal }: { raised: number; goal: number }) {
         style={{
           height: 6,
           width: `${percentage}%`,
-          backgroundColor: colors.green,
+          backgroundColor: colors.progress,
           borderRadius: 3,
         }}
       />

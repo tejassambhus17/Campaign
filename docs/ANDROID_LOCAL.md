@@ -1,21 +1,77 @@
 # Local Android build and verification
 
+**Current physical test:** the same corrected ARM64 APK is installed on the user-authorized POCO Android15 phone. [Actual physical results](../PHYSICAL_ANDROID_TEST.md) record verified installation/USB API/Metro-off launch and completed core workflows, with layout/performance findings and separate human gates. The emulator below is not a substitute for this phone.
+
+For this USB-only local test, the existing in-app Demo connection settings use `http://127.0.0.1:8787`, supported by a reverse of `tcp:8787` to the host's `tcp:8787` on the selected authorized phone only. No Metro reverse is added. This is a reachable phone address through USB; the host API must remain running and the USB mapping must be restored after disconnect/reboot. It is separate from LAN/hosting and does not provide a judge-reachable backend. Never use `10.0.2.2` on the phone. Existing ADB servers/devices must not be stopped to add this mapping.
+
+To restore this test's USB connection, first identify the same authorized physical serial on the existing Campaign ADB server. Select it explicitly in every command; do not rely on a default device or operate another connected device. Then run from `E:\Campaign`:
+
+```powershell
+& .\tools\android-sdk\platform-tools\adb.exe -P 5039 -s '<authorized-serial>' reverse --no-rebind tcp:8787 tcp:8787
+```
+
+Use **Profile → Information & help → Demo connection settings** to save `http://127.0.0.1:8787` if needed. Switching the saved backend intentionally signs out, so do this before testing signed-in flows. The installed INTERNAL-TEST APK supplies its own JavaScript; USB reverse on port 8787 supplies only access to the existing API. Do not add a port 8081 reverse to demonstrate Metro independence.
+
+POCO initially allowed installation/screenshots but rejected touch injection with `INJECT_EVENTS`. The user enabled the separate debugging security setting and restarted the phone; actual low uptime and successful UI taps verified recovery. No security setting was bypassed or changed programmatically. Exact phone/model/ABI/display/setting baselines and artifact binding are in the physical report.
+
+**Current quality-pass note:** The later October 16 Product Quality Addendum changes source within the existing Light/black Dark design. Earlier pass2 APKs and installed checks below are historical checkpoint evidence. Use [PROGRESS.md](../PROGRESS.md) and [RELEASE_READINESS.md](../RELEASE_READINESS.md) for current tagged artifacts and exact performed tests. Demo recording and production remain held until explicit human authorization.
+
 The local toolchain is isolated to `E:\Campaign`. It uses no Expo/EAS account, external hosting, paid services, global SDK installation, or production signing credentials.
 
-**Current October 16 work:** the redesigned source and targeted native correction checks are recorded in [UI_REDESIGN_PROGRESS.md](../UI_REDESIGN_PROGRESS.md). The latest user directive authorizes a local embedded-JavaScript INTERNAL-TEST build. Its build/install/Metro-independent status and commands live in [RELEASE_READINESS.md](../RELEASE_READINESS.md). The debug build results and earlier stopped-emulator records below remain historical evidence; they do not establish acceptance of the new artifact.
+**Current October 16 work:** the compact mint-and-charcoal reference redesign replaces the rejected civic-publication visual result, adding device-persisted System/Light/Dark appearance through one semantic provider. Expo system UI/navigation bar and automatic/dark splash configuration are generated with CNG; native files are not hand-edited. Source and fresh acceptance are recorded in [UI_REDESIGN_PROGRESS.md](../UI_REDESIGN_PROGRESS.md) and [RELEASE_READINESS.md](../RELEASE_READINESS.md). Old APK, video and stopped-emulator records below retain historical scope and do not accept the replacement UI.
 
-## Current INTERNAL-TEST artifacts
+**Historical black-pass2 checkpoint:** the user's correction preserved Light and rejected green-tinted Dark surfaces. That source used pure black `#000000` background, neutral `#121212` surfaces, `#1C1C1C` raised surfaces, `#151515` header and `#1E1E1E` contextual containers, with restrained mint accents/actions; these palette values remain current. Its 50/50 frontend, TypeScript/lint/exports, backend 30/30, online Expo compatibility and Doctor 20/20 checks retain that snapshot's scope. Green-Dark captures remain rejected visual evidence. The [independent finish review](../artifacts/reference-redesign/FINISH_REVIEW.md) returned `ship` only for its 12 supplied core phone surfaces; it does not approve the later quality pass.
 
-Both current APK files were rehashed against adjacent metadata. They use the generated release variant with the **Android Debug certificate**, not production signing, and share a 1,993,336-byte embedded Hermes bundle, six exact fonts and both full OFL license texts. The final build also compiles the existing internal-only backend connection controls.
+## Current quality-pass INTERNAL-TEST artifacts
 
-| Target | Current artifact | Bytes / SHA-256 | Installed evidence |
+The targeted addendum preserves the existing design and architecture. Corrected artifacts are under `artifacts/android/quality-addendum-pass2-20261016/`:
+
+| Target | APK | Bytes / SHA-256 |
+| --- | --- | --- |
+| x86_64 | [APK](../artifacts/android/quality-addendum-pass2-20261016/campaign-1.0.0-INTERNAL-TEST-x86_64.apk) | 38,459,641; `4B9B6535F8A2B4F6DB6B42BE5151DCA19987288B6FABD6A1C9CB272E9478EACA` |
+| ARM64 | [APK](../artifacts/android/quality-addendum-pass2-20261016/campaign-1.0.0-INTERNAL-TEST-arm64.apk) | 37,171,783; `24348DD939CC174C0B5C72716E015CE5519DE78091E7BA5B7C4489836B6B096A` |
+
+[Independent binary inspection](../artifacts/product-quality/pass2/BUILD_INSPECTION.json) passes both APKs: 54 frozen inputs match, both include byte-identical 2,039,780-byte Hermes, correct ABIs, exact fonts/licenses and valid Android Debug signatures. The API remains separately required at the emulator-only default `http://10.0.2.2:8787`. Final-source tests pass 62/62 plus TypeScript/lint/web and Android exports; unchanged backend tests pass 31/31. Exact installed checks are maintained in [release readiness](../RELEASE_READINESS.md); ARM64 remains uninstalled. Binary inspection does not establish runtime acceptance.
+
+The corrected x86_64 is update-installed on the owned Android16/API36 emulator. [Focused native confirmation](../artifacts/product-quality/pass2/NATIVE_RESULTS.md) passes actual keyboard/full-footer checks in both themes at normal/enlarged text, enlarged private receipt values and exact Metro-off cold launch with Black/ordinary identity/drafts plus API content and the same Completed report. [Process proof](../artifacts/product-quality/pass2/metro-pause-proof.json) records absent8081 during that test, healthy API8787 and subsequent preview/API restoration. These checks preserve first-candidate lifecycle evidence separately; no physical-device, whole-device-matrix or human acceptance is inferred. Recording remains held.
+
+## Historical black-pass2 INTERNAL-TEST artifacts
+
+Both final black pass2 APKs are under `artifacts/android/black-theme-pass2-20261016/`:
+
+| Target | Artifact / metadata | Bytes / SHA-256 | Installed evidence |
+| --- | --- | --- | --- |
+| x86_64 | [APK](../artifacts/android/black-theme-pass2-20261016/campaign-1.0.0-INTERNAL-TEST-x86_64.apk), [metadata](../artifacts/android/black-theme-pass2-20261016/campaign-1.0.0-INTERNAL-TEST-x86_64.apk.json) | 38,437,869; `45F0D82B23CD9B6C3DAD56E029E56B7F3CAF3CD91F18CF4FC6A8DED7DE7AE187` | Installed on owned Android 16 / API 36 AVD; exact Metro-off/API-backed cold launch, saved Black and ordinary identity restore pass |
+| ARM64 | [APK](../artifacts/android/black-theme-pass2-20261016/campaign-1.0.0-INTERNAL-TEST-arm64.apk), [metadata](../artifacts/android/black-theme-pass2-20261016/campaign-1.0.0-INTERNAL-TEST-arm64.apk.json) | 37,150,011; `CE69B6139356A578E1E4E9FC80EE01960B8E90F26C4BD7B000C5210DBB8DC166` | Uninstalled; no physical-device proof |
+
+[Independent build inspection](../artifacts/reference-redesign/BUILD_INSPECTION.json) verifies byte-identical 2,018,008-byte Hermes, six exact fonts and both full licenses, intended ABIs/API, Android Debug signatures and all 50 frozen app inputs. Frozen digest: `31def764edeefb1d1d3a03cdecfadb9353e2ae5992b03fe0cbf8969d8376d543`. These are internal test release variants, not production-signed releases. The API default remains `http://10.0.2.2:8787`; the backend is a separately required service.
+
+[Native results](../artifacts/reference-redesign/after-pass2/NATIVE_RESULTS.md) record all four targeted P1 corrections: Home identity/funding above the first fold at 393dp in both schemes; 360dp/font 1.3 detail funding and checkout action labels; and focused summary/cursor plus Back/Continue above actual Gboard. Selected 411dp/font 1.6 Submit/detail/checkout screens also pass. The ordinary-account Submit goal of $7.50 survived preview, theme flip, cold launch and Home Continue. Changing only the internal client address to unused port 8788 intentionally signed out and showed a retryable failure; the guest draft's $9.99 goal remained separate/offline and restoring port 8787 recovered API content. This is not a physical network-outage check. System followed actual Android night yes/no to Black/Light.
+
+[Exact-build cold-launch proof](../artifacts/reference-redesign/after-pass2/cold-launch.json) records port 8081 absent, a healthy API on port 8787, restored Black/ordinary identity and rendered API photo/funding. Metro was restored afterward; other captures must not all be described as Metro-off. These selected checks do not verify every state, viewport or primary workflow. The new demo is incomplete and held at the user's request pending further changes. Do not resume recording/production or demo campaign mutations without explicit human authorization; uninterrupted Dark capture and final video review/playback remain unfinished. Previous video is historical. Physical ARM64, screen-reader/human/listening and external backend/signing/submission gates remain unverified or deferred as recorded in release readiness.
+
+Build a distinct candidate without overwriting previous artifacts:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\android-local.ps1 -Mode InternalTest -Architecture x86_64 -ApiUrl http://10.0.2.2:8787 -ArtifactTag black-theme-next
+```
+
+The example tag must be replaced with an unused value for any further rebuild; do not overwrite accepted artifacts. `-ArtifactTag` accepts a short lowercase alphanumeric/hyphen name and writes `artifacts/android/<tag>/` plus a tagged Gradle log under `tmp/android-build`. The default untagged behavior remains available for existing workflows. The wrapper verifies bundle/fonts/licenses/signing at build time; actual installed Metro independence must be recorded separately while retaining API reachability. During parallel work, the designated native QA agent alone operates the owned Campaign AVD/ADB. The current source requires no further cosmetic correction within the reviewed scope.
+
+## Historical INTERNAL-TEST artifacts
+
+The first reference [mint pass1 APK](../artifacts/android/mint-theme-pass1-20261016/campaign-1.0.0-INTERNAL-TEST-x86_64.apk) and its [metadata](../artifacts/android/mint-theme-pass1-20261016/campaign-1.0.0-INTERNAL-TEST-x86_64.apk.json) remain preserved. Its scoped persistence/cold-launch evidence applies only to that build; the green-Dark visual result was rejected and all four demonstrated P1 layout issues were corrected in black pass2 above.
+
+The prior two flat-path files were rehashed against adjacent metadata in the earlier iteration. They use the generated release variant with the **Android Debug certificate**, not production signing, and share a 1,993,336-byte embedded Hermes bundle, six exact fonts and both full OFL license texts. Their acceptance belongs to the previous visual direction.
+
+| Target | Historical artifact | Bytes / SHA-256 | Historical installed evidence |
 | --- | --- | --- | --- |
 | x86_64 | [APK](../artifacts/android/campaign-1.0.0-INTERNAL-TEST-x86_64.apk), [metadata](../artifacts/android/campaign-1.0.0-INTERNAL-TEST-x86_64.apk.json) | 38,414,397; `638807B4095BB537574E719A5EB537E428735C3100BAE683F54BE92B5B4C6EA4` | Final Metro-off launch, internal connection controls, offline save/recovery and compact/font-scale checks pass on the owned AVD |
 | ARM64 | [APK](../artifacts/android/campaign-1.0.0-INTERNAL-TEST-arm64.apk), [metadata](../artifacts/android/campaign-1.0.0-INTERNAL-TEST-arm64.apk.json) | 37,126,539; `4B7ACD6F0D7EFA4F7C43E81C427CBA3EB932805BA257243172832774F537B94C` | Physical-device install/launch unverified; emulator host alias is not a phone backend |
 
-The [final native report](../artifacts/android/internal-acceptance/final-build/NATIVE_RESULTS.md) binds its checks to the exact x86_64 hash, not every earlier screenshot. Compiled API default is `http://10.0.2.2:8787`, suitable for the owned emulator. A phone needs a reachable LAN/hosted API selected through the internal connection settings or a separately configured build. Embedded JavaScript does not supply a hosted backend.
+The prior [final native report](../artifacts/android/internal-acceptance/final-build/NATIVE_RESULTS.md) binds its checks to the historical x86_64 hash, not current source or every earlier screenshot. Compiled API default is `http://10.0.2.2:8787`, suitable for the owned emulator. A phone needs a reachable LAN/hosted API selected through the internal connection settings or a separately configured build. Embedded JavaScript does not supply a hosted backend.
 
-The earlier internal x86_64 `B15ECFF1…` build and its evidence are preserved under [initial-build](../artifacts/android/internal-acceptance/initial-build). Its session/privacy/non-success-payment checks remain separately scoped. The [complete 22-scene film](../artifacts/demo/campaign-native-demo-INTERNAL-TEST.mp4) uses the accepted `638807B4…` artifact with Metro off throughout capture. [Native capture](../artifacts/demo/NATIVE_RESULTS.md), [full muted playback](../artifacts/demo/PLAYBACK_RESULTS.json) and [bounded frame review](../artifacts/demo/VIDEO_REVIEW.md) pass in their stated scopes. Normal logout/guest privacy and [owned AVD/ADB cleanup](../artifacts/demo/cleanup/README.md) are complete; the API and restored local web preview remain available.
+The earlier internal x86_64 `B15ECFF1…` build and its evidence are preserved under [initial-build](../artifacts/android/internal-acceptance/initial-build). Its session/privacy/non-success-payment checks remain separately scoped. The historical [22-scene film](../artifacts/demo/campaign-native-demo-INTERNAL-TEST.mp4) uses the previously accepted `638807B4…` artifact with Metro off throughout that capture. Prior [native capture](../artifacts/demo/NATIVE_RESULTS.md), [full muted playback](../artifacts/demo/PLAYBACK_RESULTS.json), [bounded frame review](../artifacts/demo/VIDEO_REVIEW.md) and [owned AVD/ADB cleanup](../artifacts/demo/cleanup/README.md) retain their stated former scopes. Consult current progress for active device/service state; none of these records verifies the replacement theme or UI.
 
 For an internal rebuild, use the documented PowerShell invocation with `scripts/android-local.ps1 -Mode InternalTest -Architecture x86_64 -ApiUrl http://10.0.2.2:8787`, or the ARM64 equivalent. Follow RELEASE_READINESS.md for acceptance. The emulator launcher's `Install` action below installs the preserved **debug** APK and adds a Metro reverse; do not use it to accept the internal artifact.
 
@@ -32,7 +88,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\android-local.ps1 
 
 The first architecture targets common Android phones; the second targets the local emulator. To include both, use `-Architecture 'arm64-v8a,x86_64'`. Two Gradle workers are the default; `-Workers 1` reduces concurrency.
 
-The launcher selects compatible Node (or `CAMPAIGN_NODE`), sets SDK/JDK/Gradle variables only for its process, restores them afterward, and invokes Expo prebuild only if `apps/mobile/android` is absent. Native files are generated; do not edit them by hand. Regenerate through Expo after changing native configuration or modules. Build output, logs, and caches remain inside the project. Successful APKs and JSON build metadata are copied into `artifacts/android`.
+The launcher selects compatible Node (or process-only `CAMPAIGN_NODE`), sets SDK/JDK/Gradle variables only for its process and restores them afterward. Under a restricted shell identity, explicitly select the compatible Node 24 executable if automatic discovery cannot find it; this machine's system Node 20.9 is too old. Expo prebuild runs when native generation is absent or the build-mode configuration requires regeneration. Native files are generated; do not edit them by hand. Regenerate through Expo after changing native configuration or modules. Build output, logs, caches and the JVM temporary directory remain inside the project. Successful APKs and JSON metadata are copied into `artifacts/android` or its optional tagged subdirectory.
 
 These are **debug development APKs**. They require Metro (`powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\mobile.ps1 start`) and a reachable development API. The execution-policy override applies only to that PowerShell process. Android emulators use `http://10.0.2.2:8787`; physical phones need a reachable host address selected in the app's Demo connection settings. This does not replace the standalone release APK or its installation verification.
 
@@ -121,4 +177,5 @@ The follow-up ended signed out at Home, density 440. The verified AVD and dedica
 - Host JDK 21 triggered the known React Native 0.83/Gradle 9 Foojay `IBM_SEMERU` error while provisioning Java 17. Installing the required local Java 17 resolved it without changing application dependencies or generated native files. [Upstream issue](https://github.com/reactwg/react-native-releases/issues/1349).
 - The inherited machine `ANDROID_SDK_HOME` conflicted with the project `ANDROID_USER_HOME`. The launcher sets consistent process-local preference paths (`tmp/android-build` and its `.android` child), then restores the original environment.
 - Java's initial Gradle-wrapper download timed out at the upstream redirect. The official Gradle archive was downloaded with curl, checksum verified, and placed in the generated wrapper's isolated cache. The unchanged Gradle wrapper now runs successfully with project-local Java 17.
-- Prebuild changed only package scripts (`expo run:android` / `expo run:ios`); dependency versions were preserved. It reported an optional `expo-system-ui` warning for `userInterfaceStyle`; this was not a native compilation failure.
+- Historical prebuild changed only package scripts (`expo run:android` / `expo run:ios`) and reported an optional `expo-system-ui` warning. The current theme iteration installs SDK55-compatible `expo-system-ui`/`expo-navigation-bar` and regenerates their native configuration through CNG; that earlier warning is not the current setup.
+- Java 17's Windows selector failed with `Unable to establish loopback connection` when its Unix-domain socket temporary path resolved through the host's aliased user directory. An isolated Selector probe reproduced the failure and passed with project-local temporary paths. The build launcher now sets process-only `JAVA_TOOL_OPTIONS` properties `-Djava.io.tmpdir=E:/Campaign/tmp/java` and `-Djdk.net.unixdomain.tmpdir=E:/Campaign/tmp/java`, and restores the original value afterward. No global Java, network or security setting is changed.

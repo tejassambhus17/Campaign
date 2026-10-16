@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  AccessibilityInfo,
   BackHandler,
+  findNodeHandle,
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
+  TextInput,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -23,8 +26,7 @@ import {
   Pill,
   Screen,
   Text,
-  colors,
-  styles,
+  useTheme,
 } from "../../components/ui";
 import { api } from "../../lib/api";
 import { refresh, useConfig, useMe, useSession } from "../../lib/session";
@@ -55,6 +57,10 @@ import {
   validateStep,
 } from "../../features/creation/model";
 import { useDraftLibrary } from "../../features/creation/useDraftLibrary";
+import { CreationTargets, TargetField, TargetGroup } from "../../features/creation/FieldTarget";
+import { DraftIssue, submissionIssues } from "../../features/creation/readiness";
+import { SubmissionChecklist } from "../../features/creation/SubmissionChecklist";
+import { accountDraftToken, AccountSaveState, draftSaveLabel, localDraftToken, LocalSaveState, mergeAccountSaved, writeLocalSnapshot } from "../../features/creation/persistence";
 
 type ActiveDraft = LocalDraft & { scope: string };
 const emptyAssistance: Assistance = {
@@ -77,6 +83,7 @@ const message = (error: unknown) =>
     : "The operation could not be completed. Your local draft is preserved.";
 
 function StepIndicator({ step }: { step: number }) {
+  const { colors } = useTheme();
   return (
     <View
       accessibilityLabel={`Step ${step + 1} of 5: ${STEPS[step]}`}
@@ -90,7 +97,8 @@ function StepIndicator({ step }: { step: number }) {
                 style={{
                   height: 4,
                   width: "100%",
-                  backgroundColor: index <= step ? colors.green : colors.line,
+                  backgroundColor:
+                    index <= step ? colors.headerText : colors.progressTrack,
                   borderRadius: 3,
                 }}
               />
@@ -98,7 +106,8 @@ function StepIndicator({ step }: { step: number }) {
                 style={{
                   fontSize: 11,
                   lineHeight: 16,
-                  color: index === step ? colors.green : colors.muted,
+                  color:
+                    index === step ? colors.headerText : colors.onHeaderMuted,
                   fontWeight: index === step ? "800" : "500",
                 }}
               >
@@ -123,6 +132,7 @@ function EditorAction({
   disabled?: boolean;
   busy?: boolean;
 }) {
+  const { colors } = useTheme();
   return (
     <Pressable
       accessibilityRole="button"
@@ -138,14 +148,14 @@ function EditorAction({
       })}
     >
       {busy ? (
-        <ActivityIndicator color={colors.green} />
+        <ActivityIndicator color={colors.headerText} />
       ) : (
         <Text
           style={{
             fontSize: 13,
             lineHeight: 18,
             fontWeight: "600",
-            color: colors.green,
+            color: colors.headerText,
           }}
         >
           {title}
@@ -164,6 +174,7 @@ function AssistanceForm({
   onChange: (value: Assistance) => void;
   onApply: () => void;
 }) {
+  const { styles } = useTheme();
   return (
     <View style={{ gap: 16 }}>
       <Notice>
@@ -220,13 +231,16 @@ function AssistanceForm({
 }
 
 export default function CreateScreen() {
+  const { colors, styles } = useTheme();
+  const local = makeLocalStyles(colors);
   const { width, fontScale } = useWindowDimensions();
   const { user, ready } = useSession();
   const config = useConfig();
   const me = useMe();
-  const params = useLocalSearchParams<{ draft?: string }>();
+  const params = useLocalSearchParams<{ draft?: string; localDraft?: string; context?: string }>();
   const scope = user?.id || "guest";
   const library = useDraftLibrary(scope, ready);
+  const [libraryScope, setLibraryScope] = useState(scope);
   const [active, setActive] = useState<ActiveDraft | null>(null);
   const [guestHandoff, setGuestHandoff] = useState<LocalDraft | null>(null);
   const [mode, setMode] = useState<"entry" | "voice" | "edit" | "submitted">(
@@ -237,7 +251,10 @@ export default function CreateScreen() {
   const [notice, setNotice] = useState("");
   const [failure, setFailure] = useState("");
   const [serverConflict, setServerConflict] = useState<Campaign | null>(null);
-  const [saveStatus, setSaveStatus] = useState("");
+  const [localSaveState, setLocalSaveState] = useState<LocalSaveState>(null);
+  const [accountSaveState, setAccountSaveState] = useState<AccountSaveState>("idle");
+  const [focusedIssue, setFocusedIssue] = useState<DraftIssue | null>(null);
+  const [reviewContext, setReviewContext] = useState(false);
   const [busy, setBusy] = useState(false);
   const [loadingDraft, setLoadingDraft] = useState(false);
   const [uploading, setUploading] = useState("");
@@ -247,6 +264,9 @@ export default function CreateScreen() {
   const [imagePrompt, setImagePrompt] = useState("");
   const [showStoryPreview, setShowStoryPreview] = useState(true);
   const scroll = useRef<ScrollView>(null);
+  const content = useRef<View>(null);
+  const targets = useRef(new Map<string, { view: View; input?: TextInput | null; announcement?: View | null }>());
+  const pendingIssue = useRef<DraftIssue | null>(null);
   const activeRef = useRef(active);
   const scopeRef = useRef(scope);
   const priorScope = useRef(scope);
@@ -256,6 +276,8 @@ export default function CreateScreen() {
   scopeRef.current = scope;
   const saveLocal = library.save;
   const removeLocal = library.remove;
+
+  useEffect(() => setLibraryScope(scope), [scope]);
 
   useEffect(() => {
     if (
@@ -274,7 +296,10 @@ export default function CreateScreen() {
     setErrors({});
     setNotice("");
     setFailure("");
-    setSaveStatus("");
+    setLocalSaveState(null);
+    setAccountSaveState("idle");
+    setFocusedIssue(null);
+    setReviewContext(false);
     setAssistance(emptyAssistance);
     setBusy(false);
     setUploading("");
@@ -291,20 +316,12 @@ export default function CreateScreen() {
     )
       return;
     const snapshot = active;
-    setSaveStatus("Saving on this device…");
+    const token = localDraftToken(snapshot);
     const timer = setTimeout(() => {
-      void saveLocal(snapshot)
-        .then(() => {
-          if (
-            activeRef.current?.updatedAt === snapshot.updatedAt &&
-            scopeRef.current === snapshot.scope
-          )
-            setSaveStatus("Saved on this device");
-        })
-        .catch(() => {
-          if (scopeRef.current === snapshot.scope)
-            setSaveStatus("Device save failed · retry Save as Draft");
-        });
+      void writeLocalSnapshot(snapshot, saveLocal,
+        () => scopeRef.current === snapshot.scope && !!activeRef.current && localDraftToken(activeRef.current) === token,
+        setLocalSaveState,
+      ).catch(() => { /* The persistence helper and draft library expose the actual failure. */ });
     }, 250);
     return () => clearTimeout(timer);
   }, [active, scope, mode, library.loading, saveLocal]);
@@ -332,6 +349,8 @@ export default function CreateScreen() {
       setServerConflict(null);
       setAssistance(entry?.assistance || emptyAssistance);
       setImagePrompt("");
+      setFocusedIssue(null);
+      setAccountSaveState("idle");
       scroll.current?.scrollTo({ y: 0, animated: false });
     },
     [scope],
@@ -387,7 +406,7 @@ export default function CreateScreen() {
             : library.entries.find((entry) => entry.draft.id === id);
         // A recovered local version may contain edits that never reached the server.
         if (local) {
-          begin(local);
+          begin({ ...local, draft: { ...local.draft, feedback: response.feedback } });
           if (
             local.draft.version !== undefined &&
             response.version !== local.draft.version
@@ -400,6 +419,7 @@ export default function CreateScreen() {
             step: Math.min(4, Math.max(0, draft.step || 0)),
             goalInput: draft.goal ? String(draft.goal) : "",
             updatedAt: new Date().toISOString(),
+            accountSavedToken: accountDraftToken({ localId: "", draft, step: Math.min(4, Math.max(0, draft.step || 0)), goalInput: draft.goal ? String(draft.goal) : "", updatedAt: "" }),
           });
         if (
           response.status !== "Draft" &&
@@ -419,6 +439,58 @@ export default function CreateScreen() {
 
   useFocusEffect(
     useCallback(() => {
+      const localId = Array.isArray(params.localDraft)
+        ? params.localDraft[0]
+        : params.localDraft;
+      if (localId) {
+        if (
+          !ready ||
+          libraryScope !== scope ||
+          library.loading ||
+          loadingDraft
+        )
+          return;
+        if (openedParameter.current === `${scope}:local:${localId}`) return;
+        openedParameter.current = `${scope}:local:${localId}`;
+        router.setParams({ localDraft: undefined });
+        const entry = library.entries.find(
+          (value) => value.localId === localId,
+        );
+        if (!entry) {
+          setFailure(
+            "This draft is not available in your current workspace. Open a saved draft below.",
+          );
+          return;
+        }
+        // Preserve current work before following a Home continuation link.
+        const current = activeRef.current;
+        if (
+          current?.scope === scope &&
+          current.localId === entry.localId &&
+          mode !== "submitted"
+        ) {
+          // The live editor may be newer than its 250ms autosave snapshot.
+          // A Home continuation for this same draft must never roll it back.
+          if (mode === "entry") begin(current);
+          return;
+        }
+        if (
+          current?.scope === scope &&
+          mode !== "submitted"
+        ) {
+          void saveLocal(current)
+            .then(() => {
+              if (scopeRef.current === scope) begin(entry);
+            })
+            .catch(() => {
+              if (scopeRef.current === scope)
+                setFailure(
+                  "Your current changes could not be saved. Retry Save as Draft before switching drafts.",
+                );
+            });
+        } else begin(entry);
+        return;
+      }
       const id = Array.isArray(params.draft) ? params.draft[0] : params.draft;
       if (!id) {
         openedParameter.current = "";
@@ -432,11 +504,26 @@ export default function CreateScreen() {
       )
         return;
       openedParameter.current = `${scope}:${id}`;
+      setReviewContext(params.context === "review");
       // Consume this visit's intent while Create is focused. A later notification
       // for the same campaign must reopen the editor after exiting or submitting.
-      router.setParams({ draft: undefined });
+      router.setParams({ draft: undefined, context: undefined });
       void loadCloud(id);
-    }, [params.draft, ready, library.loading, loadingDraft, loadCloud, scope]),
+    }, [
+      params.localDraft,
+      params.draft,
+      params.context,
+      ready,
+      libraryScope,
+      library.loading,
+      library.entries,
+      loadingDraft,
+      loadCloud,
+      scope,
+      begin,
+      mode,
+      saveLocal,
+    ]),
   );
 
   function change(patch: Partial<Campaign>) {
@@ -453,6 +540,7 @@ export default function CreateScreen() {
     setErrors({});
     setNotice("");
     setFailure("");
+    setFocusedIssue(null);
   }
   const changeStep = useCallback((step: number) => {
     setActive((previous) =>
@@ -465,11 +553,45 @@ export default function CreateScreen() {
     setPreview(false);
     scroll.current?.scrollTo({ y: 0, animated: false });
   }, []);
+  const revealTarget = useCallback(() => {
+    const issue = pendingIssue.current;
+    if (!issue || activeRef.current?.step !== issue.step || !content.current) return;
+    const target = targets.current.get(issue.field);
+    if (!target) return;
+    target.view.measureLayout(content.current, (_x, y) => {
+      if (pendingIssue.current?.id !== issue.id) return;
+      pendingIssue.current = null;
+      scroll.current?.scrollTo({ y: Math.max(0, y + 4), animated: false });
+      setTimeout(() => {
+        target.input?.focus();
+        const announcement = target.announcement && findNodeHandle(target.announcement);
+        if (!target.input && announcement) AccessibilityInfo.setAccessibilityFocus(announcement);
+        AccessibilityInfo.announceForAccessibility(`${STEPS[issue.step]}. ${issue.title}. ${issue.message}`);
+      }, 120);
+    }, () => {});
+  }, []);
+  const registerTarget = useCallback((key: string, view: View | null, input?: TextInput | null, announcement?: View | null) => {
+    if (view) targets.current.set(key, { view, input, announcement });
+    else targets.current.delete(key);
+    if (view && pendingIssue.current?.field === key) requestAnimationFrame(revealTarget);
+  }, [revealTarget]);
+  function jumpToIssue(issue: DraftIssue) {
+    changeStep(issue.step);
+    setMode("edit");
+    setFocusedIssue(issue);
+    pendingIssue.current = issue;
+    const current = activeRef.current;
+    if (current) setErrors(validateStep(current.draft, issue.step, current.goalInput, accepted));
+    setTimeout(revealTarget, 60);
+  }
   const localNow = useCallback(async () => {
     const current = activeRef.current;
     if (!current) return;
-    await saveLocal(current);
-    setSaveStatus("Saved on this device");
+    const token = localDraftToken(current);
+    await writeLocalSnapshot(current, saveLocal,
+      () => scopeRef.current === current.scope && !!activeRef.current && localDraftToken(activeRef.current) === token,
+      setLocalSaveState,
+    );
   }, [saveLocal]);
   async function signIn() {
     try {
@@ -525,6 +647,8 @@ export default function CreateScreen() {
     if (!active || cloudLock.current) return;
     const snapshot = active;
     const operationScope = scope;
+    cloudLock.current = true;
+    setBusy(true);
     setFailure("");
     setNotice("");
     try {
@@ -533,36 +657,45 @@ export default function CreateScreen() {
       setFailure(
         "The latest edits could not be saved on this device. Please retry.",
       );
+      cloudLock.current = false;
+      if (scopeRef.current === operationScope) setBusy(false);
       return;
     }
+    if (scopeRef.current !== operationScope) { cloudLock.current = false; return; }
     if (!user) {
-      setNotice(
-        "Draft saved on this device. You can resume it here after reopening the app. Sign in to save a copy to your account.",
-      );
+      cloudLock.current = false;
+      setBusy(false);
       return;
     }
-    cloudLock.current = true;
-    setBusy(true);
+    setAccountSaveState("saving");
+    let accountWritten = false;
     try {
       const saved = await saveCloud(snapshot);
+      accountWritten = true;
       if (scopeRef.current !== operationScope) return;
-      const next = {
-        ...snapshot,
-        draft: saved,
-        updatedAt: new Date().toISOString(),
-      };
+      const next = mergeAccountSaved(snapshot, activeRef.current, saved);
+      if (!next) {
+        await saveLocal({ ...snapshot, draft: saved, accountSavedToken: accountDraftToken({ ...snapshot, draft: saved }) });
+        setAccountSaveState("idle");
+        await refresh().catch(() => undefined);
+        return;
+      }
       setActive(next);
       activeRef.current = next;
-      await saveLocal(next);
-      await refresh();
-      setNotice(
-        "Draft saved to your account and this device. Resume it from Create or Profile.",
+      const token = localDraftToken(next);
+      await writeLocalSnapshot(next, saveLocal,
+        () => scopeRef.current === operationScope && !!activeRef.current && localDraftToken(activeRef.current) === token,
+        setLocalSaveState,
       );
-      setSaveStatus("Saved to your account");
+      setAccountSaveState("idle");
+      await refresh().catch(() => undefined);
     } catch (error) {
-      if (scopeRef.current === operationScope) {
+      if (scopeRef.current === operationScope && activeRef.current?.localId === snapshot.localId) {
+        setAccountSaveState(accountWritten ? "idle" : "failed");
         setFailure(
-          `${message(error)} Your current edits remain in your device draft.`,
+          accountWritten
+            ? `${message(error)} Your account copy was saved, but the latest device save did not finish. Keep this draft open and retry Save as Draft.`
+            : `${message(error)} Your current edits remain in your device draft. Retry Save as Draft to sync your account.`,
         );
         if (snapshot.draft.id && message(error).includes("newer draft")) {
           try {
@@ -578,31 +711,27 @@ export default function CreateScreen() {
       }
     } finally {
       cloudLock.current = false;
-      if (scopeRef.current === operationScope) setBusy(false);
+      if (scopeRef.current === operationScope) {
+        setBusy(false);
+        setAccountSaveState((state) => state === "saving" ? "idle" : state);
+      }
     }
   }
 
   async function submit() {
     if (!active || cloudLock.current) return;
-    for (let index = 0; index < 5; index++) {
-      const invalid = validateStep(
-        active.draft,
-        index,
-        active.goalInput,
-        accepted,
-      );
-      if (Object.keys(invalid).length) {
-        changeStep(index);
-        setErrors(invalid);
-        setFailure("Please check the highlighted fields before submitting.");
-        return;
-      }
+    const firstIssue = submissionIssues(active.draft, active.goalInput, accepted).find((issue) => issue.required);
+    if (firstIssue) {
+      jumpToIssue(firstIssue);
+      return;
     }
     if (!user) {
-      setNotice(
-        "Your draft is saved on this device. Sign in to submit it for review, then resume this draft here.",
-      );
-      await localNow().catch(() => undefined);
+      try {
+        await localNow();
+        setNotice("Your draft is saved on this device. Sign in to submit it for review, then resume this draft here.");
+      } catch {
+        setFailure("This device could not save your draft. Keep it open and retry Save as Draft before signing in.");
+      }
       return;
     }
     if (!config.data) {
@@ -888,6 +1017,7 @@ export default function CreateScreen() {
 
   const working = active?.scope === scope ? active : null;
   const draft = working?.draft;
+  const saveStatus = working ? draftSaveLabel(working, localSaveState, accountSaveState, !!user) : "";
   const step = working?.step || 0;
   const locked = busy || !!uploading;
   const goBack = useCallback(() => {
@@ -933,7 +1063,7 @@ export default function CreateScreen() {
       ["Draft", "Changes Requested"].includes(campaign.status) &&
       !library.entries.some((entry) => entry.draft.id === campaign.id),
   );
-  const stackEditorActions = fontScale > 1.15 || width < 350;
+  const stackEditorActions = fontScale > 1.15 || width < 350 || step === 2;
   const editorActions = working &&
     mode !== "entry" &&
     mode !== "submitted" &&
@@ -971,7 +1101,7 @@ export default function CreateScreen() {
                 style={
                   working && mode !== "entry" && mode !== "submitted"
                     ? local.editorTitle
-                    : styles.title
+                    : [styles.title, { color: colors.headerText }]
                 }
               >
                 {mode === "submitted"
@@ -983,19 +1113,18 @@ export default function CreateScreen() {
                       : mode === "voice"
                         ? "Guided draft"
                         : step === 2
-                          ? "Ad visuals"
+                          ? "Campaign & Ad Visuals"
                           : STEPS[step]}
               </Text>
               {working && mode !== "entry" && mode !== "submitted" && (
                 <Text
                   accessibilityLiveRegion="polite"
-                  numberOfLines={1}
                   style={{
                     fontSize: 11,
                     lineHeight: 16,
                     color: saveStatus.includes("failed")
                       ? colors.red
-                      : colors.muted,
+                      : colors.onHeaderMuted,
                   }}
                 >
                   {saveStatus || "Draft stays editable"}
@@ -1022,7 +1151,7 @@ export default function CreateScreen() {
                 }}
                 style={local.iconButton}
               >
-                <Ionicons name="close" size={24} color={colors.green} />
+                <Ionicons name="close" size={24} color={colors.headerText} />
               </Pressable>
             )}
           </View>
@@ -1039,6 +1168,8 @@ export default function CreateScreen() {
           keyboardDismissMode="on-drag"
           contentContainerStyle={local.content}
         >
+          <CreationTargets.Provider value={{ issue: focusedIssue, register: registerTarget }}>
+          <View ref={content} style={{ gap: 16 }}>
           {!!failure && <Notice tone="error">{failure}</Notice>}
           {!!notice && notice !== "Your saved draft is ready to continue." && (
             <Notice tone="success">{notice}</Notice>
@@ -1131,8 +1262,8 @@ export default function CreateScreen() {
           ) : mode === "entry" ? (
             <>
               <Text style={styles.body}>
-                Prepare your message in five steps, then send it for review.
-                Your draft saves automatically on this device.
+                Build your message in five steps. Your editable draft saves on
+                this device as you go.
               </Text>
               <View style={{ gap: 10 }}>
                 <Button
@@ -1188,7 +1319,8 @@ export default function CreateScreen() {
                   <Text style={styles.h2}>Saved drafts</Text>
                   <Text style={styles.muted}>
                     Private drafts on this device
-                    {user ? ", saved for your account" : " · guest drafts"}.
+                    {user ? " · your account's device workspace" : " · guest drafts"}.
+                    {user ? " Account copies update when you choose Save as Draft. " : " "}
                     Open one to continue editing.
                   </Text>
                   {library.entries.map((entry) => (
@@ -1316,7 +1448,11 @@ export default function CreateScreen() {
                       }}
                     >
                       {item.done ? (
-                        <Ionicons name="checkmark" size={18} color="white" />
+                        <Ionicons
+                          name="checkmark"
+                          size={18}
+                          color={colors.onPrimary}
+                        />
                       ) : (
                         <Text
                           style={{ color: colors.green, fontWeight: "700" }}
@@ -1377,8 +1513,9 @@ export default function CreateScreen() {
                 ) : (
                   <>
                     {!!draft.feedback && (
-                      <Accordion title="Reviewer feedback">
+                      <Accordion key={`${draft.id}:${reviewContext}`} title="Reviewer feedback" initiallyOpen={reviewContext}>
                         <Text style={styles.body}>{draft.feedback}</Text>
+                        <Button title="Review submission checklist" variant="ghost" onPress={() => changeStep(4)} />
                       </Accordion>
                     )}
                     {step === 0 && (
@@ -1386,16 +1523,16 @@ export default function CreateScreen() {
                         <Text style={styles.muted}>
                           Introduce your message and who is behind it.
                         </Text>
-                        <Field
+                        <TargetField target="title"
                           label="Campaign title *"
                           value={draft.title}
                           maxLength={60}
                           onChangeText={(title) => change({ title })}
                           error={errors.title}
                           placeholder="A clear idea worth sharing"
-                          hint={`${draft.title.length}/60 characters · The beginning of your title may be used as your ad headline if you don’t write a custom one.`}
+                          hint={`${draft.title.length}/60 · Used as the ad headline unless you write a custom one.`}
                         />
-                        <View style={{ gap: 10 }}>
+                        <TargetGroup target="category">
                           <Text style={local.fieldLabel}>Category *</Text>
                           <Text style={styles.muted}>
                             Help the right readers discover your message.
@@ -1415,8 +1552,8 @@ export default function CreateScreen() {
                           {!!errors.category && (
                             <Text style={styles.error}>{errors.category}</Text>
                           )}
-                        </View>
-                        <Field
+                        </TargetGroup>
+                        <TargetField target="creatorName"
                           label="Creator or organization name *"
                           value={draft.creatorName}
                           maxLength={150}
@@ -1427,7 +1564,7 @@ export default function CreateScreen() {
                           error={errors.creatorName}
                           hint="This name will be public on your campaign."
                         />
-                        <Field
+                        <TargetField target="summary"
                           label="Short summary"
                           multiline
                           maxLength={2000}
@@ -1487,7 +1624,7 @@ export default function CreateScreen() {
                           Build your article with text, images, evidence, and
                           suggested audience actions.
                         </Text>
-                        <Field
+                        <TargetField target="storyHeadline"
                           label="Story headline"
                           value={draft.storyHeadline}
                           maxLength={200}
@@ -1609,7 +1746,7 @@ export default function CreateScreen() {
                                   variant="secondary"
                                   icon="image-outline"
                                 />
-                                <Field
+                                <TargetField target={`section:${section.id}`}
                                   label={`Section ${index + 1} image URL`}
                                   value={section.url || ""}
                                   autoCapitalize="none"
@@ -1737,7 +1874,7 @@ export default function CreateScreen() {
                             <Text style={styles.error}>{errors.sections}</Text>
                           )}
                         </View>
-                        <View style={{ gap: 15, paddingTop: 9 }}>
+                        <TargetGroup target="sources">
                           <Text style={styles.h2}>Sources & evidence</Text>
                           <Text style={styles.muted}>
                             Your sources stay visible to everyone who reads the
@@ -1749,7 +1886,7 @@ export default function CreateScreen() {
                               style={[styles.card, { padding: 16, gap: 13 }]}
                               key={source.id}
                             >
-                              <Field
+                              <TargetField target={`source-title:${source.id}`}
                                 label={`Source ${index + 1} title`}
                                 maxLength={300}
                                 value={source.title}
@@ -1763,7 +1900,7 @@ export default function CreateScreen() {
                                   })
                                 }
                               />
-                              <Field
+                              <TargetField target={`source-url:${source.id}`}
                                 label={`Source ${index + 1} URL`}
                                 maxLength={2000}
                                 value={source.url}
@@ -1809,7 +1946,7 @@ export default function CreateScreen() {
                           {!!errors.sources && (
                             <Text style={styles.error}>{errors.sources}</Text>
                           )}
-                        </View>
+                        </TargetGroup>
                         <Button
                           title={
                             showStoryPreview
@@ -1846,7 +1983,7 @@ export default function CreateScreen() {
                           {!!draft.coverImage && (
                             <Picture uri={draft.coverImage} height={176} />
                           )}
-                          <Field
+                          <TargetField target="coverImage"
                             label="Cover image URL"
                             value={draft.coverImage}
                             autoCapitalize="none"
@@ -1877,7 +2014,7 @@ export default function CreateScreen() {
                             </Notice>
                           )}
                         </View>
-                        <View style={{ gap: 14 }}>
+                        <TargetGroup target="advertising">
                           <Text style={styles.h2}>Advertising images</Text>
                           <Text style={styles.muted}>
                             Story photographs are not automatically reused as
@@ -1887,7 +2024,7 @@ export default function CreateScreen() {
                           {draft.adImages.map((url, index) => (
                             <View key={index} style={{ gap: 10 }}>
                               <Picture uri={url} height={185} />
-                              <Field
+                              <TargetField target={`ad-image:${index}`}
                                 label={`Advertising image ${index + 1} URL`}
                                 value={url}
                                 autoCapitalize="none"
@@ -1944,7 +2081,7 @@ export default function CreateScreen() {
                           {!!errors.visuals && (
                             <Text style={styles.error}>{errors.visuals}</Text>
                           )}
-                        </View>
+                        </TargetGroup>
                         <Accordion title="Image generation · manual fallback">
                           <View style={{ gap: 13 }}>
                             <Text style={styles.body}>
@@ -2035,10 +2172,13 @@ export default function CreateScreen() {
                     {step === 3 && (
                       <>
                         <Text style={styles.muted}>
-                          Choose your audience and how to reach them. The
-                          platform reviews these proposed settings.
+                          Propose where the message travels, who it is for,
+                          which channels carry it, and for how long. Your
+                          percentages split the advertising budget after fees.
+                          The platform may finalize targeting, placements,
+                          allocation and schedule during review.
                         </Text>
-                        <Field
+                        <TargetField target="geography"
                           label="Target geographic locations *"
                           maxLength={1000}
                           value={draft.geography}
@@ -2056,7 +2196,7 @@ export default function CreateScreen() {
                           placeholder="What does this audience care about?"
                           hint="Describe relevant interests. Avoid private personal information or sensitive individual targeting."
                         />
-                        <View style={{ gap: 12 }}>
+                        <TargetGroup target="channels">
                           <Text style={local.fieldLabel}>
                             Distribution channels *
                           </Text>
@@ -2073,7 +2213,7 @@ export default function CreateScreen() {
                           {!!errors.channels && (
                             <Text style={styles.error}>{errors.channels}</Text>
                           )}
-                        </View>
+                        </TargetGroup>
                         <View style={{ gap: 15 }}>
                           <Text style={styles.h2}>Proposed ad allocation</Text>
                           <Text style={styles.muted}>
@@ -2082,7 +2222,7 @@ export default function CreateScreen() {
                             before this split.
                           </Text>
                           {draft.channels.map((channel) => (
-                            <Field
+                            <TargetField target={`allocation:${channel}`}
                               key={channel}
                               label={`${channel} · percent of ad budget`}
                               keyboardType="numeric"
@@ -2120,7 +2260,7 @@ export default function CreateScreen() {
                             </Text>
                           )}
                         </View>
-                        <Field
+                        <TargetField target="durationDays"
                           label="Campaign duration · days *"
                           keyboardType="numeric"
                           editable={!fundingLocked}
@@ -2155,8 +2295,10 @@ export default function CreateScreen() {
                             · {draft.durationDays || "—"} days
                           </Text>
                           <Text style={styles.body}>
-                            {draft.goal
+                            {draft.goal && config.data
                               ? `${number(estimate(draft.goal, config.data))} people, estimated from your saved funding goal`
+                              : draft.goal
+                                ? "Reach estimate unavailable until current funding policies load."
                               : "Set your goal at Submit to see the estimated audience reach."}
                           </Text>
                         </View>
@@ -2175,11 +2317,12 @@ export default function CreateScreen() {
                     )}
                     {step === 4 && (
                       <>
+                        <SubmissionChecklist issues={submissionIssues(draft, working.goalInput, accepted)} onSelect={jumpToIssue} />
                         <Text style={styles.muted}>
                           Set your funding goal, review the campaign, and
                           confirm the rules before submitting.
                         </Text>
-                        <Field
+                        <TargetField target="goal"
                           label="Your funding goal · USD *"
                           keyboardType="decimal-pad"
                           editable={!fundingLocked}
@@ -2211,7 +2354,7 @@ export default function CreateScreen() {
                               : "You set this amount. Demo policy: $0.01–$100,000, up to two decimal places. Drafting assistance never sets or changes it."
                           }
                         />
-                        <View style={[styles.card, { padding: 16, gap: 10 }]}>
+                        {config.data ? <View style={[styles.card, { padding: 16, gap: 10 }]}>
                           <Text style={styles.h2}>
                             Est. {number(fundingQuote.reach)} people
                           </Text>
@@ -2223,7 +2366,7 @@ export default function CreateScreen() {
                           >
                             <Text style={styles.muted}>
                               Platform fee (
-                              {((config.data?.feeRate ?? 0.05) * 100).toFixed(
+                              {(config.data.feeRate * 100).toFixed(
                                 0,
                               )}
                               %)
@@ -2245,11 +2388,11 @@ export default function CreateScreen() {
                           </View>
                           <Text style={styles.muted}>
                             Demo assumption:{" "}
-                            {config.data?.peoplePerAdDollar ?? 27} people per
+                            {config.data.peoplePerAdDollar} people per
                             advertising dollar, after fees. This is an estimate,
                             not guaranteed delivery or measured unique reach.
                           </Text>
-                        </View>
+                        </View> : <Notice>Current fees and reach estimates are unavailable. Connect to load funding policies before submitting; your draft can still be edited and saved.</Notice>}
                         <CampaignPreview draft={draft} config={config.data} />
                         {config.isLoading ? (
                           <ActivityIndicator
@@ -2279,6 +2422,7 @@ export default function CreateScreen() {
                           funding completion does not automatically start
                           advertising.
                         </Notice>
+                        <TargetGroup target="rules">
                         <Pressable
                           accessibilityRole="checkbox"
                           accessibilityState={{ checked: accepted }}
@@ -2311,6 +2455,7 @@ export default function CreateScreen() {
                             shown above.
                           </Text>
                         </Pressable>
+                        </TargetGroup>
                         {!!errors.rules && (
                           <Text style={styles.error}>{errors.rules}</Text>
                         )}
@@ -2348,6 +2493,8 @@ export default function CreateScreen() {
               }
             />
           )}
+          </View>
+          </CreationTargets.Provider>
         </ScrollView>
         {working && mode !== "entry" && mode !== "submitted" && (
           <View style={local.footer}>
@@ -2394,11 +2541,8 @@ export default function CreateScreen() {
                         }
                         const invalid = validateStep(draft!, step);
                         if (Object.keys(invalid).length) {
-                          setErrors(invalid);
-                          setFailure(
-                            "Please check the highlighted fields to continue.",
-                          );
-                          scroll.current?.scrollTo({ y: 0, animated: true });
+                          const issue = submissionIssues(draft!, working.goalInput, accepted).find((item) => item.required && item.step === step);
+                          if (issue) jumpToIssue(issue);
                         } else changeStep(step + 1);
                       }}
                     />
@@ -2413,7 +2557,8 @@ export default function CreateScreen() {
   );
 }
 
-const local = StyleSheet.create({
+const makeLocalStyles = (colors: ReturnType<typeof useTheme>["colors"]) =>
+  StyleSheet.create({
   frame: { flex: 1, width: "100%", maxWidth: 640, alignSelf: "center" },
   header: {
     paddingHorizontal: 16,
@@ -2422,13 +2567,13 @@ const local = StyleSheet.create({
     gap: 8,
     borderBottomWidth: 1,
     borderColor: colors.line,
-    backgroundColor: colors.bg,
+    backgroundColor: colors.header,
   },
   content: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 18,
     paddingTop: 16,
     paddingBottom: 24,
-    gap: 18,
+    gap: 16,
     flexGrow: 1,
   },
   footer: {
@@ -2436,7 +2581,7 @@ const local = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 8,
     gap: 8,
-    backgroundColor: colors.bg,
+    backgroundColor: colors.paper,
     borderTopWidth: 1,
     borderColor: colors.line,
   },
@@ -2446,7 +2591,7 @@ const local = StyleSheet.create({
     fontSize: 18,
     lineHeight: 24,
     fontWeight: "700",
-    color: colors.ink,
+    color: colors.headerText,
     letterSpacing: -0.35,
   },
   iconButton: {
