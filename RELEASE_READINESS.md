@@ -1,5 +1,35 @@
 # Android delivery readiness
 
+## October17 cloud delivery gate — live API and scoped physical CloudTest verified
+
+The existing private Campaign source is live on Render Free at
+`https://campaign-api-cw8y.onrender.com`, with the existing Neon Free production
+database and Cloudinary Free authenticated images. Actual `/health`, `/config`
+and `/campaigns` HTTPS responses passed. The [fictional live API journey](artifacts/cloud-deployment/cloud-probe-create.json)
+passed 27 checks; the [same records after an explicit Render restart](artifacts/cloud-deployment/cloud-probe-verify.json)
+passed 14 checks. [Restart evidence](artifacts/cloud-deployment/RENDER_RESTART.json)
+shows the Campaign server PID changed 64→46. The app still uses simulated
+checkout/advertising and the internal reviewer demo; no paid plan was selected.
+
+The [CloudTest ARM64 APK](artifacts/android/cloud-render-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk)
+is 48,629,443 bytes, SHA-256
+`8FCBD997C38022C9C8F5F96588376898C9AC062441526DE20C36D764945973A2`.
+Its packaged Hermes assignment is the Render HTTPS URL, its manifest is
+HTTPS-only, and it uses the existing Debug certificate. The actual POCO
+accepted a compatible update and the installed base.apk hash matches. With
+Metro off and the phone's Campaign USB reverse removed, native Home, Explore,
+images, detail, registration, all five creation screens, account draft save
+and resume after process restart, $5 simulated checkout/receipt, Activity,
+Profile/add-photo control and Light/Dark appeared and worked within
+[the recorded scope](artifacts/cloud-deployment/PHYSICAL_CLOUDTEST.json).
+The original reverse and owned preview were restored. The USB cable remained
+attached for ADB, so a physically disconnected/laptop-off check remains open.
+Native media picker/upload, native submission/reviewer, broader devices,
+sustained performance and human/TalkBack acceptance were not completed. The
+local pass12 fallback remains preserved. Recording and external submission
+remain held; production signing is open.
+The older “public delivery blocked” section below is a historical checkpoint.
+
 ## October17 Neon update — database connected; independent app delivery pending
 
 [Neon setup](docs/NEON_SETUP.md) is VERIFIED within its service scope: actual Free

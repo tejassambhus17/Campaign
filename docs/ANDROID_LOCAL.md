@@ -1,5 +1,23 @@
 # Local Android build and verification
 
+## October17 live CloudTest result
+
+The verified Render Free API is `https://campaign-api-cw8y.onrender.com`.
+The original five-step/review/contribution/media API flow and same-record
+restart persistence passed independently of Android; see the
+[cloud runbook](CLOUD_DEPLOYMENT.md). Build a separate ARM64 CloudTest package
+with `-Mode CloudTest -ApiUrl 'https://campaign-api-cw8y.onrender.com'` and a
+new `-ArtifactTag`. The actual `cloud-render-20261017` ARM64 build succeeded;
+the authorized phone accepted `install -r` and its base.apk hash matches the
+artifact. The packaged Hermes URL, HTTPS-only manifest, no-Metro launch and
+hosted phone workflow are recorded in the
+[physical report](../PHYSICAL_ANDROID_TEST.md). The Debug certificate and
+package match the prior local build. Use only authorized serial
+`tkkrlvqklzydbuh6` with ADB port 5039; do not target the emulator in the
+device list. Metro-off and no-USB-reverse connectivity passed; cable-unplugged
+and laptop-off acceptance remain open. The older pending statements below are
+historical checkpoints.
+
 ## CloudTest preparation
 
 `scripts/android-local.ps1 -Mode CloudTest -ApiUrl <actual-public-HTTPS> -ArtifactTag <new-tag>`

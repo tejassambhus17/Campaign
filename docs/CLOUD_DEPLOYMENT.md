@@ -1,5 +1,49 @@
 # Campaign zero-cost deployment runbook
 
+## October17 actual Free deployment and verification
+
+The existing private `tejassambhus17/Campaign` repository branch
+`codex/cloud-deployment` (commit `9f506038b5a7b8a0ee6620f8809aedd048929fb0`)
+is deployed as Render service `srv-db985h8pd3as73ba6h80`, `plan: free`, in Ohio,
+with auto-deploy off. Its public API is
+`https://campaign-api-cw8y.onrender.com`; deploy
+`dep-db985hopd3as73ba6j9g` is live. The provider injected the existing Neon
+production pooled and migration URLs, stable receipt/reviewer settings, and
+Cloudinary Free account keys as server-side environment. The Neon migration
+was not rerun. No paid service, trial, card, disk or background worker was
+selected. [Sanitized service result](../artifacts/cloud-deployment/RENDER_SERVICE.json)
+contains only environment key names.
+
+Read-only HTTPS smoke gave 200 JSON for `/health`, `/config`, and `/campaigns`.
+The [live fictional creation probe](../artifacts/cloud-deployment/cloud-probe-create.json)
+passed 27 checks through registration, five draft steps, review, explicit
+publication, authenticated Cloudinary image, simulated $1 contribution,
+receipt, Activity and Profile. The Cloudinary account independently reported
+Free and passed a signed upload/read, denied unsigned delivery and removed the
+QA object; [sanitized result](../artifacts/cloud-deployment/CLOUDINARY_LIVE.json).
+Only this Render service was restarted; distinct server PIDs 64→46 are present
+in its logs. The [same-record comparison](../artifacts/cloud-deployment/cloud-probe-verify.json)
+passed 14 checks after restart, without a second payment. The explicit
+[restart record](../artifacts/cloud-deployment/RENDER_RESTART.json) ties these
+observations together. Private probe state and credentials remain ignored.
+The helper's initial gzip-response bug failed before any network mutation;
+its empty state was archived privately and its regression test passes.
+
+The [CloudTest ARM64 APK](../artifacts/android/cloud-render-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk)
+built successfully and was compatibly installed on the authorized Android 15
+POCO. Its installed hash matches the artifact; packaged Hermes reads this
+exact HTTPS origin. With Campaign Metro off and the selected phone's USB-local
+API reverse temporarily removed, physical Home, Explore, media, details,
+registration, all five editor steps, account draft save/resume, simulated
+contribution/receipt, Activity, Profile and Light/Dark were exercised. See
+[release readiness](../RELEASE_READINESS.md), the
+[physical report](../PHYSICAL_ANDROID_TEST.md) and
+[machine-readable native scope](../artifacts/cloud-deployment/PHYSICAL_CLOUDTEST.json).
+The cable remained attached for ADB; unplugged/laptop-off acceptance is not
+claimed. The prior preparation/deferral sections
+below are historical and superseded as to provider availability. Recording
+and external submission remain held by the user.
+
 **October17 update:** the supplied Free Neon Campaign project is connected;
 production PostgreSQL and live API workflows are verified within
 [NEON_SETUP.md](NEON_SETUP.md)'s scope. Actual QA compute-restart persistence is

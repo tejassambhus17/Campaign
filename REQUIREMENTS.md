@@ -1,5 +1,26 @@
 # Requirements and verification matrix
 
+## October17 live cloud evidence supplement
+
+The original 248 PDF requirement rows, classes and page references remain
+unchanged. Cloud delivery progressed to an actual Render Free HTTPS service
+connected to the existing Neon Free production Postgres and a verified
+Cloudinary Free account. A fictional live API flow passed 27 checks through
+all five steps, reviewer approval/explicit publication, protected and approved
+public media, simulated contribution/receipt, Activity and Profile. After a
+Campaign-only Render restart, 14 same-record persistence checks passed.
+[Deployment evidence](docs/CLOUD_DEPLOYMENT.md) gives IDs and exact boundaries.
+The Android CloudTest APK was then built and installed compatibly on the
+authorized POCO. With Metro and its USB-local API reverse absent, native
+Home/Explore/details, registration, all five creation screens, cloud-account
+draft save/resume, simulated contribution/receipt, Activity, Profile and
+Light/Dark passed within the [physical report's](PHYSICAL_ANDROID_TEST.md)
+bounded scope. The cable stayed attached for ADB, so full disconnected or
+laptop-off acceptance remains open. Native media selection and reviewer
+submission were not repeated on this build; their live API checks do not
+substitute for native testing. No real checkout, ads, recording, or external
+submission was performed.
+
 ## October17 Neon evidence supplement
 
 The supplied Free Campaign production database is connected through the existing

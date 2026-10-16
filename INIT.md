@@ -1,5 +1,16 @@
 # Campaign Amplification Hackathon: initialization guide
 
+**October17 live cloud backend:** The Campaign FastAPI service is deployed on
+Render Free at `https://campaign-api-cw8y.onrender.com`, backed by the existing
+Neon Free production Postgres and Cloudinary Free authenticated media. The
+private source branch is `codex/cloud-deployment`, manual deploy only. See
+[cloud runbook](docs/CLOUD_DEPLOYMENT.md) and [live evidence](PROGRESS.md).
+Keep Neon/Cloudinary/Render credentials in ignored local files or server-side
+environment only; no secrets belong in the APK. CloudTest ARM64 was built and
+installed compatibly on the authorized POCO; Metro-off and no-USB-reverse
+hosted workflows passed. Cable-unplugged/laptop-off acceptance remains open.
+Recording is held. Older pending/deferral text below is historical.
+
 **October17 Neon setup:** production PostgreSQL is connected in the user's
 specified Free Campaign project. Root`npm run build` and explicit`npm start`
 are now available; Neon API uses loopback8879, while existing local SQLite API8787

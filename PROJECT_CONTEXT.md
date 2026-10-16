@@ -1,5 +1,22 @@
 # Campaign Amplification Hackathon: project context
 
+**D29 — October17 Free cloud deployment:** The existing FastAPI architecture
+now runs as one Render Free Python web service from the existing private
+`tejassambhus17/Campaign` repository's `codex/cloud-deployment` branch, with
+automatic deploys off. The previously connected Neon Free `production`
+PostgreSQL branch remains the database; no migration was rerun. The user's
+Cloudinary Free Image and Video API account stores authenticated campaign
+media behind the FastAPI authorization proxy. This supersedes the previous
+account/hosting deferral without changing Expo routes, lifecycle, monetary
+rules or the PDF workflows. Live HTTPS workflow and actual Render restart
+persistence are evidenced in [PROGRESS.md](PROGRESS.md); Debug-signed CloudTest
+Android and independent-device checks remain distinct. A Debug-signed ARM64
+CloudTest APK now has actual POCO installation/Metro-off/no-USB-reverse workflow
+evidence; cable-unplugged/laptop-off acceptance remains open. Credentials are only in
+ignored local or provider-side secrets. No production signing, recording,
+payment processing or real advertising was enabled. Historical text below
+retains its earlier scope.
+
 **D28 / October17 — connect existing Neon:** user selected
 `org-patient-sound-11803564` / `dawn-lab-92471358` / `production`, PostgreSQL only.
 Keep Expo/FastAPI and`psycopg`; root tooling maps ignored pulled URLs to pooled

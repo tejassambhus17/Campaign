@@ -1,5 +1,6 @@
 """Probe integration through isolated real API contracts, never a cloud claim."""
 from pathlib import Path
+import gzip
 import json
 import os
 import tempfile
@@ -142,6 +143,21 @@ class CloudProbeTests(unittest.TestCase):
             client.max_response_bytes = 32
             with self.assertRaises(ProbeError):
                 client.get('/health')
+
+    def test_cli_client_does_not_decode_gzip_response_twice(self):
+        body = b'{"status":"ok"}'
+        compressed = gzip.compress(body)
+        def gzipped(request):
+            return httpx.Response(200, headers={
+                'Content-Encoding': 'gzip', 'Content-Length': str(len(compressed)),
+                'Content-Type': 'application/json'}, content=compressed)
+        with BoundedProbeClient(base_url=URL, transport=httpx.MockTransport(gzipped),
+                                trust_env=False) as client:
+            response = client.get('/health')
+        self.assertEqual(response.json(), {'status': 'ok'})
+        self.assertEqual(response.content, body)
+        self.assertNotIn('content-encoding', response.headers)
+        self.assertEqual(int(response.headers['content-length']), len(body))
 
 
 if __name__ == '__main__':

@@ -1,5 +1,52 @@
 # Development progress
 
+## October17: Free cloud backend — VERIFIED within live HTTPS and restart scope
+
+The existing FastAPI application is live at
+`https://campaign-api-cw8y.onrender.com` from the existing private Campaign
+repository's `codex/cloud-deployment` branch. Render reports `plan: free`, manual
+deploy `dep-db985hopd3as73ba6j9g` live, and auto-deploy off. The Cloudinary
+account reports Free; one fictional QA image passed authenticated upload,
+signed read, direct unsigned-delivery denial and deletion. Neon production
+remains the existing Free project; its migration was not rerun. No card or paid
+resource was selected in this task. Secrets are server-side and absent from Git.
+
+Actual HTTPS `/health`, `/config` and `/campaigns` return 200. The deployed
+fictional workflow passed [27 checks](artifacts/cloud-deployment/cloud-probe-create.json),
+including all five draft steps, review/publication separation, private and
+approved-public Cloudinary media, a $1 simulated contribution, receipt,
+funding, Activity and Profile. After an explicit restart of only the Campaign
+Render service (PID 64→46 in service logs), [14 comparisons](artifacts/cloud-deployment/cloud-probe-verify.json)
+passed with the original session, image, receipt capability and funding total;
+see [restart evidence](artifacts/cloud-deployment/RENDER_RESTART.json). The
+gzip response handling in the test harness was repaired and its focused
+regression test passed. The first pre-mutation probe attempt was archived in
+ignored private state and made no account/campaign/payment mutation.
+
+The [48,629,443-byte CloudTest ARM64 APK](artifacts/android/cloud-render-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk)
+(`8FCBD997…973A2`) built successfully with an exact packaged Hermes URL
+assignment, HTTPS-only manifest and matching Debug certificate. Compatible
+`install -r` succeeded on the authorized POCO without data reset; pulling its
+installed base.apk matched the artifact SHA-256. With Campaign Metro off and
+the selected phone's USB-local `tcp:8787` reverse temporarily removed, a
+physical cold launch returned 878ms/883ms and live Home/Explore/detail/media
+loaded. A new fictional account completed native registration, all five
+creation screens, account draft save and process-restart resumption at Submit
+(goal still $0). A $5 **simulated** native contribution showed a $0.25 fee,
+$4.75 ad budget, confirmation, private receipt, Activity and Profile counts.
+Light/Dark, guest behavior and the Edit Profile photo control were inspected.
+The current process had 27 sampled log lines and zero matched fatal/JS errors.
+[Physical evidence](artifacts/cloud-deployment/PHYSICAL_CLOUDTEST.json) and
+[screenshots](artifacts/cloud-deployment/physical-no-reverse-explore-loaded.png)
+record the scope. Campaign Metro and only the selected phone's original
+reverse were restored afterward; the CloudTest app remains installed. The USB
+cable stayed attached for ADB: disconnected/laptop-off acceptance, native media
+picker/upload, native submission/reviewer, broader devices, sustained
+performance and human/TalkBack checks remain open. Recording remains held.
+Historical account
+deferrals below are superseded by this live result; their prior evidence
+boundaries remain valid.
+
 ## October17: Neon PostgreSQL setup — VERIFIED within recorded service scope
 
 The user specified organization`org-patient-sound-11803564`, project

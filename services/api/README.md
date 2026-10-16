@@ -1,5 +1,14 @@
 # Campaign Amplification API
 
+**Live Free deployment (October17):** The existing FastAPI API is at
+`https://campaign-api-cw8y.onrender.com`, deployed manually from the private
+`codex/cloud-deployment` branch to Render Free. It uses the existing Neon Free
+production Postgres and Cloudinary Free authenticated media. The end-to-end
+fictional API journey and actual Render restart persistence passed; see the
+[cloud runbook](../../docs/CLOUD_DEPLOYMENT.md). The historical local-only
+description below is retained for the separate SQLite launcher. Never copy
+server-side secrets into the app or a public issue.
+
 Cloud preparation retains FastAPI and local-default SQLite, adding versioned
 PostgreSQL and authenticated Cloudinary media through the authorized API proxy.
 Read the [runbook](../../docs/CLOUD_DEPLOYMENT.md),

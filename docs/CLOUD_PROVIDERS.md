@@ -1,5 +1,17 @@
 # Zero-cost cloud provider checks
 
+**October17 actual Free account checks:** The Cloudinary account reports
+`plan: Free` through its usage API. A real authenticated upload and signed
+read succeeded; direct unsigned delivery failed, and the fictional QA object
+was removed. [Sanitized Cloudinary evidence](../artifacts/cloud-deployment/CLOUDINARY_LIVE.json).
+Render's created Campaign web service reports `plan: free` and a live HTTPS
+deploy from the private GitHub repository with auto-deploy off; see
+[service evidence](../artifacts/cloud-deployment/RENDER_SERVICE.json) and
+[live workflow/restart verification](CLOUD_DEPLOYMENT.md). Neon Free production
+remains connected as previously documented. We did not choose a card, paid
+plan, trial or paid add-on. The earlier account-pending statements below are
+historical.
+
 **October17 actual account result:** the user-supplied Neon organization reports
 Free before and after setup. The existing Campaign production branch is wired
 and tested; the temporary0.25-CU QA branch was removed after real compute-restart

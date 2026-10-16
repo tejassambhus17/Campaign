@@ -1,5 +1,42 @@
 # Physical Android test
 
+## October17 CloudTest physical test — VERIFIED within recorded scope
+
+The authorized POCO (`tkkrlvqklzydbuh6`, Android 15, ARM64) accepted a
+compatible `install -r` update of the Debug-signed CloudTest APK. Its installed
+base.apk hash exactly matches
+`8FCBD997C38022C9C8F5F96588376898C9AC062441526DE20C36D764945973A2`
+(48,629,443 bytes). The emulator was listed but never selected or used.
+The packaged Hermes getter points to
+`https://campaign-api-cw8y.onrender.com`; local HTTP and connection editing
+are disabled. With Campaign Metro absent and only this phone's USB-local
+`tcp:8787` reverse removed, an actual cold launch returned 878ms/883ms.
+Home/Explore rendered hosted campaigns and images, including the newly
+published fictional cloud probe; detail and the fee/reach quote opened.
+
+Native registration created a separate fictional QA account. Activity showed
+its account event; Profile showed the one-account creator/backer identity and
+Edit Profile has Choose photo. The manual wizard opened and traversed Basics,
+Story, Campaign & Ad Visuals, Reach and Submit. Its fictional draft was saved
+on device and account, verified server-side as Step 4/Draft/goal $0, then
+resumed on Submit after a Campaign process restart. A separate $5 **simulated**
+native payment on a public seed campaign showed $0.25 fee/$4.75 advertising,
+success, private receipt, updated funding, Activity and Profile counts. Light
+and Dark selections rendered; the original Dark preference was restored.
+The current Campaign process log sample contained 27 lines with zero matching
+fatal/JS-error markers. The Campaign-only Metro preview and selected phone's
+original `tcp:8787` reverse were restored. [Machine-readable result](artifacts/cloud-deployment/PHYSICAL_CLOUDTEST.json)
+and screenshots are under `artifacts/cloud-deployment`; no screenshot with a
+phone password-manager overlay was retained. App data was not cleared,
+unrelated devices were untouched and no recording began.
+
+The cable remained attached to collect ADB evidence; this proves operation
+without Metro or USB reverse, not unplugged/laptop-off independence. Native
+media picker/upload and native review/submission were not repeated (the live
+API probe covers server-side media/review). No human/TalkBack, wider hardware,
+fresh install, or sustained performance conclusion is claimed. The existing
+pass12 local APK remains available as a fallback.
+
 ## Cloud preparation: read-only device availability
 
 Authorized `tkkrlvqklzydbuh6` is connected: POCO2312FRAFDI, Android15/API35/ARM64.

@@ -45,7 +45,13 @@ class BoundedProbeClient(httpx.Client):
                 if len(output) + len(chunk) > self.max_response_bytes:
                     raise ProbeError('The API response exceeds this probe\'s size limit.')
                 output.extend(chunk)
-            return httpx.Response(response.status_code, headers=response.headers,
+            # iter_bytes has already decoded a compressed wire response. Keeping
+            # the original encoding/length headers would make httpx decode it
+            # a second time when the caller reads the reconstructed response.
+            headers = response.headers.copy()
+            headers.pop('content-encoding', None)
+            headers.pop('content-length', None)
+            return httpx.Response(response.status_code, headers=headers,
                                   content=bytes(output), request=response.request)
 
 

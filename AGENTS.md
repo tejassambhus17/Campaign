@@ -1,5 +1,16 @@
 # Campaign Amplification Hackathon: agent instructions
 
+**Current October17 cloud decision:** The user later authorized connecting only
+verified Free Neon, Cloudinary and Render accounts. The existing Campaign
+FastAPI service is live on Render Free from the private
+`codex/cloud-deployment` branch, with the existing Neon Free production
+Postgres and Cloudinary Free authenticated media. Auto-deploy is off. See
+`docs/CLOUD_DEPLOYMENT.md` for sanitized live and restart evidence. The older
+cloud-account deferral below is historical. Do not select a card, paid plan,
+trial or upgrade. Keep provider secrets out of source/APK. Native CloudTest
+and production release require their own verification. Recording and external
+submission remain held until the user authorizes them.
+
 ## Project boundary
 
 - The authoritative project root is `E:\Campaign`, explicitly confirmed by the user on October 15, 2026. The macOS project path in the initialization request is superseded; do not create or use it.

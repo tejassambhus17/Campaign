@@ -1,5 +1,16 @@
 # Campaign Amplification
 
+**Current cloud deployment (October17):** The existing FastAPI API is live on
+[Render Free](https://campaign-api-cw8y.onrender.com) using the existing Neon
+Free production database and Cloudinary Free authenticated media. The private
+GitHub branch `codex/cloud-deployment` deploys manually; no paid plan or card
+was selected for this work. The full fictional API journey and restart
+persistence passed; [live evidence](PROGRESS.md) and [runbook](docs/CLOUD_DEPLOYMENT.md)
+record the scope. The Android CloudTest APK has a scoped physical pass with
+Metro and USB reverse absent; unplugged acceptance remains open. Recording
+remains held. Older local-only
+statements below describe their historical checkpoints.
+
 **October17 update:** Neon PostgreSQL is connected to the existing FastAPI app.
 From this root,`npm run build` checks TypeScript, exports Android JavaScript/assets
 and compiles FastAPI;`npm start` runs the Neon-backed local API on8879. The original
