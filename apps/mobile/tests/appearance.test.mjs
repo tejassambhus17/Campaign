@@ -29,23 +29,33 @@ function fixture({ saved = null, os = 'light', read, write } = {}) {
   return { create, values, calls, setOS: (value) => { os = value; events.forEach((fn) => fn()); } };
 }
 
-test('missing and invalid saved values safely default to System, including non-string input', async () => {
+test('missing and invalid saved values default to Dark even on a Light device', async () => {
   for (const saved of [null, '', 'unexpected', '{"theme":"dark"}', '__proto__']) {
-    const f = fixture({ saved, os: 'dark' });
+    const f = fixture({ saved, os: 'light' });
     const store = f.create();
     assert.equal(store.getSnapshot().ready, false);
     await store.restore();
-    assert.deepEqual(store.getSnapshot(), { preference: 'system', scheme: 'dark', ready: true, appearanceError: '' });
+    assert.deepEqual(store.getSnapshot(), { preference: 'dark', scheme: 'dark', ready: true, appearanceError: '' });
   }
-  for (const value of [undefined, {}, [], 0, false]) assert.equal(normalizeAppearance(value), 'system');
+  for (const value of [undefined, {}, [], 0, false]) assert.equal(normalizeAppearance(value), 'dark');
   assert.equal(resolveAppearance('system', null), 'light');
 });
 
 test('System follows live OS changes; unsubscribe stops receiving OS events', async () => {
-  const f = fixture(); const store = f.create(); const stop = store.start(); await store.restore();
+  const f = fixture({ saved: 'system' }); const store = f.create(); const stop = store.start(); await store.restore();
   f.setOS('dark'); assert.equal(store.getSnapshot().scheme, 'dark');
   f.setOS('light'); assert.equal(store.getSnapshot().scheme, 'light');
   stop(); f.setOS('dark'); assert.equal(store.getSnapshot().scheme, 'light');
+});
+
+test('existing explicit Light, Dark and System choices survive the new Dark default', async () => {
+  for (const preference of ['light', 'dark', 'system']) {
+    const f = fixture({ saved: preference, os: 'light' }); const store = f.create();
+    await store.restore();
+    assert.equal(store.getSnapshot().preference, preference);
+    assert.equal(store.getSnapshot().scheme, preference === 'dark' ? 'dark' : 'light');
+    assert.equal(f.calls.filter(([operation]) => operation === 'set').length, 0);
+  }
 });
 
 test('explicit Light and Dark override the OS; returning to System reads the current OS immediately', async () => {
@@ -79,10 +89,10 @@ test('rapid preference writes are serialized and the final choice survives resta
   const restarted = f.create(); await restarted.restore(); assert.equal(restarted.getSnapshot().scheme, 'light');
 });
 
-test('failed reads use System and failed writes keep the visible choice with actionable error', async () => {
+test('failed reads use Dark and failed writes keep the visible choice with actionable error', async () => {
   const f = fixture({ os: 'dark', read: async () => { throw Error('unavailable'); } });
   const store = f.create(); await store.restore(); assert.equal(store.getSnapshot().ready, true);
-  assert.equal(store.getSnapshot().preference, 'system'); assert.match(store.getSnapshot().appearanceError, /restored/);
+  assert.equal(store.getSnapshot().preference, 'dark'); assert.match(store.getSnapshot().appearanceError, /restored/);
   let fail = true; const g = fixture({ write: async () => { if (fail) throw Error('full'); } });
   const other = g.create(); await other.restore(); await assert.rejects(other.setPreference('dark'));
   assert.equal(other.getSnapshot().scheme, 'dark'); assert.match(other.getSnapshot().appearanceError, /Try again/);
@@ -108,8 +118,8 @@ test('snapshots remain stable without changes and notify subscribers only for ac
   const f = fixture(); const store = f.create(); await store.restore();
   let notifications = 0; const stop = store.subscribe(() => notifications++);
   const snapshot = store.getSnapshot(); assert.equal(store.getSnapshot(), snapshot);
-  await store.setPreference('system'); assert.equal(notifications, 0);
-  await store.setPreference('dark'); assert.ok(notifications > 0); stop();
+  await store.setPreference('dark'); assert.equal(notifications, 0);
+  await store.setPreference('system'); assert.ok(notifications > 0); stop();
   const count = notifications; await store.setPreference('light'); assert.equal(notifications, count);
 });
 

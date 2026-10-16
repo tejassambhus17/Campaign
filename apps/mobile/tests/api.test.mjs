@@ -20,8 +20,26 @@ new Function('require', 'module', 'exports', '__DEV__', 'process', source)(
   true,
   { env: {} },
 );
-const { api, ApiError, getApiUrl, setApiUrl, normalizeApiUrl, setToken, mediaUrl, onSessionExpired } = loaded.exports;
+const { api, ApiError, getApiUrl, setApiUrl, normalizeApiUrl, setToken, mediaUrl, onSessionExpired, captureApiSession } = loaded.exports;
 const local = 'http://127.0.0.1:8787';
+
+test('profile picker completions are invalidated by logout, reauthentication and backend changes', () => {
+  setApiUrl(local);
+  setToken('first-account');
+  const picker = captureApiSession();
+  assert.equal(picker(), true);
+  setToken(null);
+  assert.equal(picker(), false);
+  setToken('first-account');
+  assert.equal(picker(), false, 'even a renewed token cannot revive an old picker');
+  const upload = captureApiSession();
+  setToken('other-account');
+  assert.equal(upload(), false);
+  const current = captureApiSession();
+  setApiUrl('https://api.example.test');
+  assert.equal(current(), false);
+  setApiUrl(local); setToken(null);
+});
 
 function mockFetch(t, implementation) {
   const original = globalThis.fetch;
@@ -225,8 +243,9 @@ test('network failures and permission denials preserve the signed-in token', asy
 
 // Execute the real provider effect with small platform/hook adapters, so the
 // transport callback is verified against persisted storage and real query data.
-function providerHarness(t, savedSession, removeSession) {
-  const values = new Map([['campaign-session', JSON.stringify(savedSession)]]);
+function providerHarness(t, savedSession, removeSession, saveSession, options = {}) {
+  const values = new Map(savedSession ? [['campaign-session', JSON.stringify(savedSession)]] : []);
+  for (const [key, value] of options.values || []) values.set(key, value);
   const states = [];
   const effects = [];
   const react = {
@@ -239,20 +258,35 @@ function providerHarness(t, savedSession, removeSession) {
     },
     useEffect: (effect) => { effects.push(effect); },
     useCallback: (callback) => callback,
+    useRef: (initial) => ({ current: initial }),
   };
-  const { QueryClient } = require('@tanstack/react-query');
+  const { QueryClient, CancelledError } = require('@tanstack/react-query');
+  const activityModule = { exports: {} };
+  const activitySource = ts.transpileModule(
+    readFileSync(new URL('../src/lib/activity.ts', import.meta.url), 'utf8'),
+    { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } },
+  ).outputText;
+  new Function('module', 'exports', activitySource)(activityModule, activityModule.exports);
+  const sessionStorageModule = { exports: {} };
+  const sessionStorageSource = ts.transpileModule(
+    readFileSync(new URL('../src/lib/session-storage.ts', import.meta.url), 'utf8'),
+    { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } },
+  ).outputText;
+  new Function('module', 'exports', sessionStorageSource)(sessionStorageModule, sessionStorageModule.exports);
   const adapters = {
     react: { ...react, default: react },
     'react-native': { Platform: { OS: 'web' } },
     'expo-router': { useFocusEffect: () => undefined },
     '@react-native-async-storage/async-storage': { default: {
       getItem: async (key) => values.get(key) ?? null,
-      setItem: async (key, value) => { values.set(key, value); },
+      setItem: async (key, value) => { if (saveSession) await saveSession(); values.set(key, value); },
       removeItem: async (key) => { if (removeSession) await removeSession(); values.delete(key); },
     } },
     'expo-secure-store': {},
-    '@tanstack/react-query': { QueryClient, QueryClientProvider: 'QueryClientProvider' },
-    './api': loaded.exports,
+    '@tanstack/react-query': { QueryClient, CancelledError, QueryClientProvider: 'QueryClientProvider' },
+    './api': options.api || loaded.exports,
+    './activity': activityModule.exports,
+    './session-storage': sessionStorageModule.exports,
   };
   const providerSource = ts.transpileModule(
     readFileSync(new URL('../src/lib/session.tsx', import.meta.url), 'utf8'),
@@ -304,7 +338,7 @@ test('a sign-in during expiry cleanup keeps its newer identity and durable sessi
   assert.equal(provider.states[0], null);
   const signIn = provider.session.login('new@example.test', 'fictional-test-password');
   await settle();
-  assert.deepEqual(provider.states[0], newUser);
+  assert.equal(provider.states[0], null, 'do not publish the new identity until its saved-session choice succeeds');
   finishRemoval();
   await signIn;
   await assert.rejects(expiredRead, (error) => error.status === 401);
@@ -315,4 +349,137 @@ test('a sign-in during expiry cleanup keeps its newer identity and durable sessi
     return Response.json({ ok: true });
   };
   await api('/health');
+});
+
+test('unchecked Remember removes any saved identity, preserves drafts and stays signed out after a restart', async t => {
+  const oldUser = { id: 'old-owner', name: 'Old Creator', role: 'member' };
+  const newUser = { id: 'memory-owner', name: 'Memory Creator', role: 'member' };
+  mockFetch(t, async url => Response.json(url.endsWith('/auth/login')
+    ? { token: 'memory-session', user: newUser }
+    : { user: oldUser }));
+  const provider = providerHarness(t, { token: 'old-session', user: oldUser });
+  await settle();
+  provider.values.set('campaign:drafts:old-owner', 'untouched draft');
+  provider.queryClient.setQueryData(['me', oldUser.id], { private: true });
+  await provider.session.login('memory@example.test', 'fictional-test-password', false);
+  assert.deepEqual(provider.states[0], newUser);
+  assert.equal(provider.values.has('campaign-session'), false);
+  assert.equal(provider.values.get('campaign:drafts:old-owner'), 'untouched draft');
+  assert.equal(provider.queryClient.getQueryData(['me', oldUser.id]), undefined);
+  globalThis.fetch = async (_url, options) => {
+    assert.equal(options.headers.Authorization, 'Bearer memory-session');
+    return Response.json({ ok: true });
+  };
+  await api('/health');
+  setToken(null); // A fresh process has no in-memory bearer.
+  const restarted = providerHarness(t);
+  await settle();
+  assert.equal(restarted.states[0], null);
+  assert.equal(restarted.states[1], true);
+  assert.equal(restarted.values.has('campaign-session'), false);
+});
+
+test('remembered login and registration retain the existing durable token/user contract', async t => {
+  const user = { id: 'remembered-owner', name: 'Remembered Creator', role: 'member' };
+  mockFetch(t, async url => Response.json(url.endsWith('/me') ? { user } : { token: 'durable-session', user }));
+  const provider = providerHarness(t);
+  await settle();
+  await provider.session.login('remembered@example.test', 'fictional-test-password', true);
+  assert.deepEqual(JSON.parse(provider.values.get('campaign-session')), { token: 'durable-session', user });
+  const restarted = providerHarness(t, JSON.parse(provider.values.get('campaign-session')));
+  await settle();
+  assert.deepEqual(restarted.states[0], user);
+  const registration = providerHarness(t);
+  await settle();
+  await registration.session.register(user.name, 'registration@example.test', 'fictional-test-password');
+  assert.deepEqual(JSON.parse(registration.values.get('campaign-session')), { token: 'durable-session', user });
+});
+
+test('failed Remember storage does not expose a new identity or clear its existing private state', async t => {
+  const user = { id: 'existing-owner', name: 'Existing Creator', role: 'member' };
+  mockFetch(t, async url => Response.json(url.endsWith('/auth/login')
+    ? { token: 'must-not-publish', user: { id: 'new-owner', name: 'New Creator', role: 'member' } }
+    : { user }));
+  const provider = providerHarness(t, { token: 'existing-session', user }, async () => { throw new Error('storage unavailable'); });
+  await settle();
+  provider.queryClient.setQueryData(['me', user.id], { private: true });
+  await assert.rejects(provider.session.login('new@example.test', 'fictional-test-password', false), /Could not update the saved sign-in/);
+  assert.deepEqual(provider.states[0], user);
+  assert.deepEqual(provider.queryClient.getQueryData(['me', user.id]), { private: true });
+  assert.equal(JSON.parse(provider.values.get('campaign-session')).token, 'existing-session');
+});
+
+test('logout invalidates an outstanding login response so it cannot recreate a persisted account', async t => {
+  let finishLogin;
+  mockFetch(t, async url => url.endsWith('/auth/login')
+    ? new Promise(resolve => { finishLogin = resolve; })
+    : Response.json({ ok: true }));
+  const provider = providerHarness(t);
+  await settle();
+  const pending = provider.session.login('late@example.test', 'fictional-test-password', true);
+  await settle();
+  await provider.session.logout();
+  finishLogin(Response.json({ token: 'obsolete-session', user: { id: 'late-owner' } }));
+  await assert.rejects(pending, /sign-in changed/);
+  assert.equal(provider.states[0], null);
+  assert.equal(provider.values.has('campaign-session'), false);
+});
+
+function cloudApi(url = 'https://campaign-demo.onrender.com') {
+  const module = { exports: {} };
+  new Function('require', 'module', 'exports', '__DEV__', 'process', source)(
+    name => { assert.equal(name, 'react-native'); return { Platform: { OS: 'web' } }; },
+    module, module.exports, false, { env: { EXPO_PUBLIC_CLOUD_BUILD: '1', EXPO_PUBLIC_API_URL: url } },
+  );
+  return module.exports;
+}
+
+test('cloud startup ignores old USB overrides and local identity without erasing local credentials or drafts', async t => {
+  const cloud = cloudApi();
+  const old = { token: 'local-token-must-stay-local', user: { id: 'same-seeded-owner', name: 'Local owner' } };
+  let calls = 0;
+  mockFetch(t, async () => { calls++; throw new Error('No legacy credential request is allowed.'); });
+  const provider = providerHarness(t, old, undefined, undefined, { api: cloud, values: [
+    ['campaign-api-url', 'http://127.0.0.1:8787'],
+    ['campaign-creation-v1:same-seeded-owner', 'private local draft'],
+    ['campaign-creation-v1:guest', 'local guest draft'],
+  ] });
+  await settle();
+  assert.equal(provider.states[1], true);
+  assert.equal(provider.states[0], null);
+  assert.equal(calls, 0, 'old local token is never sent to the public backend');
+  assert.equal(cloud.getApiUrl(), 'https://campaign-demo.onrender.com');
+  assert.deepEqual(JSON.parse(provider.values.get('campaign-session')), old);
+  assert.equal(provider.values.get('campaign-api-url'), 'http://127.0.0.1:8787');
+  assert.equal(provider.values.get('campaign-creation-v1:same-seeded-owner'), 'private local draft');
+  assert.equal(provider.values.get('campaign-creation-v1:guest'), 'local guest draft');
+});
+
+test('cloud Remember stores/restores only its backend namespace and survives a temporary network failure', async t => {
+  const cloud = cloudApi(), user = { id: 'same-seeded-owner', name: 'Cloud owner', role: 'member' };
+  const oldSession = JSON.stringify({ token: 'untouched-local-token', user: { id: user.id, name: 'Local owner' } });
+  mockFetch(t, async (url, options) => {
+    assert.match(url, /^https:\/\/campaign-demo\.onrender\.com\//);
+    assert.notEqual(options.headers.Authorization, 'Bearer untouched-local-token');
+    return Response.json({ token: 'cloud-token', user });
+  });
+  const provider = providerHarness(t, undefined, undefined, undefined, { api: cloud, values: [['campaign-session', oldSession]] });
+  await settle();
+  await provider.session.login('fictional@example.test', 'fictional-test-password', true);
+  const key = cloud.getSessionStorageKey();
+  assert.deepEqual(JSON.parse(provider.values.get(key)), { token: 'cloud-token', user });
+  assert.equal(provider.values.get('campaign-session'), oldSession);
+  cloud.setToken(null);
+  globalThis.fetch = async (_url, options) => {
+    assert.equal(options.headers.Authorization, 'Bearer cloud-token');
+    throw new TypeError('Network request failed');
+  };
+  const restart = providerHarness(t, undefined, undefined, undefined, { api: cloud, values: [...provider.values] });
+  await settle();
+  assert.deepEqual(restart.states[0], user);
+  assert.equal(restart.states[1], true);
+  assert.equal(restart.values.get(key), provider.values.get(key));
+  await assert.rejects(restart.session.logout(), /taking longer to connect/);
+  assert.equal(restart.values.has(key), false);
+  assert.equal(restart.values.get('campaign-session'), oldSession);
 });

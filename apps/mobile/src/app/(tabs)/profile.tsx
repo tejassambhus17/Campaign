@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { Linking, Pressable, ScrollView, Switch, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
+import { AccessibilityInfo, BackHandler, Linking, Pressable, ScrollView, Switch, View } from "react-native";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { api, getApiUrl, normalizeApiUrl, setApiUrl } from "../../lib/api";
-import { Campaign, Config, Payment, estimate, money, number } from "../../lib/types";
+import { api, getApiUrl, isCloudBuild, normalizeApiUrl, setApiUrl } from "../../lib/api";
+import { Campaign, Config, Me, Payment, estimate, money, number } from "../../lib/types";
 import { useQuery } from "@tanstack/react-query";
 import {
   refresh,
@@ -24,7 +24,6 @@ import {
   IconButton,
   Loading,
   Notice,
-  PageHeader,
   Pill,
   Picture,
   Progress,
@@ -34,6 +33,7 @@ import {
 } from "../../components/ui";
 import { AuthForm } from "../../features/auth";
 import { Reviewer } from "../../features/reviewer";
+import { ProfilePhoto, ProfilePhotoEditor } from "../../features/profile/Photo";
 const groups: Record<string, string[]> = {
   Drafts: ["Draft"],
   "Under Review": ["Submitted for Review", "Approved"],
@@ -79,45 +79,67 @@ const information: Record<string, string> = {
     "Use accurate, respectful messaging and relevant sources. Do not publish private information, harassment or misleading claims. Submitted campaigns require review; material changes require another review before advertising updates.",
 };
 
+type ProfileSection = "Overview" | "Created" | "Backed" | "Saved" | "Payments" | "Notifications" | "Settings" | "Edit" | "Appearance" | "Help" | "Review";
+const sectionTitles: Record<ProfileSection, string> = {
+  Overview: "Profile", Created: "My Campaigns", Backed: "Backed Campaigns", Saved: "Saved Campaigns",
+  Payments: "Payment History", Notifications: "Notifications", Settings: "Settings", Edit: "Edit Profile",
+  Appearance: "Appearance", Help: "Help & Support", Review: "Campaign Review",
+};
+
 export default function Profile() {
-  const { colors, styles } = useTheme();
+  const { colors, styles, scheme, preference, setPreference, ready: appearanceReady, appearanceError } = useTheme();
   const params = useLocalSearchParams<{ section?: string; payment?: string }>();
   const session = useSession();
   const me = useMe();
   const campaigns = useCampaigns();
   const config = useConfig();
-  const [section, setSection] = useState("Created");
+  const [section, setSection] = useState<ProfileSection>("Overview");
   const [filter, setFilter] = useState("Drafts");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  const [appearanceBusy, setAppearanceBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   const [address, setAddress] = useState(getApiUrl());
   const [name, setName] = useState("");
-  const [focusedPayment, setFocusedPayment] = useState<{
-    id: string;
-    userId: string;
-  } | null>(null);
+  const [focusedPayment, setFocusedPayment] = useState<{ id: string; userId: string } | null>(null);
+  useEffect(() => {
+    if (!message || failed) return;
+    AccessibilityInfo.announceForAccessibility(message);
+    const timer = setTimeout(() => setMessage(""), 4000);
+    return () => clearTimeout(timer);
+  }, [message, failed]);
   useEffect(() => {
     setMessage("");
     setName("");
+    setBusy(false);
     setFocusedPayment(null);
+    setSection("Overview");
   }, [session.user?.id]);
   useEffect(() => {
-    if (params.section === "Payments" || params.section === "Settings") {
-      setSection(params.section);
+    if (params.section && Object.prototype.hasOwnProperty.call(sectionTitles, params.section)) {
+      setSection(params.section as ProfileSection);
       setMessage("");
       if (params.section === "Payments" && params.payment && session.user) {
         setFocusedPayment({ id: params.payment, userId: session.user.id });
-      } else {
-        setFocusedPayment(null);
-      }
+      } else setFocusedPayment(null);
       router.setParams({ section: undefined, payment: undefined });
     }
   }, [params.section, params.payment, session.user]);
-  async function run(action: () => Promise<unknown>, success: string) {
-    setBusy(true);
+  const back = useCallback(() => {
+    if (focusedPayment) setFocusedPayment(null);
+    else setSection("Overview");
     setMessage("");
-    setFailed(false);
+  }, [focusedPayment]);
+  useFocusEffect(useCallback(() => {
+    const sub = BackHandler.addEventListener("hardwareBackPress", () => {
+      if (section === "Overview") return false;
+      back();
+      return true;
+    });
+    return () => sub.remove();
+  }, [section, back]));
+  async function run(action: () => Promise<unknown>, success: string) {
+    setBusy(true); setMessage(""); setFailed(false);
     try {
       await action();
       await refresh();
@@ -125,462 +147,173 @@ export default function Profile() {
     } catch (e) {
       setFailed(true);
       setMessage((e as Error).message);
-    } finally {
-      setBusy(false);
-    }
+    } finally { setBusy(false); }
+  }
+  function open(next: ProfileSection) {
+    setSection(next); setMessage(""); setFocusedPayment(null);
+    if (next === "Edit") setName(me.data?.user.name || session.user?.name || "");
+    if (session.user) void me.refetch();
+    if (next === "Saved" || next === "Backed") void campaigns.refetch();
+  }
+  async function quickAppearance() {
+    if (appearanceBusy || !appearanceReady) return;
+    setAppearanceBusy(true);
+    try { await setPreference(scheme === "dark" ? "light" : "dark"); }
+    catch { setFailed(true); setMessage("Appearance changed, but could not be saved. Try again in Settings."); }
+    finally { setAppearanceBusy(false); }
   }
   const own = me.data?.campaigns || [];
-  const list =
-    section === "Created"
-      ? own.filter((c) => groups[filter]?.includes(c.status))
-      : section === "Saved"
-        ? (campaigns.data || []).filter((c) => me.data?.saved.includes(c.id))
-        : section === "Backed"
-          ? (campaigns.data || []).filter((c) =>
-              me.data?.payments.some(
-                (p) => p.campaignId === c.id && p.status === "successful",
-              ),
-            )
-          : [];
-  return (
-    <Screen key={`${section}:${focusedPayment?.id || ""}`}>
-      <PageHeader
-        title="Profile"
-        action={
-          session.user ? (
-            <IconButton
-              label="Refresh your profile"
-              icon="refresh-outline"
-              loading={me.isFetching || campaigns.isFetching}
-              onPress={() => {
-                void refresh();
-              }}
-            />
-          ) : undefined
-        }
-      />
-      {!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}
-      {session.ready && !session.user && <AppearanceSettings />}
-      {!session.ready ? (
-        <Loading />
-      ) : !session.user ? (
-        <AuthForm />
-      ) : (
-        <>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-            <View
-              accessible={false}
-              style={{
-                width: 48,
-                height: 48,
-                borderRadius: 24,
-                backgroundColor: colors.mint,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text style={{ fontFamily: fonts.bold, color: colors.green, fontSize: 18 }}>
-                {(me.data?.user.name || session.user.name)
-                  .trim()
-                  .split(/\s+/)
-                  .slice(0, 2)
-                  .map((part) => part.charAt(0).toUpperCase())
-                  .join("")}
-              </Text>
-            </View>
-            <View style={{ flex: 1, gap: 3 }}>
-              <Text style={[styles.h2, { fontSize: 20, lineHeight: 27 }]}>
-                {me.data?.user.name || session.user.name}
-              </Text>
-              <Text style={[styles.muted, { fontSize: 12 }]}>
-                {session.user.role === "reviewer"
-                  ? "Reviewer · creator · backer"
-                  : "One account to create, back and follow"}
-              </Text>
-            </View>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 8, paddingBottom: 4 }}
-          >
-            {[
-              "Created",
-              "Backed",
-              "Saved",
-              "Payments",
-              "Settings",
-              ...(session.user.role === "reviewer" ? ["Review"] : []),
-            ].map((s) => (
-              <Pill
-                key={s}
-                title={s}
-                selected={section === s}
-                onPress={() => {
-                  setSection(s);
-                  setFocusedPayment(null);
-                  setMessage("");
-                  void me.refetch();
-                  void campaigns.refetch();
-                }}
-              />
-            ))}
-          </ScrollView>
-          {section === "Settings" && <AppearanceSettings />}
-          {section === "Review" ? (
-            <Reviewer />
-          ) : me.isPending ? (
-            <Loading />
-          ) : me.isError ? (
-            <ErrorState error={me.error} retry={() => me.refetch()} />
-          ) : section === "Settings" ? (
-            <View style={{ gap: 20 }}>
-              <Text accessibilityRole="header" style={styles.h2}>
-                Account settings
-              </Text>
-              <Text style={styles.muted}>{session.user.email}</Text>
-              <Field
-                label="Display name"
-                value={name}
-                onChangeText={setName}
-                placeholder={me.data.user.name}
-                autoComplete="name"
-                maxLength={150}
-                editable={!busy}
-              />
-              <Button
-                title="Save account details"
-                disabled={busy || !name.trim()}
-                onPress={() =>
-                  run(
-                    () => api("/me", { method: "PUT", body: { name } }),
-                    "Account details saved.",
-                  )
-                }
-              />
-              <Accordion title="Notification preferences" initiallyOpen>
-                <Text style={styles.muted}>
-                  Choose which new updates appear in Activity. Existing activity
-                  stays available.
-                </Text>
-                <View style={{ paddingTop: 4 }}>
-                  {(["campaigns", "payments"] as const).map((category) => (
-                    <View
-                      key={category}
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        gap: 12,
-                        minHeight: 64,
-                        borderBottomWidth: 1,
-                        borderColor: colors.line,
-                      }}
-                    >
-                      <View style={{ flex: 1, gap: 3 }}>
-                        <Text
-                          style={[styles.body, { fontFamily: fonts.medium }]}
-                        >
-                          {category === "campaigns"
-                            ? "Campaign updates"
-                            : "Payment updates"}
-                        </Text>
-                        <Text style={styles.muted}>
-                          {category === "campaigns"
-                            ? "Reviews, funding and distribution"
-                            : "Contribution and refund status"}
-                        </Text>
-                      </View>
-                      <Switch
-                        accessibilityLabel={
-                          category === "campaigns"
-                            ? "Campaign updates"
-                            : "Payment updates"
-                        }
-                        value={
-                          me.data.preferences.categories[category] !== false
-                        }
-                        disabled={busy}
-                        trackColor={{ false: colors.outline, true: colors.green }}
-                        thumbColor={colors.onPrimary}
-                        onValueChange={(value) => {
-                          void run(
-                            () =>
-                              api("/me/preferences", {
-                                method: "PUT",
-                                body: { categories: { [category]: value } },
-                              }),
-                            `${category === "campaigns" ? "Campaign" : "Payment"} notification preference saved.`,
-                          );
-                        }}
-                      />
-                    </View>
-                  ))}
-                  <View style={{ paddingVertical: 16, gap: 4 }}>
-                    <Text style={[styles.body, { fontFamily: fonts.medium }]}>
-                      Essential security notices · Always on
-                    </Text>
-                    <Text style={styles.muted}>
-                      In-app delivery is active. Push and email are not
-                      connected in this prototype.
-                    </Text>
-                  </View>
-                </View>
-              </Accordion>
-              <Button
-                title="Sign out"
-                variant="secondary"
-                loading={busy}
-                onPress={() => run(() => session.logout(), "Signed out.")}
-              />
-            </View>
-          ) : section === "Payments" ? (
-            <View style={{ gap: 16 }}>
-              <Text accessibilityRole="header" style={styles.h2}>
-                Payment history
-              </Text>
-              <Text style={styles.muted}>
-                Simulated payments for message distribution. No real money has
-                moved.
-              </Text>
-              {focusedPayment?.userId === session.user.id && (
-                <PrivatePayment
-                  paymentId={focusedPayment.id}
-                  payments={me.data.payments}
-                  userId={session.user.id}
-                  onClose={() => setFocusedPayment(null)}
-                />
-              )}
-              {focusedPayment?.userId === session.user.id ? null : !me.data.payments.length ? (
-                <Empty
-                  title="No contributions yet"
-                  body="Your simulated contributions and private receipts will appear here."
-                />
-              ) : (
-                <View
-                  style={{
-                    backgroundColor: colors.paper,
-                    borderRadius: 14,
-                    paddingHorizontal: 16,
-                  }}
-                >
-                  {me.data.payments.map((p, index) => (
-                    <View
-                      key={p.id}
-                      style={{
-                        paddingVertical: 18,
-                        gap: 10,
-                        borderBottomWidth:
-                          index === me.data.payments.length - 1 ? 0 : 1,
-                        borderColor: colors.line,
-                      }}
-                    >
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "baseline",
-                          gap: 12,
-                        }}
-                      >
-                        <Text
-                          style={[
-                            styles.body,
-                            { flex: 1, fontFamily: fonts.semibold },
-                          ]}
-                        >
-                          {p.title}
-                        </Text>
-                        <Text style={[styles.h2, { fontSize: 22, fontVariant: ["tabular-nums"] }]}>
-                          {money(p.amount)}
-                        </Text>
-                      </View>
-                      <Text style={styles.muted}>
-                        {p.status.charAt(0).toUpperCase() + p.status.slice(1)} ·{" "}
-                        {new Date(p.createdAt).toLocaleDateString()}
-                      </Text>
-                      <Text style={styles.muted}>
-                        Included fee {money(p.fee)} · Advertising{" "}
-                        {money(p.adBudget)}
-                      </Text>
-                      <Button
-                        title="Campaign report"
-                        variant="secondary"
-                        onPress={() =>
-                          router.push(`/explore/${p.campaignId}/report`)
-                        }
-                      />
-                      {p.receipt && (
-                        <Button
-                          title="Open private receipt"
-                          variant="ghost"
-                          onPress={() => setFocusedPayment({ id: p.id, userId: session.user!.id })}
-                        />
-                      )}
-                    </View>
-                  ))}
-                </View>
-              )}
-            </View>
-          ) : (
-            <View style={{ gap: 16 }}>
-              <View style={{ gap: 5 }}>
-                <Text accessibilityRole="header" style={styles.h2}>
-                  {section === "Created"
-                    ? "Your campaigns"
-                    : `${section} campaigns`}
-                </Text>
-                {section === "Created" && (
-                  <Text style={styles.muted}>
-                    {own.length} {own.length === 1 ? "campaign" : "campaigns"}{" "}
-                    in your account. Drafts also resume from Create.
-                  </Text>
-                )}
-              </View>
-              {section === "Created" && (
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{ gap: 8, paddingBottom: 4 }}
-                >
-                  {Object.keys(groups).map((f) => (
-                    <Pill
-                      key={f}
-                      title={f}
-                      selected={filter === f}
-                      onPress={() => {
-                        setFilter(f);
-                        void me.refetch();
-                      }}
-                    />
-                  ))}
-                </ScrollView>
-              )}
-              {section !== "Created" && campaigns.isPending ? (
-                <Loading />
-              ) : section !== "Created" && campaigns.isError ? (
-                <ErrorState
-                  error={campaigns.error}
-                  retry={() => campaigns.refetch()}
-                />
-              ) : !list.length ? (
-                <Empty
-                  title={
-                    section === "Created"
-                      ? emptyGroupTitles[filter]
-                      : `No ${section.toLowerCase()} campaigns yet`
-                  }
-                  body={
-                    section === "Created"
-                      ? "Create a campaign, then follow each step from your dashboard."
-                      : `Explore campaigns to build your ${section.toLowerCase()} collection.`
-                  }
-                  action={
-                    <Button
-                      title={
-                        section === "Created"
-                          ? "Create a campaign"
-                          : "Explore campaigns"
-                      }
-                      onPress={() =>
-                        router.push(
-                          section === "Created" ? "/create" : "/explore",
-                        )
-                      }
-                    />
-                  }
-                />
-              ) : (
-                list.map((c) => (
-                  <DashboardCard
-                    key={c.id}
-                    c={c}
-                    config={config.data}
-                    busy={busy}
-                    owner={c.ownerId === session.user!.id}
-                    revision={() =>
-                      run(async () => {
-                        await api(`/campaigns/${c.id}/revision`, {
-                          method: "POST",
-                        });
-                        router.push(`/create?draft=${c.id}`);
-                      }, "Editable revision prepared. The approved public version stays visible until review.")
-                    }
-                  />
-                ))
-              )}
-            </View>
-          )}
-        </>
-      )}
-      <View style={{ gap: 3, paddingTop: 16 }}>
-        <Text accessibilityRole="header" style={styles.h2}>
-          Information & help
-        </Text>
-        {Object.entries(information).map(([title, body]) => (
-          <Accordion key={title} title={title}>
-            {title === "Terms" && config.data
-              ? [
-                  "purpose",
-                  "fees",
-                  "allocation",
-                  "refunds",
-                  "unspent",
-                  "partialFunding",
-                ]
-                  .map((key) => config.data.policies[key])
-                  .join("\n\n")
-              : body}
-          </Accordion>
+  const successfulCampaignIds = new Set(me.data?.payments.filter(p => p.status === "successful").map(p => p.campaignId));
+  const list = section === "Created" ? own.filter(c => groups[filter]?.includes(c.status))
+    : section === "Saved" ? (campaigns.data || []).filter(c => me.data?.saved.includes(c.id))
+    : section === "Backed" ? (campaigns.data || []).filter(c => successfulCampaignIds.has(c.id)) : [];
+  const appearanceLabel = `Appearance settings, ${preference === "system" ? `System, currently ${scheme}` : preference}`;
+  const heading = (
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 6, minHeight: 48, marginLeft: -10 }}>
+      <IconButton label={focusedPayment ? "Back to payment history" : "Back to Profile"} icon="arrow-back" onPress={back} />
+      <Text accessibilityRole="header" style={[styles.h2, { fontSize: 21, lineHeight: 29, flex: 1 }]}>{focusedPayment ? "Payment Details" : sectionTitles[section]}</Text>
+      {session.user && <IconButton label="Refresh your profile" icon="refresh-outline" loading={me.isFetching} onPress={() => { void refresh(); }} />}
+    </View>
+  );
+  const help = (
+    <View style={{ gap: 8 }}>
+      <Text style={[styles.muted, { marginBottom: 8 }]}>A little clarity for your next step.</Text>
+      {Object.entries(information).map(([title, body]) => <Accordion key={title} title={title}>
+        {title === "Terms" && config.data ? ["purpose", "fees", "allocation", "refunds", "unspent", "partialFunding"].map(key => config.data.policies[key]).join("\n\n") : body}
+      </Accordion>)}
+      {!isCloudBuild && (__DEV__ || process.env.EXPO_PUBLIC_INTERNAL_TEST === "1") && <Accordion title="Demo connection settings">
+        <Text style={styles.muted}>Use an API address reachable from your device. Switching servers signs you out; saved drafts remain on this device. A standalone build needs a configured backend.</Text>
+        <Field label="Backend address" value={address} onChangeText={setAddress} autoCapitalize="none" autoCorrect={false} editable={!busy} />
+        <Button title="Save connection & reconnect" loading={busy} onPress={() => run(async () => {
+          const next = normalizeApiUrl(address);
+          if (next !== getApiUrl()) {
+            if (session.user) await session.logout().catch(() => undefined);
+            queryClient.clear();
+          }
+          setApiUrl(next); setAddress(next);
+          await AsyncStorage.setItem("campaign-api-url", next);
+          await api("/health");
+        }, "Backend connection verified.")} />
+      </Accordion>}
+      {!session.user && <Accordion title="Appearance settings"><AppearanceSettings /></Accordion>}
+      <Button title="View the product reference" variant="ghost" icon="open-outline" onPress={() => { void Linking.openURL("https://campaign-one-pearl.vercel.app/"); }} />
+      <Text style={[styles.muted, { fontSize: 12, textAlign: "center", paddingVertical: 12 }]}>Campaign · Prototype 1.0</Text>
+    </View>
+  );
+
+  if (!session.ready) return <Screen><Loading /></Screen>;
+  if (!session.user) return <Screen scroll={false} androidKeyboardAvoidance={section === "Help"}>
+    <View style={{ flex: 1, display: section === "Help" ? "none" : "flex" }}>
+      <AuthForm active={section !== "Help"} onHelp={() => open("Help")} onAppearance={() => { void quickAppearance(); }} onModeChange={() => { if (!failed) setMessage(""); }} />
+      {(!!message || !!appearanceError) && <View style={{ padding: 16 }}><Notice tone={appearanceError || failed ? "error" : "success"}>{appearanceError || message}</Notice></View>}
+    </View>
+    {section === "Help" && <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 18, gap: 18 }}>
+      {heading}{!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}{help}
+    </ScrollView>}
+  </Screen>;
+
+  return <Screen key={`${section}:${focusedPayment?.id || ""}`}>
+    {section === "Overview" ? <View style={{ gap: 14 }}>
+      <View style={{ minHeight: 48, flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }}>
+        <Pressable accessibilityRole="button" accessibilityLabel={appearanceLabel} accessibilityHint="Choose Light, Dark or System appearance." accessibilityState={{ disabled: !appearanceReady }} disabled={!appearanceReady} onPress={() => open("Appearance")}
+          style={({ pressed }) => ({ minHeight: 48, paddingHorizontal: 12, flexDirection: "row", gap: 8, alignItems: "center", justifyContent: "center", borderRadius: 24, backgroundColor: colors.mint, opacity: pressed ? 0.7 : 1 })}>
+          <Ionicons name={preference === "system" ? "phone-portrait-outline" : scheme === "dark" ? "moon-outline" : "sunny-outline"} size={18} color={colors.green} />
+          <Text style={{ fontSize: 12, lineHeight: 18, fontWeight: "600", color: colors.green }}>{preference === "system" ? "System" : scheme === "dark" ? "Dark" : "Light"}</Text>
+          <Ionicons name="chevron-down" size={14} color={colors.green} />
+        </Pressable>
+      </View>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 14, paddingHorizontal: 3, paddingBottom: 2 }}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Edit profile photo" onPress={() => open("Edit")}><ProfilePhoto user={me.data?.user || session.user} /></Pressable>
+        <View style={{ flex: 1, gap: 4 }}>
+          <Text accessibilityRole="header" style={[styles.h2, { fontSize: 20, lineHeight: 27 }]}>{me.data?.user.name || session.user.name}</Text>
+          <Text style={[styles.muted, { fontSize: 12, lineHeight: 19 }]}>{session.user.role === "reviewer" ? "Reviewer · Creator · Backer" : "Creator · Backer · Changemaker"}</Text>
+          <Pressable accessibilityRole="button" accessibilityLabel="Edit profile" onPress={() => open("Edit")} style={{ minHeight: 48, alignSelf: "flex-start", justifyContent: "center" }}>
+            <Text style={{ color: colors.green, fontFamily: fonts.semibold, fontSize: 13 }}>Edit Profile</Text>
+          </Pressable>
+        </View>
+      </View>
+      <View style={{ flexDirection: "row", gap: 8 }}>
+        {[{ label: "Campaigns", value: own.length, next: "Created" }, { label: "Backed", value: successfulCampaignIds.size, next: "Backed" }, { label: "Saved", value: me.data?.saved.length || 0, next: "Saved" }].map(metric => (
+          <Pressable key={metric.label} accessibilityRole="button" accessibilityLabel={`View ${metric.label.toLowerCase()}`} onPress={() => open(metric.next as ProfileSection)}
+            style={({ pressed }) => ({ flex: 1, minHeight: 68, borderRadius: 12, backgroundColor: pressed ? colors.mint : colors.subtle, alignItems: "center", justifyContent: "center", gap: 2, paddingVertical: 8, paddingHorizontal: 3 })}>
+            <Text style={{ fontFamily: fonts.bold, fontSize: 18, lineHeight: 25, fontVariant: ["tabular-nums"] }}>{me.data ? number(metric.value) : "—"}</Text>
+            <Text style={[styles.muted, { fontSize: 12, lineHeight: 18 }]}>{metric.label}</Text>
+          </Pressable>
         ))}
       </View>
-      {(__DEV__ || process.env.EXPO_PUBLIC_INTERNAL_TEST === "1") && (
-        <Accordion title="Demo connection settings">
-          <Text style={styles.muted}>
-            Use an API address reachable from your device. Switching servers
-            signs you out; saved drafts remain on this device. A standalone
-            build needs a configured backend.
-          </Text>
-          <Field
-            label="Backend address"
-            value={address}
-            onChangeText={setAddress}
-            autoCapitalize="none"
-            autoCorrect={false}
-            editable={!busy}
-          />
-          <Button
-            title="Save connection & reconnect"
-            loading={busy}
-            onPress={() =>
-              run(async () => {
-                const next = normalizeApiUrl(address);
-                if (next !== getApiUrl()) {
-                  if (session.user)
-                    await session.logout().catch(() => undefined);
-                  queryClient.clear();
-                }
-                setApiUrl(next);
-                setAddress(next);
-                await AsyncStorage.setItem("campaign-api-url", next);
-                await api("/health");
-              }, "Backend connection verified.")
-            }
-          />
-        </Accordion>
-      )}
-      <Text style={styles.muted}>Campaign Amplification · Prototype 1.0</Text>
-      <Button
-        title="View the product reference"
-        variant="ghost"
-        icon="open-outline"
-        onPress={() => {
-          void Linking.openURL("https://campaign-one-pearl.vercel.app/");
-        }}
-        style={{ alignSelf: "flex-start", paddingHorizontal: 0 }}
-      />
-    </Screen>
-  );
+      {!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}
+      {!!appearanceError && <Notice tone="error">{appearanceError}</Notice>}
+      {me.isError && <ErrorState error={me.error} retry={() => me.refetch()} />}
+      <View style={{ gap: 1 }}>
+        <AccountRow icon="people-outline" title="My Campaigns" onPress={() => open("Created")} />
+        <AccountRow icon="heart-outline" title="Backed Campaigns" onPress={() => open("Backed")} />
+        <AccountRow icon="card-outline" title="Payment History" onPress={() => open("Payments")} />
+        <AccountRow icon="bookmark-outline" title="Saved Campaigns" onPress={() => open("Saved")} />
+        <AccountRow icon="notifications-outline" title="Notifications" onPress={() => open("Notifications")} />
+        <AccountRow icon="settings-outline" title="Settings" onPress={() => open("Settings")} />
+        <AccountRow icon="help-circle-outline" title="Help & Support" onPress={() => open("Help")} />
+        {session.user.role === "reviewer" && <AccountRow icon="shield-checkmark-outline" title="Campaign Review" onPress={() => open("Review")} />}
+      </View>
+    </View> : <>
+      {heading}
+      {!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}
+      {section === "Help" ? help : section === "Appearance" ? <AppearanceSettings /> : section === "Settings" ? <View style={{ gap: 20 }}>
+        <AppearanceSettings />
+        <View>
+          <AccountRow icon="person-outline" title="Account details" onPress={() => open("Edit")} />
+          <AccountRow icon="notifications-outline" title="Notification preferences" onPress={() => open("Notifications")} />
+          <AccountRow icon="help-circle-outline" title="Help, terms & privacy" onPress={() => open("Help")} />
+        </View>
+        <Text style={styles.muted}>{session.user.email}</Text>
+        <Button title="Sign out" variant="secondary" loading={busy} onPress={() => run(() => session.logout(), "Signed out.")} />
+        <Text style={[styles.muted, { fontSize: 12, lineHeight: 19 }]}>Your device appearance is kept when you sign out.</Text>
+      </View> : section === "Review" ? <Reviewer /> : me.isPending ? <Loading /> : me.isError ? <ErrorState error={me.error} retry={() => me.refetch()} /> : section === "Edit" ? <View style={{ gap: 20 }}>
+        <ProfilePhotoEditor key={`${getApiUrl()}:${session.user.id}`} user={me.data.user} />
+        <Text style={styles.muted}>Your name appears on the campaigns you create. Backer names stay private by default.</Text>
+        <Field label="Display name" value={name} onChangeText={setName} placeholder={me.data.user.name} autoComplete="name" maxLength={150} editable={!busy} />
+        <View style={{ gap: 5 }}><Text style={{ fontFamily: fonts.semibold, fontSize: 14 }}>Email address</Text><Text style={styles.muted}>{session.user.email}</Text></View>
+        <Button title="Save account details" loading={busy} disabled={!name.trim() || name.trim() === me.data.user.name} onPress={() => run(() => api("/me", { method: "PUT", body: { name: name.trim() } }), "Account details saved.")} />
+      </View> : section === "Notifications" ? <View style={{ gap: 18 }}>
+        <Text style={styles.muted}>Choose which new updates appear in Activity. Your existing activity stays available.</Text>
+        <NotificationPreferences me={me.data} busy={busy} run={run} />
+        <Button title="Open Activity" icon="notifications-outline" onPress={() => router.push("/activity")} />
+      </View> : section === "Payments" ? <View style={{ gap: 16 }}>
+        <Text style={styles.muted}>Simulated payments for message distribution. No real money has moved.</Text>
+        {focusedPayment?.userId === session.user.id ? <PrivatePayment paymentId={focusedPayment.id} payments={me.data.payments} userId={session.user.id} onClose={() => setFocusedPayment(null)} /> : !me.data.payments.length ? <Empty title="No contributions yet" body="Your contributions and private receipts will appear here." action={<Button title="Explore campaigns" onPress={() => router.push("/explore")} />} /> : me.data.payments.map(p => (
+          <View key={p.id} style={{ backgroundColor: colors.paper, borderWidth: 1, borderColor: colors.line, borderRadius: 14, padding: 16, gap: 11 }}>
+            <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 12 }}>
+              <View style={{ flex: 1, gap: 5 }}><Text style={[styles.body, { fontFamily: fonts.semibold }]}>{p.title}</Text><Text style={[styles.muted, { fontSize: 12 }]}>{p.status.charAt(0).toUpperCase() + p.status.slice(1)} · {new Date(p.createdAt).toLocaleDateString()}</Text></View>
+              <Text style={[styles.h2, { fontSize: 20, lineHeight: 28, fontVariant: ["tabular-nums"] }]}>{money(p.amount)}</Text>
+            </View>
+            <Text style={[styles.muted, { fontSize: 13 }]}>Included fee {money(p.fee)} · Advertising {money(p.adBudget)}</Text>
+            <Button title={p.receipt ? "Open private receipt" : "Payment details"} variant="secondary" onPress={() => setFocusedPayment({ id: p.id, userId: session.user!.id })} />
+            <Button title="Campaign report" variant="ghost" onPress={() => router.push(`/explore/${p.campaignId}/report`)} />
+          </View>
+        ))}
+      </View> : <View style={{ gap: 16 }}>
+        {section === "Created" && <><Text style={styles.muted}>{own.length} {own.length === 1 ? "campaign" : "campaigns"} in your account. Drafts also resume from Create.</Text><ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingBottom: 4 }}>{Object.keys(groups).map(f => <Pill key={f} title={f} selected={filter === f} onPress={() => { setFilter(f); void me.refetch(); }} />)}</ScrollView></>}
+        {section !== "Created" && campaigns.isPending ? <Loading /> : section !== "Created" && campaigns.isError ? <ErrorState error={campaigns.error} retry={() => campaigns.refetch()} /> : !list.length ? <Empty title={section === "Created" ? emptyGroupTitles[filter] : `No ${section.toLowerCase()} campaigns yet`} body={section === "Created" ? "Give your next idea a bigger audience. Your saved drafts will be here when you return." : `Explore campaigns to build your ${section.toLowerCase()} collection.`} action={<Button title={section === "Created" ? "Create a campaign" : "Explore campaigns"} onPress={() => router.push(section === "Created" ? "/create" : "/explore")} />} /> : list.map(c => <DashboardCard key={c.id} c={c} config={config.data} busy={busy} owner={c.ownerId === session.user!.id} revision={() => run(async () => { await api(`/campaigns/${c.id}/revision`, { method: "POST" }); router.push(`/create?draft=${c.id}`); }, "Editable revision prepared. The approved public version stays visible until review.")} />)}
+      </View>}
+    </>}
+  </Screen>;
+}
+
+function AccountRow({ icon, title, onPress }: { icon: React.ComponentProps<typeof Ionicons>["name"]; title: string; onPress: () => void }) {
+  const { colors } = useTheme();
+  return <Pressable accessibilityRole="button" accessibilityLabel={title} onPress={onPress} style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 15, minHeight: 53, paddingVertical: 10, paddingHorizontal: 9, borderRadius: 9, backgroundColor: pressed ? colors.mint : "transparent" })}>
+    <Ionicons name={icon} size={22} color={colors.ink} /><Text style={{ flex: 1, fontSize: 14, lineHeight: 22, fontFamily: fonts.medium }}>{title}</Text><Ionicons name="chevron-forward" size={17} color={colors.muted} />
+  </Pressable>;
+}
+
+function NotificationPreferences({ me, busy, run }: { me: Me; busy: boolean; run: (action: () => Promise<unknown>, success: string) => Promise<void> }) {
+  const { colors, styles } = useTheme();
+  return <View>
+    {(["campaigns", "payments"] as const).map(category => <View key={category} style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 12, minHeight: 86, paddingVertical: 12, borderBottomWidth: 1, borderColor: colors.line }}>
+      <View style={{ flex: 1, gap: 5 }}><Text style={[styles.body, { fontFamily: fonts.semibold }]}>{category === "campaigns" ? "Campaign updates" : "Payment updates"}</Text><Text style={[styles.muted, { fontSize: 13, lineHeight: 20 }]}>{category === "campaigns" ? "Reviews, funding and distribution" : "Contribution and refund status"}</Text></View>
+      <Switch accessibilityLabel={category === "campaigns" ? "Campaign updates" : "Payment updates"} value={me.preferences.categories[category] !== false} disabled={busy} trackColor={{ false: colors.outline, true: colors.green }} thumbColor={colors.onPrimary} onValueChange={value => { void run(() => api("/me/preferences", { method: "PUT", body: { categories: { [category]: value } } }), `${category === "campaigns" ? "Campaign" : "Payment"} notification preference saved.`); }} />
+    </View>)}
+    <View style={{ paddingVertical: 18, gap: 6 }}><Text style={[styles.body, { fontFamily: fonts.semibold }]}>Security notices · Always on</Text><Text style={[styles.muted, { fontSize: 13, lineHeight: 21 }]}>In-app delivery is active. Push and email are not connected in this prototype.</Text></View>
+  </View>;
 }
 
 function PrivatePayment({

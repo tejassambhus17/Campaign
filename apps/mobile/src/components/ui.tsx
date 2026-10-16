@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -19,7 +19,7 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTheme } from "../lib/theme";
 import { fonts } from "../lib/appearance";
-import { mediaUrl } from "../lib/api";
+import { getApiSessionGeneration, isCloudBuild, loadPrivateWebImage, mediaImageSource, subscribeApiSession } from "../lib/api";
 export { useTheme } from "../lib/theme";
 export { fonts } from "../lib/appearance";
 export function Text({ style, ...props }: TextProps) {
@@ -79,22 +79,25 @@ export function Screen({
   children,
   scroll = true,
   backgroundColor,
+  androidKeyboardAvoidance = true,
 }: {
   children: React.ReactNode;
   scroll?: boolean;
   backgroundColor?: string;
+  /** Disable where Android window resizing already handles the focused form. */
+  androidKeyboardAvoidance?: boolean;
 }) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [keyboardVisible, setKeyboardVisible] = useState(
-    () => Platform.OS === "android" && Keyboard.isVisible(),
+    () => Platform.OS === "android" && androidKeyboardAvoidance && Keyboard.isVisible(),
   );
   useEffect(() => {
-    if (Platform.OS !== "android") return;
+    if (Platform.OS !== "android" || !androidKeyboardAvoidance) return;
     const show = Keyboard.addListener("keyboardDidShow", () => setKeyboardVisible(true));
     const hide = Keyboard.addListener("keyboardDidHide", () => setKeyboardVisible(false));
     return () => { show.remove(); hide.remove(); };
-  }, []);
+  }, [androidKeyboardAvoidance]);
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: backgroundColor || colors.bg }}
@@ -102,9 +105,10 @@ export function Screen({
     >
       <KeyboardAvoidingView
         style={{ flex: 1 }}
+        enabled={Platform.OS !== "android" || androidKeyboardAvoidance}
         // Android may retain a residual height after IME dismissal. Returning
         // to flex layout clears it while preserving this view and its children.
-        behavior={Platform.OS === "ios" ? "padding" : keyboardVisible ? "height" : undefined}
+        behavior={Platform.OS === "ios" ? "padding" : androidKeyboardAvoidance && keyboardVisible ? "height" : undefined}
         keyboardVerticalOffset={Platform.OS === "android" ? insets.top : 0}
       >
         {scroll ? (
@@ -170,7 +174,7 @@ export function Button({
         minHeight: 48,
         paddingHorizontal: 18,
         paddingVertical: 12,
-        borderRadius: 9,
+        borderRadius: 24,
         backgroundColor: disabled ? colors.disabledSurface : bg,
         opacity: pressed ? 0.8 : 1,
         flexDirection: "row",
@@ -243,13 +247,14 @@ export function Field({
   hint,
   error,
   inputRef,
+  compact = false,
   ...props
-}: TextInputProps & { label: string; hint?: string; error?: string; inputRef?: React.Ref<TextInput> }) {
+}: TextInputProps & { label: string; hint?: string; error?: string; inputRef?: React.Ref<TextInput>; compact?: boolean }) {
   const { colors, styles, scheme } = useTheme();
   const [focused, setFocused] = useState(false);
   return (
-    <View style={{ gap: 7 }}>
-      <Text style={{ fontSize: 14, fontWeight: "600", color: colors.ink }}>
+    <View style={{ gap: compact ? 5 : 7 }}>
+      <Text style={{ fontSize: compact ? 12 : 14, lineHeight: compact ? 17 : 20, fontWeight: "600", color: colors.ink }}>
         {label}
       </Text>
       <TextInput
@@ -270,14 +275,15 @@ export function Field({
         style={[
           styles.input,
           props.multiline && { minHeight: 110, textAlignVertical: "top" },
+          compact && { minHeight: props.multiline ? 112 : 48, fontSize: 14, lineHeight: 20, paddingHorizontal: 12, paddingVertical: 10 },
           props.style,
           focused && { borderColor: colors.focus },
           error && { borderColor: colors.red },
         ]}
       />
-      {!!hint && <Text style={styles.muted}>{hint}</Text>}
+      {!!hint && <Text style={[styles.muted, compact && { fontSize: 11, lineHeight: 16 }]}>{hint}</Text>}
       {!!error && (
-        <Text accessibilityRole="alert" style={styles.error}>
+        <Text accessibilityRole="alert" style={[styles.error, compact && { fontSize: 12, lineHeight: 17 }]}>
           {error}
         </Text>
       )}
@@ -310,7 +316,7 @@ export function Pill({
         paddingHorizontal: 14,
         paddingVertical: 12,
         justifyContent: "center",
-        borderRadius: 8,
+        borderRadius: 24,
         backgroundColor: selected ? colors.green : colors.paper,
         borderWidth: 1,
         borderColor: selected ? colors.green : colors.line,
@@ -404,8 +410,20 @@ export function Loading() {
         />
       ))}
       <ActivityIndicator color={colors.green} />
+      <ConnectionHint active />
     </View>
   );
+}
+export function ConnectionHint({ active }: { active: boolean }) {
+  const { styles } = useTheme();
+  const [waiting, setWaiting] = useState(false);
+  useEffect(() => {
+    setWaiting(false);
+    if (!active || !isCloudBuild) return;
+    const timer = setTimeout(() => setWaiting(true), 8000);
+    return () => clearTimeout(timer);
+  }, [active]);
+  return waiting && active ? <Text accessibilityLiveRegion="polite" style={[styles.muted, { fontSize: 12, lineHeight: 18, textAlign: "center" }]}>Connecting to Campaign… Free hosting may take a moment to wake up. Your device drafts stay saved.</Text> : null;
 }
 export function ErrorState({
   error,
@@ -484,15 +502,36 @@ export function Picture({
   height?: number;
 }) {
   const { colors } = useTheme();
+  const generation = useSyncExternalStore(subscribeApiSession, getApiSessionGeneration, getApiSessionGeneration);
+  const identity = `${generation}:${uri || ""}`;
+  const currentIdentity = useRef(identity);
+  currentIdentity.current = identity;
   const [failed, setFailed] = useState(false);
-  useEffect(() => setFailed(false), [uri]);
-  return uri && !failed ? (
+  const [webImage, setWebImage] = useState<{ identity: string; uri: string } | null>(null);
+  useEffect(() => setFailed(false), [identity]);
+  const source = mediaImageSource(uri || "");
+  const privateWebImage = Platform.OS === "web" && !!source.headers;
+  useEffect(() => {
+    if (Platform.OS !== "web" || !uri || !mediaImageSource(uri).headers) return;
+    let active = true;
+    let dispose: (() => void) | undefined;
+    const controller = new AbortController();
+    void loadPrivateWebImage(uri, controller.signal).then((image) => {
+      if (!active || currentIdentity.current !== identity) { image.dispose(); return; }
+      dispose = image.dispose;
+      setWebImage({ identity, uri: image.uri });
+    }).catch(() => { if (active && currentIdentity.current === identity) setFailed(true); });
+    return () => { active = false; controller.abort(); dispose?.(); };
+  }, [identity, uri]);
+  const displaySource = privateWebImage ? webImage?.identity === identity ? { uri: webImage.uri } : null : source;
+  return uri && !failed && displaySource ? (
     <Image
+      key={identity}
       accessibilityLabel="Campaign photograph"
-      source={{ uri: mediaUrl(uri) }}
+      source={displaySource}
       style={{ width: "100%", height, backgroundColor: colors.mint }}
       resizeMode="cover"
-      onError={() => setFailed(true)}
+      onError={() => { if (currentIdentity.current === identity && getApiSessionGeneration() === generation) setFailed(true); }}
     />
   ) : (
     <View

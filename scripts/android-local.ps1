@@ -2,13 +2,44 @@ param(
   [ValidateSet('arm64-v8a','x86_64','arm64-v8a,x86_64')]
   [string]$Architecture = 'arm64-v8a',
   [ValidateRange(1,4)][int]$Workers = 2,
-  [ValidateSet('Debug','InternalTest')]
+  [ValidateSet('Debug','InternalTest','CloudTest')]
   [string]$Mode = 'Debug',
   [string]$ApiUrl = 'http://10.0.2.2:8787',
   [ValidatePattern('^$|^[a-z0-9][a-z0-9-]{0,63}$')]
   [string]$ArtifactTag = ''
 )
 $ErrorActionPreference = 'Stop'
+
+function Confirm-CampaignEmbeddedApi {
+  param(
+    [Parameter(Mandatory=$true)][string]$BundlePath,
+    [Parameter(Mandatory=$true)][string]$HermesCompiler,
+    [Parameter(Mandatory=$true)][string]$ExpectedApiUrl,
+    [Parameter(Mandatory=$true)][string]$DiagnosticPath
+  )
+  if (!(Test-Path -LiteralPath $HermesCompiler -PathType Leaf)) {
+    throw 'The project Hermes compiler is required to verify the packaged API address.'
+  }
+  # Inspect the bundle extracted from the APK, not build arguments or a source
+  # map. String-table presence alone cannot establish the module assignment.
+  $inspector = Join-Path $PSScriptRoot 'verify-android-api.py'
+  $python = Join-Path (Split-Path $PSScriptRoot) 'services/api/.venv/Scripts/python.exe'
+  if (!(Test-Path -LiteralPath $python -PathType Leaf)) { throw 'The existing project Python environment is required for exact packaged API verification.' }
+  $report = "$BundlePath.api-verification.json"
+  $priorPreference = $ErrorActionPreference
+  try {
+    $ErrorActionPreference = 'Continue'
+    & $python $inspector --bundle $BundlePath --hermes $HermesCompiler --expected-url $ExpectedApiUrl --report $report *> $DiagnosticPath
+    $hermesExitCode = $LASTEXITCODE
+  } finally { $ErrorActionPreference = $priorPreference }
+  if ($hermesExitCode -ne 0) {
+    throw "Could not verify the packaged Hermes API assignment. See $DiagnosticPath. No APK artifact or success metadata will be published."
+  }
+  $verified = Get-Content -LiteralPath $report -Raw | ConvertFrom-Json
+  if (!$verified.verifiedAssignment -or $verified.apiUrl -cne $ExpectedApiUrl) { throw 'Packaged API assignment did not match the requested backend.' }
+  return $verified
+}
+
 $campaignRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
 if ($campaignRoot -ne 'E:\Campaign') { throw 'The authorized project root must resolve to E:\Campaign.' }
 $mobileRoot = Join-Path $campaignRoot 'apps/mobile'
@@ -19,11 +50,18 @@ $jdkRoot = Join-Path $sdkRoot 'jdk17'
 $nativeRoot = Join-Path $mobileRoot 'android'
 $artifactRoot = Join-Path $campaignRoot 'artifacts/android'
 if ($ArtifactTag) { $artifactRoot = Join-Path $artifactRoot $ArtifactTag }
-$internalTest = $Mode -eq 'InternalTest'
+# Both standalone variants reuse the existing Debug certificate. Only the
+# local InternalTest variant permits HTTP or editable backend addresses.
+$internalTest = $Mode -ne 'Debug'
+$allowLocalHttp = $Mode -eq 'InternalTest'
+$cloudTest = $Mode -eq 'CloudTest'
 $variant = if ($internalTest) { 'release' } else { 'debug' }
-$artifactLabel = if ($internalTest) { 'INTERNAL-TEST' } else { 'debug' }
+$artifactLabel = if ($cloudTest) { 'CLOUD-TEST' } elseif ($internalTest) { 'INTERNAL-TEST' } else { 'debug' }
 $nativeConfigStamp = Join-Path $buildRoot 'native-config.json'
-if ($internalTest) {
+if ($cloudTest) {
+  . (Join-Path $PSScriptRoot 'android-cloud-url.ps1')
+  $ApiUrl = ConvertTo-CampaignCloudApiUrl -Value $ApiUrl
+} elseif ($internalTest) {
   $parsedApi = $null
   if (![Uri]::TryCreate($ApiUrl.Trim(), [UriKind]::Absolute, [ref]$parsedApi) -or
       $parsedApi.Scheme -notin @('http','https') -or
@@ -46,6 +84,30 @@ if ([version](& $campaignNode -p 'process.versions.node') -lt [version]'20.19.4'
 }
 $nodeVersion = & $campaignNode -p 'process.versions.node'
 if ([version]$nodeVersion -lt [version]'20.19.4') { throw 'Use Node 20.19.4+ or set CAMPAIGN_NODE to a compatible executable.' }
+$metroTemp = $null
+if ($internalTest) {
+  # CI deliberately disables Expo's --reset-cache. Give every attempt an empty,
+  # project-owned Node temp/cache directory instead, retaining noninteractive CI
+  # and never deleting a shared/global Metro cache (or a previous build's data).
+  $metroTag = if ($ArtifactTag) { $ArtifactTag } else { 'internal-test' }
+  $metroParent = Join-Path $buildRoot "metro-$metroTag"
+  $metroTemp = [IO.Path]::GetFullPath((Join-Path $metroParent ([Guid]::NewGuid().ToString('N'))))
+  $allowedPrefix = [IO.Path]::GetFullPath($buildRoot).TrimEnd('\') + '\'
+  if (!$metroTemp.StartsWith($allowedPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+    throw 'The Metro temporary directory must remain inside Campaign tmp/android-build.'
+  }
+  $ancestor = $metroTemp
+  while ($ancestor -and $ancestor.StartsWith($campaignRoot, [StringComparison]::OrdinalIgnoreCase)) {
+    if (Test-Path -LiteralPath $ancestor) {
+      if ((Get-Item -LiteralPath $ancestor -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+        throw "The Metro temporary directory must not follow a link: $ancestor"
+      }
+    }
+    if ($ancestor -eq $campaignRoot) { break }
+    $ancestor = Split-Path -Parent $ancestor
+  }
+  New-Item -ItemType Directory -Path $metroTemp | Out-Null
+}
 New-Item -ItemType Directory -Path $buildRoot,$artifactRoot,$javaTemp -Force | Out-Null
 $temporaryEnvironment = @{
   JAVA_HOME = $jdkRoot
@@ -61,10 +123,15 @@ $temporaryEnvironment = @{
   PATH = ((Split-Path $campaignNode) + ';' + (Join-Path $jdkRoot 'bin') + ';' + $env:PATH)
   EXPO_NO_TELEMETRY = '1'
   CI = '1'
-  CAMPAIGN_INTERNAL_TEST = if ($internalTest) { '1' } else { '0' }
-  EXPO_PUBLIC_INTERNAL_TEST = if ($internalTest) { '1' } else { '0' }
+  CAMPAIGN_INTERNAL_TEST = if ($allowLocalHttp) { '1' } else { '0' }
+  EXPO_PUBLIC_INTERNAL_TEST = if ($allowLocalHttp) { '1' } else { '0' }
+  EXPO_PUBLIC_CLOUD_BUILD = if ($cloudTest) { '1' } else { '0' }
 }
-if ($internalTest) { $temporaryEnvironment.EXPO_PUBLIC_API_URL = $ApiUrl }
+if ($internalTest) {
+  $temporaryEnvironment.EXPO_PUBLIC_API_URL = $ApiUrl
+  $temporaryEnvironment.TEMP = $metroTemp
+  $temporaryEnvironment.TMP = $metroTemp
+}
 $priorEnvironment = @{}
 foreach ($name in $temporaryEnvironment.Keys) {
   $priorEnvironment[$name] = [Environment]::GetEnvironmentVariable($name, 'Process')
@@ -110,9 +177,10 @@ try {
   if (!(Test-Path -LiteralPath $nativeWrapper)) { throw 'The generated Android Gradle wrapper is missing. Regenerate with Expo prebuild.' }
   [xml]$generatedManifest = Get-Content -LiteralPath (Join-Path $nativeRoot 'app/src/main/AndroidManifest.xml') -Raw
   $cleartextSetting = $generatedManifest.manifest.application.GetAttribute('usesCleartextTraffic','http://schemas.android.com/apk/res/android')
-  if (($internalTest -and $cleartextSetting -ne 'true') -or (!$internalTest -and $cleartextSetting -eq 'true')) {
+  if (($allowLocalHttp -and $cleartextSetting -ne 'true') -or (!$allowLocalHttp -and $cleartextSetting -eq 'true')) {
     throw 'The generated Android HTTP policy does not match the selected build mode. Regenerate through Expo before building.'
   }
+  if ($cloudTest -and $cleartextSetting -ne 'false') { throw 'CloudTest must explicitly disable cleartext traffic.' }
   if ($didGenerate) {
     @{ mode = $Mode; sha256 = $configHash; generatedUtc = [DateTime]::UtcNow.ToString('o') } |
       ConvertTo-Json | Set-Content -LiteralPath $nativeConfigStamp -Encoding UTF8
@@ -134,6 +202,7 @@ try {
   $certificateHash = $null
   $verifiedFonts = @()
   $verifiedFontLicenses = @()
+  $verifiedEmbeddedApi = $null
   if ($internalTest) {
     $aapt = Join-Path $sdkRoot 'build-tools/36.0.0/aapt2.exe'
     $signerJar = Join-Path $sdkRoot 'build-tools/36.0.0/lib/apksigner.jar'
@@ -160,6 +229,16 @@ try {
       $bundle = $archive.GetEntry('assets/index.android.bundle')
       if (!$bundle -or $bundle.Length -le 0) { throw 'InternalTest has no embedded JavaScript bundle.' }
       $bundleBytes = $bundle.Length
+      $packagedBundlePath = Join-Path $metroTemp 'packaged-index.android.bundle'
+      $bundleStream = $bundle.Open()
+      try {
+        $extractedBundle = [IO.File]::Create($packagedBundlePath)
+        try { $bundleStream.CopyTo($extractedBundle) }
+        finally { $extractedBundle.Dispose() }
+      } finally { $bundleStream.Dispose() }
+      $verifiedEmbeddedApi = Confirm-CampaignEmbeddedApi -BundlePath $packagedBundlePath `
+        -HermesCompiler (Join-Path $mobileRoot 'node_modules/hermes-compiler/hermesc/win64-bin/hermesc.exe') `
+        -ExpectedApiUrl $ApiUrl -DiagnosticPath (Join-Path $metroTemp 'packaged-hermes-inspection.stderr.log')
       $fontNames = @(
         'Manrope-Regular.ttf','Manrope-Medium.ttf','Manrope-SemiBold.ttf',
         'Manrope-Bold.ttf','Newsreader-Medium.ttf','Newsreader-SemiBold.ttf'
@@ -221,12 +300,17 @@ try {
   }
   if ($internalTest) {
     $metadata.buildVariant = 'release'
-    $metadata.distribution = 'INTERNAL-TEST'
-    $metadata.internalTestConnectionControls = $true
+    $metadata.distribution = $artifactLabel
+    $metadata.internalTestConnectionControls = $allowLocalHttp
     $metadata.signingCertificate = 'Android Debug'
     $metadata.signingCertificateSha256 = $certificateHash
     $metadata.apiUrl = $ApiUrl
-    $metadata.localHttpAllowed = $true
+    $metadata.cloudHttpsOnly = $cloudTest
+    $metadata.ignoresSavedLocalApiOverride = $cloudTest
+    $metadata.verifiedEmbeddedApi = $verifiedEmbeddedApi
+    $metadata.metroTemporaryDirectory = $metroTemp
+    $metadata.metroCachePolicy = 'Fresh project-local TEMP/TMP directory per build attempt; CI remains enabled; no shared cache deletion'
+    $metadata.localHttpAllowed = $allowLocalHttp
     $metadata.embeddedJavaScriptBytes = $bundleBytes
     $metadata.verifiedLocalFonts = $verifiedFonts
     $metadata.verifiedFontLicenses = $verifiedFontLicenses
@@ -241,7 +325,7 @@ try {
   Write-Host "$artifactLabel APK: $artifact"
   Write-Host "SHA-256: $checksum"
   if ($internalTest) {
-    Write-Host 'INTERNAL-TEST: release variant with embedded JavaScript, signed by the Android Debug certificate.'
+    Write-Host "${artifactLabel}: release variant with embedded JavaScript, signed by the Android Debug certificate."
     Write-Host 'Installed launch without Metro and a reachable demo API still need verification. This is not a production-signed delivery.'
   } else {
     Write-Host 'Development build only: requires the local Metro server. This is not a standalone release APK.'

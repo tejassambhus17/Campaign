@@ -1,6 +1,14 @@
 # Native redesign execution
 
-**User hold, October 16:** Recording and demo production are stopped pending further application changes. Partial footage and the saved Story draft are preserved. Resume only on explicit human authorization; earlier recording plans below are superseded. Existing builds and visual reviews retain their exact checkpoint scope.
+## Current: approved Home and Auth correction — VERIFIED within the native matrix
+
+The reference-led Home and latest Welcome/Sign In/Create Account polish preserve the approved palette, Expo architecture and PDF workflows. The new transparent megaphone removes poster rectangles, native branding stays sharp, Login forms sit higher, Welcome adapts to compact displays, and authentication has no main tabs or theme picker. Dark is the shared fresh-preference default; explicit Light/System settings remain available in Profile/Help. Recovery is truthfully unavailable.
+
+[Native execution](artifacts/premium-quality/NATIVE_RESULTS.md) identifies final pass12, actual installed SHA, 91 passing tests, source/binary gates, Metro-independent launch, keyboard-open scrolling with full >=48dp actions, Remember/guest/navigation/state checks and restored phone/services. [Independent design QA](design-qa.md) and [15-surface finish matrix](artifacts/premium-quality/FINISH_REVIEW.md) close observed visual P0–P2 findings and retain every prior candidate boundary. Standard and compact/font1.3 Light/Dark captures are actual POCO screenshots, not emulator or browser substitutes.
+
+Earlier complete creation/payment/report tests retain their exact scopes; final Auth verification does not imply a wholesale final-APK rerun. Compact confirmation remains unverified; sustained performance is inconclusive, with TalkBack/human/broader hardware still open. [PROGRESS.md](PROGRESS.md) holds current status; older sections below are historical.
+
+**User hold:** Recording and demo production remain stopped until explicit human resumption. Partial footage and the held Story draft are preserved. No hosting/deployment or submission occurred.
 
 ## Current iteration: compact Light and pure-black Dark
 

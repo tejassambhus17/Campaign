@@ -1,5 +1,10 @@
 import { Notification } from "./types";
 
+export function notificationBadgeLabel(count: number) {
+  if (!Number.isFinite(count) || count < 1) return undefined;
+  return count > 99 ? "99+" : String(Math.floor(count));
+}
+
 export const activityFilters = [
   "All",
   "Unread",
@@ -8,6 +13,38 @@ export const activityFilters = [
   "Account",
 ] as const;
 export type ActivityFilter = (typeof activityFilters)[number];
+
+// Copy before sorting: a notification with the same timestamp keeps its server
+// order, and malformed historical timestamps fall after valid ones.
+export function activityNewestFirst(notifications: readonly Notification[]) {
+  return notifications
+    .map((item, index) => ({ item, index, time: Date.parse(item.createdAt) }))
+    .sort((a, b) => {
+      const first = Number.isNaN(a.time) ? -Infinity : a.time;
+      const second = Number.isNaN(b.time) ? -Infinity : b.time;
+      return first === second ? a.index - b.index : second - first;
+    })
+    .map(({ item }) => item);
+}
+
+export function recentNotifications(
+  notifications: readonly Notification[],
+  limit = 5,
+) {
+  return activityNewestFirst(notifications).slice(0, Math.max(0, limit));
+}
+
+// Read status is monotonic in the existing API. A background GET begun before
+// a successful POST must not turn a confirmed read back into an unread item.
+export function mergeActivityReadStatus(
+  incoming: Notification[],
+  current?: Notification[],
+) {
+  const readIds = new Set(current?.filter((item) => item.read).map((item) => item.id));
+  return incoming.map((item) =>
+    !item.read && readIds.has(item.id) ? { ...item, read: true } : item,
+  );
+}
 
 export function activitySections(
   notifications: Notification[],
@@ -21,7 +58,7 @@ export function activitySections(
     title,
     data: [] as Notification[],
   }));
-  for (const item of notifications) {
+  for (const item of activityNewestFirst(notifications)) {
     if (filter === "Unread" && item.read) continue;
     if (filter === "Campaigns" && item.category !== "campaigns") continue;
     if (filter === "Payments" && item.category !== "payments") continue;
@@ -80,4 +117,22 @@ export function activityTime(value: string) {
         hour: "numeric",
         minute: "2-digit",
       });
+}
+
+export function activityRelativeTime(value: string, now = new Date()) {
+  const timestamp = Date.parse(value);
+  if (Number.isNaN(timestamp) || Number.isNaN(now.getTime())) return "Date unavailable";
+  const seconds = Math.max(0, Math.floor((now.getTime() - timestamp) / 1000));
+  if (seconds < 60) return "Just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days} ${days === 1 ? "day" : "days"} ago`;
+  return new Date(timestamp).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    ...(new Date(timestamp).getFullYear() !== now.getFullYear() ? { year: "numeric" } : {}),
+  });
 }

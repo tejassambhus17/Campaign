@@ -5,7 +5,6 @@ import {
   Accordion,
   Notice,
   Picture,
-  Pill,
   Text,
   fonts,
   useTheme,
@@ -18,6 +17,7 @@ import {
   number,
 } from "../../lib/types";
 import { isPublicUrl } from "./model";
+import { lightColors } from "../../lib/appearance";
 
 export function AdPreview({
   draft,
@@ -28,50 +28,56 @@ export function AdPreview({
 }) {
   const { colors, styles } = useTheme();
   return (
-    <View style={[styles.card, { borderRadius: 14 }]}>
-      <View style={{ padding: 14, gap: 3 }}>
-        <Text style={{ fontWeight: "700", color: colors.ink }}>
+    <View style={{ gap: 8, width: "100%", maxWidth: 286, alignSelf: "center" }}>
+    <View style={{ borderWidth: 3, borderColor: colors.line, borderRadius: 23, padding: 3, backgroundColor: colors.surfaceRaised }}>
+    {/* The creative previews a fixed light placement independently of app appearance. */}
+    <View style={[styles.card, { borderRadius: 16, backgroundColor: lightColors.paper, borderColor: lightColors.line }]}>
+      <View style={{ paddingHorizontal: 11, paddingVertical: 8, gap: 1 }}>
+        <Text style={{ fontSize: 11, lineHeight: 16, fontWeight: "700", color: lightColors.ink }}>
           {draft.creatorName || "Your organization"}
         </Text>
-        <Text style={styles.muted}>Advertisement preview · {placement}</Text>
-        <Text style={styles.muted}>Illustrative placement · no live advertising</Text>
+        <Text style={{ fontSize: 10, lineHeight: 14, color: lightColors.muted }}>Advertisement preview · {placement}</Text>
       </View>
       <Picture
         uri={draft.adImages[0]}
-        height={placement === "Display" ? 140 : 185}
+        height={placement === "Display" ? 120 : 150}
       />
-      <View style={{ padding: 16, gap: 8 }}>
+      <View style={{ padding: 11, gap: 6 }}>
         <Text
           style={{
-            fontSize: 18,
-            lineHeight: 25,
+            fontSize: 16,
+            lineHeight: 21,
             fontWeight: "700",
-            color: colors.ink,
+            color: lightColors.ink,
           }}
         >
           {draft.adHeadline ||
             draft.title.slice(0, 60) ||
             "Your message, out in the world."}
         </Text>
-        <Text style={styles.body}>
+        <Text style={{ fontSize: 12, lineHeight: 18, color: lightColors.text }}>
           {draft.adDescription ||
             draft.summary ||
             "Add an advertising description to see it here."}
         </Text>
         <View
           style={{
-            alignSelf: "flex-start",
+            alignItems: "center",
             paddingVertical: 10,
-            paddingHorizontal: 15,
-            backgroundColor: colors.mint,
-            borderRadius: 7,
+            paddingHorizontal: 12,
+            backgroundColor: lightColors.primary,
+            borderRadius: 10,
+            marginTop: 2,
           }}
         >
-          <Text style={{ fontWeight: "700", color: colors.green }}>
+          <Text style={{ fontSize: 12, lineHeight: 18, fontWeight: "700", color: lightColors.onPrimary }}>
             {draft.cta || "Learn more"}
           </Text>
         </View>
       </View>
+    </View>
+    </View>
+    <Text style={[styles.muted, { textAlign: "center", fontSize: 10, lineHeight: 14 }]}>Illustrative {placement} placement. No live advertising.</Text>
     </View>
   );
 }
@@ -259,6 +265,42 @@ export function StoryPreview({
   );
 }
 
+export function FundingPolicies({ config }: { config?: Config }) {
+  const { colors, styles } = useTheme();
+  return (
+      <Accordion title="Funding policies & campaign rules" initiallyOpen>
+        <Text style={styles.body}>
+          Demo policy · No real payments or advertisements. Contributions
+          support distribution of this message and are never paid directly to
+          the creator or cause.
+        </Text>
+        {config?.policies ? (
+          Object.entries(config.policies).map(([key, value]) => (
+            <View key={key} style={{ gap: 5 }}>
+              <Text style={{ fontWeight: "700", color: colors.ink }}>
+                {key
+                  .replace(/([A-Z])/g, " $1")
+                  .replace(/^./, (character) => character.toUpperCase())}
+              </Text>
+              <Text style={styles.body}>{value}</Text>
+            </View>
+          ))
+        ) : (
+          <Text style={styles.muted}>
+            Connect to the server to load the current allocation, refund, and
+            unspent-funds policy before submitting.
+          </Text>
+        )}
+        <Text style={styles.body}>
+          Share accurate information, include supporting sources for factual
+          claims, and use only media you have permission to distribute. Review
+          approval is required before publication; funding completion does not
+          launch advertising automatically.
+        </Text>
+      </Accordion>
+  );
+}
+
 export function CampaignPreview({
   draft,
   config,
@@ -271,27 +313,25 @@ export function CampaignPreview({
   const funding = config ? quote(draft.goal, config) : null;
   return (
     <View style={{ gap: 20 }}>
-      <Text style={styles.muted}>
-        Draft preview · Approval is required before publication. Contributions
-        fund message distribution, rather than direct support for the cause.
-      </Text>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-        <Pill title="Campaign page" selected={view === "campaign"} onPress={() => setView("campaign")} />
-        <Pill title="Advertisement" selected={view === "advertisement"} onPress={() => setView("advertisement")} />
+      <View accessibilityRole="tablist" style={{ flexDirection: "row", padding: 3, borderWidth: 1, borderColor: colors.outline, borderRadius: 28, backgroundColor: colors.bg }}>
+        {([
+          ["campaign", "Campaign page"],
+          ["advertisement", "Social ad"],
+        ] as const).map(([value, label]) => (
+          <Pressable key={value} accessibilityRole="tab" accessibilityState={{ selected: view === value }} onPress={() => setView(value)} style={({ pressed }) => ({ flex: 1, minHeight: 46, paddingVertical: 10, paddingHorizontal: 8, alignItems: "center", justifyContent: "center", borderRadius: 24, backgroundColor: view === value ? colors.primary : "transparent", opacity: pressed ? 0.75 : 1 })}>
+            <Text style={{ fontSize: 13, fontWeight: "600", color: view === value ? colors.onPrimary : colors.text }}>{label}</Text>
+          </Pressable>
+        ))}
       </View>
-      <Text style={styles.muted}>{view === "campaign" ? "The editorial page readers open: your story, identity and sources, followed by funding and audience details." : "The creative people may see before opening your campaign page. Advertising copy and images stay separate from the story."}</Text>
       {view === "campaign" && <>
       <View style={styles.card}>
-        {!!draft.coverImage && <Picture uri={draft.coverImage} height={185} />}
-        <View style={{ padding: 18, gap: 9 }}>
-          <Text style={styles.muted}>
-            {draft.category || "Category not selected"}
-          </Text>
+        {!!draft.coverImage && <Picture uri={draft.coverImage} height={220} />}
+        <View style={{ padding: 16, gap: 9 }}>
           <Text
             style={{
               fontFamily: fonts.bold,
-              fontSize: 24,
-              lineHeight: 31,
+              fontSize: 23,
+              lineHeight: 29,
               color: colors.ink,
             }}
           >
@@ -300,6 +340,7 @@ export function CampaignPreview({
           <Text style={styles.muted}>
             By {draft.creatorName || "Your name or organization"}
           </Text>
+          <Text style={[styles.muted, { fontSize: 12 }]}>{draft.category || "Category not selected"}</Text>
           {!!draft.summary && <Text style={styles.body}>{draft.summary}</Text>}
         </View>
       </View>
@@ -308,13 +349,9 @@ export function CampaignPreview({
       {view === "advertisement" &&
       <View
         style={{
-          borderTopWidth: 1,
-          borderColor: colors.line,
-          paddingTop: 20,
           gap: 16,
         }}
       >
-        <Text style={styles.h2}>Advertising creative</Text>
         <AdPreview draft={draft} placement={draft.channels[0]} />
         {draft.adImages.length > 1 && (
           <View style={{ gap: 12 }}>
@@ -326,6 +363,9 @@ export function CampaignPreview({
         )}
       </View>
       }
+      <Text style={styles.muted}>
+        Draft preview · Approval is required before publication. Contributions fund message distribution. Story and advertising assets remain separate.
+      </Text>
       <View style={{ gap: 12 }}>
         <Text style={styles.h2}>Audience & distribution</Text>
         <Text style={styles.body}>
@@ -399,36 +439,7 @@ export function CampaignPreview({
           {config ? `Demo model: ${config.peoplePerAdDollar} people per advertising dollar after the ${(config.feeRate * 100).toFixed(0)}% fee. Reach depends on prices, inventory, targeting, delivery, and performance; it is never guaranteed.` : "Connect to load current fees, funding policies and estimate assumptions. Your draft remains editable; no fee or audience estimate is assumed."}
         </Text>
       </View>
-      <Accordion title="Funding policies & campaign rules" initiallyOpen>
-        <Text style={styles.body}>
-          Demo policy · No real payments or advertisements. Contributions
-          support distribution of this message and are never paid directly to
-          the creator or cause.
-        </Text>
-        {config?.policies ? (
-          Object.entries(config.policies).map(([key, value]) => (
-            <View key={key} style={{ gap: 5 }}>
-              <Text style={{ fontWeight: "700", color: colors.ink }}>
-                {key
-                  .replace(/([A-Z])/g, " $1")
-                  .replace(/^./, (character) => character.toUpperCase())}
-              </Text>
-              <Text style={styles.body}>{value}</Text>
-            </View>
-          ))
-        ) : (
-          <Text style={styles.muted}>
-            Connect to the server to load the current allocation, refund, and
-            unspent-funds policy before submitting.
-          </Text>
-        )}
-        <Text style={styles.body}>
-          Share accurate information, include supporting sources for factual
-          claims, and use only media you have permission to distribute. Review
-          approval is required before publication; funding completion does not
-          launch advertising automatically.
-        </Text>
-      </Accordion>
+      <FundingPolicies config={config} />
     </View>
   );
 }

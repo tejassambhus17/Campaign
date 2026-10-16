@@ -4,6 +4,7 @@ import {
   AccessibilityInfo,
   BackHandler,
   findNodeHandle,
+  Image,
   Platform,
   Pressable,
   ScrollView,
@@ -19,7 +20,7 @@ import {
   Accordion,
   Button,
   Empty,
-  Field,
+  Field as BaseField,
   Loading,
   Notice,
   Picture,
@@ -29,6 +30,7 @@ import {
   useTheme,
 } from "../../components/ui";
 import { api } from "../../lib/api";
+import { detailPath } from "../../features/campaign";
 import { refresh, useConfig, useMe, useSession } from "../../lib/session";
 import {
   Campaign,
@@ -42,6 +44,7 @@ import {
 import {
   AdPreview,
   CampaignPreview,
+  FundingPolicies,
   StoryPreview,
 } from "../../features/creation/Preview";
 import {
@@ -57,12 +60,17 @@ import {
   validateStep,
 } from "../../features/creation/model";
 import { useDraftLibrary } from "../../features/creation/useDraftLibrary";
-import { CreationTargets, TargetField, TargetGroup } from "../../features/creation/FieldTarget";
+import { CreationTargets, TargetField as BaseTargetField, TargetGroup } from "../../features/creation/FieldTarget";
+import { CampaignReviewSummary, CategorySelect, CreationButton, CreationProgress, CreationTip, MediaThumb, StoryComposer, StoryFormatting, UploadArea } from "../../features/creation/CreationUi";
 import { DraftIssue, submissionIssues } from "../../features/creation/readiness";
 import { SubmissionChecklist } from "../../features/creation/SubmissionChecklist";
 import { accountDraftToken, AccountSaveState, draftSaveLabel, localDraftToken, LocalSaveState, mergeAccountSaved, writeLocalSnapshot } from "../../features/creation/persistence";
 
 type ActiveDraft = LocalDraft & { scope: string };
+const stepSuccessNotices = {
+  upload: "Image uploaded.",
+  assistance: "Demo assistance filled the empty fields. Check the suggested category, edit the text, and add public source links. Your funding goal was left for you to set at Submit.",
+};
 const emptyAssistance: Assistance = {
   idea: "",
   audience: "",
@@ -82,41 +90,36 @@ const message = (error: unknown) =>
     ? error.message
     : "The operation could not be completed. Your local draft is preserved.";
 
-function StepIndicator({ step }: { step: number }) {
+const Field = (props: React.ComponentProps<typeof BaseField>) => <BaseField compact {...props} />;
+const TargetField = (props: React.ComponentProps<typeof BaseTargetField>) => <BaseTargetField compact {...props} />;
+
+const stepDescriptions = [
+  "Give your campaign a clear identity.",
+  "Share your purpose. Help people connect with your why.",
+  "Bring your message to life with a cover and advertising images.",
+  "Choose who should hear your message and how it travels.",
+  "Almost there. Set your goal and check the details before review.",
+];
+const stepHeadings = ["Campaign Basics", "Your Story", "Campaign & Ad Visuals", "Set Your Reach", "Review & Submit"];
+
+function CreationOverview() {
   const { colors } = useTheme();
   return (
-    <View
-      accessibilityLabel={`Step ${step + 1} of 5: ${STEPS[step]}`}
-      style={{ gap: 6 }}
-    >
-      <View style={{ flexDirection: "row", gap: 5 }}>
-        {["Basics", "Story", "Visuals", "Reach", "Submit"].map(
-          (label, index) => (
-            <View key={label} style={{ flex: 1, gap: 5, alignItems: "center" }}>
-              <View
-                style={{
-                  height: 4,
-                  width: "100%",
-                  backgroundColor:
-                    index <= step ? colors.headerText : colors.progressTrack,
-                  borderRadius: 3,
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: 11,
-                  lineHeight: 16,
-                  color:
-                    index === step ? colors.headerText : colors.onHeaderMuted,
-                  fontWeight: index === step ? "800" : "500",
-                }}
-              >
-                {label}
-              </Text>
+    <View accessibilityLabel="Five campaign creation steps" style={{ paddingVertical: 8 }}>
+      {STEPS.map((title, index) => (
+        <View key={title} style={{ flexDirection: "row", gap: 14, minHeight: 76 }}>
+          <View style={{ width: 34, alignItems: "center" }}>
+            <View style={{ width: 32, height: 32, borderRadius: 16, alignItems: "center", justifyContent: "center", backgroundColor: index === 0 ? colors.progress : colors.subtle }}>
+              <Text style={{ fontSize: 15, fontWeight: "700", color: index === 0 ? colors.onPrimary : colors.ink }}>{index + 1}</Text>
             </View>
-          ),
-        )}
-      </View>
+            {index < 4 && <View style={{ flex: 1, width: 2, backgroundColor: index === 0 ? colors.progress : colors.line, marginVertical: 5 }} />}
+          </View>
+          <View style={{ flex: 1, gap: 4, paddingTop: index === 0 ? 9 : 3, paddingBottom: index === 0 ? 13 : 22, paddingHorizontal: index === 0 ? 12 : 0, marginLeft: index === 0 ? -12 : 0, marginBottom: index === 0 ? 14 : 0, backgroundColor: index === 0 ? colors.mint : "transparent", borderRadius: 12 }}>
+            <Text style={{ fontSize: 15, lineHeight: 21, fontWeight: "700", color: colors.ink }}>{title}</Text>
+            <Text style={{ fontSize: 12, lineHeight: 18, color: colors.muted }}>{stepDescriptions[index]}</Text>
+          </View>
+        </View>
+      ))}
     </View>
   );
 }
@@ -142,20 +145,24 @@ function EditorAction({
       onPress={onPress}
       style={({ pressed }) => ({
         minHeight: 48,
-        paddingHorizontal: 8,
+        paddingHorizontal: 14,
         justifyContent: "center",
+        borderWidth: 1,
+        borderColor: colors.line,
+        backgroundColor: colors.paper,
+        borderRadius: 24,
         opacity: disabled ? 0.45 : pressed ? 0.65 : 1,
       })}
     >
       {busy ? (
-        <ActivityIndicator color={colors.headerText} />
+        <ActivityIndicator color={colors.green} />
       ) : (
         <Text
           style={{
-            fontSize: 13,
+            fontSize: 12,
             lineHeight: 18,
             fontWeight: "600",
-            color: colors.headerText,
+            color: colors.green,
           }}
         >
           {title}
@@ -233,7 +240,7 @@ function AssistanceForm({
 export default function CreateScreen() {
   const { colors, styles } = useTheme();
   const local = makeLocalStyles(colors);
-  const { width, fontScale } = useWindowDimensions();
+  const { fontScale } = useWindowDimensions();
   const { user, ready } = useSession();
   const config = useConfig();
   const me = useMe();
@@ -263,6 +270,7 @@ export default function CreateScreen() {
   const [placement, setPlacement] = useState("Instagram");
   const [imagePrompt, setImagePrompt] = useState("");
   const [showStoryPreview, setShowStoryPreview] = useState(true);
+  const [editingParagraphId, setEditingParagraphId] = useState<string | null>(null);
   const scroll = useRef<ScrollView>(null);
   const content = useRef<View>(null);
   const targets = useRef(new Map<string, { view: View; input?: TextInput | null; announcement?: View | null }>());
@@ -550,6 +558,7 @@ export default function CreateScreen() {
     );
     setErrors({});
     setFailure("");
+    setNotice((current) => Object.values(stepSuccessNotices).includes(current) ? "" : current);
     setPreview(false);
     scroll.current?.scrollTo({ y: 0, animated: false });
   }, []);
@@ -878,9 +887,7 @@ export default function CreateScreen() {
               : section,
           ),
         });
-      setNotice(
-        "Image uploaded. Your story and advertising assets stay separate.",
-      );
+      setNotice(stepSuccessNotices.upload);
     } catch (error) {
       if (scopeRef.current === operationScope) setFailure(message(error));
     } finally {
@@ -953,9 +960,7 @@ export default function CreateScreen() {
       previous ? { ...previous, entryMode: "edit" } : previous,
     );
     setMode("edit");
-    setNotice(
-      "Demo assistance filled the empty fields. Check the suggested category, edit the text, and add public source links. Your funding goal was left for you to set at Submit.",
-    );
+    setNotice(stepSuccessNotices.assistance);
     scroll.current?.scrollTo({ y: 0, animated: false });
   }
 
@@ -1017,6 +1022,18 @@ export default function CreateScreen() {
 
   const working = active?.scope === scope ? active : null;
   const draft = working?.draft;
+  useEffect(() => setEditingParagraphId(null), [working?.localId]);
+  const primaryParagraph = draft?.sections.find((section) => section.kind === "text" && section.id === editingParagraphId) || draft?.sections.find((section) => section.kind === "text");
+  const primaryParagraphIndex = primaryParagraph ? draft!.sections.findIndex((section) => section.id === primaryParagraph.id) : -1;
+  function editPrimaryParagraph(patch: Partial<Section>) {
+    if (!draft) return;
+    if (primaryParagraph) updateSection(primaryParagraph.id, patch);
+    else {
+      const id = newId();
+      setEditingParagraphId(id);
+      change({ sections: [...draft.sections, { id, kind: "text", text: "", format: "normal", ...patch }] });
+    }
+  }
   const saveStatus = working ? draftSaveLabel(working, localSaveState, accountSaveState, !!user) : "";
   const step = working?.step || 0;
   const locked = busy || !!uploading;
@@ -1063,14 +1080,13 @@ export default function CreateScreen() {
       ["Draft", "Changes Requested"].includes(campaign.status) &&
       !library.entries.some((entry) => entry.draft.id === campaign.id),
   );
-  const stackEditorActions = fontScale > 1.15 || width < 350 || step === 2;
   const editorActions = working &&
     mode !== "entry" &&
     mode !== "submitted" &&
     !preview && (
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
         <EditorAction
-          title="Save as Draft"
+          title="Save Draft"
           onPress={() => {
             void saveDraft();
           }}
@@ -1078,14 +1094,17 @@ export default function CreateScreen() {
           busy={busy}
         />
         {mode !== "voice" && (
-          <EditorAction
-            title="Preview"
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Preview campaign"
+            accessibilityState={{ disabled: locked }}
             disabled={locked}
             onPress={() => {
               setPreview(true);
               scroll.current?.scrollTo({ y: 0, animated: false });
             }}
-          />
+            style={({ pressed }) => ({ width: 48, height: 48, alignItems: "center", justifyContent: "center", opacity: locked ? 0.45 : pressed ? 0.65 : 1 })}
+          ><Ionicons name="eye-outline" size={21} color={colors.muted} /></Pressable>
         )}
       </View>
     );
@@ -1094,70 +1113,41 @@ export default function CreateScreen() {
     <Screen scroll={false}>
       <View style={local.frame}>
         <View style={local.header}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            {working && mode !== "entry" && mode !== "submitted" && (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={preview ? "Return to editing" : step > 0 && mode !== "voice" ? `Back to ${STEPS[step - 1]}` : "Return to saved drafts"}
+                disabled={locked}
+                onPress={goBack}
+                style={[local.iconButton, { marginLeft: -8 }]}
+              >
+                <Ionicons name="arrow-back" size={21} color={colors.ink} />
+              </Pressable>
+            )}
             <View style={{ flex: 1, gap: 2 }}>
-              <Text
+              {!(working && mode === "edit" && !preview) && <Text
                 accessibilityRole="header"
-                style={
-                  working && mode !== "entry" && mode !== "submitted"
-                    ? local.editorTitle
-                    : [styles.title, { color: colors.headerText }]
-                }
+                style={local.editorTitle}
               >
                 {mode === "submitted"
                   ? "Submitted for review"
                   : mode === "entry"
-                    ? "Create a campaign"
+                    ? "Create campaign"
                     : preview
                       ? "Preview"
                       : mode === "voice"
                         ? "Guided draft"
-                        : step === 2
-                          ? "Campaign & Ad Visuals"
-                          : STEPS[step]}
-              </Text>
-              {working && mode !== "entry" && mode !== "submitted" && (
-                <Text
-                  accessibilityLiveRegion="polite"
-                  style={{
-                    fontSize: 11,
-                    lineHeight: 16,
-                    color: saveStatus.includes("failed")
-                      ? colors.red
-                      : colors.onHeaderMuted,
-                  }}
-                >
-                  {saveStatus || "Draft stays editable"}
-                </Text>
-              )}
+                        : ""}
+              </Text>}
             </View>
-            {!stackEditorActions && editorActions}
-            {working && mode !== "entry" && mode !== "submitted" && (
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Return to saved drafts"
-                disabled={locked}
-                onPress={() => {
-                  void localNow()
-                    .then(() => {
-                      setMode("entry");
-                      setPreview(false);
-                    })
-                    .catch(() =>
-                      setFailure(
-                        "Save your latest changes before leaving the editor.",
-                      ),
-                    );
-                }}
-                style={local.iconButton}
-              >
-                <Ionicons name="close" size={24} color={colors.headerText} />
-              </Pressable>
-            )}
+            {editorActions}
           </View>
-          {stackEditorActions && editorActions}
           {working && mode !== "entry" && mode !== "submitted" && (
-            <StepIndicator step={step} />
+            <>
+              <CreationProgress step={step} />
+              <Text accessibilityLiveRegion="polite" style={{ fontSize: 11, lineHeight: 16, paddingTop: 2, color: saveStatus.includes("failed") ? colors.red : colors.muted, textAlign: "center" }}>{saveStatus || "Draft stays editable"}</Text>
+            </>
           )}
         </View>
         <ScrollView
@@ -1172,7 +1162,10 @@ export default function CreateScreen() {
           <View ref={content} style={{ gap: 16 }}>
           {!!failure && <Notice tone="error">{failure}</Notice>}
           {!!notice && notice !== "Your saved draft is ready to continue." && (
-            <Notice tone="success">{notice}</Notice>
+            <View accessibilityLiveRegion="polite" style={{ flexDirection: "row", alignItems: "flex-start", gap: 8, padding: 10, borderRadius: 10, backgroundColor: colors.paper }}>
+              <Ionicons name={Object.values(stepSuccessNotices).includes(notice) ? "checkmark-circle-outline" : "information-circle-outline"} size={18} color={colors.green} />
+              <Text style={{ flex: 1, fontSize: 12, lineHeight: 18, color: colors.ink }}>{notice}</Text>
+            </View>
           )}
           {serverConflict && working && (
             <View style={[styles.card, { padding: 18, gap: 13 }]}>
@@ -1261,27 +1254,22 @@ export default function CreateScreen() {
             <Loading />
           ) : mode === "entry" ? (
             <>
-              <Text style={styles.body}>
-                Build your message in five steps. Your editable draft saves on
-                this device as you go.
-              </Text>
+              <CreationOverview />
               <View style={{ gap: 10 }}>
                 <Button
                   title="Create Manually"
                   onPress={() => begin()}
-                  icon="arrow-forward"
                   disabled={!!library.error}
                 />
                 <Button
                   title="Create with Your Voice"
                   onPress={() => begin(undefined, true)}
-                  variant="secondary"
+                  variant="ghost"
                   icon="mic-outline"
                   disabled={!!library.error}
                 />
                 <Text style={styles.muted}>
-                  Voice and AI: guided demo / manual fallback. All suggestions
-                  remain editable.
+                  Start with the manual editor, or try an editable guided demo. Live speech and AI are not connected.
                 </Text>
               </View>
               <Text style={styles.muted}>
@@ -1389,22 +1377,24 @@ export default function CreateScreen() {
             </>
           ) : mode === "submitted" && draft ? (
             <>
-              <View
-                style={{
-                  alignSelf: "flex-start",
-                  padding: 12,
-                  backgroundColor: colors.mint,
-                  borderRadius: 50,
-                }}
-              >
-                <Ionicons name="checkmark" size={24} color={colors.green} />
-              </View>
-              <Text style={styles.title}>Campaign submitted</Text>
-              <Text style={styles.body}>
+              <View style={{ alignItems: "center", paddingTop: 24, gap: 18 }}>
+                <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: colors.green, alignItems: "center", justifyContent: "center" }}><Ionicons name="checkmark" size={40} color={colors.onPrimary} /></View>
+                <Text accessibilityRole="header" style={{ fontSize: 27, lineHeight: 35, fontWeight: "700", textAlign: "center", letterSpacing: -0.5 }}>Your idea is ready{"\n"}for review.</Text>
+              <Text style={[styles.body, { textAlign: "center", color: colors.muted }]}>
                 {draft.revisionPending
                   ? `Your proposed changes to “${draft.title}” were received for review. The previously approved version remains public; this update has not been published or applied to advertising.`
                   : `“${draft.title}” has been received for review. It is not published and no advertising has started.`}
               </Text>
+              </View>
+              <View style={{ gap: 10, paddingTop: 6 }}>
+                <CreationButton title="View Campaign" icon="arrow-forward" onPress={() => router.push(detailPath(draft.id))} />
+                <CreationButton title="Create Another Campaign" secondary onPress={() => { setMode("entry"); setActive(null); router.setParams({ draft: undefined }); }} />
+              </View>
+              <View style={{ height: 170, borderRadius: 14, overflow: "hidden", backgroundColor: "#000000" }}>
+                <Image accessible={false} source={require("../../../assets/images/create/confirmation-coast.png")} style={{ width: "100%", height: "100%" }} resizeMode="cover" />
+                <View style={{ position: "absolute", left: 20, right: 20, bottom: 16 }}><Text style={{ color: "#FFFFFF", fontSize: 17, lineHeight: 24, textAlign: "center", fontWeight: "600" }}>Small ideas. A wider conversation.</Text></View>
+              </View>
+              <Text style={styles.h2}>What happens next</Text>
               <View style={[styles.card, { padding: 16, gap: 18 }]}>
                 {[
                   {
@@ -1477,23 +1467,9 @@ export default function CreateScreen() {
                 ))}
               </View>
               <Button
-                title="View my campaigns"
-                onPress={() => router.push("/profile")}
-                icon="albums-outline"
-              />
-              <Button
                 title="View activity"
                 onPress={() => router.push("/activity")}
                 variant="secondary"
-              />
-              <Button
-                title="Create another campaign"
-                onPress={() => {
-                  setMode("entry");
-                  setActive(null);
-                  router.setParams({ draft: undefined });
-                }}
-                variant="ghost"
               />
             </>
           ) : working && draft ? (
@@ -1512,6 +1488,10 @@ export default function CreateScreen() {
                   <CampaignPreview draft={draft} config={config.data} />
                 ) : (
                   <>
+                    <View style={{ gap: 5, paddingTop: 2, paddingBottom: 2 }}>
+                      <Text accessibilityRole="header" style={{ fontSize: 22, lineHeight: 29, fontWeight: "700", letterSpacing: -0.45, color: colors.ink }}>{step + 1}. {stepHeadings[step]}</Text>
+                      <Text style={{ fontSize: 13, lineHeight: 19, color: colors.muted }}>{stepDescriptions[step]}</Text>
+                    </View>
                     {!!draft.feedback && (
                       <Accordion key={`${draft.id}:${reviewContext}`} title="Reviewer feedback" initiallyOpen={reviewContext}>
                         <Text style={styles.body}>{draft.feedback}</Text>
@@ -1520,9 +1500,6 @@ export default function CreateScreen() {
                     )}
                     {step === 0 && (
                       <>
-                        <Text style={styles.muted}>
-                          Introduce your message and who is behind it.
-                        </Text>
                         <TargetField target="title"
                           label="Campaign title *"
                           value={draft.title}
@@ -1530,25 +1507,11 @@ export default function CreateScreen() {
                           onChangeText={(title) => change({ title })}
                           error={errors.title}
                           placeholder="A clear idea worth sharing"
-                          hint={`${draft.title.length}/60 · Used as the ad headline unless you write a custom one.`}
+                          hint={`${draft.title.length}/60 · Default ad headline.`}
                         />
                         <TargetGroup target="category">
                           <Text style={local.fieldLabel}>Category *</Text>
-                          <Text style={styles.muted}>
-                            Help the right readers discover your message.
-                          </Text>
-                          <View style={local.pills}>
-                            {(config.data?.categories || categories).map(
-                              (category) => (
-                                <Pill
-                                  key={category}
-                                  title={category}
-                                  selected={draft.category === category}
-                                  onPress={() => change({ category })}
-                                />
-                              ),
-                            )}
-                          </View>
+                          <CategorySelect value={draft.category} options={config.data?.categories || categories} onChange={(category) => change({ category })} />
                           {!!errors.category && (
                             <Text style={styles.error}>{errors.category}</Text>
                           )}
@@ -1571,7 +1534,8 @@ export default function CreateScreen() {
                           value={draft.summary}
                           onChangeText={(summary) => change({ summary })}
                           placeholder="What is the message, who is it for, and why does it matter?"
-                          hint="A short introduction helps people decide to read the full story."
+                          style={{ minHeight: 100 }}
+                          hint={`${draft.summary.length}/2000 characters · A short introduction to your message.`}
                         />
                         <Accordion title="Optional campaign cover image">
                           <View style={{ gap: 13 }}>
@@ -1620,10 +1584,14 @@ export default function CreateScreen() {
                     )}
                     {step === 1 && (
                       <>
-                        <Text style={styles.muted}>
-                          Build your article with text, images, evidence, and
-                          suggested audience actions.
-                        </Text>
+                        <StoryComposer text={primaryParagraph?.text || ""} format={primaryParagraph?.format || "normal"} position={primaryParagraphIndex} total={draft.sections.length} onChangeText={(text) => editPrimaryParagraph({ text })} onFormat={(format) => editPrimaryParagraph({ format })} onMove={(direction) => { if (primaryParagraph) { setEditingParagraphId(primaryParagraph.id); moveSection(primaryParagraphIndex, direction); } }} onRemove={() => { if (primaryParagraph) { change({ sections: draft.sections.filter((section) => section.id !== primaryParagraph.id) }); setEditingParagraphId(null); } }} />
+                        <CreationTip title="Be real. Be human.">People support clear, honest stories.</CreationTip>
+                        <View style={{ height: 88, borderRadius: 12, overflow: "hidden", backgroundColor: "#000000" }}>
+                          <Image accessible={false} source={require("../../../assets/images/create/story-mountains.png")} style={{ position: "absolute", width: "100%", height: 177, bottom: 0 }} resizeMode="cover" />
+                          <Text style={{ position: "absolute", left: 20, right: 20, bottom: 13, color: "#FFFFFF", fontSize: 14, lineHeight: 20, fontWeight: "600", textAlign: "center" }}>Every big change starts with a story.</Text>
+                        </View>
+                        <Accordion key={focusedIssue?.field === "storyHeadline" ? "story-headline-focus" : "story-heading"} title="Headline & introduction" initiallyOpen={focusedIssue?.field === "storyHeadline"}>
+                        <View style={{ gap: 14 }}>
                         <TargetField target="storyHeadline"
                           label="Story headline"
                           value={draft.storyHeadline}
@@ -1641,10 +1609,12 @@ export default function CreateScreen() {
                           onChangeText={(intro) => change({ intro })}
                           placeholder="Invite people into the story."
                         />
-                        {draft.sections.map((section, index) => (
+                        </View>
+                        </Accordion>
+                        {draft.sections.map((section, index) => section.id === primaryParagraph?.id ? null : (
                           <View
                             key={section.id}
-                            style={[styles.card, { padding: 17, gap: 14 }]}
+                            style={[styles.card, { padding: 13, gap: 12 }]}
                           >
                             <View
                               style={[
@@ -1775,30 +1745,7 @@ export default function CreateScreen() {
                               </>
                             ) : (
                               <>
-                                {section.kind === "text" && (
-                                  <View style={local.pills}>
-                                    {[
-                                      { value: "normal", label: "Normal" },
-                                      { value: "bold", label: "Bold" },
-                                      { value: "italic", label: "Italic" },
-                                      { value: "bullet", label: "• List" },
-                                    ].map((format) => (
-                                      <Pill
-                                        key={format.value}
-                                        title={format.label}
-                                        selected={
-                                          (section.format || "normal") ===
-                                          format.value
-                                        }
-                                        onPress={() =>
-                                          updateSection(section.id, {
-                                            format: format.value,
-                                          })
-                                        }
-                                      />
-                                    ))}
-                                  </View>
-                                )}
+                                {section.kind === "text" && <StoryFormatting value={section.format || "normal"} onChange={(format) => updateSection(section.id, { format })} />}
                                 <Field
                                   label={
                                     section.kind === "statistic"
@@ -1974,114 +1921,34 @@ export default function CreateScreen() {
                     )}
                     {step === 2 && (
                       <>
-                        <Text style={styles.muted}>
-                          Keep story images separate from advertising creative.
-                          Upload media you have permission to promote.
-                        </Text>
-                        <View style={{ gap: 13 }}>
-                          <Text style={styles.h2}>Campaign cover</Text>
-                          {!!draft.coverImage && (
-                            <Picture uri={draft.coverImage} height={176} />
-                          )}
-                          <TargetField target="coverImage"
-                            label="Cover image URL"
-                            value={draft.coverImage}
-                            autoCapitalize="none"
-                            keyboardType="url"
-                            onChangeText={(coverImage) =>
-                              change({ coverImage })
-                            }
-                          />
-                          <Button
-                            title="Upload campaign cover"
-                            variant="secondary"
-                            onPress={() => {
-                              void upload("cover");
-                            }}
-                            icon="image-outline"
-                          />
-                          {!!draft.coverImage && (
-                            <Button
-                              title="Remove cover image"
-                              variant="ghost"
-                              onPress={() => change({ coverImage: "" })}
-                            />
-                          )}
-                          {!draft.coverImage && (
-                            <Notice>
-                              A cover image is missing. It is optional, but
-                              helps readers recognize your campaign.
-                            </Notice>
-                          )}
-                        </View>
+                        <UploadArea title={draft.coverImage ? "Tap to add advertising images" : "Tap to upload a campaign cover"} onPress={() => { void upload(draft.coverImage ? "advertising" : "cover"); }} disabled={locked} />
+                        {!draft.coverImage && !draft.adImages.some(Boolean) && <Button title="Upload an advertising image instead" variant="ghost" icon="images-outline" onPress={() => { void upload("advertising"); }} />}
+                        {(!!draft.coverImage || !!draft.adImages.some(Boolean)) && <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 12 }}>
+                          {!!draft.coverImage && <MediaThumb uri={draft.coverImage} label="Campaign cover" large onRemove={() => change({ coverImage: "" })} />}
+                          <View style={{ flex: 1, gap: 10 }}>
+                            {!!draft.adImages[0] && <MediaThumb uri={draft.adImages[0]} label="Advertising image 1" onRemove={() => change({ adImages: draft.adImages.filter((_, position) => position !== 0) })} />}
+                            <Pressable accessibilityRole="button" accessibilityLabel="Upload advertising image" onPress={() => { void upload("advertising"); }} style={({ pressed }) => ({ minHeight: draft.adImages[0] ? 58 : 174, borderWidth: 1, borderColor: colors.outline, borderRadius: 12, backgroundColor: colors.paper, alignItems: "center", justifyContent: "center", padding: 12, gap: 6, opacity: pressed ? 0.75 : 1 })}><Ionicons name="add" size={21} color={colors.ink} /><Text style={{ fontSize: 12, lineHeight: 17 }}>Add ad image</Text></Pressable>
+                          </View>
+                        </View>}
+                        {draft.adImages.length > 1 && <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>{draft.adImages.slice(1).map((url, index) => <View key={index + 1} style={{ width: "47%" }}><MediaThumb uri={url} label={`Advertising image ${index + 2}`} onRemove={() => change({ adImages: draft.adImages.filter((_, position) => position !== index + 1) })} /></View>)}</View>}
                         <TargetGroup target="advertising">
-                          <Text style={styles.h2}>Advertising images</Text>
-                          <Text style={styles.muted}>
-                            Story photographs are not automatically reused as
-                            ads. Upload the images you have permission to
-                            promote.
-                          </Text>
-                          {draft.adImages.map((url, index) => (
-                            <View key={index} style={{ gap: 10 }}>
-                              <Picture uri={url} height={185} />
-                              <TargetField target={`ad-image:${index}`}
-                                label={`Advertising image ${index + 1} URL`}
-                                value={url}
-                                autoCapitalize="none"
-                                keyboardType="url"
-                                onChangeText={(next) =>
-                                  change({
-                                    adImages: draft.adImages.map(
-                                      (item, position) =>
-                                        position === index ? next : item,
-                                    ),
-                                  })
-                                }
-                              />
-                              <Button
-                                title={`Remove advertising image ${index + 1}`}
-                                variant="ghost"
-                                onPress={() =>
-                                  change({
-                                    adImages: draft.adImages.filter(
-                                      (_, position) => position !== index,
-                                    ),
-                                  })
-                                }
-                              />
-                            </View>
-                          ))}
-                          <Button
-                            title="Upload advertising image"
-                            onPress={() => {
-                              void upload("advertising");
-                            }}
-                            variant="secondary"
-                            icon="images-outline"
-                          />
-                          <Button
-                            title="Add advertising image URL"
-                            onPress={() =>
-                              change({ adImages: [...draft.adImages, ""] })
-                            }
-                            variant="ghost"
-                            icon="link-outline"
-                          />
-                          {!draft.adImages.some(Boolean) && (
-                            <Notice>
-                              No advertising image yet. The reviewer may request
-                              suitable creative before distribution.
-                            </Notice>
-                          )}
-                          <Text style={styles.muted}>
-                            JPEG, PNG, or WebP · up to 8 MB per upload. Video
-                            creatives and other formats are unsupported in this
-                            prototype.
-                          </Text>
-                          {!!errors.visuals && (
-                            <Text style={styles.error}>{errors.visuals}</Text>
-                          )}
+                          <Text style={{ fontSize: 12, lineHeight: 18, color: colors.muted }}>Your cover introduces the campaign. Ad images promote it; story photographs stay separate.</Text>
+                          {!draft.coverImage && <Text style={{ fontSize: 12, lineHeight: 18, color: colors.muted }}>No campaign cover yet. A cover is optional, but helps readers recognize your message.</Text>}
+                          {!draft.adImages.some(Boolean) && <Text style={{ fontSize: 12, lineHeight: 18, color: colors.muted }}>No ad image yet. Reviewers may request one before distribution.</Text>}
+                          {!!errors.visuals && <Text style={styles.error}>{errors.visuals}</Text>}
                         </TargetGroup>
+                        <Accordion key={focusedIssue?.field === "coverImage" || focusedIssue?.field.startsWith("ad-image:") ? focusedIssue.field : "media-urls"} title="Manage images & public URLs" initiallyOpen={focusedIssue?.field === "coverImage" || !!focusedIssue?.field.startsWith("ad-image:")}>
+                          <View style={{ gap: 14 }}>
+                            <TargetField target="coverImage" label="Cover image URL" value={draft.coverImage} autoCapitalize="none" keyboardType="url" onChangeText={(coverImage) => change({ coverImage })} />
+                            <Button title={draft.coverImage ? "Change campaign cover" : "Upload campaign cover"} variant="secondary" onPress={() => { void upload("cover"); }} icon="image-outline" />
+                            {draft.adImages.map((url, index) => <View key={index} style={{ gap: 6 }}>
+                              <TargetField target={`ad-image:${index}`} label={`Advertising image ${index + 1} URL`} value={url} autoCapitalize="none" keyboardType="url" onChangeText={(next) => change({ adImages: draft.adImages.map((item, position) => position === index ? next : item) })} />
+                              <Button title={`Remove advertising image ${index + 1}`} variant="ghost" onPress={() => change({ adImages: draft.adImages.filter((_, position) => position !== index) })} />
+                            </View>)}
+                            <Button title="Add advertising image URL" onPress={() => change({ adImages: [...draft.adImages, ""] })} variant="ghost" icon="link-outline" />
+                            <Text style={styles.muted}>JPEG, PNG or WebP, up to 8 MB per upload. Videos and documents are not supported in this prototype.</Text>
+                          </View>
+                        </Accordion>
                         <Accordion title="Image generation · manual fallback">
                           <View style={{ gap: 13 }}>
                             <Text style={styles.body}>
@@ -2171,13 +2038,6 @@ export default function CreateScreen() {
                     )}
                     {step === 3 && (
                       <>
-                        <Text style={styles.muted}>
-                          Propose where the message travels, who it is for,
-                          which channels carry it, and for how long. Your
-                          percentages split the advertising budget after fees.
-                          The platform may finalize targeting, placements,
-                          allocation and schedule during review.
-                        </Text>
                         <TargetField target="geography"
                           label="Target geographic locations *"
                           maxLength={1000}
@@ -2187,6 +2047,10 @@ export default function CreateScreen() {
                           error={errors.geography}
                           hint="Use cities, regions, or countries. The platform will confirm available targeting."
                         />
+                        <View style={{ gap: 5 }}>
+                          <Text style={local.fieldLabel}>Target audience</Text>
+                          <View style={local.pills}>{["Everyone", "Students", "Professionals", "Communities"].map((audience) => <Pill key={audience} title={audience} selected={audience === "Everyone" ? !draft.interests : draft.interests === audience} onPress={() => change({ interests: audience === "Everyone" ? "" : audience })} />)}</View>
+                        </View>
                         <Field
                           label="Audience characteristics & interests"
                           multiline
@@ -2214,17 +2078,13 @@ export default function CreateScreen() {
                             <Text style={styles.error}>{errors.channels}</Text>
                           )}
                         </TargetGroup>
-                        <View style={{ gap: 15 }}>
+                        <View style={{ gap: 12 }}>
                           <Text style={styles.h2}>Proposed ad allocation</Text>
-                          <Text style={styles.muted}>
-                            Split 100% of the advertising budget. You’ll set
-                            your funding goal at Submit; fees are deducted
-                            before this split.
-                          </Text>
-                          {draft.channels.map((channel) => (
+                          <Text style={{ fontSize: 12, lineHeight: 18, color: colors.muted }}>Split 100% of the budget after fees. You set your funding goal at Submit.</Text>
+                          <View style={{ flexDirection: fontScale > 1.3 ? "column" : "row", gap: 10 }}>{draft.channels.map((channel) => (
+                            <View key={channel} style={{ flex: 1 }}>
                             <TargetField target={`allocation:${channel}`}
-                              key={channel}
-                              label={`${channel} · percent of ad budget`}
+                              label={`${channel} %`}
                               keyboardType="numeric"
                               value={String(draft.allocation[channel] ?? 0)}
                               onChangeText={(raw) => {
@@ -2237,7 +2097,8 @@ export default function CreateScreen() {
                                   });
                               }}
                             />
-                          ))}
+                            </View>
+                          ))}</View>
                           <Text
                             style={{
                               fontWeight: "700",
@@ -2278,6 +2139,7 @@ export default function CreateScreen() {
                               : "Demo policy: 1–90 days. The platform confirms the distribution schedule during review."
                           }
                         />
+                        {!fundingLocked && <View style={local.pills}>{[14, 30, 60].map((days) => <Pill key={days} title={`${days} days`} selected={draft.durationDays === days} onPress={() => change({ durationDays: days })} />)}</View>}
                         <View style={[styles.card, { padding: 20, gap: 13 }]}>
                           <Text style={styles.label}>
                             Your audience preview
@@ -2317,11 +2179,7 @@ export default function CreateScreen() {
                     )}
                     {step === 4 && (
                       <>
-                        <SubmissionChecklist issues={submissionIssues(draft, working.goalInput, accepted)} onSelect={jumpToIssue} />
-                        <Text style={styles.muted}>
-                          Set your funding goal, review the campaign, and
-                          confirm the rules before submitting.
-                        </Text>
+                        <CampaignReviewSummary draft={draft} onEdit={(targetStep) => targetStep === 4 ? jumpToIssue({ id: "review-goal", step: 4, field: "goal", title: "Funding goal", message: "Choose the funding goal for your message.", required: false }) : changeStep(targetStep)} />
                         <TargetField target="goal"
                           label="Your funding goal · USD *"
                           keyboardType="decimal-pad"
@@ -2393,7 +2251,8 @@ export default function CreateScreen() {
                             not guaranteed delivery or measured unique reach.
                           </Text>
                         </View> : <Notice>Current fees and reach estimates are unavailable. Connect to load funding policies before submitting; your draft can still be edited and saved.</Notice>}
-                        <CampaignPreview draft={draft} config={config.data} />
+                        <SubmissionChecklist issues={submissionIssues(draft, working.goalInput, accepted)} onSelect={jumpToIssue} />
+                        <Accordion title="Complete campaign preview"><CampaignPreview draft={draft} config={config.data} /></Accordion>
                         {config.isLoading ? (
                           <ActivityIndicator
                             color={colors.green}
@@ -2422,6 +2281,7 @@ export default function CreateScreen() {
                           funding completion does not automatically start
                           advertising.
                         </Notice>
+                        <FundingPolicies config={config.data} />
                         <TargetGroup target="rules">
                         <Pressable
                           accessibilityRole="checkbox"
@@ -2511,10 +2371,10 @@ export default function CreateScreen() {
             ) : (
               <>
                 <View style={styles.row}>
-                  <Button
-                    title="Back"
-                    variant="ghost"
-                    style={{ minWidth: 78 }}
+                  <CreationButton
+                    title={step === 0 && mode !== "voice" ? "Save & Exit" : "Back"}
+                    secondary
+                    style={{ flex: 1 }}
                     onPress={goBack}
                     disabled={locked}
                   />
@@ -2526,14 +2386,14 @@ export default function CreateScreen() {
                       onPress={manualMode}
                     />
                   ) : (
-                    <Button
-                      title={step === 4 ? "Submit for Review" : "Continue"}
+                    <CreationButton
+                      title={step === 4 ? "Submit for Review" : "Next"}
                       icon={
                         step === 4 ? "paper-plane-outline" : "arrow-forward"
                       }
                       loading={busy}
                       disabled={!!uploading || (step === 4 && config.isLoading)}
-                      style={{ flex: 1 }}
+                      style={{ flex: step === 4 ? 1.65 : 1.1 }}
                       onPress={() => {
                         if (step === 4) {
                           void submit();
@@ -2561,37 +2421,33 @@ const makeLocalStyles = (colors: ReturnType<typeof useTheme>["colors"]) =>
   StyleSheet.create({
   frame: { flex: 1, width: "100%", maxWidth: 640, alignSelf: "center" },
   header: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
     paddingTop: 4,
-    paddingBottom: 10,
-    gap: 8,
-    borderBottomWidth: 1,
-    borderColor: colors.line,
-    backgroundColor: colors.header,
+    paddingBottom: 8,
+    gap: 2,
+    backgroundColor: colors.bg,
   },
   content: {
     paddingHorizontal: 18,
-    paddingTop: 16,
+    paddingTop: 6,
     paddingBottom: 24,
-    gap: 16,
+    gap: 14,
     flexGrow: 1,
   },
   footer: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
     paddingTop: 8,
     paddingBottom: 8,
     gap: 8,
-    backgroundColor: colors.paper,
-    borderTopWidth: 1,
-    borderColor: colors.line,
+    backgroundColor: colors.bg,
   },
   pills: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  fieldLabel: { fontSize: 14, fontWeight: "600", color: colors.ink },
+  fieldLabel: { fontSize: 12, lineHeight: 17, fontWeight: "600", color: colors.ink },
   editorTitle: {
-    fontSize: 18,
-    lineHeight: 24,
+    fontSize: 17,
+    lineHeight: 23,
     fontWeight: "700",
-    color: colors.headerText,
+    color: colors.ink,
     letterSpacing: -0.35,
   },
   iconButton: {

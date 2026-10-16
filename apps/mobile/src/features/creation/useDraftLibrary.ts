@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LocalDraft } from "./model";
+import { draftStorageKey } from "../../lib/api";
 
 export function useDraftLibrary(scope: string, ready: boolean) {
   const [entries, setEntries] = useState<LocalDraft[]>([]);
@@ -10,7 +11,7 @@ export function useDraftLibrary(scope: string, ready: boolean) {
   const entriesRef = useRef<LocalDraft[]>([]);
   const currentScope = useRef(scope);
   const queue = useRef(Promise.resolve());
-  const key = `campaign-creation-v1:${scope}`;
+  const key = draftStorageKey(scope);
   currentScope.current = scope;
 
   useEffect(() => {
@@ -96,7 +97,7 @@ export function useDraftLibrary(scope: string, ready: boolean) {
       await save(entry);
       // Transfer is explicit and only offered for a guest draft from this running session.
       // Remove the unowned copy after it is durably saved to the signed-in account's scope.
-      const guestKey = "campaign-creation-v1:guest";
+      const guestKey = draftStorageKey("guest");
       const raw = await AsyncStorage.getItem(guestKey);
       const guestEntries: LocalDraft[] = raw ? JSON.parse(raw) : [];
       await AsyncStorage.setItem(

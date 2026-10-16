@@ -2,18 +2,21 @@ const { withAndroidManifest, withDangerousMod } = require("expo/config-plugins")
 const fs = require("node:fs/promises");
 const path = require("node:path");
 
-// The INTERNAL-TEST APK talks to the explicitly configured local demo API.
-// Removing the attribute in normal mode also reverses a previous local prebuild.
+// INTERNAL-TEST permits the explicitly configured local demo API. CLOUD-TEST
+// explicitly denies cleartext; switching modes reverses prior local prebuilds.
 module.exports = function withInternalTestAndroid(
   config,
-  { enabled = false } = {},
+  { enabled = false, cloud = false } = {},
 ) {
+  if (enabled && cloud) throw new Error("Cloud builds must not enable local HTTP traffic.");
   config = withAndroidManifest(config, (result) => {
     const application = result.modResults.manifest.application?.[0];
     if (!application)
       throw new Error("The Android application manifest is missing.");
     application.$ ||= {};
-    if (enabled === true)
+    if (cloud === true)
+      application.$["android:usesCleartextTraffic"] = "false";
+    else if (enabled === true)
       application.$["android:usesCleartextTraffic"] = "true";
     else delete application.$["android:usesCleartextTraffic"];
     return result;

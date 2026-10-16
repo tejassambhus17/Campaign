@@ -52,9 +52,38 @@ The actual source filename is `Hackathon_Requirements.pdf`; the user's `HACKATHO
 
 ## Current authorized development scope
 
+On October17 the user resumed account connection and requested step-by-step
+guidance for Render, Neon and Cloudinary with no credit card. This supersedes
+the account-connection deferral below. Guide one provider at a time; the human
+completes login, verification and provider terms directly. Provision only
+confirmed Free resources, keep secrets out of chat/Git/APK and grant access only
+to the existing Campaign repository. A card/billing requirement blocks that
+provider; do not bypass it. Recording and organizer submission remain held.
+
+The October16 zero-cost cloud directive authorizes minimal deployment engineering
+for the existing Expo/FastAPI product. The user then chose “Prepare everything;
+I'll connect accounts later.” Finish independent implementation/testing/runbooks;
+do not provision accounts/resources while connection is deferred. Budget is ₹0:
+no card, paid trial, billing, automatic upgrade or chargeable CI. Account-confirm
+Free eligibility before provisioning. `docs/CLOUD_DEPLOYMENT.md` records evidence
+and remaining gates. Checkpoint: `refs/checkpoints/cloud-deployment-20261016`.
+Preserve private local SQLite/data and fallback APK; never migrate private
+records automatically. Cloud APKs require verified public HTTPS, disabled local
+overrides and separate sessions/drafts. Local tests do not prove cloud persistence
+or disconnected phone access. Recording/submission remain held. This supersedes
+the older blanket cloud-deferral statements below only for preparation.
+
+The final premium UI/UX correction brief approves the existing visual identity and authorizes evidence-based refinements across current screens, shared controls and native performance. Preserve the palette, architecture and workflows; do not redesign again. Capture current and corrected Android states, verify scrolling before claiming footer clipping, and compare performance under repeatable conditions. The recoverable local Git checkpoint is `refs/checkpoints/premium-quality-20261016`; the normal index and existing work were preserved. This task permits local QA/builds, not hosting, deployment or recording. Keep prior candidate evidence historical and distinguish source checks from installed visual/functional acceptance.
+
+The later premium-notifications directive gives the Home bell and Activity tab distinct roles: bell opens a native quick sheet with the latest five authorized notifications; Activity remains the complete existing history. Both must use the same recipient-scoped query, read actions, badges and safe destinations. Preserve category preferences, guest privacy and session cleanup; do not create a second notification backend/store or alter business rules. Close/back/swipe/overlay dismissal, reduced motion, safe areas and larger text require native verification. Recording and external release holds remain in force.
+
+The subsequent Create reference (`artifacts/create-polish/reference.png`) now governs the creation editor's composition, compact controls, icon progress, media layout and confirmation treatment. Preserve five steps, the 60-character title limit, funding goal at Submit, and submission for review: the image's six-step caption, 80-character limit, goal at Reach and immediate-live wording do not override the PDF. Match its visual proportions while retaining black/neutral Dark, native Android chrome and all required fields. The user also explicitly requests a working persistent profile-photo option; implement add/change/remove with account isolation and validate it on the authorized phone. Screenshot QA remains authorized; recording stays held.
+
+The latest approved visual source is `Campaign App UI Showcase.png` (preserved under `artifacts/showcase-redesign/reference.png`). Match its screen compositions, image treatments, compact typography, spacing, navigation and light/black-Dark appearance closely; login and Profile must be complete. Verify fidelity using actual screenshots from the explicitly authorized physical Android device, and fix visible discrepancies before declaring completion. This supersedes earlier composition choices, while pure-black Dark surfaces, mandatory PDF requirements, existing functional workflows and the recording hold remain in force. Illustration data is not authoritative financial, identity or verification data.
+
 The latest October 16 reference-driven directive rejects the preceding civic-publication result and replaces its ultramarine/large-serif direction with a compact mint-and-charcoal consumer mobile composition. Use the supplied reference for hierarchy, proportions and image-led discovery, while retaining Campaign's amplification meaning and every mandatory PDF workflow. Do not copy donation/banking claims, people or photographs from the reference. Routine design choices, local dependency/tooling work, tests, Android QA, embedded-JavaScript INTERNAL-TEST APK preparation and complete demo production are authorized; do not ask for routine design approval. Preserve the existing Expo/FastAPI architecture and working business rules.
 
-Appearance is a device-level System (default), Light or Dark preference, available to guests and signed-in users. Maintain the shared semantic theme mechanism above the existing session/query/navigation providers; never reset navigation, drafts, forms, filters, checkout or identity to change appearance. Persist it separately from account data, follow live OS changes in System mode, and retain it through sign-out. Use compact Manrope typography, readable contrast and consistent app-owned surfaces. `DESIGN.md` and `.impeccable/design.json` document the current implemented contract; if either still describes the superseded civic direction, reconcile it with current code and evidence. Use `PROGRESS.md` and `RELEASE_READINESS.md` for current acceptance. Old APKs, screenshots and videos retain their historical scope and do not verify the replacement design.
+Appearance is a device-level Dark (new-user default), System or Light preference, available to guests and signed-in users through Profile/Help settings. The latest explicit instruction removes the appearance picker from Welcome and authentication; preserve valid saved Light/System/Dark choices rather than resetting them on entry. Maintain the shared semantic theme mechanism above the existing session/query/navigation providers; never reset navigation, drafts, forms, filters, checkout or identity to change appearance. Persist it separately from account data, follow live OS changes in System mode, and retain it through sign-out. Use compact Manrope typography, readable contrast and consistent app-owned surfaces. `DESIGN.md` and `.impeccable/design.json` document the current implemented contract; if either still describes the superseded civic direction, reconcile it with current code and evidence. Use `PROGRESS.md` and `RELEASE_READINESS.md` for current acceptance. Old APKs, screenshots and videos retain their historical scope and do not verify the replacement design.
 
 The user's later October 16 correction rejects green-tinted Dark surfaces. Preserve the existing Light design; Dark must use pure black/neutral-charcoal backgrounds and containers, with mint limited to restrained accents/actions. The corrected target is background `#000000`, surface `#121212`, raised `#1C1C1C`, header `#151515` and neutral contextual container `#1E1E1E`. Earlier green-Dark captures are rejected visual evidence. Their separately demonstrated appearance persistence or state behavior remains valid only for the exact tested build and must not be described as black-Dark acceptance.
 

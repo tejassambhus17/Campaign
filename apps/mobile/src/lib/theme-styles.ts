@@ -2,10 +2,10 @@ import { StyleSheet } from "react-native";
 import { fonts, ThemeColors } from "./appearance";
 
 export const createThemeStyles = (colors: ThemeColors) => StyleSheet.create({
-  body: { fontSize: 15, lineHeight: 23, color: colors.text },
-  muted: { fontSize: 14, lineHeight: 21, color: colors.muted },
+  body: { fontSize: 14, lineHeight: 21, color: colors.text },
+  muted: { fontSize: 13, lineHeight: 20, color: colors.muted },
   title: { fontFamily: fonts.bold, fontSize: 25, lineHeight: 32, letterSpacing: -0.5, color: colors.ink },
-  h2: { fontSize: 20, lineHeight: 27, fontFamily: fonts.bold, fontWeight: "700", color: colors.ink, letterSpacing: -0.4 },
+  h2: { fontSize: 19, lineHeight: 25, fontFamily: fonts.bold, fontWeight: "700", color: colors.ink, letterSpacing: -0.4 },
   label: { fontSize: 12, lineHeight: 17, fontWeight: "600", color: colors.muted },
   card: { backgroundColor: colors.paper, borderRadius: 14, borderWidth: 1, borderColor: colors.line, overflow: "hidden" },
   row: { flexDirection: "row", alignItems: "center", gap: 10 },
