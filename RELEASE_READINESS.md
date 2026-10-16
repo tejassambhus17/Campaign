@@ -1,5 +1,15 @@
 # Android delivery readiness
 
+## October17 Neon update — database connected; independent app delivery pending
+
+[Neon setup](docs/NEON_SETUP.md) is VERIFIED within its service scope: actual Free
+production DB/TLS,20 production HTTP workflow checks,8 API-restart comparisons,
+actual QA compute-restart persistence and3 live concurrency/startup tests. Root
+build,83 backend/107 mobile/3 adapter tests pass. FastAPI runs locally on8879 and
+campaign image files remain local. Render/Cloudinary/public HTTPS/cloud APK and
+new native/disconnected-phone acceptance remain pending. No card/paid plan or
+extra Neon service was added; existing APK/API8787/Metro8081 are preserved.
+
 ## Current cloud preparation — public delivery BLOCKED
 
 The user deferred account connection after authorizing ₹0 preparation. See

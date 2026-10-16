@@ -1,6 +1,35 @@
 # Development progress
 
-## October17: free provider account connection resumed — IN PROGRESS
+## October17: Neon PostgreSQL setup — VERIFIED within recorded service scope
+
+The user specified organization`org-patient-sound-11803564`, project
+`dawn-lab-92471358` (Campaign), branch`production`, Postgres only. Browser login
+succeeded; the organization reports Free; deploy applied a no-change policy and
+pulled the three server variables into ignored`.env.local`. No card/paid plan,
+new project or additional Neon service was enabled. [Setup](docs/NEON_SETUP.md)
+records runtime/env wiring, diagnostics and exact evidence boundaries.
+
+Root`npm run build` passes TypeScript, Android export and FastAPI compilation.
+Final local tests pass83backend/107mobile/3environment adapter checks. Live QA
+workflows and actual Neon compute restart persistence pass. Production migrations
+were applied only after QA, to a previously empty database;20 real HTTP assertions
+cover registration, all five steps, review/publication, contributions/receipts,
+funding, Activity/Profile/photo. All8 production API-restart comparisons and all3
+focused live-Neon concurrency/startup tests pass. The QA compute truly restarted
+(server start time changed); its original state survived. The temporary branch
+was deleted and organization Free rechecked. Source-only export does not imply
+native/cloud APK acceptance. Exact server-secret values were absent from all53
+Android export files and178 candidate source files in the targeted scan.
+Existing API8787/Metro8081/phone remain untouched; new Neon API uses8879.
+Final host-side checks return HTTP200 on all existing/new local services.
+The separate Expo Web preview at`http://localhost:19006` serves a compiled bundle
+configured for API8879, with the expected CORS response. Browser automation could
+not initialize; this is bundle/network evidence only, not visual or native QA.
+Use`npm run preview:neon` after`npm start`; see`PREVIEW.json` in Neon evidence.
+The final scoped branch list contains only production; the temporary QA branch
+is independently confirmed absent.
+
+## October17: free provider account connection resumed — historical intake
 
 The user now requests guided Render/Neon/Cloudinary account connection, strictly
 free with no credit card. The earlier deferral is superseded. Official Free
@@ -8,7 +37,9 @@ terms were rechecked; actual account eligibility and resources remain unverified
 Start with Neon login/project setup, then Cloudinary, then Render using the
 existing private Campaign repository only. Login/verification/provider terms
 are completed directly by the human; no secrets belong in chat. No provider
-account/resource or public backend is claimed created yet. Recording remains held.
+account/resource or public backend was claimed created at this intake. The newer
+Neon verification above supersedes that database status; Cloudinary and Render
+remain pending. Recording remains held.
 
 ## October16 preparation checkpoint: account connection was deferred
 

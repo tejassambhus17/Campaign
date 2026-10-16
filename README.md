@@ -1,5 +1,15 @@
 # Campaign Amplification
 
+**October17 update:** Neon PostgreSQL is connected to the existing FastAPI app.
+From this root,`npm run build` checks TypeScript, exports Android JavaScript/assets
+and compiles FastAPI;`npm start` runs the Neon-backed local API on8879. The original
+SQLite launcher remains unchanged. See [Neon setup](docs/NEON_SETUP.md),
+[current progress](PROGRESS.md) and [release readiness](RELEASE_READINESS.md).
+Database hosting does not yet provide a public API or independent Android APK.
+After the API starts, `npm run preview:neon` serves the isolated app preview at
+`http://localhost:19006`. Database workflow checks passed; the current preview
+has bundle/network verification, with browser visual and new native QA pending.
+
 A React Native / Expo prototype for community-funded message distribution. Contributions fund advertising reach, rather than direct donations to the campaign's cause. All payments, advertising delivery and report figures are explicitly simulated.
 
 The active October 16 redesign uses compact Manrope typography, campaign photography, mint-and-charcoal surfaces and complete System/Light/Dark appearance. The user's latest reference replaces the previous civic-publication visual result while preserving the working Expo/FastAPI architecture and workflows. [Design system](DESIGN.md), [native redesign evidence](UI_REDESIGN_PROGRESS.md) and [current delivery status](RELEASE_READINESS.md) distinguish source checks, fresh installed Android acceptance and historical evidence.

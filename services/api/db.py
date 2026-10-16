@@ -146,6 +146,7 @@ class Database:
     def __init__(self, path: str | Path | None = None):
         # Explicit paths are always SQLite, including existing isolated API tests.
         self.url = os.getenv('CAMPAIGN_DATABASE_URL', '').strip() if path is None else ''
+        self.migration_url = (os.getenv('CAMPAIGN_MIGRATION_DATABASE_URL', '').strip() or self.url) if self.url else ''
         self.backend = 'postgresql' if self.url else 'sqlite'
         self.notification_order = 'insertion_order' if self.url else 'rowid'
         self.schema = os.getenv('CAMPAIGN_DATABASE_SCHEMA', 'public') if self.url else None
@@ -190,14 +191,15 @@ class Database:
         self.secret = secret_path.read_text(encoding='utf-8').strip().encode()
         self.initialize()
 
-    def connect(self):
+    def connect(self, *, migration=False):
         if self.url:
-            connection = psycopg.connect(self.url, row_factory=record_factory,
-                                         connect_timeout=10, prepare_threshold=None,
-                                         options='-c statement_timeout=30000 -c lock_timeout=30000')
+            connection = psycopg.connect(self.migration_url if migration else self.url, row_factory=record_factory,
+                                         connect_timeout=10, prepare_threshold=None)
             wrapped = PostgresConnection(connection)
-            # Only the strictly validated identifier above is interpolated.
-            wrapped.execute(f'SET LOCAL search_path TO "{self.schema}"')
+            # Neon rejects arbitrary startup options. Transaction-local settings
+            # also remain valid through PgBouncer transaction pooling.
+            # Only the strictly validated schema identifier is interpolated.
+            wrapped.execute(f'SET LOCAL statement_timeout=30000; SET LOCAL lock_timeout=30000; SET LOCAL search_path TO "{self.schema}"')
             return wrapped
         connection = sqlite3.connect(self.path, timeout=30, check_same_thread=False, factory=ClosingConnection)
         connection.row_factory = sqlite3.Row
@@ -206,8 +208,8 @@ class Database:
         return connection
 
     @contextmanager
-    def transaction(self):
-        connection = self.connect()
+    def transaction(self, *, migration=False):
+        connection = self.connect(migration=True) if migration else self.connect()
         try:
             if self.url:
                 connection.execute('SELECT pg_advisory_xact_lock(?)', (WRITE_LOCK,))
@@ -225,7 +227,7 @@ class Database:
         if self.url:
             # Schema creation and each migration commit atomically; startup races
             # take the same lock as mutations before inspecting schema_migrations.
-            with self.transaction() as connection:
+            with self.transaction(migration=True) as connection:
                 connection.execute('CREATE TABLE IF NOT EXISTS schema_migrations (version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)')
                 for migration in sorted((ROOT / 'migrations' / 'postgres').glob('*.sql')):
                     version = int(migration.name.split('_')[0])

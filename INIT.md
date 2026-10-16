@@ -1,5 +1,15 @@
 # Campaign Amplification Hackathon: initialization guide
 
+**October17 Neon setup:** production PostgreSQL is connected in the user's
+specified Free Campaign project. Root`npm run build` and explicit`npm start`
+are now available; Neon API uses loopback8879, while existing local SQLite API8787
+remains separate. Read [NEON_SETUP.md](docs/NEON_SETUP.md) for ignored server env,
+direct migrations/pooled traffic and current proof. Render/Cloudinary/public API,
+cloud APK/native acceptance remain pending; older blanket deferrals are historical.
+After `npm start`, use `npm run preview:neon` in another terminal to serve an
+isolated Web preview at `http://localhost:19006`, connected to API8879. This
+preview does not establish installed Android acceptance.
+
 **Current cloud task:** preparation is implemented; public deployment is BLOCKED
 on user-deferred account connection. Read [CLOUD_DEPLOYMENT.md](docs/CLOUD_DEPLOYMENT.md)
 for PostgreSQL/media/configuration, CloudTest builds, provider terms, commands and

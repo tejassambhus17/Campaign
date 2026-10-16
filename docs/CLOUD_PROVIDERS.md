@@ -1,5 +1,13 @@
 # Zero-cost cloud provider checks
 
+**October17 actual account result:** the user-supplied Neon organization reports
+Free before and after setup. The existing Campaign production branch is wired
+and tested; the temporary0.25-CU QA branch was removed after real compute-restart
+and concurrency tests. No card/paid plan/additional Neon service was enabled.
+[NEON_SETUP.md](NEON_SETUP.md) contains actual proof. Render and Cloudinary remain
+unconfigured; their account eligibility is still unverified. Earlier no-resource
+statements below retain their October16 preparation scope.
+
 Checked October 16, 2026 (Asia/Calcutta). These are public documentation checks,
 not an account eligibility, provisioning, persistence or deployed-service result.
 No account, subscription, card, billing, add-on or cloud resource was created.

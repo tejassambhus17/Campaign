@@ -1,5 +1,15 @@
 # Requirements and verification matrix
 
+## October17 Neon evidence supplement
+
+The supplied Free Campaign production database is connected through the existing
+FastAPI driver. [Setup evidence](docs/NEON_SETUP.md) records20 real production HTTP
+checks,8 original-state API-restart comparisons, actual QA compute-restart
+persistence and3 live concurrency/startup tests. Root build/local regressions
+pass; all248 original PDF rows retain their descriptions/classes/page references.
+Neon database evidence does not verify public API/media hosting or a new native
+APK. Render/Cloudinary and independent phone delivery remain pending.
+
 ## Current cloud delivery supplement
 
 The October16 ₹0 directive supplements delivery, preserving all 248 original PDF

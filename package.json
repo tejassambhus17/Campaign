@@ -1,0 +1,14 @@
+{
+  "name": "campaign-workspace",
+  "private": true,
+  "scripts": {
+    "build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-project.ps1",
+    "start": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/api-neon.ps1",
+    "preview:neon": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/preview-neon.ps1",
+    "test:neon": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/node-project.ps1 -Task neon-tests"
+  },
+  "dependencies": {
+    "@neon/config": "^1.9.2",
+    "@neon/env": "^1.6.3"
+  }
+}

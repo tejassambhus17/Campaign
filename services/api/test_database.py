@@ -3,12 +3,28 @@ import os
 from pathlib import Path
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from db import Database, Record, ROOT, postgres_query
 
 
 class DatabaseBoundaryTests(unittest.TestCase):
+    def test_direct_migration_connection_does_not_replace_pooled_application_url(self):
+        pooled = 'postgresql://fixture:only-test@ep-fixture-pooler.neon.tech/db?sslmode=require'
+        direct = 'postgresql://fixture:only-test@ep-fixture.neon.tech/db?sslmode=require'
+        with patch.dict(os.environ, {'CAMPAIGN_DATABASE_URL': pooled,
+                                    'CAMPAIGN_MIGRATION_DATABASE_URL': direct,
+                                    'CAMPAIGN_RECEIPT_SECRET': 'test-only-' * 5}), \
+                patch.object(Database, 'initialize'), patch('db.psycopg.connect', return_value=MagicMock()) as connect:
+            database = Database()
+            database.connect().close()
+            database.connect(migration=True).close()
+        self.assertEqual(connect.call_args_list[0].args[0], pooled)
+        self.assertEqual(connect.call_args_list[1].args[0], direct)
+        self.assertNotIn('options', connect.call_args_list[0].kwargs)
+        self.assertIn('SET LOCAL statement_timeout=30000', connect.return_value.execute.call_args.args[0])
+        self.assertEqual(database.url, pooled)
+
     def test_qmark_binding_does_not_rewrite_quoted_values_or_comments(self):
         statement = '''SELECT ?, '?', "a?", 'It''s ? 100%' -- ?
             /* ? */ WHERE key=? AND title LIKE '100%' '''

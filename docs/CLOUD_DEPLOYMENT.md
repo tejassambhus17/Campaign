@@ -1,10 +1,11 @@
 # Campaign zero-cost deployment runbook
 
-**October17 update:** the user has resumed guided Free account connection with
-no credit card. The earlier deferral below is historical. Connection/provisioning
-is IN PROGRESS; no actual account/resource/HTTPS/persistence result exists yet.
-The human completes login, verification and terms directly. Keep all credentials
-out of chat and grant GitHub access only to the Campaign repository.
+**October17 update:** the supplied Free Neon Campaign project is connected;
+production PostgreSQL and live API workflows are verified within
+[NEON_SETUP.md](NEON_SETUP.md)'s scope. Actual QA compute-restart persistence is
+recorded. FastAPI/media remain local; Render/Cloudinary/public HTTPS/cloud APK
+are pending. Preserve the established server receipt/reviewer secrets when
+configuring Render. Older deferral statements below retain historical scope.
 
 ## Current result: prepared locally; accounts intentionally pending
 

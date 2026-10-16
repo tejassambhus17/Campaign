@@ -1,5 +1,15 @@
 # Campaign Amplification Hackathon: project context
 
+**D28 / October17 — connect existing Neon:** user selected
+`org-patient-sound-11803564` / `dawn-lab-92471358` / `production`, PostgreSQL only.
+Keep Expo/FastAPI and`psycopg`; root tooling maps ignored pulled URLs to pooled
+app traffic and direct migrations. Transaction-local timeout settings replace
+startup options rejected by real Neon. Root build delegates to existing tooling;
+explicit Neon startup uses port8879 and preserves local-default SQLite startup.
+Existing receipt/reviewer secrets must persist into future Render configuration.
+[NEON_SETUP.md](docs/NEON_SETUP.md) separates live database proof from still-local
+API/media and pending independent Android delivery. No paid resource/card added.
+
 **Latest decision D27 — zero-cost cloud preparation:** the October16 directive
 authorizes minimal PostgreSQL, persistent media, security/configuration,
 cold-start and HTTPS Android support while preserving UI/business rules. The

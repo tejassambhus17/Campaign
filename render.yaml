@@ -19,8 +19,10 @@ services:
         value: cloudinary
       - key: CAMPAIGN_DATABASE_URL
         sync: false
+      - key: CAMPAIGN_MIGRATION_DATABASE_URL
+        sync: false
       - key: CAMPAIGN_RECEIPT_SECRET
-        generateValue: true
+        sync: false
       - key: CAMPAIGN_REVIEWER_EMAIL
         sync: false
       - key: CAMPAIGN_REVIEWER_PASSWORD

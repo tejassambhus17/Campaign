@@ -52,6 +52,16 @@ The actual source filename is `Hackathon_Requirements.pdf`; the user's `HACKATHO
 
 ## Current authorized development scope
 
+The October17 Neon setup links only `org-patient-sound-11803564` /
+`dawn-lab-92471358` / `production`, PostgreSQL only. Keep the existing FastAPI
+`psycopg` driver. Root `npm start` explicitly loads Campaign's ignored Neon env
+into pooled traffic/direct migration settings on local port8879; the original
+SQLite launcher remains unchanged. Retain established ignored server receipt
+and reviewer secrets when later configuring Render; never rotate receipt keys
+silently or embed them in mobile. QA-branch compute restart and production HTTP
+proof do not establish public API hosting, Cloudinary persistence or native
+independent-device acceptance. The temporary QA branch was removed after tests.
+
 On October17 the user resumed account connection and requested step-by-step
 guidance for Render, Neon and Cloudinary with no credit card. This supersedes
 the account-connection deferral below. Guide one provider at a time; the human
