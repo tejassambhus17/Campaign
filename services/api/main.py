@@ -38,6 +38,7 @@ from deployment import Deployment
 from media_storage import create_media_storage, StorageRecord, MediaNotFound, MediaStorageError
 from security import CloudRequestGuardMiddleware
 from assessments import content_hash, register_assessment_routes, observe_public_assessments
+from report_projection import project_report, report_read_snapshot
 
 Image.MAX_IMAGE_PIXELS = 25_000_000
 LIBRARY_MEDIA = frozenset({'bedroom', 'movement', 'night-sky', 'library', 'workspace', 'data-desk', 'repair', 'civic'})
@@ -770,7 +771,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
                           'allocated': dollars(money['allocated']), 'spent': 0, 'simulatedReach': 0,
                           'measuredReach': None, 'impressions': 0, 'clicks': 0, 'unspent': dollars(net),
                           'durationDays': content['durationDays'], 'final': False, 'startedAt': stamp(),
-                          'refundStatus': 'Calculated on completion', 'completedAt': None}
+                          'refundStatus': 'Calculated on completion', 'completedAt': None, 'updatedAt': stamp()}
                 connection.execute('UPDATE campaigns SET report_json=?,setup_ready=1 WHERE id=?', (json.dumps(report), campaign_id))
             if target == 'Completed':
                 if campaign['revision_status']:
@@ -783,7 +784,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
                 report.update({'spent': dollars(spent), 'simulatedReach': int(spent/100*people_rate*0.9),
                                'impressions': int(spent/100*people_rate*1.35), 'clicks': int(spent/100*0.8),
                                'unspent': dollars(net-spent), 'final': True, 'completedAt': stamp(),
-                               'refundStatus': 'Simulated unspent refund complete'})
+                               'refundStatus': 'Simulated unspent refund complete', 'updatedAt': stamp()})
                 connection.execute('UPDATE campaigns SET report_json=? WHERE id=?', (json.dumps(report), campaign_id))
                 campaign['report_json'] = json.dumps(report)
                 refund(connection, campaign, full=False)
@@ -1059,10 +1060,11 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
 
     @app.get('/campaigns/{campaign_id}/report')
     def report(campaign_id: str, user=Depends(auth_optional)):
-        with database.connect() as connection:
+        with report_read_snapshot(database) as connection:
             campaign = get_campaign(connection, campaign_id)
             assert_visible(campaign, user)
-            return report_json(connection, campaign)
+            return project_report(connection, campaign, report_json(connection, campaign), asset_urls=asset_urls,
+                                  policies=config()['policies'], fee_rate=fee_rate, people_rate=people_rate)
 
     @app.get('/campaigns/{campaign_id}/updates')
     def campaign_updates(campaign_id: str, user=Depends(auth_optional)):
@@ -1222,7 +1224,8 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             spent = int(allocated*0.5)
             report.update({'spent': dollars(spent), 'unspent': dollars(allocated-spent),
                            'simulatedReach': int(spent/100*people_rate*0.9),
-                           'impressions': int(spent/100*people_rate*1.35), 'clicks': int(spent/100*0.8)})
+                           'impressions': int(spent/100*people_rate*1.35), 'clicks': int(spent/100*0.8),
+                           'updatedAt': stamp()})
             connection.execute('UPDATE campaigns SET report_json=? WHERE id=?', (json.dumps(report), campaign_id))
             campaign_notice(connection, campaign, 'Distribution progress', 'The simulation reached its midpoint. View the report for modelled spend and results.', f'progress-midpoint:{campaign_id}', destination_type='report')
             return report_json(connection, get_campaign(connection, campaign_id))
