@@ -37,8 +37,10 @@ from seed import seed_demo, localize_seed_assets
 from deployment import Deployment
 from media_storage import create_media_storage, StorageRecord, MediaNotFound, MediaStorageError
 from security import CloudRequestGuardMiddleware
+from assessments import content_hash, register_assessment_routes, observe_public_assessments
 
 Image.MAX_IMAGE_PIXELS = 25_000_000
+LIBRARY_MEDIA = frozenset({'bedroom', 'movement', 'night-sky', 'library', 'workspace', 'data-desk', 'repair', 'civic'})
 
 
 class Login(BaseModel):
@@ -212,6 +214,9 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
                 return path
             if re.fullmatch(r'/seed-media/(forest|learning|ocean|community|arts|science)\.jpg', path) and (ROOT / 'assets' / 'seed' / path.rsplit('/', 1)[-1]).is_file():
                 return path
+            library_match = re.fullmatch(r'/seed-media/library-v1/([a-z-]+)\.jpg', path)
+            if library_match and library_match.group(1) in LIBRARY_MEDIA and (ROOT / 'assets/seed/library-v1' / path.rsplit('/', 1)[-1]).is_file():
+                return path
             return value
         content['coverImage'] = local_reference(content['coverImage'])
         content['adImages'] = [local_reference(value) for value in content['adImages']]
@@ -336,6 +341,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
                         'raised': dollars(money['raised']), 'version': campaign['version'],
                         'estimatedReach': estimated_reach(cents(content['goal'], allow_zero=True)-fee_for(cents(content['goal'], allow_zero=True), fee_rate), people_rate),
                         'revisionPending': bool(campaign['revision_status']), 'simulated': True,
+                        'publicContentHash': content_hash(campaign['published_json']) if campaign['published_json'] else None,
                         'report': report_json(connection, campaign)})
         if managed:
             content['clientDraftId'] = campaign.get('client_draft_id')
@@ -679,6 +685,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
                    campaign_id=campaign_id, key=f"review:{campaign_id}:{campaign['version']}:{target}", destination={'type': 'creator'})
             if revision and payload.decision == 'approve':
                 campaign_notice(connection, campaign, 'Reviewed campaign update', 'A material campaign revision was approved. Read the updated story and sources.', f"revision-approved:{campaign_id}:{campaign['version']}")
+            observe_public_assessments(connection, get_campaign(connection, campaign_id))
             return campaign_json(connection, get_campaign(connection, campaign_id), user)
 
     def refund(connection, campaign, *, full):
@@ -802,6 +809,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             title, body = messages.get(target, (f'Campaign: {target}', payload.reason or 'The campaign lifecycle was updated.'))
             campaign_notice(connection, campaign, title, body, f'transition:{campaign_id}:{target}:{campaign["version"]}',
                             destination_type='report' if target == 'Completed' else 'campaign')
+            observe_public_assessments(connection, get_campaign(connection, campaign_id))
             return campaign_json(connection, get_campaign(connection, campaign_id), user)
 
     def payment_json(payment, *, include_receipt=True):
@@ -1190,6 +1198,16 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             raise HTTPException(404, 'Sample image not found.')
         return FileResponse(path, media_type='image/jpeg', headers={'Cache-Control': 'public, max-age=86400'})
 
+    @app.get('/seed-media/library-v1/{filename}')
+    def library_seed_media(filename: str):
+        if filename.removesuffix('.jpg') not in LIBRARY_MEDIA or not filename.endswith('.jpg'):
+            raise HTTPException(404, 'Sample image not found.')
+        from db import ROOT
+        path = (ROOT / 'assets/seed/library-v1' / filename).resolve()
+        if not path.is_relative_to(ROOT / 'assets/seed/library-v1') or not path.is_file():
+            raise HTTPException(404, 'Sample image not found.')
+        return FileResponse(path, media_type='image/jpeg', headers={'Cache-Control': 'public, max-age=86400'})
+
     @app.post('/campaigns/{campaign_id}/progress')
     def progress(campaign_id: str, user=Depends(reviewer)):
         """One controlled midpoint for demonstrating a meaningful distribution notification."""
@@ -1209,6 +1227,11 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             campaign_notice(connection, campaign, 'Distribution progress', 'The simulation reached its midpoint. View the report for modelled spend and results.', f'progress-midpoint:{campaign_id}', destination_type='report')
             return report_json(connection, get_campaign(connection, campaign_id))
 
+    register_assessment_routes(app, database, get_campaign=get_campaign, assert_visible=assert_visible,
+                               auth_optional=auth_optional, reviewer=reviewer,
+                               policy_context={'version': 'prototype-funding-v1', 'currency': 'USD',
+                                               'feeRate': float(fee_rate), 'peoplePerAdDollar': people_rate,
+                                               'basis': 'Net advertising dollars after the configured platform fee; payments and delivery are simulated.'})
     return app
 
 

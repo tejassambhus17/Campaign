@@ -1,0 +1,2816 @@
+{
+  "version": "campaign-library-v1",
+  "fixtureOwner": {
+    "email": "samples@amplify.local",
+    "name": "Demonstration Campaigns",
+    "role": "member"
+  },
+  "categories": [
+    "Environment",
+    "Health",
+    "Science",
+    "Education",
+    "Public Policy",
+    "Economic Policy",
+    "Community",
+    "Arts & Culture",
+    "Business",
+    "Other"
+  ],
+  "existingIds": [
+    "demo_forest",
+    "demo_learning",
+    "demo_ocean",
+    "demo_community",
+    "demo_arts",
+    "demo_science"
+  ],
+  "campaigns": [
+    {
+      "id": "demo_sleep",
+      "content": {
+        "title": "Make room for a better night",
+        "category": "Health",
+        "creatorName": "Restful Rhythm Studio",
+        "summary": "Start a thoughtful conversation about sleep, without miracle claims or one-size-fits-all advice.",
+        "coverImage": "/seed-media/library-v1/bedroom.jpg",
+        "storyHeadline": "A quieter conversation about sleep",
+        "intro": "Sleep is easy to overlook when daily life gets busy. This fictional studio proposes an awareness message that makes reliable information easier to find, without selling a sleep product.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "A quieter conversation about sleep",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "The NHLBI explains that sleep supports brain function and physical health. Its general overview is the background for this message; it does not prescribe a personal sleep schedule or diagnose a sleep condition.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "Our proposed advertisement invites readers to look at their routines and read the source. It makes no claim that viewing an ad improves health. Persistent sleep concerns belong with a qualified health professional.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Restful Rhythm Studio is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 650 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 14-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Read the general information and decide which questions you want to ask a health professional.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "NHLBI — Why Is Sleep Important?",
+            "url": "https://www.nhlbi.nih.gov/health/sleep/why-sleep-important"
+          }
+        ],
+        "adImages": [
+          "/seed-media/library-v1/night-sky.jpg"
+        ],
+        "adHeadline": "Make time to learn about sleep",
+        "adDescription": "Start a thoughtful conversation about sleep, without miracle claims or one-size-fits-all advice.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Sleep awareness and general wellbeing; adults in India",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 650.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://www.nhlbi.nih.gov/health/sleep/why-sleep-important",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "General role of sleep in physical health, thinking and learning; opened overview and thinking/memory sections.",
+        "limitations": "No individual medical advice, cure, creator credentials or campaign outcome is established."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/bedroom.jpg",
+        "ad": "/seed-media/library-v1/night-sky.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_move",
+      "content": {
+        "title": "Everyday movement deserves a conversation",
+        "category": "Health",
+        "creatorName": "Small Steps Message Lab",
+        "summary": "Help a general-awareness message about accessible movement reach beyond the usual fitness audience.",
+        "coverImage": "/seed-media/library-v1/movement.jpg",
+        "storyHeadline": "Movement can start with a conversation",
+        "intro": "An advertisement does not need a transformation photograph to start a useful discussion. Our fictional team wants to invite people to explore movement in ways that suit their circumstances.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "Movement can start with a conversation",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "WHO describes physical activity broadly, including walking, cycling, wheeling, play and everyday tasks. This campaign uses that broad explanation, rather than promising a particular result or prescribing an exercise plan.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "The proposed message is an invitation to read, not a challenge or treatment programme. Ability, safety and personal circumstances differ. Anyone needing individual guidance should consult an appropriate professional.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Small Steps Message Lab is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 700 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 14-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Explore the WHO background and share a respectful conversation about movement.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "WHO — Physical activity",
+            "url": "https://www.who.int/news-room/fact-sheets/detail/physical-activity"
+          }
+        ],
+        "adImages": [
+          "/seed-media/community.jpg"
+        ],
+        "adHeadline": "A little curiosity about movement",
+        "adDescription": "Help a general-awareness message about accessible movement reach beyond the usual fitness audience.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Everyday activity, inclusive recreation and general wellbeing; adults in India",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 700.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://www.who.int/news-room/fact-sheets/detail/physical-activity",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened overview and guideline summary: activity includes movement for recreation, transport and daily tasks.",
+        "limitations": "No individual programme, medical clearance, diagnosis or improvement from this campaign is established."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/movement.jpg",
+        "ad": "/seed-media/community.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_nightsky",
+      "content": {
+        "title": "Look up: a shared sky of questions",
+        "category": "Science",
+        "creatorName": "Open Sky Notebook",
+        "summary": "Introduce curious neighbours to skywatching resources, without promising an event or equipment giveaway.",
+        "coverImage": "/seed-media/library-v1/night-sky.jpg",
+        "storyHeadline": "The sky is an invitation to ask",
+        "intro": "You do not need to be part of a science club to ask what is overhead. This fictional campaign proposes a simple message that points curious readers towards NASA skywatching resources.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "The sky is an invitation to ask",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "NASA publishes a skywatching collection with guides and current observing features. The linked directory provides a starting point; weather, location, timing and equipment affect what a person can actually observe.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "Our goal is to fund distribution of that invitation. We are not organising a confirmed gathering, selling equipment, or claiming that a pictured night sky will be visible from every location.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Open Sky Notebook is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 850 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 21-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Open the observing resources, check local conditions and keep curiosity safe. Never look directly at the Sun.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "NASA Science — Skywatching",
+            "url": "https://science.nasa.gov/skywatching/"
+          }
+        ],
+        "adImages": [
+          "/seed-media/science.jpg"
+        ],
+        "adHeadline": "There is a question above every horizon",
+        "adDescription": "Introduce curious neighbours to skywatching resources, without promising an event or equipment giveaway.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Astronomy, science learning and skywatching; India",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 21,
+        "goal": 850.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://science.nasa.gov/skywatching/",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened NASA skywatching directory, which links observing guidance and current features.",
+        "limitations": "No specific local visibility forecast, confirmed event, equipment provision or NASA endorsement is established."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/night-sky.jpg",
+        "ad": "/seed-media/science.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_libraries",
+      "content": {
+        "title": "Your next discovery might be a library",
+        "category": "Education",
+        "creatorName": "Open Door Reading Circle",
+        "summary": "Make the idea of discovering a public library easier to share, one clear awareness message at a time.",
+        "coverImage": "/seed-media/library-v1/library.jpg",
+        "storyHeadline": "A doorway to more than one story",
+        "intro": "A library can be easy to pass without wondering what is inside. This fictional reading circle proposes an advertisement inviting people to look up their local library and its own access information.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "A doorway to more than one story",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "The IFLA-UNESCO Public Library Manifesto describes a public-library mission spanning education, culture and information. That international statement supplies context; it is not a directory of services at a particular branch.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "Before visiting, readers should check opening hours, accessibility, membership and available services with the library itself. The campaign pays for communication, not book purchases, memberships or a new library building.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Open Door Reading Circle is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 600 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 14-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Find your local library through its official information and discover what it offers.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "IFLA — The IFLA-UNESCO Public Library Manifesto 2022",
+            "url": "https://www.ifla.org/public-library-manifesto/"
+          }
+        ],
+        "adImages": [
+          "/seed-media/learning.jpg"
+        ],
+        "adHeadline": "There may be a story around the corner",
+        "adDescription": "Make the idea of discovering a public library easier to share, one clear awareness message at a time.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Reading, lifelong learning and public libraries; India",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 600.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://www.ifla.org/public-library-manifesto/",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened manifesto introduction explaining the public-library role in education, culture and information.",
+        "limitations": "No specific branch, service availability, opening hours, literacy improvement or institutional endorsement is established."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/library.jpg",
+        "ad": "/seed-media/learning.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_budget",
+      "content": {
+        "title": "Public budgets, clearer questions",
+        "category": "Public Policy",
+        "creatorName": "Civic Page Collective",
+        "summary": "A nonpartisan invitation to understand how public-budget information is presented and scrutinised.",
+        "coverImage": "/seed-media/library-v1/civic.jpg",
+        "storyHeadline": "Start with the document, then the question",
+        "intro": "Budget conversations are easier to follow when people know what kind of document they are reading. This fictional collective wants an awareness message that encourages readers to seek original public-budget information.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "Start with the document, then the question",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "The International Budget Partnership explains transparency, participation and oversight as distinct parts of its national Open Budget Survey. This is a framework for asking questions, not proof of the quality of a particular local budget.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "Our proposed message asks readers to locate the responsible public body, identify the document date and distinguish a proposal from an account of expenditure. It endorses no party, candidate, policy outcome or spending figure.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Civic Page Collective is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 900 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 21-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Find an official budget document and note its scope, date and responsible institution.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "International Budget Partnership — Open Budget Survey",
+            "url": "https://internationalbudget.org/open-budget-survey/"
+          }
+        ],
+        "adImages": [
+          "/seed-media/library-v1/data-desk.jpg"
+        ],
+        "adHeadline": "Better budget questions start with context",
+        "adDescription": "A nonpartisan invitation to understand how public-budget information is presented and scrutinised.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Public documents and civic learning; India; no political affiliation targeting",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 21,
+        "goal": 900.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://internationalbudget.org/open-budget-survey/",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened methodology overview distinguishing transparency, participation and legislative/audit oversight of national budgets.",
+        "limitations": "Does not assess a named local authority or support a partisan conclusion; no local budget document was independently audited."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/civic.jpg",
+        "ad": "/seed-media/library-v1/data-desk.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_information",
+      "content": {
+        "title": "Public information should be easier to follow",
+        "category": "Public Policy",
+        "creatorName": "Plain Page Forum",
+        "summary": "Help a neutral message about finding and understanding public information travel further.",
+        "coverImage": "/seed-media/library-v1/workspace.jpg",
+        "storyHeadline": "A clearer route to the original information",
+        "intro": "When a public claim is confusing, finding the responsible institution can be a useful first step. This fictional forum proposes a short awareness message that encourages readers to look for original public information.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "A clearer route to the original information",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "UNESCO describes access to information as part of freedom of expression and discusses public-access guarantees. The linked overview provides international background, not a legal interpretation for an individual request.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "The message encourages readers to check dates, definitions and the official body involved. Procedures and exemptions differ by jurisdiction. We do not promise that any request will succeed or provide legal advice.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Plain Page Forum is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 750 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 14-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Trace a public claim to its original institution and read the available context.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "UNESCO — Right to Information",
+            "url": "https://www.unesco.org/en/right-information"
+          }
+        ],
+        "adImages": [
+          "/seed-media/library-v1/civic.jpg"
+        ],
+        "adHeadline": "Find the source behind the public claim",
+        "adDescription": "Help a neutral message about finding and understanding public information travel further.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Public information, media literacy and civic learning; India",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 750.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://www.unesco.org/en/right-information",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened overview on access to information and monitoring of public-access guarantees.",
+        "limitations": "No jurisdiction-specific legal advice, right to a particular record, response deadline or official endorsement is established."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/workspace.jpg",
+        "ad": "/seed-media/library-v1/civic.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_inflation",
+      "content": {
+        "title": "Inflation numbers need their context",
+        "category": "Economic Policy",
+        "creatorName": "Everyday Numbers Studio",
+        "summary": "Explain what a price index can tell us, and why one headline cannot describe every household.",
+        "coverImage": "/seed-media/library-v1/data-desk.jpg",
+        "storyHeadline": "One headline, many price experiences",
+        "intro": "A price-index headline can lead to very different conversations at different kitchen tables. This fictional studio proposes an explanatory message that asks readers to inspect what an index actually measures.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "One headline, many price experiences",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "The US Bureau of Labor Statistics explains that CPI measures average price change for a defined basket and population; an individual household may experience something different. We use that US example to explain a concept, not as a reading of current Indian inflation.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "The proposed advertisement invites questions about period, geography, basket and method. It offers no forecast, investment recommendation, wage recommendation or judgement about a political party.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Everyday Numbers Studio is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 800 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 21-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "When you see an inflation headline, find the original measure and read its definitions.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "US Bureau of Labor Statistics — CPI Frequently Asked Questions",
+            "url": "https://www.bls.gov/cpi/questions-and-answers.htm"
+          }
+        ],
+        "adImages": [
+          "/seed-media/library-v1/workspace.jpg"
+        ],
+        "adHeadline": "A number makes more sense with a definition",
+        "adDescription": "Explain what a price index can tell us, and why one headline cannot describe every household.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Economic literacy and public statistics; adults in India; no financial-status targeting",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 21,
+        "goal": 800.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://www.bls.gov/cpi/questions-and-answers.htm",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened CPI overview and personal-experience limitations: averages do not necessarily represent one household.",
+        "limitations": "US methodology example only; no current Indian rate, personal budget forecast, investment advice or campaign effect is established."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/data-desk.jpg",
+        "ad": "/seed-media/library-v1/workspace.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_data",
+      "content": {
+        "title": "Read the label on economic data",
+        "category": "Economic Policy",
+        "creatorName": "Data With Context Circle",
+        "summary": "Bring the definitions behind public economic data into everyday conversations.",
+        "coverImage": "/seed-media/library-v1/workspace.jpg",
+        "storyHeadline": "Before comparing, ask what was measured",
+        "intro": "An economic chart becomes more useful when its labels are visible. This fictional circle proposes a message about checking units, dates, definitions and coverage before drawing comparisons.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "Before comparing, ask what was measured",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "The World Bank explains that its income groups use GNI per capita calculated with the Atlas method and are assigned for a fiscal year. This example shows why a classification needs a method and a time reference; no thresholds or country rankings are reproduced here.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "The campaign does not forecast growth or recommend a policy or investment. Its invitation is to find the source notes and distinguish a classification from a complete description of peoples lives.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Data With Context Circle is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 700 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 14-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Read one chart with its source notes before forwarding a conclusion.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "World Bank — Country and Lending Groups",
+            "url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups"
+          }
+        ],
+        "adImages": [
+          "/seed-media/library-v1/data-desk.jpg"
+        ],
+        "adHeadline": "Good comparisons begin with good questions",
+        "adDescription": "Bring the definitions behind public economic data into everyday conversations.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Public data, statistical literacy and economics learning; India",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 700.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened classification explanation: fiscal-year income groupings use GNI per capita and the Atlas method.",
+        "limitations": "Does not measure wellbeing comprehensively; no investment advice, future classification or current national ranking is asserted."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/workspace.jpg",
+        "ad": "/seed-media/library-v1/data-desk.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_volunteer",
+      "content": {
+        "title": "Find a place for your time and skills",
+        "category": "Community",
+        "creatorName": "Neighbour Time Exchange",
+        "summary": "Help people discover how to look for volunteering opportunities without promising a placement.",
+        "coverImage": "/seed-media/community.jpg",
+        "storyHeadline": "An invitation, not an assignment",
+        "intro": "People may want to volunteer without knowing where to begin. Our fictional neighbourhood group proposes a message that encourages readers to explore credible opportunities and their requirements.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "An invitation, not an assignment",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "UN Volunteers describes in-country, abroad and online routes and explains that assignments have conditions and eligibility requirements. It is one institutional starting point, not a partner or a promise of a position.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "Readers should check the organisation, role, time commitment, safeguarding and applicable conditions before applying. This campaign funds an awareness advertisement; it does not collect applications or transfer contributions to a volunteer programme.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Neighbour Time Exchange is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 550 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 14-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Explore an organisation and its published conditions before deciding whether a role fits.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "United Nations Volunteers — Become a volunteer",
+            "url": "https://www.unv.org/become-volunteer"
+          }
+        ],
+        "adImages": [
+          "/seed-media/library-v1/library.jpg"
+        ],
+        "adHeadline": "Your time starts with a thoughtful choice",
+        "adDescription": "Help people discover how to look for volunteering opportunities without promising a placement.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Community participation and volunteering information; adults in India",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 550.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://www.unv.org/become-volunteer",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened available routes, conditions of service and opportunity/application information.",
+        "limitations": "No placement, eligibility determination, screening, local opportunity or UN affiliation with the fictional creator is established."
+      },
+      "media": {
+        "cover": "/seed-media/community.jpg",
+        "ad": "/seed-media/library-v1/library.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_heritage",
+      "content": {
+        "title": "Keep local stories in the conversation",
+        "category": "Arts & Culture",
+        "creatorName": "Living Story Atelier",
+        "summary": "Spread an invitation to learn about living cultural heritage with care and permission.",
+        "coverImage": "/seed-media/arts.jpg",
+        "storyHeadline": "Culture lives in the people who share it",
+        "intro": "A song, craft or remembered story can mean more than an attractive image. This fictional atelier proposes a respectful awareness message about listening to communities and learning how they describe their own heritage.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "Culture lives in the people who share it",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "UNESCO explains intangible cultural heritage through traditions, practices, knowledge and expressions that communities recognise as part of their identity. This general framework does not identify or authorise use of a particular community story.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "The proposed creative invites learning rather than claiming to preserve a tradition by itself. No interview, recording or community consent has been obtained; readers should seek permission before documenting or republishing personal stories.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Living Story Atelier is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 800 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 21-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Listen, ask permission and learn the context before sharing someone elses cultural story.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "UNESCO — Intangible Cultural Heritage",
+            "url": "https://www.unesco.org/en/intangible-cultural-heritage"
+          }
+        ],
+        "adImages": [
+          "/seed-media/library-v1/library.jpg"
+        ],
+        "adHeadline": "Every living story deserves its context",
+        "adDescription": "Spread an invitation to learn about living cultural heritage with care and permission.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Arts learning, oral history and cultural heritage; India; no ethnicity targeting",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 21,
+        "goal": 800.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://www.unesco.org/en/intangible-cultural-heritage",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened heritage overview and listed domains including oral traditions, performing arts and craftsmanship.",
+        "limitations": "No community endorsement, permission to record, ownership claim or successful preservation outcome is established."
+      },
+      "media": {
+        "cover": "/seed-media/arts.jpg",
+        "ad": "/seed-media/library-v1/library.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_offers",
+      "content": {
+        "title": "Pause before an online offer",
+        "category": "Business",
+        "creatorName": "Thoughtful Checkout Studio",
+        "summary": "Make practical questions about online sellers, full prices and terms easier to discover.",
+        "coverImage": "/seed-media/library-v1/workspace.jpg",
+        "storyHeadline": "A good question before a quick checkout",
+        "intro": "An urgent-looking offer can leave little room to read. This fictional studio proposes an advertisement that encourages people to pause and inspect the seller, total price and terms before choosing.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "A good question before a quick checkout",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "The US Federal Trade Commission advises comparison shopping, critical reading of reviews, checking terms and retaining purchase records. We use those general consumer-information themes without importing US legal rights into another jurisdiction.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "The message names no seller as fraudulent and guarantees no protection against scams. It does not sell a product or recommend a payment provider. Contributions pay to distribute the message, not compensate shopping losses.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Thoughtful Checkout Studio is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 650 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 14-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Check the seller, complete price and relevant terms before deciding to buy.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "Federal Trade Commission — Online Shopping",
+            "url": "https://consumer.ftc.gov/articles/online-shopping"
+          }
+        ],
+        "adImages": [
+          "/seed-media/library-v1/data-desk.jpg"
+        ],
+        "adHeadline": "Read the offer beyond the headline",
+        "adDescription": "Make practical questions about online sellers, full prices and terms easier to discover.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Online consumer awareness and digital literacy; adults in India",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 650.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://consumer.ftc.gov/articles/online-shopping",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened seller/review checks, comparison-shopping terms and record-keeping sections.",
+        "limitations": "General US consumer background; no seller investigation, India-specific legal right or scam-prevention guarantee is established."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/workspace.jpg",
+        "ad": "/seed-media/library-v1/data-desk.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_repair",
+      "content": {
+        "title": "Discover repair before replacement",
+        "category": "Business",
+        "creatorName": "Second Life Message Workshop",
+        "summary": "Help an awareness message about repair and reuse reach people considering what to do next.",
+        "coverImage": "/seed-media/library-v1/repair.jpg",
+        "storyHeadline": "Another question before the bin",
+        "intro": "When an object stops working, replacement is not the only question someone can ask. This fictional workshop proposes a communication campaign inviting people to investigate appropriate repair and reuse options.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "Another question before the bin",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "The European Environment Agency describes repair, refurbishment and reuse among ways to extend product lifetimes in a circular economy. This background does not establish that any specific item is safe, repairable or cheaper to fix.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "Our advertisement does not provide electrical repair instructions or endorse a service. Readers should check qualified providers, safety, warranty and local options. Funding buys message distribution, not repairs, tools or parts.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Second Life Message Workshop is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 750 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 21-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Ask a suitable provider about safety and options before deciding on repair or replacement.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "European Environment Agency — Circular economy",
+            "url": "https://www.eea.europa.eu/en/topics/in-depth/circular-economy"
+          }
+        ],
+        "adImages": [
+          "/seed-media/library-v1/workspace.jpg"
+        ],
+        "adHeadline": "Could this have a second life?",
+        "adDescription": "Help an awareness message about repair and reuse reach people considering what to do next.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Repair, reuse and consumer information; adults in India",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 21,
+        "goal": 750.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://www.eea.europa.eu/en/topics/in-depth/circular-economy",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened circular-practices overview identifying repair, refurbishment and product-lifetime extension.",
+        "limitations": "No named provider, safe repair procedure, cost saving or quantified environmental result is established."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/repair.jpg",
+        "ad": "/seed-media/library-v1/workspace.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_privacy",
+      "content": {
+        "title": "Everyday privacy, clearer choices",
+        "category": "Other",
+        "creatorName": "Quiet Digital Studio",
+        "summary": "Help people understand a few questions to ask about online tracking and app permissions.",
+        "coverImage": "/seed-media/library-v1/workspace.jpg",
+        "storyHeadline": "Small settings, clearer questions",
+        "intro": "Digital privacy can feel abstract until an app asks for information. This fictional studio proposes a short message encouraging readers to understand the permissions and tracking choices available on their own devices.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "Small settings, clearer questions",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "The FTC explains common tracking methods and notes that browser and phone privacy settings provide different controls. It also cautions that private browsing does not block every form of tracking.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "This is general awareness, not a security audit or a promise of anonymity. Settings vary, and no campaign can guarantee that personal information will remain private. We do not collect readers device data for this demonstration.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Quiet Digital Studio is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 700 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 14-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Read your devices own privacy guidance and review permissions you no longer need.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "Federal Trade Commission — How Websites and Apps Collect and Use Your Information",
+            "url": "https://consumer.ftc.gov/articles/how-websites-and-apps-collect-and-use-your-information"
+          }
+        ],
+        "adImages": [
+          "/seed-media/library-v1/repair.jpg"
+        ],
+        "adHeadline": "Know what an app is asking for",
+        "adDescription": "Help people understand a few questions to ask about online tracking and app permissions.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Digital privacy awareness and technology learning; adults in India",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 700.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://consumer.ftc.gov/articles/how-websites-and-apps-collect-and-use-your-information",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened tracking methods and settings limitations, including limits of private browsing.",
+        "limitations": "No security audit, anonymity guarantee, device-specific instruction or campaign privacy certification is established."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/workspace.jpg",
+        "ad": "/seed-media/library-v1/repair.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    },
+    {
+      "id": "demo_sharing",
+      "content": {
+        "title": "Check the context before you share",
+        "category": "Other",
+        "creatorName": "Pause And Read Collective",
+        "summary": "Spread a calm invitation to trace a claim to its source before passing it on.",
+        "coverImage": "/seed-media/library-v1/library.jpg",
+        "storyHeadline": "A pause can make room for context",
+        "intro": "Sharing can be immediate; understanding sometimes takes another moment. This fictional collective proposes a simple message that invites people to open a source, look for a date and separate a quotation from an interpretation.",
+        "sections": [
+          {
+            "id": "purpose",
+            "kind": "heading",
+            "text": "A pause can make room for context",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background-heading",
+            "kind": "heading",
+            "text": "Background, with limits",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "background",
+            "kind": "text",
+            "text": "UNESCO describes media and information literacy as skills for engaging critically with information and navigating online environments. The linked overview is educational background, not a verdict on a particular claim.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "campaign-plan",
+            "kind": "heading",
+            "text": "The message we propose",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "plan",
+            "kind": "text",
+            "text": "Our campaign does not label a person or news outlet as false, and it is not an automated fact-checking service. The intended outcome is a conversation; no change in beliefs or sharing behaviour has been measured.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "fictional",
+            "kind": "text",
+            "text": "Pause And Read Collective is a fictional demonstration identity, not an independently verified organisation. The cited institution supplies background only; it does not endorse this campaign. Artwork is illustrative stock photography, not evidence of an event or result.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding",
+            "kind": "heading",
+            "text": "What a contribution would fund",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "funding-purpose",
+            "kind": "text",
+            "text": "The configured USD 600 goal funds communication and proposed advertising distribution only, not direct donations or transfers to this fictional creator. A platform fee is deducted using the current Campaign configuration; the remaining net budget follows the selected channel percentages. The contribution, fee and net estimate are shown before simulated checkout.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "distribution",
+            "kind": "text",
+            "text": "The proposed 14-day advertising plan is 60% Instagram and 40% Facebook in India, subject to platform review and placement availability. These are supported preview channels, not confirmed partnerships. No advertising has been purchased. Reaching the goal does not start delivery automatically.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "limits",
+            "kind": "text",
+            "text": "Reach is an uncertain configured estimate from net advertising dollars, not guaranteed people or measured delivery. Checkout is simulated. Cancellation, partial-funding and proportional unspent-refund rules are explained in Campaigns current funding policies; no real money moves.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Read the original context, ask what is missing, and share with care.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "background",
+            "title": "UNESCO — Media and Information Literacy",
+            "url": "https://www.unesco.org/en/media-information-literacy"
+          }
+        ],
+        "adImages": [
+          "/seed-media/library-v1/workspace.jpg"
+        ],
+        "adHeadline": "Read a little further before sharing",
+        "adDescription": "Spread a calm invitation to trace a claim to its source before passing it on.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Media literacy and responsible information sharing; India",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 600.0,
+        "currentStep": 4,
+        "featured": false
+      },
+      "status": "Available for Funding",
+      "initialRaisedUSD": 0,
+      "publicationProvenance": "Explicit fictional seeded campaign, not a reviewer approval or advertising-platform approval. Delivery has not begun.",
+      "sourceInspection": {
+        "url": "https://www.unesco.org/en/media-information-literacy",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened the institutional source and read the relevant sections during demo authoring.",
+        "supports": "Opened introductory explanation of critical information engagement and digital competencies.",
+        "limitations": "No particular claim has been fact-checked; no measured behaviour change, bias-free detector or UNESCO endorsement is established."
+      },
+      "media": {
+        "cover": "/seed-media/library-v1/library.jpg",
+        "ad": "/seed-media/library-v1/workspace.jpg",
+        "usage": "Distinct cover and ad references; existing native creative preview combines ad photo/headline/copy/CTA. Stock photo subjects are not fictional creators or verified beneficiaries."
+      }
+    }
+  ],
+  "provenance": "Original fictional demonstration content; source pages opened and their limited background support inspected on 2026-10-17. No institutional endorsement or live delivery.",
+  "sourceInspectionLimit": "Inspection establishes the cited page supports stated background, not truth of every claim or an independently verified identity. No long quotations copied.",
+  "existing": [
+    {
+      "id": "demo_forest",
+      "content": {
+        "title": "Let our forests keep growing",
+        "category": "Environment",
+        "creatorName": "Canopy Collective",
+        "summary": "A community message about protecting the green spaces we share.",
+        "coverImage": "/seed-media/forest.jpg",
+        "storyHeadline": "Let our forests keep growing",
+        "intro": "A community message about protecting the green spaces we share.",
+        "sections": [
+          {
+            "id": "why",
+            "kind": "heading",
+            "text": "A message worth sharing",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "story",
+            "kind": "text",
+            "text": "A single conversation can start a wider one. This fictional campaign brings a thoughtful, accessible message to people beyond its creator’s existing network. It is a demonstration of community-funded distribution, with no direct transfer of funds to the cause.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "photo",
+            "kind": "image",
+            "text": "",
+            "format": "plain",
+            "url": "/seed-media/forest.jpg",
+            "caption": "Illustrative stock photography for this fictional campaign.",
+            "credit": "Unsplash"
+          },
+          {
+            "id": "evidence",
+            "kind": "heading",
+            "text": "Context, with care",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "source-note",
+            "kind": "text",
+            "text": "The public reference below offers general context. It does not independently verify this fictional campaign, its creator, its sample funding, or any delivery results.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Read the context, start a conversation, and share the message if it matters to you.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "context",
+            "title": "United Nations Sustainable Development Goals — general context",
+            "url": "https://sdgs.un.org/goals"
+          }
+        ],
+        "adImages": [
+          "/seed-media/forest.jpg"
+        ],
+        "adHeadline": "Let our forests keep growing",
+        "adDescription": "A community message about protecting the green spaces we share.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Community, learning and a shared future",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 2400.0,
+        "currentStep": 0,
+        "featured": true
+      },
+      "sourceInspection": {
+        "url": "https://sdgs.un.org/goals",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened original UN goals page; compared actual seed story, source and advertisement from seed.py.",
+        "supports": "Broad sustainable-development background relevant to Environment; not specific evidence for Let our forests keep growing.",
+        "limitations": "No campaign-specific evidence, independent creator verification, promised effects or real delivery is supported by this general goals index."
+      }
+    },
+    {
+      "id": "demo_learning",
+      "content": {
+        "title": "A brighter start for every learner",
+        "category": "Education",
+        "creatorName": "Open Chapter Studio",
+        "summary": "Bring a hopeful message about everyday learning into more conversations.",
+        "coverImage": "/seed-media/learning.jpg",
+        "storyHeadline": "A brighter start for every learner",
+        "intro": "Bring a hopeful message about everyday learning into more conversations.",
+        "sections": [
+          {
+            "id": "why",
+            "kind": "heading",
+            "text": "A message worth sharing",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "story",
+            "kind": "text",
+            "text": "A single conversation can start a wider one. This fictional campaign brings a thoughtful, accessible message to people beyond its creator’s existing network. It is a demonstration of community-funded distribution, with no direct transfer of funds to the cause.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "photo",
+            "kind": "image",
+            "text": "",
+            "format": "plain",
+            "url": "/seed-media/learning.jpg",
+            "caption": "Illustrative stock photography for this fictional campaign.",
+            "credit": "Unsplash"
+          },
+          {
+            "id": "evidence",
+            "kind": "heading",
+            "text": "Context, with care",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "source-note",
+            "kind": "text",
+            "text": "The public reference below offers general context. It does not independently verify this fictional campaign, its creator, its sample funding, or any delivery results.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Read the context, start a conversation, and share the message if it matters to you.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "context",
+            "title": "United Nations Sustainable Development Goals — general context",
+            "url": "https://sdgs.un.org/goals"
+          }
+        ],
+        "adImages": [
+          "/seed-media/learning.jpg"
+        ],
+        "adHeadline": "A brighter start for every learner",
+        "adDescription": "Bring a hopeful message about everyday learning into more conversations.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Community, learning and a shared future",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 1600.0,
+        "currentStep": 0,
+        "featured": true
+      },
+      "sourceInspection": {
+        "url": "https://sdgs.un.org/goals",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened original UN goals page; compared actual seed story, source and advertisement from seed.py.",
+        "supports": "Broad sustainable-development background relevant to Education; not specific evidence for A brighter start for every learner.",
+        "limitations": "No campaign-specific evidence, independent creator verification, promised effects or real delivery is supported by this general goals index."
+      }
+    },
+    {
+      "id": "demo_ocean",
+      "content": {
+        "title": "The ocean connects all of us",
+        "category": "Environment",
+        "creatorName": "Blue Current Community",
+        "summary": "An invitation to notice, understand, and care for our shared coastline.",
+        "coverImage": "/seed-media/ocean.jpg",
+        "storyHeadline": "The ocean connects all of us",
+        "intro": "An invitation to notice, understand, and care for our shared coastline.",
+        "sections": [
+          {
+            "id": "why",
+            "kind": "heading",
+            "text": "A message worth sharing",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "story",
+            "kind": "text",
+            "text": "A single conversation can start a wider one. This fictional campaign brings a thoughtful, accessible message to people beyond its creator’s existing network. It is a demonstration of community-funded distribution, with no direct transfer of funds to the cause.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "photo",
+            "kind": "image",
+            "text": "",
+            "format": "plain",
+            "url": "/seed-media/ocean.jpg",
+            "caption": "Illustrative stock photography for this fictional campaign.",
+            "credit": "Unsplash"
+          },
+          {
+            "id": "evidence",
+            "kind": "heading",
+            "text": "Context, with care",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "source-note",
+            "kind": "text",
+            "text": "The public reference below offers general context. It does not independently verify this fictional campaign, its creator, its sample funding, or any delivery results.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Read the context, start a conversation, and share the message if it matters to you.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "context",
+            "title": "United Nations Sustainable Development Goals — general context",
+            "url": "https://sdgs.un.org/goals"
+          }
+        ],
+        "adImages": [
+          "/seed-media/ocean.jpg"
+        ],
+        "adHeadline": "The ocean connects all of us",
+        "adDescription": "An invitation to notice, understand, and care for our shared coastline.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Community, learning and a shared future",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 3000.0,
+        "currentStep": 0,
+        "featured": false
+      },
+      "sourceInspection": {
+        "url": "https://sdgs.un.org/goals",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened original UN goals page; compared actual seed story, source and advertisement from seed.py.",
+        "supports": "Broad sustainable-development background relevant to Environment; not specific evidence for The ocean connects all of us.",
+        "limitations": "No campaign-specific evidence, independent creator verification, promised effects or real delivery is supported by this general goals index."
+      }
+    },
+    {
+      "id": "demo_community",
+      "content": {
+        "title": "Good neighbours make stronger communities",
+        "category": "Community",
+        "creatorName": "The Neighbourhood Table",
+        "summary": "Help a simple message of belonging travel beyond one neighbourhood.",
+        "coverImage": "/seed-media/community.jpg",
+        "storyHeadline": "Good neighbours make stronger communities",
+        "intro": "Help a simple message of belonging travel beyond one neighbourhood.",
+        "sections": [
+          {
+            "id": "why",
+            "kind": "heading",
+            "text": "A message worth sharing",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "story",
+            "kind": "text",
+            "text": "A single conversation can start a wider one. This fictional campaign brings a thoughtful, accessible message to people beyond its creator’s existing network. It is a demonstration of community-funded distribution, with no direct transfer of funds to the cause.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "photo",
+            "kind": "image",
+            "text": "",
+            "format": "plain",
+            "url": "/seed-media/community.jpg",
+            "caption": "Illustrative stock photography for this fictional campaign.",
+            "credit": "Unsplash"
+          },
+          {
+            "id": "evidence",
+            "kind": "heading",
+            "text": "Context, with care",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "source-note",
+            "kind": "text",
+            "text": "The public reference below offers general context. It does not independently verify this fictional campaign, its creator, its sample funding, or any delivery results.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Read the context, start a conversation, and share the message if it matters to you.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "context",
+            "title": "United Nations Sustainable Development Goals — general context",
+            "url": "https://sdgs.un.org/goals"
+          }
+        ],
+        "adImages": [
+          "/seed-media/community.jpg"
+        ],
+        "adHeadline": "Good neighbours make stronger communities",
+        "adDescription": "Help a simple message of belonging travel beyond one neighbourhood.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Community, learning and a shared future",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 900.0,
+        "currentStep": 0,
+        "featured": false
+      },
+      "sourceInspection": {
+        "url": "https://sdgs.un.org/goals",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened original UN goals page; compared actual seed story, source and advertisement from seed.py.",
+        "supports": "Broad sustainable-development background relevant to Community; not specific evidence for Good neighbours make stronger communities.",
+        "limitations": "No campaign-specific evidence, independent creator verification, promised effects or real delivery is supported by this general goals index."
+      }
+    },
+    {
+      "id": "demo_arts",
+      "content": {
+        "title": "Make room for local creativity",
+        "category": "Arts & Culture",
+        "creatorName": "Common Ground Arts",
+        "summary": "A local arts message, now in a simulated distribution demonstration.",
+        "coverImage": "/seed-media/arts.jpg",
+        "storyHeadline": "Make room for local creativity",
+        "intro": "A local arts message, now in a simulated distribution demonstration.",
+        "sections": [
+          {
+            "id": "why",
+            "kind": "heading",
+            "text": "A message worth sharing",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "story",
+            "kind": "text",
+            "text": "A single conversation can start a wider one. This fictional campaign brings a thoughtful, accessible message to people beyond its creator’s existing network. It is a demonstration of community-funded distribution, with no direct transfer of funds to the cause.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "photo",
+            "kind": "image",
+            "text": "",
+            "format": "plain",
+            "url": "/seed-media/arts.jpg",
+            "caption": "Illustrative stock photography for this fictional campaign.",
+            "credit": "Unsplash"
+          },
+          {
+            "id": "evidence",
+            "kind": "heading",
+            "text": "Context, with care",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "source-note",
+            "kind": "text",
+            "text": "The public reference below offers general context. It does not independently verify this fictional campaign, its creator, its sample funding, or any delivery results.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Read the context, start a conversation, and share the message if it matters to you.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "context",
+            "title": "United Nations Sustainable Development Goals — general context",
+            "url": "https://sdgs.un.org/goals"
+          }
+        ],
+        "adImages": [
+          "/seed-media/arts.jpg"
+        ],
+        "adHeadline": "Make room for local creativity",
+        "adDescription": "A local arts message, now in a simulated distribution demonstration.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Community, learning and a shared future",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 2000.0,
+        "currentStep": 0,
+        "featured": false
+      },
+      "sourceInspection": {
+        "url": "https://sdgs.un.org/goals",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened original UN goals page; compared actual seed story, source and advertisement from seed.py.",
+        "supports": "Broad sustainable-development background relevant to Arts & Culture; not specific evidence for Make room for local creativity.",
+        "limitations": "No campaign-specific evidence, independent creator verification, promised effects or real delivery is supported by this general goals index."
+      }
+    },
+    {
+      "id": "demo_science",
+      "content": {
+        "title": "Curiosity belongs to everyone",
+        "category": "Science",
+        "creatorName": "Everyday Science Club",
+        "summary": "See how a completed message campaign is reported with clear demo metrics.",
+        "coverImage": "/seed-media/science.jpg",
+        "storyHeadline": "Curiosity belongs to everyone",
+        "intro": "See how a completed message campaign is reported with clear demo metrics.",
+        "sections": [
+          {
+            "id": "why",
+            "kind": "heading",
+            "text": "A message worth sharing",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "story",
+            "kind": "text",
+            "text": "A single conversation can start a wider one. This fictional campaign brings a thoughtful, accessible message to people beyond its creator’s existing network. It is a demonstration of community-funded distribution, with no direct transfer of funds to the cause.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "photo",
+            "kind": "image",
+            "text": "",
+            "format": "plain",
+            "url": "/seed-media/science.jpg",
+            "caption": "Illustrative stock photography for this fictional campaign.",
+            "credit": "Unsplash"
+          },
+          {
+            "id": "evidence",
+            "kind": "heading",
+            "text": "Context, with care",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "source-note",
+            "kind": "text",
+            "text": "The public reference below offers general context. It does not independently verify this fictional campaign, its creator, its sample funding, or any delivery results.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          },
+          {
+            "id": "action",
+            "kind": "action",
+            "text": "Read the context, start a conversation, and share the message if it matters to you.",
+            "format": "plain",
+            "url": "",
+            "caption": "",
+            "credit": ""
+          }
+        ],
+        "sources": [
+          {
+            "id": "context",
+            "title": "United Nations Sustainable Development Goals — general context",
+            "url": "https://sdgs.un.org/goals"
+          }
+        ],
+        "adImages": [
+          "/seed-media/science.jpg"
+        ],
+        "adHeadline": "Curiosity belongs to everyone",
+        "adDescription": "See how a completed message campaign is reported with clear demo metrics.",
+        "cta": "Read the story",
+        "geography": "India",
+        "interests": "Community, learning and a shared future",
+        "channels": [
+          "Instagram",
+          "Facebook"
+        ],
+        "allocation": {
+          "Instagram": 60.0,
+          "Facebook": 40.0
+        },
+        "durationDays": 14,
+        "goal": 1200.0,
+        "currentStep": 0,
+        "featured": false
+      },
+      "sourceInspection": {
+        "url": "https://sdgs.un.org/goals",
+        "inspectedOn": "2026-10-17",
+        "method": "Opened original UN goals page; compared actual seed story, source and advertisement from seed.py.",
+        "supports": "Broad sustainable-development background relevant to Science; not specific evidence for Curiosity belongs to everyone.",
+        "limitations": "No campaign-specific evidence, independent creator verification, promised effects or real delivery is supported by this general goals index."
+      }
+    }
+  ]
+}
