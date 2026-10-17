@@ -300,7 +300,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
 
     def get_campaign(connection, campaign_id):
         row = connection.execute('SELECT * FROM campaigns WHERE id=?', (campaign_id,)).fetchone()
-        if not row:
+        if not row or row['status'] == 'Deleted Draft':
             raise HTTPException(404, 'Campaign not found.')
         return dict(row)
 
@@ -536,6 +536,8 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             if content.clientDraftId:
                 existing = connection.execute('SELECT * FROM campaigns WHERE owner_id=? AND client_draft_id=?', (user['id'], content.clientDraftId)).fetchone()
                 if existing:
+                    if existing['status'] == 'Deleted Draft':
+                        raise HTTPException(409, 'This draft was deleted. Start a new draft rather than resaving its old identifier.')
                     return campaign_json(connection, dict(existing), user)
             campaign_id, created = identifier('cmp'), stamp()
             data = canonical_assets(content.model_dump(exclude={'clientDraftId'}), connection, user)
@@ -543,6 +545,40 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             connection.execute('''INSERT INTO campaigns (id,owner_id,data_json,status,created_at,updated_at,client_draft_id)
                 VALUES (?,?,?,'Draft',?,?,?)''', (campaign_id, user['id'], json.dumps(data), created, created, content.clientDraftId))
             return campaign_json(connection, get_campaign(connection, campaign_id), user)
+
+    @app.delete('/campaigns/{campaign_id}/draft')
+    def delete_draft(campaign_id: str, user=Depends(auth)):
+        # The same write lock as save/submit makes the lifecycle decision and
+        # content removal atomic in SQLite and pooled PostgreSQL. A minimal
+        # identifier tombstone prevents delayed POST retries from recreating it.
+        with database.transaction() as connection:
+            row = connection.execute('SELECT * FROM campaigns WHERE id=?', (campaign_id,)).fetchone()
+            if not row:
+                raise HTTPException(404, 'Draft not found.')
+            campaign = dict(row)
+            assert_owner(campaign, user)
+            if campaign['status'] == 'Deleted Draft':
+                return {'deleted': True, 'campaignId': campaign_id, 'scope': 'account'}
+            if campaign['status'] != 'Draft' or campaign['published_json'] is not None or campaign['revision_status'] is not None:
+                raise HTTPException(409, 'Only an unpublished draft can be deleted. Submitted campaigns and private revisions are preserved.')
+            if connection.execute('SELECT 1 FROM payments WHERE campaign_id=?', (campaign_id,)).fetchone() or connection.execute('SELECT 1 FROM ledger WHERE campaign_id=?', (campaign_id,)).fetchone():
+                raise HTTPException(409, 'This record has payment history and cannot be deleted as a draft.')
+            connection.execute('DELETE FROM tracking WHERE campaign_id=?', (campaign_id,))
+            connection.execute('DELETE FROM feedback WHERE campaign_id=?', (campaign_id,))
+            connection.execute('DELETE FROM campaign_events WHERE campaign_id=?', (campaign_id,))
+            # Notifications keep their historical message; an absent campaign
+            # destination resolves safely to Profile. Uploaded assets are never
+            # removed: another campaign or story may still reference them.
+            connection.execute('UPDATE notifications SET campaign_id=NULL WHERE campaign_id=?', (campaign_id,))
+            removed = connection.execute("""UPDATE campaigns SET data_json='{}',status='Deleted Draft',
+                feedback='',report_json=NULL,setup_ready=0,approved_version=NULL,deadline=NULL,
+                version=version+1,updated_at=? WHERE id=? AND owner_id=? AND status='Draft'
+                AND published_json IS NULL AND revision_status IS NULL""", (stamp(), campaign_id, user['id']))
+            if removed.rowcount != 1:
+                # Also reject a writer outside the app's normal advisory-lock
+                # protocol; rollback restores all preceding dependent changes.
+                raise HTTPException(409, 'The draft changed before deletion. Refresh its status before trying again.')
+        return {'deleted': True, 'campaignId': campaign_id, 'scope': 'account'}
 
     @app.put('/campaigns/{campaign_id}')
     def save_campaign(campaign_id: str, payload: dict, user=Depends(auth)):
@@ -615,7 +651,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
         with database.transaction() as connection:
             reconcile(connection)
             # Includes approved/public campaigns so the same restricted view can control the separate delivery stages.
-            rows = connection.execute("SELECT * FROM campaigns WHERE status NOT IN ('Draft','Rejected') OR revision_status IS NOT NULL ORDER BY updated_at DESC").fetchall()
+            rows = connection.execute("SELECT * FROM campaigns WHERE status NOT IN ('Draft','Rejected','Deleted Draft') OR revision_status IS NOT NULL ORDER BY updated_at DESC").fetchall()
             return [campaign_json(connection, dict(row), user) for row in rows]
 
     @app.post('/campaigns/{campaign_id}/review')
@@ -845,7 +881,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
     def me(user=Depends(auth)):
         with database.transaction() as connection:
             reconcile(connection)
-            campaigns = [campaign_json(connection, dict(row), user) for row in connection.execute('SELECT * FROM campaigns WHERE owner_id=? ORDER BY updated_at DESC', (user['id'],))]
+            campaigns = [campaign_json(connection, dict(row), user) for row in connection.execute("SELECT * FROM campaigns WHERE owner_id=? AND status!='Deleted Draft' ORDER BY updated_at DESC", (user['id'],))]
             payments = [payment_json(row) for row in connection.execute('SELECT * FROM payments WHERE user_id=? ORDER BY created_at DESC', (user['id'],))]
             saved = [row[0] for row in connection.execute("SELECT campaign_id FROM tracking WHERE user_id=? AND kind='save'", (user['id'],))]
             followed = [row[0] for row in connection.execute("SELECT campaign_id FROM tracking WHERE user_id=? AND kind='follow'", (user['id'],))]
@@ -951,7 +987,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
                     found = connection.execute('SELECT * FROM campaigns WHERE id=?', (campaign_id,)).fetchone()
                     campaigns[campaign_id] = dict(found) if found else None
                 campaign = campaigns.get(campaign_id)
-                visible = bool(campaign and (can_manage(campaign, user) or
+                visible = bool(campaign and campaign['status'] != 'Deleted Draft' and (can_manage(campaign, user) or
                                (campaign['status'] in PUBLIC_STATES and campaign['published_json'])))
                 campaign_title = None
                 if visible:
