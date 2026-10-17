@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
+import { join, relative, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const ts = require('typescript');
@@ -24,8 +26,25 @@ new Function('require', 'module', 'exports', source)(
   module,
   module.exports,
 );
-const { shareCampaign } = module.exports;
+const { detailPath, shareCampaign } = module.exports;
 const published = { id: 'campaign-public', title: 'The approved public message', publishedAt: '2026-10-15T12:00:00Z', status: 'Available for Funding', campaignState: 'Available for Funding' };
+
+test('campaign detail destinations resolve to an existing Expo Router screen', () => {
+  const root = fileURLToPath(new URL('../src/app/', import.meta.url));
+  const screenSegments = [];
+  const visit = (directory) => {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) visit(path);
+      else if (entry.name.endsWith('.tsx') && !entry.name.startsWith('_') && !entry.name.startsWith('+')) {
+        screenSegments.push(relative(root, path).replace(/\.tsx$/, '').split(sep).filter((part) => !/^\(.+\)$/.test(part) && part !== 'index'));
+      }
+    }
+  };
+  visit(root);
+  const destination = detailPath(published.id).split('/').filter(Boolean);
+  assert.ok(screenSegments.some((screen) => screen.length === destination.length && screen.every((part, index) => /^\[[^\]]+\]$/.test(part) || part === destination[index])), `No Expo screen resolves ${detailPath(published.id)}`);
+});
 
 test('published Android shares include the public message and working app route', async () => {
   await shareCampaign(published);

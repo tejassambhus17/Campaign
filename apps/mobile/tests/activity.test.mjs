@@ -10,7 +10,7 @@ const source = ts.transpileModule(
 ).outputText;
 const model = { exports: {} };
 new Function('exports', 'module', source)(model.exports, model);
-const { activitySections, notificationAction, activityCategory, activityTime } = model.exports;
+const { activitySections, notificationAction, activityCategory, activityTime, activityNewestFirst, recentNotifications, activityRelativeTime, mergeActivityReadStatus, notificationBadgeLabel } = model.exports;
 const now = new Date(2026, 9, 16, 12);
 const rows = [
   { id: 'newer', category: 'payments', read: false, createdAt: new Date(2026, 9, 16, 10).toISOString() },
@@ -19,6 +19,13 @@ const rows = [
   { id: 'older', category: 'campaigns', read: false, createdAt: new Date(2026, 9, 13).toISOString() },
 ];
 const ids = (filter) => activitySections(rows, filter, now).flatMap(s => s.data.map(n => n.id));
+
+test('shared visual unread badges hide zero and retain compact single, double and capped counts', () => {
+  assert.equal(notificationBadgeLabel(0), undefined);
+  assert.equal(notificationBadgeLabel(-1), undefined);
+  assert.equal(notificationBadgeLabel(NaN), undefined);
+  assert.deepEqual([1, 9, 10, 99, 100, 300].map(notificationBadgeLabel), ['1', '9', '10', '99', '99+', '99+']);
+});
 
 test('activity groups by local calendar day, preserves server tie order and does not mutate records', () => {
   const original = structuredClone(rows);
@@ -73,4 +80,56 @@ test('invalid historical timestamps remain readable without crashing the inbox',
   assert.equal(activityTime('broken timestamp'), 'Date unavailable');
   assert.equal(activitySections([{ ...rows[0], createdAt: 'broken' }], 'All', now)[0].title, 'Earlier');
   assert.match(activityTime(rows[0].createdAt), /Oct 16/);
+});
+
+test('quick notifications show only the latest five with stable ties without changing the Activity cache', () => {
+  const incoming = [
+    { id: 'invalid', createdAt: 'broken' },
+    { id: 'old', createdAt: '2026-10-10T12:00:00Z' },
+    { id: 'tie-first', createdAt: '2026-10-16T12:00:00Z' },
+    { id: 'newest', createdAt: '2026-10-16T12:01:00Z' },
+    { id: 'tie-second', createdAt: '2026-10-16T12:00:00Z' },
+    { id: 'middle', createdAt: '2026-10-14T12:00:00Z' },
+    { id: 'yesterday', createdAt: '2026-10-15T12:00:00Z' },
+  ];
+  const original = structuredClone(incoming);
+  assert.deepEqual(recentNotifications(incoming).map(item => item.id), ['newest', 'tie-first', 'tie-second', 'yesterday', 'middle']);
+  assert.equal(activityNewestFirst(incoming).at(-1).id, 'invalid');
+  assert.deepEqual(recentNotifications(incoming, 0), []);
+  assert.deepEqual(incoming, original);
+});
+
+test('chronological groups sort independently of incoming server order', () => {
+  assert.deepEqual(activitySections([...rows].reverse(), 'All', now).map(section => [section.title, section.data.map(item => item.id)]), [
+    ['Today', ['tied', 'newer']], ['Yesterday', ['yesterday']], ['Earlier', ['older']],
+  ]);
+});
+
+test('relative timestamps handle boundaries, clock skew, old years and malformed dates', () => {
+  const reference = new Date('2026-10-16T12:00:00Z');
+  for (const [timestamp, expected] of [
+    ['2026-10-16T12:01:00Z', 'Just now'],
+    ['2026-10-16T11:59:01Z', 'Just now'],
+    ['2026-10-16T11:59:00Z', '1 minute ago'],
+    ['2026-10-16T11:58:00Z', '2 minutes ago'],
+    ['2026-10-16T11:00:00Z', '1 hour ago'],
+    ['2026-10-16T10:00:00Z', '2 hours ago'],
+    ['2026-10-15T12:00:00Z', '1 day ago'],
+    ['2026-10-14T12:00:00Z', '2 days ago'],
+    ['invalid', 'Date unavailable'],
+  ]) assert.equal(activityRelativeTime(timestamp, reference), expected);
+  assert.match(activityRelativeTime('2026-10-01T12:00:00Z', reference), /Oct 1/);
+  assert.match(activityRelativeTime('2025-10-01T12:00:00Z', reference), /2025/);
+  assert.equal(activityRelativeTime('2026-10-01', new Date('invalid')), 'Date unavailable');
+});
+
+test('a stale background response preserves confirmed read flags without hiding new or server-read events', () => {
+  const current = [{ id: 'just-read', read: true }, { id: 'removed', read: true }, { id: 'server-read', read: false }];
+  const incoming = [{ id: 'just-read', read: false }, { id: 'new', read: false }, { id: 'server-read', read: true }];
+  const before = structuredClone(incoming);
+  assert.deepEqual(mergeActivityReadStatus(incoming, current), [
+    { id: 'just-read', read: true }, { id: 'new', read: false }, { id: 'server-read', read: true },
+  ]);
+  assert.deepEqual(incoming, before);
+  assert.deepEqual(mergeActivityReadStatus(incoming), incoming);
 });

@@ -2,6 +2,7 @@
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from datetime import timedelta
+import base64
 import io
 import json
 import os
@@ -621,9 +622,12 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(response.status_code, 201, response.text)
         self.assertEqual((response.json()['width'], response.json()['height']), (40, 30))
         self.assertEqual(response.json()['purpose'], 'story')
-        served_image = self.client.get(response.json()['url'])
+        # Unpublished campaign media is now private. This intentionally tightens
+        # the old unlisted-public contract before exposing the API to the cloud.
+        self.assertEqual(self.client.get(response.json()['url']).status_code, 404)
+        served_image = self.client.get(response.json()['url'], headers=self.headers())
         self.assertEqual(served_image.status_code, 200)
-        self.assertIn('max-age=86400', served_image.headers.get('cache-control', ''))
+        self.assertIn('no-store', served_image.headers.get('cache-control', ''))
 
     def test_seeded_discovery_and_completed_reporting(self):
         seeded_path = Path(self.temp.name) / 'seeded.db'
@@ -638,6 +642,96 @@ class ApiTests(unittest.TestCase):
             self.assertTrue(report['final'])
             self.assertTrue(report['simulated'])
             self.assertIsNone(report['measuredReach'])
+
+    def test_profile_photo_is_authenticated_private_and_owner_scoped(self):
+        stream = io.BytesIO()
+        Image.new('RGB', (48, 32), 'purple').save(stream, 'PNG')
+        for method in ['get', 'post', 'delete']:
+            response = getattr(self.client, method)('/me/avatar')
+            self.assertEqual(response.status_code, 401)
+        upload = self.client.post('/me/avatar', headers=self.headers(),
+                                  files={'file': ('../../another-user.jpg', stream.getvalue(), 'image/png')},
+                                  data={'userId': self.other['user']['id'], 'url': '/media/not-an-avatar.jpg'})
+        self.assertEqual(upload.status_code, 200, upload.text)
+        version = upload.json()['version']
+        self.assertTrue(version.startswith('avatar_'))
+        self.assertEqual(upload.headers['cache-control'], 'no-store')
+        self.assertIn('authorization', upload.headers['vary'].lower())
+        own = self.client.get('/me/avatar', headers=self.headers())
+        self.assertEqual(own.json(), upload.json())
+        self.assertEqual(own.headers['cache-control'], 'no-store')
+        for account in [self.other, self.reviewer]:
+            response = self.client.get('/me/avatar?userId='+self.creator['user']['id'], headers=self.headers(account))
+            self.assertEqual(response.json(), {'version': None, 'dataUri': None})
+        self.assertEqual(self.client.delete('/me/avatar?userId='+self.creator['user']['id'], headers=self.headers(self.other)).status_code, 200)
+        self.assertEqual(self.client.get('/me/avatar', headers=self.headers()).json()['version'], version)
+        self.assertEqual(self.client.get('/me', headers=self.headers()).json()['user']['avatarVersion'], version)
+        self.assertEqual(self.client.get('/media/'+version+'.jpg').status_code, 404)
+        with self.app.state.database.connect() as connection:
+            self.assertEqual(connection.execute('SELECT COUNT(*) FROM assets').fetchone()[0], 0)
+            self.assertEqual(connection.execute('SELECT user_id FROM profile_avatars').fetchone()[0], self.creator['user']['id'])
+
+    def test_profile_photo_normalizes_orientation_size_and_removes_metadata(self):
+        stream = io.BytesIO()
+        original = Image.new('RGB', (1200, 600), 'teal')
+        exif = Image.Exif()
+        exif[274] = 6  # Rotate 90 degrees clockwise before thumbnailing.
+        exif[315] = 'Private artist metadata'
+        original.save(stream, 'JPEG', exif=exif)
+        response = self.client.post('/me/avatar', headers=self.headers(), files={'file': ('photo.jpg', stream.getvalue(), 'image/jpeg')})
+        self.assertEqual(response.status_code, 200, response.text)
+        encoded = response.json()['dataUri'].split(',', 1)[1]
+        with Image.open(io.BytesIO(base64.b64decode(encoded))) as image:
+            self.assertEqual(image.format, 'JPEG')
+            self.assertEqual(image.size, (256, 512))
+            self.assertEqual(dict(image.getexif()), {})
+            self.assertNotIn('icc_profile', image.info)
+        self.assertLess(len(encoded), 2 * 1024 * 1024)
+
+    def test_profile_photo_rejects_invalid_files_without_replacing_existing_photo(self):
+        stream = io.BytesIO()
+        Image.new('RGBA', (32, 32), (0, 0, 0, 0)).save(stream, 'PNG')
+        good = self.client.post('/me/avatar', headers=self.headers(), files={'file': ('photo.png', stream.getvalue(), 'image/png')}).json()
+        invalid = [('photo.svg', b'<svg/>', 'image/svg+xml', 415),
+                   ('broken.jpg', b'not an image', 'image/jpeg', 422),
+                   ('oversized.jpg', b'x' * (8 * 1024 * 1024 + 1), 'image/jpeg', 413)]
+        huge = io.BytesIO()
+        Image.new('1', (5001, 5000)).save(huge, 'PNG')
+        invalid.append(('too-many-pixels.png', huge.getvalue(), 'image/png', 422))
+        gif = io.BytesIO()
+        Image.new('RGB', (20, 20)).save(gif, 'GIF')
+        invalid.append(('fake.jpg', gif.getvalue(), 'image/jpeg', 422))
+        for filename, data, mime, status in invalid:
+            with self.subTest(filename=filename):
+                response = self.client.post('/me/avatar', headers=self.headers(), files={'file': (filename, data, mime)})
+                self.assertEqual(response.status_code, status, response.text)
+                self.assertEqual(self.client.get('/me/avatar', headers=self.headers()).json(), good)
+        with Image.open(io.BytesIO(base64.b64decode(good['dataUri'].split(',', 1)[1]))) as normalized:
+            self.assertEqual(normalized.getpixel((0, 0)), (255, 255, 255))
+
+    def test_profile_photo_replacement_removal_and_restart_persistence(self):
+        versions = []
+        for color in ['red', 'blue']:
+            stream = io.BytesIO()
+            Image.new('RGB', (40, 30), color).save(stream, 'WEBP')
+            response = self.client.post('/me/avatar', headers=self.headers(), files={'file': ('photo.webp', stream.getvalue(), 'image/webp')})
+            self.assertEqual(response.status_code, 200, response.text)
+            versions.append(response.json()['version'])
+        self.assertNotEqual(*versions)
+        with self.app.state.database.connect() as connection:
+            self.assertEqual(connection.execute('SELECT COUNT(*) FROM profile_avatars').fetchone()[0], 1)
+        with TestClient(create_app(self.path, seed=False)) as restarted:
+            self.assertEqual(restarted.get('/me/avatar', headers=self.headers()).json()['version'], versions[1])
+            login = restarted.post('/auth/login', json={'email': 'creator@example.test', 'password': 'test-only-password'}).json()
+            self.assertEqual(login['user']['avatarVersion'], versions[1])
+            profile = restarted.put('/me', json={'name': 'Updated name'}, headers=self.headers()).json()
+            self.assertEqual(profile['avatarVersion'], versions[1])
+            removed = restarted.delete('/me/avatar', headers=self.headers())
+            self.assertEqual(removed.json(), {'version': None, 'dataUri': None})
+            self.assertEqual(restarted.delete('/me/avatar', headers=self.headers()).status_code, 200)
+        with TestClient(create_app(self.path, seed=False)) as restarted:
+            self.assertEqual(restarted.get('/me/avatar', headers=self.headers()).json(), {'version': None, 'dataUri': None})
+            self.assertIsNone(restarted.get('/me', headers=self.headers()).json()['user']['avatarVersion'])
 
 
 if __name__ == '__main__':

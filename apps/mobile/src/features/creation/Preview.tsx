@@ -1,3 +1,4 @@
+import { useCurrency } from "../../lib/CurrencyProvider";
 import React, { useState } from "react";
 import { Linking, Pressable, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -5,7 +6,6 @@ import {
   Accordion,
   Notice,
   Picture,
-  Pill,
   Text,
   fonts,
   useTheme,
@@ -14,10 +14,10 @@ import {
   Campaign,
   Config,
   quote,
-  money,
   number,
 } from "../../lib/types";
 import { isPublicUrl } from "./model";
+import { lightColors } from "../../lib/appearance";
 
 export function AdPreview({
   draft,
@@ -28,50 +28,56 @@ export function AdPreview({
 }) {
   const { colors, styles } = useTheme();
   return (
-    <View style={[styles.card, { borderRadius: 14 }]}>
-      <View style={{ padding: 14, gap: 3 }}>
-        <Text style={{ fontWeight: "700", color: colors.ink }}>
+    <View style={{ gap: 8, width: "100%", maxWidth: 286, alignSelf: "center" }}>
+    <View style={{ borderWidth: 3, borderColor: colors.line, borderRadius: 23, padding: 3, backgroundColor: colors.surfaceRaised }}>
+    {/* The creative previews a fixed light placement independently of app appearance. */}
+    <View style={[styles.card, { borderRadius: 16, backgroundColor: lightColors.paper, borderColor: lightColors.line }]}>
+      <View style={{ paddingHorizontal: 11, paddingVertical: 8, gap: 1 }}>
+        <Text style={{ fontSize: 11, lineHeight: 16, fontWeight: "700", color: lightColors.ink }}>
           {draft.creatorName || "Your organization"}
         </Text>
-        <Text style={styles.muted}>Advertisement preview · {placement}</Text>
-        <Text style={styles.muted}>Illustrative placement · no live advertising</Text>
+        <Text style={{ fontSize: 10, lineHeight: 14, color: lightColors.muted }}>Advertisement preview · {placement}</Text>
       </View>
       <Picture
         uri={draft.adImages[0]}
-        height={placement === "Display" ? 140 : 185}
+        height={placement === "Display" ? 120 : 150}
       />
-      <View style={{ padding: 16, gap: 8 }}>
+      <View style={{ padding: 11, gap: 6 }}>
         <Text
           style={{
-            fontSize: 18,
-            lineHeight: 25,
+            fontSize: 16,
+            lineHeight: 21,
             fontWeight: "700",
-            color: colors.ink,
+            color: lightColors.ink,
           }}
         >
           {draft.adHeadline ||
             draft.title.slice(0, 60) ||
             "Your message, out in the world."}
         </Text>
-        <Text style={styles.body}>
+        <Text style={{ fontSize: 12, lineHeight: 18, color: lightColors.text }}>
           {draft.adDescription ||
             draft.summary ||
             "Add an advertising description to see it here."}
         </Text>
         <View
           style={{
-            alignSelf: "flex-start",
+            alignItems: "center",
             paddingVertical: 10,
-            paddingHorizontal: 15,
-            backgroundColor: colors.mint,
-            borderRadius: 7,
+            paddingHorizontal: 12,
+            backgroundColor: lightColors.primary,
+            borderRadius: 10,
+            marginTop: 2,
           }}
         >
-          <Text style={{ fontWeight: "700", color: colors.green }}>
+          <Text style={{ fontSize: 12, lineHeight: 18, fontWeight: "700", color: lightColors.onPrimary }}>
             {draft.cta || "Learn more"}
           </Text>
         </View>
       </View>
+    </View>
+    </View>
+    <Text style={[styles.muted, { textAlign: "center", fontSize: 10, lineHeight: 14 }]}>Illustrative {placement} placement. No live advertising.</Text>
     </View>
   );
 }
@@ -259,146 +265,9 @@ export function StoryPreview({
   );
 }
 
-export function CampaignPreview({
-  draft,
-  config,
-}: {
-  draft: Campaign;
-  config?: Config;
-}) {
+export function FundingPolicies({ config }: { config?: Config }) {
   const { colors, styles } = useTheme();
-  const [view, setView] = useState<"campaign" | "advertisement">("campaign");
-  const funding = config ? quote(draft.goal, config) : null;
   return (
-    <View style={{ gap: 20 }}>
-      <Text style={styles.muted}>
-        Draft preview · Approval is required before publication. Contributions
-        fund message distribution, rather than direct support for the cause.
-      </Text>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-        <Pill title="Campaign page" selected={view === "campaign"} onPress={() => setView("campaign")} />
-        <Pill title="Advertisement" selected={view === "advertisement"} onPress={() => setView("advertisement")} />
-      </View>
-      <Text style={styles.muted}>{view === "campaign" ? "The editorial page readers open: your story, identity and sources, followed by funding and audience details." : "The creative people may see before opening your campaign page. Advertising copy and images stay separate from the story."}</Text>
-      {view === "campaign" && <>
-      <View style={styles.card}>
-        {!!draft.coverImage && <Picture uri={draft.coverImage} height={185} />}
-        <View style={{ padding: 18, gap: 9 }}>
-          <Text style={styles.muted}>
-            {draft.category || "Category not selected"}
-          </Text>
-          <Text
-            style={{
-              fontFamily: fonts.bold,
-              fontSize: 24,
-              lineHeight: 31,
-              color: colors.ink,
-            }}
-          >
-            {draft.title || "Your campaign title"}
-          </Text>
-          <Text style={styles.muted}>
-            By {draft.creatorName || "Your name or organization"}
-          </Text>
-          {!!draft.summary && <Text style={styles.body}>{draft.summary}</Text>}
-        </View>
-      </View>
-      <StoryPreview draft={draft} campaignHeader={draft} />
-      </>}
-      {view === "advertisement" &&
-      <View
-        style={{
-          borderTopWidth: 1,
-          borderColor: colors.line,
-          paddingTop: 20,
-          gap: 16,
-        }}
-      >
-        <Text style={styles.h2}>Advertising creative</Text>
-        <AdPreview draft={draft} placement={draft.channels[0]} />
-        {draft.adImages.length > 1 && (
-          <View style={{ gap: 12 }}>
-            <Text style={styles.label}>Additional advertising images</Text>
-            {draft.adImages.slice(1).map((uri, index) => (
-              <Picture key={`${uri}-${index}`} uri={uri} height={180} />
-            ))}
-          </View>
-        )}
-      </View>
-      }
-      <View style={{ gap: 12 }}>
-        <Text style={styles.h2}>Audience & distribution</Text>
-        <Text style={styles.body}>
-          {draft.geography || "Geography not set"}
-          {draft.interests ? ` · ${draft.interests}` : ""}
-        </Text>
-        <Text style={styles.muted}>
-          {draft.channels.join(" + ") || "Select distribution channels"} ·{" "}
-          {draft.durationDays} days
-        </Text>
-        {draft.channels.map((channel) => (
-          <View
-            style={[styles.row, { justifyContent: "space-between" }]}
-            key={channel}
-          >
-            <Text style={styles.body}>{channel}</Text>
-            <Text style={styles.body}>
-              {draft.allocation[channel] || 0}%
-              {funding && draft.goal > 0 ? ` · ${money((funding.adBudget * (draft.allocation[channel] || 0)) / 100)}` : ""}
-            </Text>
-          </View>
-        ))}
-        <Text style={styles.muted}>
-          These are your proposed settings. The platform may finalize targeting,
-          placements, and allocation during review.
-        </Text>
-      </View>
-      <View
-        style={{
-          borderTopWidth: 1,
-          borderColor: colors.line,
-          paddingTop: 20,
-          gap: 12,
-        }}
-      >
-        <Text style={styles.h2}>Funding review</Text>
-        <View
-          style={{
-            ...styles.row,
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-          }}
-        >
-          <Text style={styles.body}>Your funding goal</Text>
-          <Text style={{ ...styles.h2, fontSize: 22 }}>
-            {draft.goal ? money(draft.goal) : "Not set yet"}
-          </Text>
-        </View>
-        <View style={{ ...styles.row, justifyContent: "space-between" }}>
-          <Text style={styles.body}>Platform fee</Text>
-          <Text style={styles.body}>{funding ? money(funding.fee) : "Unavailable"}</Text>
-        </View>
-        <View
-          style={{
-            ...styles.row,
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-          }}
-        >
-          <Text style={styles.body}>Advertising budget</Text>
-          <Text style={{ ...styles.body, fontWeight: "700" }}>
-            {funding ? money(funding.adBudget) : "Unavailable"}
-          </Text>
-        </View>
-        <Text
-          style={{ ...styles.body, fontWeight: "700", color: colors.green }}
-        >
-          {funding && draft.goal > 0 ? `Est. ${number(funding.reach)} people` : draft.goal > 0 ? "Reach estimate unavailable" : "Set your goal at Submit for a reach estimate"}
-        </Text>
-        <Text style={styles.muted}>
-          {config ? `Demo model: ${config.peoplePerAdDollar} people per advertising dollar after the ${(config.feeRate * 100).toFixed(0)}% fee. Reach depends on prices, inventory, targeting, delivery, and performance; it is never guaranteed.` : "Connect to load current fees, funding policies and estimate assumptions. Your draft remains editable; no fee or audience estimate is assumed."}
-        </Text>
-      </View>
       <Accordion title="Funding policies & campaign rules" initiallyOpen>
         <Text style={styles.body}>
           Demo policy · No real payments or advertisements. Contributions
@@ -429,6 +298,150 @@ export function CampaignPreview({
           launch advertising automatically.
         </Text>
       </Accordion>
+  );
+}
+
+export function CampaignPreview({
+  draft,
+  config,
+}: {
+  draft: Campaign;
+  config?: Config;
+}) {
+  const { colors, styles } = useTheme();
+  const [view, setView] = useState<"campaign" | "advertisement">("campaign");
+  const { money, description } = useCurrency();
+  const funding = config ? quote(draft.goal, config) : null;
+  return (
+    <View style={{ gap: 20 }}>
+      <View accessibilityRole="tablist" style={{ flexDirection: "row", padding: 3, borderWidth: 1, borderColor: colors.outline, borderRadius: 28, backgroundColor: colors.bg }}>
+        {([
+          ["campaign", "Campaign page"],
+          ["advertisement", "Social ad"],
+        ] as const).map(([value, label]) => (
+          <Pressable key={value} accessibilityRole="tab" accessibilityState={{ selected: view === value }} onPress={() => setView(value)} style={({ pressed }) => ({ flex: 1, minHeight: 46, paddingVertical: 10, paddingHorizontal: 8, alignItems: "center", justifyContent: "center", borderRadius: 24, backgroundColor: view === value ? colors.primary : "transparent", opacity: pressed ? 0.75 : 1 })}>
+            <Text style={{ fontSize: 13, fontWeight: "600", textAlign: "center", flexShrink: 1, color: view === value ? colors.onPrimary : colors.text }}>{label}</Text>
+          </Pressable>
+        ))}
+      </View>
+      {view === "campaign" && <>
+      <View style={styles.card}>
+        {!!draft.coverImage && <Picture uri={draft.coverImage} height={220} />}
+        <View style={{ padding: 16, gap: 9 }}>
+          <Text
+            style={{
+              fontFamily: fonts.bold,
+              fontSize: 23,
+              lineHeight: 29,
+              color: colors.ink,
+            }}
+          >
+            {draft.title || "Your campaign title"}
+          </Text>
+          <Text style={styles.muted}>
+            By {draft.creatorName || "Your name or organization"}
+          </Text>
+          <Text style={[styles.muted, { fontSize: 12 }]}>{draft.category || "Category not selected"}</Text>
+          {!!draft.summary && <Text style={styles.body}>{draft.summary}</Text>}
+        </View>
+      </View>
+      <StoryPreview draft={draft} campaignHeader={draft} />
+      </>}
+      {view === "advertisement" &&
+      <View
+        style={{
+          gap: 16,
+        }}
+      >
+        <AdPreview draft={draft} placement={draft.channels[0]} />
+        {draft.adImages.length > 1 && (
+          <View style={{ gap: 12 }}>
+            <Text style={styles.label}>Additional advertising images</Text>
+            {draft.adImages.slice(1).map((uri, index) => (
+              <Picture key={`${uri}-${index}`} uri={uri} height={180} />
+            ))}
+          </View>
+        )}
+      </View>
+      }
+      <Text style={styles.muted}>
+        Draft preview · Approval is required before publication. Contributions fund message distribution. Story and advertising assets remain separate.
+      </Text>
+      <View style={{ gap: 12 }}>
+        <Text style={styles.h2}>Audience & distribution</Text>
+        <Text style={styles.body}>
+          {draft.geography || "Geography not set"}
+          {draft.interests ? ` · ${draft.interests}` : ""}
+        </Text>
+        <Text style={styles.muted}>
+          {draft.channels.join(" + ") || "Select distribution channels"} ·{" "}
+          {draft.durationDays} days
+        </Text>
+        {draft.channels.map((channel) => (
+          <View
+            style={[styles.row, { justifyContent: "space-between", flexWrap: "wrap" }]}
+            key={channel}
+          >
+            <Text style={[styles.body, { flexShrink: 1 }]}>{channel}</Text>
+            <Text style={[styles.body, { flexShrink: 1 }]}>
+              {draft.allocation[channel] || 0}%
+              {funding && draft.goal > 0 ? ` · ${money((funding.adBudget * (draft.allocation[channel] || 0)) / 100)}` : ""}
+            </Text>
+          </View>
+        ))}
+        <Text style={styles.muted}>
+          These are your proposed settings. The platform may finalize targeting,
+          placements, and allocation during review.
+        </Text>
+      </View>
+      <View
+        style={{
+          borderTopWidth: 1,
+          borderColor: colors.line,
+          paddingTop: 20,
+          gap: 12,
+        }}
+      >
+        <Text style={styles.h2}>Funding review</Text>
+        <Text style={[styles.muted, { fontSize: 11, lineHeight: 17 }]}>{description}</Text>
+        <View
+          style={{
+            ...styles.row,
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+          }}
+        >
+          <Text style={[styles.body, { flexShrink: 1 }]}>Your funding goal</Text>
+          <Text style={{ ...styles.h2, fontSize: 22, flexShrink: 1 }}>
+            {draft.goal ? money(draft.goal) : "Not set yet"}
+          </Text>
+        </View>
+        <View style={{ ...styles.row, justifyContent: "space-between", flexWrap: "wrap" }}>
+          <Text style={[styles.body, { flexShrink: 1 }]}>Platform fee</Text>
+          <Text style={[styles.body, { flexShrink: 1 }]}>{funding ? money(funding.fee) : "Unavailable"}</Text>
+        </View>
+        <View
+          style={{
+            ...styles.row,
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+          }}
+        >
+          <Text style={[styles.body, { flexShrink: 1 }]}>Advertising budget</Text>
+          <Text style={{ ...styles.body, fontWeight: "700", flexShrink: 1 }}>
+            {funding ? money(funding.adBudget) : "Unavailable"}
+          </Text>
+        </View>
+        <Text
+          style={{ ...styles.body, fontWeight: "700", color: colors.green }}
+        >
+          {funding && draft.goal > 0 ? `Est. ${number(funding.reach)} people` : draft.goal > 0 ? "Reach estimate unavailable" : "Set your goal at Submit for a reach estimate"}
+        </Text>
+        <Text style={styles.muted}>
+          {config ? `Demo model: ${config.peoplePerAdDollar} people per advertising dollar after the ${(config.feeRate * 100).toFixed(0)}% fee. Reach depends on prices, inventory, targeting, delivery, and performance; it is never guaranteed.` : "Connect to load current fees, funding policies and estimate assumptions. Your draft remains editable; no fee or audience estimate is assumed."}
+        </Text>
+      </View>
+      <FundingPolicies config={config} />
     </View>
   );
 }

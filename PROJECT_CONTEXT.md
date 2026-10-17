@@ -1,10 +1,283 @@
 # Campaign Amplification Hackathon: project context
 
-Initialization baseline date: October 15, 2026. Primary agent: OpenAI Codex. Authoritative workspace: `E:\Campaign` (user-confirmed). Current phase: stable reference-driven Light/black-Dark source and final internal APKs with scoped native acceptance; the incomplete updated demo is now held at the user's request pending further changes. The latest October 16 attached directive rejects the previous civic-publication visual result, while preserving the Expo/FastAPI architecture and mandatory workflows. Local INTERNAL-TEST work remains authorized, but recording/production and demo campaign mutations may resume only after explicit human authorization. Cloud accounts/hosting remain deferred. Sections 18-20 describe current architecture/direction; [PROGRESS.md](PROGRESS.md), [REQUIREMENTS.md](REQUIREMENTS.md) and [RELEASE_READINESS.md](RELEASE_READINESS.md) contain live evidence. Earlier accepted APK/video, debug-only and stopped-device statements retain their historical scope.
+**D37 — October17 clean guest Welcome/auth footer:** The later user screenshot
+rejects the standalone Settings control under Welcome/Login. Remove only the
+guest-Profile footer shared by Welcome/Login/Register, plus unused auth
+appearance callback/types. Device Settings remains inside Help and signed-in
+Profile. Existing routes, form state, guest browsing, saved appearance/currency,
+safe areas, design and cloud business logic remain. No backend redeploy needed.
+
+Current [Campaign.apk](Campaign.apk) is47,705,118 bytes, SHA256
+`1D36B4C1BF8BDAEB1E5D773FF8E20641499561FB323D0A793366F856E672344C`, fresh
+`final-campaign-auth-clean-20261017` ARM64 CloudTest, existing Debug v2 certificate
+and HTTPS origin. ARM64/x86_64 builds pass1m57s/1m56s; both embed identical
+2,196,144-byte Hermes.230frontend/TS/lint pass; revised existing source test
+checks no footer Settings and retained Help. Package label/logo/splash checks
+pass25pixel/15launcher-byte comparisons. Current-build POCO Dark Welcome/Login/
+Register, scrolled lower fields and Back return pass10/10 no-Settings-footer/
+no-tab-bar UI checks, no form submitted. [Install/launch proof](artifacts/final-delivery-20261017/AUTH_CLEAN_PHYSICAL.json)
+records fresh install-r because Campaign was already absent from active user0;
+the agent did not uninstall/clear it. Exact-hash [installer preview](artifacts/final-delivery-20261017/AUTH_CLEAN_INSTALLER_PREVIEW.json)
+shows Campaign/approved mint mark, then Cancel and return to Welcome with no
+Update/security/data changes. Final emulator10/10 checks verify clean auth,
+Help→Settings, saved System/Light/INR, Back/mode routes and actual unsent fictional
+email retention;17captures/XML and172process lines/0listed fatal/JS markers.
+Phone sample19lines/0markers, Android15/API35/Dark/font1.17/density440. No auth
+submission, onboarding completion, draft or preference mutation. [Receipt](artifacts/final-delivery-20261017/AUTH_CLEAN_NATIVE_EMULATOR.json)
+owns scope; earlier7C broader gesture observations retain their prior hash.
+The unchanged e599 backend remains live Free, auto-deploy off, with93isolated,
+13preservation/32live-delete checks. Prior-binary fictional-account native delete
+adds7/7 checks, QA logout and older guest-draft preservation. D36's candidate is
+preserved below; production/warning-free/whole-app acceptance is not implied.
+
+**D36 — October17 scoped final deployment and APK delivery:** The user authorized
+the necessary reviewed backend deployment after checks and requested the final
+filename Campaign.apk with the approved installer logo. A minimal two-file commit
+`e599f984d43b8b109dff63504937c946400cbbad` (`main.py` plus draft-deletion tests)
+was fast-forwarded only to the existing private `codex/cloud-deployment` branch
+and deployed manually to existing Render Free service `srv-db985h8pd3as73ba6h80`,
+deploy `dep-db9n37e1egvs73fsumfg`, live October17,13:02:41 UTC. The DELETE endpoint
+and all tombstone-aware read/write paths are now live together. No Neon schema,
+Cloudinary configuration, environment, stable secret or plan change; auto-deploy
+remains off. Older D35 hosted-deletion holds below are historical.
+
+Fresh 230 frontend/93 isolated backend checks, TS/lint, 13 existing-record/media/
+receipt HTTPS preservation checks and 32 live fictional-account delete checks pass. Live
+concurrent Postgres writers and native account-delete follow-up are not inferred.
+After tombstones exist, rollback must retain tombstone-aware read/create guards,
+or disable only DELETE while retaining them; naive pre-delete-code rollback is
+unsafe. No existing user records, payments or media were changed by the probe.
+
+Historical pre-auth-clean delivery [ARM64 APK](artifacts/android/final-campaign-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk),47,705,774 bytes, SHA256
+`7C1682A1975DB888E2D84F05517B9491F3B3FCA48E0B24EB15DB93C6A44F0329`, a fresh ARM64
+CloudTest build byte-identical to the previously tested native-pager candidate.
+Package1.0.0/code1, Android Debug v2 certificate, embedded Hermes/current HTTPS
+remain. Independent compiled-resource checks verify Campaign label and approved
+transparent mint megaphone normal/round/adaptive icons/native splash. Actual
+unlocked authorized POCO [installer preview](artifacts/final-delivery-20261017/INSTALLER_PREVIEW.json)
+verifies Campaign name/approved logo in the update dialog; Cancel was pressed,
+with no update, security-setting change or data wipe. This is internal-test
+delivery, not production signing, warning-free sideload, whole-app verification
+or submission. [Current report](artifacts/final-delivery-20261017/COMPLETION_REPORT.md)
+records scope; existing native evidence retains its exact hash/screen boundaries.
+No recording, paid resource, Play publication or organizer submission occurred.
+
+**D35 — October17 native paging / scoped currency / draft safety:** The user
+rejected reversed and simulated section motion. Expo55-compatible
+react-native-pager-view8.0.0 now supplies actual native LTR pages: LEFT advances,
+RIGHT returns, tab/pill commands synchronized. Shared campaign overview/sticky
+tabs precede the viewport-sized pager; each mounted section keeps a nested
+vertical ScrollView. Explore shares search/filter/header, with stable category
+pages and separate virtualized lists. Web uses a platform-specific scroll-snap
+fallback. This focused dependency/implementation replaces only the rejected
+motion; five tabs, backend, themes and routes remain. Latest Create reference
+restores the informational vertical5-step overview before manual/voice actions.
+
+Activity-only rows lose filled boxes; quick sheet/feed/read rules stay shared.
+Currency is a separately persisted deviceUSD-default/INR preference, guest and
+account accessible. One anonymous fixed FrankfurterUSD/INR endpoint supplies an
+actual dated daily reference; deduplicated refresh, explicit stale cache≤7days,
+then labelledUSD fallback. Integer minor-unit conversion and original-entry/
+checkout snapshots preserve canonicalUSD cents, fees, ledger, reach and original
+receipts. Original immutable notification body text is not reinterpreted.
+
+Confirmed device draft deletion uses durable scoped markers/late-save guards.
+Account DELETE /campaigns/{id}/draft logically tombstones only owned unpublished
+Draft with no public revision or financial rows using existing write locks; no
+schema migration/media deletion. New endpoint and all tombstone-aware reads/
+writes must be deployed together; cloud deployment is held, so hosted account
+delete remains pending. No silent offline account-delete success.
+
+Current APK/evidence: PROGRESS.md and artifacts/activity-currency-polish-20261017/
+COMPLETION_REPORT.md. Final230frontend,86isolated backend, TS/lint/web export and
+bounded actual POCO+emulator gestures pass; no whole-app/livePostgres/security/
+submission claim. Older D34 candidate and its native packet below are historical.
+
+
+**D34 — October17 four-area native polish:** Extend the approved visual world
+only in Welcome photo paging/order, compact tour cards, Create-entry/draft
+hierarchy and separate optional-cover/ad controls. Welcome uses stable
+`story-mountains` → `confirmation-coast` → `ocean-turtle` identities, keeping
+each image/caption/accessibility label together in a measured horizontal pager.
+Its informational gestures never complete Welcome or write session/tour/theme
+preferences. Tour cards use a shared step/Skip header, 14-unit padding/eight-unit
+gaps, 17/23 headings, 13/19 copy and one adaptive navigation row. Manual creation
+is primary above compact truthful saved-draft rows; voice assistance stays
+explicitly a typed/keyboard-dictation demo. Cover add/change/remove and ad
+add/remove remain purpose-specific, with shared JPEG/PNG/WebP and 8 MB validation.
+The exact five-step editor, creator-set Submit goal, draft ownership, onboarding
+and tour preferences, themes, package/signing and backend configuration remain.
+No dependency, API, migration or new architecture was introduced.
+
+Current [ARM64 CloudTest](artifacts/android/four-area-polish-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk)
+is 47,565,328 bytes, SHA
+`CD7E775787FEAB1473C9198492A7A65F045D09B068E0C97C0B63F9ACE988B5BC`.
+179/179 frontend tests, TypeScript/full-source ESLint exit 0; Gradle 1m45s includes
+normal vital lint. Existing Android Debug certificate, embedded Hermes and
+current Render HTTPS remain. After initial emulator-only evidence, the sole
+authorized POCO `tkkrlvqklzydbuh6` (2312FRAFDI, Android15/API35/ARM64) reconnected
+on its existing 5037 transport and accepted compatible `install -r`. Its signed-in
+session and existing Untitled draft were preserved. Phone checks cover all four
+compact tour cards, blocked underlying Create and Android Back dismissal;
+manual-first entry; a separate local-only **Four Area Phone QA** draft at Visuals
+with ocean-cover/forest-ad URL previews; picker cancellation preserving both;
+and Activity recreation/resumption retaining the draft. Selected Light/font1.3
+captures cover the four cards, entry and media, including scrolled lower controls.
+No signup/logout, account save, submission, media upload or backend change occurred.
+
+Physical Welcome remains UNVERIFIED because the signed-in session was preserved.
+Fresh isolated Android16/API36/x86_64 `Campaign_FourArea_36` evidence covers the
+full B mountains→C coast→A turtle sequence, swipes in both directions, matching
+caption/dot selection, boundary/vertical gestures and no implicit completion.
+A mounted Welcome System→Light change retained turtle; font-scale changes
+recreated Activity and fresh Welcome started mountains. This is not an in-place
+selection reset. An enlarged-text funding-tour UIAutomator idle failure was handled
+with direct native capture/observed taps and is not reported as an app crash.
+The [independent visual review](artifacts/four-area-polish-20261017/VISUAL_REVIEW.md)
+returns bounded `ship`, including fourteen actual phone captures; no engine,
+detector, whole-app, TalkBack, upload/cloud, sustained-performance or production
+acceptance is inferred. The earlier context-engine failure and direct project/
+native-guidance fallback remain disclosed. [Physical report](PHYSICAL_ANDROID_TEST.md)
+owns exact interactions. [Final device proof](artifacts/four-area-polish-20261017/FINAL_DEVICE_STATE.json)
+matches each installed ABI package to its artifact, confirms identical cross-ABI
+Hermes and 81 frozen inputs with zero drift. Phone ends at signed-in Dark Home,
+font1.17/density440/OS night=yes and unchanged 3 unread; Metro8081 is absent and
+both reverse lists are empty. Current-process samples contain 108 phone/58
+emulator log lines with no matching fatal/uncaught-JS markers, not a crash-free
+or performance guarantee. [Native results](artifacts/four-area-polish-20261017/NATIVE_RESULTS.json)
+register 38 PNGs and 10 carousel cases; observed vertical photo displacement is
+−30px. Source start ref `refs/checkpoints/four-area-start-20261017`
+is `6f5f2e22b020464e97cb1cc97b649796b631bfe5`. Recording, cloud restart/deployment,
+migration, billing, publishing and submission remain held. Earlier D33 and other
+candidate evidence retain their original scopes.
+
+**D33 — October17 optional walkthrough and onboarding QA:** The latest brief
+resumes normal QA and adds an optional four-step native tour over the approved
+Home and existing tabs. Welcome completion, identity/session and the versioned
+device-local `campaign:walkthrough:v1` record remain separate. An idle, ready
+Home offers one nonblocking invitation; explicit guest/account Help replay
+waits for Home layout. Offered/in-progress/completed/skipped/interrupted states
+survive restart without automatic resumption. No tour action changes campaign,
+payment, notification-read or profile state. Actual measured targets use a
+same-root touch shield, safe unanchored fallbacks, semantic themes, scalable
+text and accessibility focus/background safeguards. No dependency/backend added.
+
+Startup hydrates local session/preferences before resolving Welcome without
+waiting for cloud `/me`; obsolete bootstrap responses cannot replace newer
+authentication. Session persistence precedes Welcome completion, and failed
+preference saving has truthful recovery. A legitimate nested/pending entry
+retains public tab navigation for that mount without silently completing
+Welcome. Ordinary fresh entry still requires an explicit Welcome choice.
+The creator and its business rules are unchanged. Evidence and candidate scopes
+are in [PHYSICAL_ANDROID_TEST.md](PHYSICAL_ANDROID_TEST.md);159 frontend tests,
+68 isolated backend regressions, TypeScript, ESLint and Expo Doctor20/20 pass.
+The latest ARM64 CloudTest remains Debug-signed internal testing, not production
+release. Native TalkBack, older Android mask fallback and broad performance
+acceptance remain open. Recording, cloud deployment/restarts, migrations,
+billing, publication and submission remain held.
+
+**D32 — October17 approved-logo physical verification:** The user explicitly
+resumed checks on the previously authorized POCO `tkkrlvqklzydbuh6`; its
+existing ADB5037 transport was used without resetting data or other servers.
+Initial BRAND-POLISH F126 exposed a transient icon-font delay. The sole runtime
+source correction preloads `Ionicons.font` with the existing text fonts in
+`src/app/_layout.tsx`'s existing splash gate; no new dependency/provider or
+business rule. Final ARM64 CloudTest SHA
+`41103294718087AD471BF341CA6BC75F6169D0E171D645B0B051BD527C6AE338`
+was compiled, compatibly installed, hash-matched and launched with Metro absent
+and no USB reverse against the unchanged Render HTTPS backend. Native checks
+cover preserved avatar/draft/session, five-step editing/previews, policy-gated
+review submission, simulated backing/receipt, shared notifications/Activity,
+same-account creator/backer and guest privacy, selected appearance/IME/large-text
+states. [Physical report](PHYSICAL_ANDROID_TEST.md) binds exact candidate scopes.
+No cable-unplugged, fresh-install, full matrix, production signing or warning-free
+claim follows. POCO's additional launcher backplate and minor enlarged-text/
+Welcome fidelity issues remain. Font1.17/density440/Dark guest Home restored.
+Recording/deployment/paid resources/submission remain held; no backend logic,
+migration or provider setup changed. D30/D31 build-only statements below are
+historical instructions for their original passes.
+
+**D31 — October17 Android branding and permission minimization / build-only:**
+The user approved the existing transparent megaphone for the launcher and
+native opening screen. Android now uses a black adaptive icon, native 16%
+foreground insets and an alpha-based themed layer; the black splash uses the
+same mark at144 units. The original poster and extraction remain unchanged,
+as does the explicitly preserved iOS icon. Expo config blocks unused overlay
+and legacy broad storage permissions; existing system-picker upload code is
+preserved. Brand hashes participate in native build invalidation. The current
+Debug certificate remains for update compatibility; production signing and
+Play Protect recognition are not established. No device or cloud access is
+authorized by this pass. See [branding report](docs/BRANDING_AND_ANDROID_WARNINGS.md)
+for the built ARM64 package evidence and warning limitations. The build script
+has `-SkipLint` for explicitly restricted packaging passes; its first run had
+implicitly invoked Gradle vital lint, documented as a mistake. Earlier whole-poster
+launcher/splash statements below describe historical builds.
+
+**D30 — October17 final polish / build-only:** Introductions now have one
+device-level AsyncStorage `campaign:onboarding:v1` marker, separate from
+backend-scoped authentication and drafts. A missing marker migrates existing
+session/draft/preference evidence; Android's Expo Application install/update
+timestamps additionally identify legacy in-place updates. An existing explicit
+`welcome` marker always remains incomplete across updates. Session restoration
+and onboarding gate tab mounting; guest completion opens Home. Storage failure
+holds a retry surface, and serialized writes protect explicit completion.
+The five-step editor uses a shared in-layout action dock with compact secondary
+and mint primary actions; responsive wrapping refinements preserve the approved
+design. SDK-compatible `expo-application` is the only added runtime dependency;
+the local native-config fingerprint now includes package manifests. No cloud
+architecture/business/API/schema/credential change. This pass is compilation
+only at the user's explicit request, with no tests/device/cloud checks or
+deployment; [final-polish report](docs/FINAL_POLISH.md) holds actual build status.
+
+**D29 — October17 Free cloud deployment:** The existing FastAPI architecture
+now runs as one Render Free Python web service from the existing private
+`tejassambhus17/Campaign` repository's `codex/cloud-deployment` branch, with
+automatic deploys off. The previously connected Neon Free `production`
+PostgreSQL branch remains the database; no migration was rerun. The user's
+Cloudinary Free Image and Video API account stores authenticated campaign
+media behind the FastAPI authorization proxy. This supersedes the previous
+account/hosting deferral without changing Expo routes, lifecycle, monetary
+rules or the PDF workflows. Live HTTPS workflow and actual Render restart
+persistence are evidenced in [PROGRESS.md](PROGRESS.md); Debug-signed CloudTest
+Android and independent-device checks remain distinct. A Debug-signed ARM64
+CloudTest APK now has actual POCO installation/Metro-off/no-USB-reverse workflow
+evidence; cable-unplugged/laptop-off acceptance remains open. Credentials are only in
+ignored local or provider-side secrets. No production signing, recording,
+payment processing or real advertising was enabled. Historical text below
+retains its earlier scope.
+
+**D28 / October17 — connect existing Neon:** user selected
+`org-patient-sound-11803564` / `dawn-lab-92471358` / `production`, PostgreSQL only.
+Keep Expo/FastAPI and`psycopg`; root tooling maps ignored pulled URLs to pooled
+app traffic and direct migrations. Transaction-local timeout settings replace
+startup options rejected by real Neon. Root build delegates to existing tooling;
+explicit Neon startup uses port8879 and preserves local-default SQLite startup.
+Existing receipt/reviewer secrets must persist into future Render configuration.
+[NEON_SETUP.md](docs/NEON_SETUP.md) separates live database proof from still-local
+API/media and pending independent Android delivery. No paid resource/card added.
+
+**Latest decision D27 — zero-cost cloud preparation:** the October16 directive
+authorizes minimal PostgreSQL, persistent media, security/configuration,
+cold-start and HTTPS Android support while preserving UI/business rules. The
+user then chose “Prepare everything; I'll connect accounts later.” Actual cloud
+provisioning, HTTPS/persistence and disconnected-phone acceptance remain BLOCKED.
+No account/charge/private-data migration exists. The
+[runbook](docs/CLOUD_DEPLOYMENT.md) supersedes older blanket hosting holds only
+within preparation. Recording, paid resources and organizer submission stay held.
+
+**Current premium pass12 — VERIFIED within the recorded local scope:** [Fresh source gates](artifacts/premium-quality/pass12/SOURCE_CHECKS.json) pass **91/91 in 1044.901ms**, TypeScript/full-source ESLint/diff/public Expo config. [Strict inspection](artifacts/premium-quality/pass12/BUILD_INSPECTION.json) binds **86 inputs / 45 compiled modules / six artworks / 15 native branding resources** to the **48,623,759-byte APK**, SHA `DF4C95CB9F6555DE6E5637DCF18989B7E41042E0D978F7F908EFA0697FDAEDF9`. The installed package hash matches. [Actual Metro-off launch](artifacts/premium-quality/pass12/METRO_OFF.json) is **COLD 1,418ms / wait 1,431ms**, with preserved data and a separately healthy USB-local API. [Independent finish review](artifacts/premium-quality/FINISH_REVIEW.md) closes the opened Home/Auth/keyboard findings. Earlier matrices retain [their exact scopes](artifacts/premium-quality/CANDIDATE_SCOPES.json); no whole-app final-hash rerun or human/production acceptance is inferred. Recording/external release stay held.
+
+[Frozen source](artifacts/premium-quality/pass12/SOURCE_INPUTS.json) digest: `6e92c273b2ca5ddea4a99119d7a8357b8cfab54d54bf365c9f31b5697cf47726`. [Final source verification](artifacts/premium-quality/pass12/SOURCE_VERIFICATION.json) and strict inspection bind the same 86 mobile/13 backend inputs; original 25-page PDF SHA remains `6A5443253C33997A7361BA91BFF4C04DAF02743ADF23CB47F7E4F1C3789E3290`.
+
+**Historical quick notifications and complete Activity — VERIFIED within recorded local scope:** Home's bell and Activity now have distinct quick-sheet/full-history roles over shared authorized data/read state. Final pass5 source, strict binary, compatible physical install and Metro-off/API launch pass; actual compact failure/retry, guest/account recovery, Light/Dark content sizing, contextual destination and dismissal checks close its local matrix. The [bounded native finish review](artifacts/notification-center/FINISH_REVIEW.md) has no open actionable P0/P1/P2. D24/section 23 retains earlier candidate scopes and limits; no whole-app/human/TalkBack/sustained-performance or production release claim follows. Recording/external release remain held.
+
+**Historical Create + private profile photo — VERIFIED within recorded local scope:** Final pass6 source, binary and physical Metro-off/API checks pass. The pass3/pass5 editor/photo matrix and pass6 submission-route correction close the bounded native verification and reference review. No open P0/P1/P2 remains in that review; retained P3 style/keyboard-space notes, human/accessibility, sustained performance and external release gates remain separate. Prior Showcase evidence retains its historical scope.
+
+Initialization baseline: October 15, 2026. Primary agent: OpenAI Codex. Root: `E:\Campaign`. Current scope preserves Expo/FastAPI, mandatory PDF workflows and black/neutral Dark while applying the targeted premium-correction directive and exact supplied branding under D25. Sections 18–24 describe architecture/design decisions; [PROGRESS.md](PROGRESS.md), [REQUIREMENTS.md](REQUIREMENTS.md) and [RELEASE_READINESS.md](RELEASE_READINESS.md) hold current evidence. Recording/production, accounts/hosting and external submission remain held. Historical APKs and checks retain their exact scopes.
 
 Read [AGENTS.md](AGENTS.md) and [INIT.md](INIT.md) before development. Product requirements below come from [Hackathon_Requirements.pdf](Hackathon_Requirements.pdf), unless explicitly labelled otherwise. All PDF page references use the document's printed pages, 1-25. Proposed designs describe future work, not existing functionality.
 
-**Current physical verification:** the corrected ARM64 `24348DD9…B096A` APK is installed on the user-authorized POCO Android 15/API35 phone. Actual USB-backed API access, exact Metro-off launch and the documented core phone walkthrough pass in [PHYSICAL_ANDROID_TEST.md](PHYSICAL_ANDROID_TEST.md), including the five-step draft/submit flow, restart/resume, pending/successful simulated backing, Activity receipt, Profile and selected theme/font/keyboard checks. Share-text clipping, a compact journey-label wrap and bounded launch/frame-performance concerns remain. The saved in-app address is `http://127.0.0.1:8787`, reachable through the selected phone's USB reverse8787. USB and the running host API are required; this does not establish LAN or organizer connectivity. No application source or backend business logic changed for this physical test. Recording remains held.
+**Historical Create physical evidence boundary:** The authorized POCO had Create pass6 `383F23C2…69184` installed without data reset; exact Metro-off cold launch is 1,483ms with healthy USB-local API. Pass3/pass5 record complete checked creation/photo controls and $13.25 draft submission; pass6 fixes View Campaign and opens a separate $2.50 submitted fixture correctly, with backing closed. Pass6 also checks Explore, contribution quote, Activity destination and persistent photo. Full prior matrices were not rerun wholesale under pass6. The [reference review](artifacts/create-polish/FINISH_REVIEW.md) is bounded; no human approval, fresh-install, other-device or sustained-performance claim follows.
 
 **Source-backup checkpoint:** source-only GitHub backup to the user's existing private [tejassambhus17/Campaign](https://github.com/tejassambhus17/Campaign) repository. Root `main` tracks `origin/main`; the 102-file source upload and preserved mobile scaffold ancestor were verified against GitHub. This is independent of deferred hosting/release work. No application changes, new repository, history replacement, force-push or automated deployment occurred in that backup task. [Backup boundaries](docs/GITHUB_BACKUP.md) and [PROGRESS.md](PROGRESS.md) record exact source commit and verification. Organizer material, credentials, local data and generated artifacts remain local.
 
@@ -494,12 +767,19 @@ Decision log records **Decision, Reason, Alternatives, Date, Impact, Status**. C
 | D19 / 2026-10-16 | Device-scoped System (default), Light and Dark appearance through one semantic theme provider | Explicit complete-appearance requirement for guests and signed-in users, live OS changes, cold restore and sign-out retention | Per-screen toggles, account-bound preference and theme-driven navigation/session remounts rejected | AsyncStorage `campaign:appearance:v1`; provider above session/query/navigation; semantic palettes/styles, SDK55 system UI/navigation bar/splash configuration; user content, forms and draft state remain separate | IMPLEMENTED; pure tests and scoped installed System/cold-restore/draft continuity pass; exhaustive state combinations unverified |
 | D20 / 2026-10-16 | Preserve Light; correct Dark to pure black/neutral-charcoal surfaces with restrained mint accents/actions | Later explicit user steering rejects the first reference pass's green-tinted Dark appearance | Green-tinted large backgrounds/containers rejected; no change to preference/session/draft architecture | Frozen pass2 source uses background #000000, surface #121212, raised #1C1C1C, header #151515 and contextual container #1E1E1E; earlier green-Dark captures remain rejected visually | IMPLEMENTED; contrast tests, exact-build Black cold restore and 12-surface visual review pass in their stated scopes |
 | D21 / 2026-10-16 | Apply the Product Quality and Hackathon Alignment Addendum as targeted refinements within the existing design | Explicit user direction reopens source after black pass2; avoid another redesign or duplicated functionality | New visual direction, extra wizard step, separate notification store and full admin expansion rejected | Actionable existing-validation checklist, truthful draft persistence, distinct editorial/ad previews, contextual private receipts and ledger-derived refund reconciliation; exact current evidence stays in PROGRESS/REQUIREMENTS | IMPLEMENTED; source and selected installed gates pass; physical/human and judge-backend gates remain open, recording held and cloud release deferred |
+| D22 / 2026-10-16 | Faithfully implement the user-approved Campaign App UI Showcase across native discovery, creation, backing, Activity and complete auth/Profile | Explicit latest user direction makes screen composition and actual phone screenshot comparison primary acceptance criteria | Another generic template, invented identity/followers/trust or copied financial assumptions rejected | Retain Expo/FastAPI, five tabs/steps, scoped drafts, shared appearance, server policy/privacy/review; use compact Manrope, near-white Light, neutral-black Dark, mint actions and documented generated local art | IMPLEMENTED; final source/binary/physical checks and bounded reference review VERIFIED; performance/human/external delivery remain open, recording held |
+| D23 / 2026-10-16 | Apply the later Create reference to the existing five-step editor and add persistent private profile photos | Explicit request for faithful creation composition and a working My Profile/Edit Profile photo option | Six-step/80-character/goal-at-Reach/immediate-live reference text, public avatar URLs, fabricated portraits and a replacement stack rejected | Reuse existing draft/session/theme/validation; add compact native CreationUi components and decorative local art; add owner-only normalized avatar BLOB via migration005 and authenticated API | IMPLEMENTED; 35 API tests retained, final 64 mobile/source checks pass; pass3/pass5 native matrix plus pass6 route/runtime correction and bounded reference review VERIFIED; human/performance/release gates remain, recording held |
+| D24 / 2026-10-16 | Separate Home quick notifications from Activity's full existing history | Explicit premium-notifications directive; PDF pp.18–19 governs events/preferences | Duplicate backend/store/event records and changed business rules rejected | Content-sized native Modal latest5, shared NotificationRow/recipient Query, safe destinations and guarded existing-POST coordinator; stable header gesture/compact pinned failures | IMPLEMENTED; pass5 source 81 mobile/35 API tests, strict binary, installed launch/focused native checks and bounded finish review VERIFIED; broader human/performance/release limits remain, recording held |
+| D25 / 2026-10-16 | Refine the approved identity using exact supplied logo and later Home/Onboarding compositions | Explicit final-correction, logo, Home and Auth references supersede earlier compositions in their scope | Backend rewrite, duplicate stores, omitted PDF explanation or altered brand raster rejected | Preserve Expo/FastAPI, five tabs/steps and business rules; refine density/notifications/summary/Explore/Appearance; Home source unchanged 6→7; new Auth optionally persists login | VERIFIED within pass12 source/binary and bounded Home/Auth/native scope; earlier matrices retain exact hashes; human/performance/release held |
+| D26 / 2026-10-16 | Compact Auth polish, transparent extracted mark and Dark fallback | Later explicit user brief removes Welcome/Login theme controls and requests Dark default | Parallel auth theme, forced overwrite of saved Light/System and opaque poster fragments rejected | One shared store; preserve saved preferences/Settings, truthful recovery text, original poster unchanged and separately documented transparent extraction | VERIFIED within pass12 source/Auth/keyboard/preference-restoration scope; new-device fallback source-tested, no fresh-install claim; pass8 unbuilt |
 
 ## 15. Actual project status
 
-**Current phase:** the Product Quality Addendum is implemented within the established Light and pure-black/neutral Dark design. Existing validators provide field-directed Submit guidance; awaited persistence distinguishes device/account copies; live editorial/ad previews stay separate; Activity resolves exact owned receipts; reports reconcile ledger balances and refunds. Final source gates pass 62 frontend and 31 backend tests plus TypeScript/lint/exports. Both corrected INTERNAL-TEST APKs are independently inspected under `artifacts/android/quality-addendum-pass2-20261016/`; their 54-input digest is `a302e8c14b3706e92efc4eb54c1f7c7e11ac53476ca007fde9ad07b76c5c44a9`. First-candidate native workflow evidence and final corrected-build confirmation are separate, tracked in [PROGRESS.md](PROGRESS.md), [product quality](docs/PRODUCT_QUALITY.md) and [release readiness](RELEASE_READINESS.md). Physical ARM64, human/screen-reader acceptance and a judge-reachable backend remain open. Recording/production is held; functional QA is authorized. No new film, cloud setup or submission is claimed.
+**Historical notification phase — VERIFIED within recorded local scope:** notification pass5 preserves the existing backend and distinct Home quick-sheet/full Activity responsibilities. 78 source inputs/81 tests, TypeScript/lint/diff, unchanged backend 35 tests and strict binary inspection pass; actual POCO compatible install/Metro-off launch and final focused error/privacy/theme/dismissal/context checks pass. The broader pass2/pass3 matrices retain their exact scope. The bounded finish review closes the header-swipe finding and two material visual findings (long failure prose and low-volume empty height). Diagnostics/service restoration are saved. No filming, hosting or submission occurred; sustained performance, human/TalkBack, more devices/orientations and external delivery remain separate.
 
-**Current installed scope:** [corrected quality-pass2 native results](artifacts/product-quality/pass2/NATIVE_RESULTS.md) pass actual keyboard/full-footer checks at 393dp/font1.0 and 360dp/font1.3 in both themes, an enlarged private receipt, and exact `4B9B6535...8EACA` Metro-off/API-backed cold restore of Black, ordinary identity, drafts and the same Completed report. [Pause/restoration proof](artifacts/product-quality/pass2/metro-pause-proof.json) records preview HTTP200 and API health afterward. The first `35974413...` APK retains full connected-fixture evidence, including the explicit7.50 goal. Corrected confirmation uses another existing QA draft without edits; the held reading-room Story draft was untouched. ARM64 remains uninstalled. Physical/human/current-video acceptance is separate.
+**Historical Create phase:** bounded Create/photo local verification is complete. Final pass6 source has 64/64 mobile tests (898.9374ms), TypeScript/lint exit 0, independently inspected binary and actual Metro-off/API launch. The unchanged backend retains 35/35 tests observed earlier in tool output (13.323s). Pass3/pass5 cover Story order/format/source, distinct cover/ad uploads, Reach and explicit goal persistence, appearances, previews/policies/submission and complete photo controls; pass6 closes the submission destination defect and confirms the focused native follow-ups. The independent review has no open P0/P1/P2 in its matrix. Prior Showcase proof remains historical. No film, hosting or submission occurred.
+
+**Previous corrected x86 checkpoint:** [quality-pass2 native results](artifacts/product-quality/pass2/NATIVE_RESULTS.md) bind `4B9B6535…8EACA` to selected keyboard/footer/receipt and Metro-off/state/report checks. The first `35974413…` APK retains its connected lifecycle fixture. The later `24348DD9…B096A` ARM64 was physically installed and exercised through its documented core workflows before Showcase development. These historical checks remain useful regression evidence but do not establish current appearance or final-build acceptance.
 
 **Existing files/configuration:** original PDF and preserved initialization records; active requirements/progress; shared Expo source, bundled licensed fonts, local CNG plugin/configuration, session/draft/appearance state and tests; one FastAPI/SQLite API with migrations, uploads and cached licensed seed assets; re-extracted current design system/sidecar, audit and release/demo evidence; isolated Android SDK/JDK/Gradle/emulator tools; preserved historical artifacts and both final tagged black pass2 APKs. Test helpers under tmp remain non-product artifacts.
 
@@ -513,7 +793,7 @@ Decision log records **Decision, Reason, Alternatives, Date, Impact, Status**. C
 
 **Isolation:** initialization authored only its three requested Markdown files. The subsequent authorized development work remains under E:\Campaign, with ordinary system toolchain/package-cache use permitted by the master directive. No ERP files, source, databases, containers, credentials or settings were accessed or changed; its exclusion path was not inspected. The original PDF remains unchanged.
 
-**Current next action:** preserve the verified quality-pass source, tagged APKs, scoped evidence and incomplete captures. Perform physical/fresh-install and real-person checks when available; hosting/account setup stays deferred, and recording requires direct human resumption. The older black-pass2 verdict remains historical. Do not resume recording/production or mutate campaigns for the demo without explicit human authorization. Preserve earlier source/APKs/video. External release work remains deferred: physical ARM64, reachable judging backend, human/screen-reader checks, free-only hosting/signing and Telegram confirmation are separate gates before authorized submission. Existing unlisted draft-media and upstream dependency findings remain production review items. A local internal test artifact is not an organizer-accessible release.
+**Current next action:** preserve final pass6 and its source/binary/native/reference records; no further code correction is required by this bounded review. Keep P3 ornament/IME-spacing notes and sustained-performance, TalkBack/human/additional-device checks separate from completion. Free hosted judging access, production signing, conditional TestFlight and Telegram cutoff confirmation remain external release gates. Recording, external submission and Git publication are not resumed.
 
 ## 16. Delivery requirements
 
@@ -527,7 +807,7 @@ Decision log records **Decision, Reason, Alternatives, Date, Impact, Status**. C
 
 **Submission timing:** Monday, October 19, 2026 remains the working target (Asia/Calcutta planning context). The user's October 16 organizer-video summary reports a maximum Tuesday, October 20 at 11:59 AM. This maximum and its timezone are not independently confirmed: the official Telegram invite exposes no posts publicly. The PDF supplies no separate deadline. See REQUIREMENTS.md organizer alignment for provenance and follow-up.
 
-**Delivery verification:** RELEASE_READINESS.md separates corrected quality-pass2 APK inspection and exact installed confirmation from first-candidate connected-flow evidence, older black-pass2 checks and historical recordings. Recipient backend access, physical ARM64/human checks, conditional TestFlight and actual submission remain separate. Recording is held. A build or bounded visual review does not verify an entire journey, video or external delivery.
+**Delivery verification:** RELEASE_READINESS.md separates the new Create/photo candidates from the historical Showcase pass5 binary/phone proof, pass4 connected workflow and bounded reference review. Actual bytecode and exact phone launch confirm the corrected USB-local default; the host API and USB are still required. Performance/human/accessibility, complete current video, signing, iOS and organizer connectivity remain separate. No automated similarity/engine or whole-device approval is claimed.
 
 ## 17. Important project rules
 
@@ -542,19 +822,21 @@ Decision log records **Decision, Reason, Alternatives, Date, Impact, Status**. C
 9. Build coherent connected workflows with appropriate states, real actions, data integrity, privacy and accessible premium mobile UI/UX.
 10. Reuse existing implementations and maintain the established architecture; document significant decisions and verify changes before claiming completion.
 11. Keep all project work inside `E:\Campaign`; leave the Prakash Glass Enterprise ERP and unrelated projects completely untouched.
-12. The initialization-only boundary is complete. Current instructions authorize local implementation, dependencies, tests, redesign, INTERNAL-TEST builds and full demo production; cloud accounts/hosting remain deferred.
+12. The initialization-only boundary is complete. Local implementation, dependencies, tests, authorized screenshots and INTERNAL-TEST builds may continue; demo recording/production remains held and cloud accounts/hosting remain deferred.
 
 ## 18. Implemented local architecture and continuation
 
 - **Mobile source:** `apps/mobile/src/app/(tabs)` contains Home, nested Explore/detail/checkout/report, Create, Activity and Profile. Expo Router preserves the five tabs; non-route components and features stay outside the route directory.
-- **Shared client boundaries:** `components/ui.tsx` provides reusable controls/states consuming `useTheme`. `lib/appearance.ts` owns semantic Light/Dark palettes and a separate device preference store; `lib/theme-styles.ts` derives styles; `lib/theme.tsx` owns the stable provider above session/query/navigation. Appearance defaults to System, follows live OS changes, persists in AsyncStorage under `campaign:appearance:v1`, handles invalid/failed restoration and serialized writes, and does not touch account/draft/payment keys. Native OS bars/root background and supported keyboard appearance follow the effective scheme; OS-owned dialogs/gesture behavior remain platform-controlled. `lib/api.ts` owns request auth/timeouts/errors and validated device-reachable media/API URLs; `lib/session.tsx` owns session restoration and TanStack Query invalidation. Explicit expiry clears durable/private identity, allowlisted public reads may retry as guests, writes never replay, and a late old-session response cannot clear a newer sign-in. Offline failures preserve saved identity/drafts; switching backends signs out. `lib/types.ts` centralizes types, supported categories and integer-cent quote previews. Server responses remain authoritative for transactions.
+- **Shared client boundaries:** `components/ui.tsx` provides reusable controls/states consuming `useTheme`. `lib/appearance.ts` owns semantic Light/Dark palettes and a separate device preference store; `lib/theme-styles.ts` derives styles; `lib/theme.tsx` owns the stable provider above session/query/navigation. Appearance now defaults to Dark only for absent/invalid preferences under the later explicit Auth-polish brief (D26), preserves saved Light/System values, follows live OS changes in System mode, and persists in AsyncStorage under `campaign:appearance:v1`, handles invalid/failed restoration and serialized writes, and does not touch account/draft/payment keys. Native OS bars/root background and supported keyboard appearance follow the effective scheme; OS-owned dialogs/gesture behavior remain platform-controlled. `lib/api.ts` owns request auth/timeouts/errors and validated device-reachable media/API URLs; `lib/session.tsx` owns session restoration and TanStack Query invalidation. Explicit expiry clears durable/private identity, allowlisted public reads may retry as guests, writes never replay, and a late old-session response cannot clear a newer sign-in. Offline failures preserve saved identity/drafts; switching backends signs out. `lib/types.ts` centralizes types, supported categories and integer-cent quote previews. Server responses remain authoritative for transactions.
 - **Audience content:** `lib/public-campaign.ts` projects approved public content from managed private revisions using an allowlist, failing closed when required approved content is absent or malformed. Public lifecycle/financial facts remain current, but private pending story, assets, goal and reviewer feedback do not become backable audience content. Detail, checkout, sharing and reporting use the public projection; the campaign journey displays only available real lifecycle dates, never inferred advertising delivery or private review history.
 - **Creation:** `features/creation` owns validation, normalized editable payloads, scoped durable multi-draft storage and live campaign/advertising previews. `readiness.ts` derives issues from existing validation; `FieldTarget` and `SubmissionChecklist` reuse the five existing steps. `persistence.ts` describes actual local/account snapshots and protects newer edits from late save responses. Guest transfer is explicit after sign-in. Automatic local saves and explicit account saves preserve progress; submit is idempotent and requires the creator's goal/policy confirmation. Published and pending revisions stay separate.
+- **Quick notifications and Activity:** Home mounts `features/notifications/NotificationSheet.tsx` separately from its ScrollView; Activity retains the full existing virtualized feed. `NotificationRow.tsx` shares presentation; `useActivity` remains the sole recipient notification cache/badge source. `state.ts`/`useNotificationActions.ts` share guarded in-flight reads, not duplicate event records. Existing endpoints/preferences/destinations remain. D24/section 23 records final pass5 and separately scoped native evidence; bounded local verification passes.
+- **Private account photos:** `features/profile/Photo.tsx` uses the system picker and authenticated JSON transport for choose/crop/change/remove; user initials remain the fallback. `captureApiSession` rejects late completions after sign-out, reauthentication or server change. Private image query keys include server/account/version and clear on sign-out; no photo bytes go to AsyncStorage. `/me`, login and name edits expose nullable `avatarVersion`. Migration005 stores one owner-only normalized JPEG BLOB, separate from public campaign assets. See section 22.
 - **Backend:** `services/api/main.py` implements validated authentication/profiles, campaigns/drafts/submission/reviews/transitions, tracking/preferences/activity/updates, uploads, payments/receipts/refunds and reports. `db.py` owns transactions, migrations, password/session/receipt primitives; `domain.py` owns content/policy validation; `seed.py` produces fictional coherent demo campaigns. See its README for exact contracts.
-- **Persistence/permissions:** project-local SQLite uses relational identity/payment/event/ledger records and versioned campaign content snapshots. Ownership and reviewer roles are enforced server-side, privileged status/funding fields are not accepted from draft edits, and confirmed contributions/refunds reconcile transactionally. API JSON prevents private caching; private receipt capabilities are not logged. Images retain caching and unlisted public URIs; draft authenticated-media delivery is a documented production boundary.
+- **Persistence/permissions:** local-default SQLite and explicitly configured PostgreSQL share relational identity/payment/event/ledger records and versioned content snapshots. Ownership/reviewer roles, privileged-field protection and transactional contribution/refund rules remain. The D27 preparation replaces the previous unlisted-public upload boundary: unpublished media requires owner/reviewer authorization, and only approved public snapshots expose image bytes. Cloudinary objects remain authenticated behind the API proxy; all media responses use private/no-store caching. Profile images remain authenticated database bytes/data URIs. Stable cloud receipt secrets preserve capabilities; neither secrets nor private local records enter the APK/cloud seeds. Actual hosted persistence is unverified pending account connection.
 - **Business states:** review, approval/publication, funding, preparation, promotion and completion remain separate. Funding cannot launch advertising. Material revisions require review and setup reconfirmation. Demo delivery records and refund calculations are coherent with successful simulated funds and never claim verified real-world delivery.
-- **Run locally:** `start-local.cmd` verifies/reuses project listeners or starts hidden owned processes. Preview localhost:8081; API 127.0.0.1:8787. Per-process PowerShell invocations in README avoid changing the machine's global script policy. The authorized physical phone uses the verified in-app override http://127.0.0.1:8787 with its explicitly scoped USB reverse8787; LAN/hosting remain unverified. An emulator uses 10.0.2.2:8787.
-- **Android:** Expo CNG generates native files; never hand-edit them. Package com.campaignamplification.mobile; app name Campaign. Camera/microphone permissions are blocked, keyboard resize configured, focused Back preserves editor state. SDK55-compatible `expo-system-ui` and `expo-navigation-bar` plus automatic appearance/black splash configuration are generated through CNG. `android-local.ps1` supports preserved Debug and distinct InternalTest release variants using isolated SDK/JDK17/Gradle and explicit ABI, restoring process variables. Optional `-ArtifactTag` writes a separate artifact directory and tagged build log. The process-only JVM temporary directory is `tmp/java` for both `java.io.tmpdir` and `jdk.net.unixdomain.tmpdir`, resolving the Windows selector failure without global changes. The internal flag permits local HTTP and exposes existing backend connection controls; both final pass2 APKs have byte-verified matching Hermes/fonts/licenses and Debug signatures. Exact x86_64 Metro-off cold launch with API data and saved Black/ordinary identity passes. The current corrected ARM64 APK is also installed and tested on the authorized POCO Android15 phone; its separate physical report preserves exact workflow, device and performance limits. The emulator helper verifies only Campaign_API_36/dedicated ADB5039; its default Install still targets the debug APK, so use the explicit internal artifact for acceptance. Exact hashes/runtime scopes are in RELEASE_READINESS and ANDROID_LOCAL. Exports alone never establish installed acceptance.
+- **Run locally:** `start-local.cmd` verifies/reuses project listeners or starts hidden owned processes. Preview localhost:8081; API 127.0.0.1:8787. Per-process PowerShell invocations in README avoid changing the machine's global script policy. The authorized physical phone uses the verified in-app override http://127.0.0.1:8787 with its explicitly scoped USB reverse 8787; LAN/hosting remain unverified. An emulator uses 10.0.2.2:8787.
+- **Android:** Expo CNG generates native files; never hand-edit them. Package com.campaignamplification.mobile; app name Campaign. Camera/microphone permissions are blocked, keyboard resize configured, focused Back preserves editor state. SDK55-compatible `expo-system-ui` and `expo-navigation-bar` plus automatic appearance/black splash configuration are generated through CNG. `android-local.ps1` supports preserved Debug and distinct InternalTest release variants using isolated SDK/JDK17/Gradle and explicit ABI, restoring process variables. Optional `-ArtifactTag` writes a separate artifact directory and tagged build log. The process-only JVM temporary directory is `tmp/java` for both `java.io.tmpdir` and `jdk.net.unixdomain.tmpdir`, resolving the Windows selector failure without global changes. The internal flag permits local HTTP and exposes existing backend connection controls. Historical quality-pass APKs have independent binary and scoped installed evidence. The historical Showcase pass5 independently matches frozen/compiled sources and actual embedded API assignment `http://127.0.0.1:8787`; the old emulator value is absent. Each build attempt now uses a fresh project-local TEMP/TMP directory while CI remains enabled, avoiding shared stale transforms without clearing global caches. The exact installed POCO Metro-off/API launch and bounded native/reference checks pass. Scope and remaining performance/accessibility/release limits are recorded separately. The emulator helper verifies only Campaign_API_36/dedicated ADB5039; its default Install still targets the debug APK, so use the explicit internal artifact for acceptance. Exact hashes/runtime scopes are in RELEASE_READINESS and ANDROID_LOCAL. Exports alone never establish installed acceptance.
 - **Verification memory:** the active matrix and progress log record exact evidence and limits. Do not promote a parent requirement to VERIFIED based solely on static code, one screen or a partial test. Keep the original product specification and decision history while updating live evidence.
 
 ## 19. Organizer guidance alignment
@@ -563,7 +845,7 @@ The user supplied a 13-point summary of reviewed official video guidance on Octo
 
 The alignment audit found Activity-specific gaps rather than a reason to restart: missing campaign context, identical followed links, generic destinations, a singular/plural payment-icon mismatch and read writes blocking navigation. The current refinement uses a virtualized chronological native inbox, explicit unread/category controls, shared unread badge, named followed campaigns and server-resolved safe destinations. Existing Profile settings handle payment/preference navigation; no separate end-user roles or parallel architecture were introduced. Notification destination metadata preserves legacy rows and resolves current permissions/approved public titles; preference updates merge transactionally. A native regression also exposed repeated correction links returning to creation entry; Create now consumes focused draft intents and saves/preserves the current device snapshot when switching or reopening. Actual tests/native acceptance and outstanding delivery limits belong in PROGRESS.md and REQUIREMENTS.md.
 
-## 20. October 16 reference redesign and local delivery
+## 20. Previous October 16 reference redesign and local delivery
 
 The earlier civic-publication iteration remains preserved in source/artifact history. The latest reference-driven directive rejects that visual result and requests compact mint-and-charcoal consumer mobile UI, complete appearance and refreshed native/demo proof without restarting working functionality. Source checkpoint `artifacts/checkpoints/before-reference-redesign-20261016-101133` preserves the clean prior source. All 25 original PDF pages were reread; the actual organizer recording/transcript remains unavailable, so the user-supplied clarifications are not presented as a directly watched video. The reference website text reader failed this visit; prior product understanding and the PDF remain available.
 
@@ -572,3 +854,77 @@ Later explicit steering rejects the first reference pass's green-tinted Dark sur
 Product Design's supplied-reference translation and screenshot-first audit plus Impeccable Operate/Android/craft-floor guidance inform this iteration. Impeccable `context` ran successfully with a project-local `IMPECCABLE_HOME` cache; the earlier missing-engine/cache limitation is resolved. The native target does not use the HTML/CSS detector. No Figma connection, generated alternatives or design approval is claimed. The new source uses compact Manrope hierarchy, semantic light/dark colors and one device-level preference mechanism throughout app-owned screens. Newsreader assets/licenses remain bundled for historical compatibility, rather than being the active title style. `DESIGN.md` and its sidecar must describe the final actual source; no parallel component framework or web-only architecture was introduced.
 
 The final black pass2 APKs are under `artifacts/android/black-theme-pass2-20261016/`: x86_64 is 38,437,869 bytes, SHA-256 `45F0D82B23CD9B6C3DAD56E029E56B7F3CAF3CD91F18CF4FC6A8DED7DE7AE187`; ARM64 is 37,150,011 bytes, SHA-256 `CE69B6139356A578E1E4E9FC80EE01960B8E90F26C4BD7B000C5210DBB8DC166`. Independent inspection verifies a shared 2,018,008-byte Hermes bundle, exact fonts/full licenses, correct ABIs/API and Android Debug signing, plus the frozen 50-input digest `31def764edeefb1d1d3a03cdecfadb9353e2ae5992b03fe0cbf8969d8376d543`. ARM64 is uninstalled. [Exact x86_64 cold-launch proof](artifacts/reference-redesign/after-pass2/cold-launch.json) demonstrates Metro absent, API content, saved Black and restored ordinary identity; Metro was restored afterward. Additional selected theme/draft/large-text/System/recovery checks are in the [native results](artifacts/reference-redesign/after-pass2/NATIVE_RESULTS.md). The new demo is incomplete and held at the user's request; no recording/production or demo campaign mutations are authorized until the human user explicitly resumes them. The old film remains historical. EAS/cloud accounts and hosting stay deferred, free-only preference retained. Embedded JavaScript, installed Metro independence, backend reachability and video acceptance remain distinct claims. Current artifact/runtime/video evidence and precise remaining blockers live in PROGRESS.md, RELEASE_READINESS.md and DEMO_CHECKLIST.md.
+
+## 21. Approved Showcase design contract and acceptance boundary
+
+The app-wide user-approved `Campaign App UI Showcase.png` is preserved under `artifacts/showcase-redesign/reference.png`. D22 changes native composition, not product semantics or the architecture: compact Manrope, image-led Home/Explore/detail, clear contribution amounts and configured allocation, the existing five-step creation/editor and current-data previews, vertical campaign journey, contextual Activity, and focused Profile/account destinations. Light uses near-white surfaces/deep-green primary; Dark uses `#000000` background/header, `#121212` surfaces, `#1C1C1C` raised surfaces and restrained mint actions. The device-level System/Light/Dark provider remains stable above identity/navigation; the Profile switch retains System under Settings.
+
+The guest welcome, sign-in and create-account forms use real session APIs, validation, loading/error feedback, password visibility and guest navigation. Signed-in Profile uses actual identity and truthful Campaigns/Backed/Saved metrics, with existing private payment, notification, help/legal, backend connection, sign-out and role-restricted review functions retained. No reference likeness, follower count or trust metric is fabricated. Successful auth notices are transient and accessibility-announced; error feedback remains available.
+
+Three generated local assets live under `apps/mobile/assets/images/showcase/`: `campaign-mark.png`, `welcome-background.png` and `ocean-turtle.png`. [Provenance](artifacts/showcase-redesign/ASSETS.md) records generation, the native-driven medallion correction and exact hashes. The ocean cover is explicitly illustrative for a fictional fixture, not campaign evidence or a replacement for story/ad uploads. [DESIGN.md](DESIGN.md) and `.impeccable/design.json` describe actual implementation and the bounded native reference review. The inner advertising creative intentionally remains white with dark text/deep-green CTA in both app appearances; the surrounding canvas/frame follows the selected theme.
+
+Historical Showcase build/runtime facts remain in release/progress/physical records. Its pass3 exposed a stale baked emulator address despite matching source maps and a working saved USB override. Pass4 fixes build cache isolation; final pass5 retains independent exact API-module verification and actual installed phone launch. The pass4 workflow matrix and pass5 focused correction remain separate in the completed local verification; human/accessibility/performance and external release gates remain open. Existing records, accounts and drafts must be preserved. Screenshot QA is authorized; recording and external release setup remain held.
+
+## 22. Create reference and private profile-photo refinement
+
+The later [Create reference](artifacts/create-polish/reference.png) refines D22 only for creation and its confirmation. `features/creation/CreationUi.tsx` adds the connected five-icon progress row, compact category selector, formatting/story composer, upload area and media thumbnails, review-summary rows and pill actions. Existing `create.tsx`, model/readiness/persistence and draft-library behavior remain in use. `FundingPolicies` is shared from `creation/Preview.tsx` into Submit so complete current server policy is available before explicit consent.
+
+PDF pages 9–12 retain Basics → Story → Campaign & Ad Visuals → Reach → Submit, 60-character title, required creator/category, optional summary/cover, editable ordered editorial sections, public source titles/URLs and separate ad assets. Geography/interests/channels/allocation/duration remain Reach controls; the creator enters the funding goal only at Submit. Manual and labelled guided fallback, previews, local/account persistence, Back and review-only submission remain connected. Reference claims of six steps, 80 characters, goal at Reach, INR amounts, 100MB/video/document upload and immediate publication are visual sample content and are not adopted. Confirmation says submitted for review; it cannot imply funding or advertising has begun.
+
+Two generated local decorative rasters, `assets/images/create/story-mountains.png` and `confirmation-coast.png`, frame Story and confirmation. [Asset provenance](artifacts/create-polish/ASSETS.md) records exact prompts/hashes. They are fictional scenery outside the accessibility reading order, not user campaign media or factual evidence; no draft/ad field is automatically populated. App surfaces retain neutral black/charcoal Dark and near-white Light.
+
+Profile/Edit Profile now support deliberately selected photo add/change/remove with busy/cancel/error feedback. POST `/me/avatar` accepts a still JPEG/PNG/WebP up to 8MB and 25 megapixels, validates actual content, applies EXIF orientation, bounds to 512×512, flattens transparency and re-encodes fresh JPEG without original metadata. Migration `005_profile_avatars.sql` stores one BLOB per bearer owner; atomic replacement/removal does not touch public uploads or other users. GET/POST/DELETE return `{version,dataUri}` under no-store/Vary Authorization, with no user/path selector. Photos are private to account views and do not become public creator avatars. No portrait is fabricated or selected automatically. The picker may create a temporary crop file; app photo data is otherwise held in scoped memory, not durable client storage.
+
+Four new API tests cover auth/ownership including reviewer separation, nonpublic storage, content/size/metadata validation, invalid-upload preservation, replacement/removal and persistence after app-factory restart. The mobile transport regression checks late-picker session invalidation. The backend's 35/35 test result (13.323s) was observed in completed tool output, not saved as a standalone log; no later backend rerun is claimed. Its sandbox event-loop socket stall was resolved for the isolated test by bounded escalation. Final mobile tests are 64/64 in [898.9374ms](artifacts/create-polish/pass6/frontend.log), including the new confirmation-route regression; TypeScript/ESLint exit 0.
+
+**Final snapshot:** [72-input pass6 source](artifacts/create-polish/pass6/SOURCE_INPUTS.json), digest `aaf7b4df0713749a7ff5c7ea0997ce7f05760e49ed53f592f1e3992283436a4b`; [13-input backend](artifacts/create-polish/pass6/BACKEND_INPUTS.json), digest `622e55ee66c0872fb4a6e0a7d1f48b873e9ad0dd145fc6693b4a3d2eaa8bdecf`. [Independent inspection](artifacts/create-polish/pass6/BUILD_INSPECTION.json) verifies frozen/compiled sources, art/fonts/licenses, ARM64/Hermes, Debug signing and exact `http://127.0.0.1:8787` assignment. [APK](artifacts/android/create-polish-pass6-20261016/campaign-1.0.0-INTERNAL-TEST-arm64.apk): 45,035,820 bytes, SHA-256 `383F23C2945B052AE4E8DA6482632AADF0146DB08D3702D4959C180322D69184`. [Exact phone proof](artifacts/create-polish/pass6/METRO_OFF.json) records install Success, Metro absent, healthy API, selected-phone reverse and cold launch 1,483ms/wait 1,490ms.
+
+**Native scope:** pass3 records Story order/format/source, separate native cover/ad upload, Reach and explicit $13.25 goal across checked navigation/appearances. Photo captures [23](artifacts/create-polish/pass3/23-edit-profile-photo-dark.png)–[28](artifacts/create-polish/pass3/28-profile-photo-cancel-preserved-dark.png) show removal, crop, add, change and cancellation preservation. Pass5 retains that draft through update/cold launch, demonstrates both preview modes, complete policies/consent and submission for review, and checks selected font 1.3 Basics Dark/Profile Light. Compact upload feedback clears on step change, summary actions measure 48dp, and progress distinguishes 32-unit active from 24-unit inactive markers.
+
+Pass5's new View Campaign action exposed an invalid route after the successful $13.25 submission. Pass6 reuses `detailPath`; actual [confirmation](artifacts/create-polish/pass6/03-route-submitted-dark.png) → [detail](artifacts/create-polish/pass6/04-view-campaign-fixed-dark.png) now opens a separate submitted $2.50 QA fixture with backing closed, without publication or advertising. Pass6 also checks Explore, a contribution quote (not a new payment), Activity/context destination and [persistent photo](artifacts/create-polish/pass6/09-photo-persisted-final-dark.png). The full pass3/pass5 matrix is not described as a complete pass6 rerun.
+
+**Review and limits:** [Native results](artifacts/create-polish/NATIVE_RESULTS.md) record the complete scoped matrix. [FINISH_REVIEW](artifacts/create-polish/FINISH_REVIEW.md) returns bounded `ship`, closing all its P0/P1/P2 findings. Straight connectors/plain decorative quote lettering and spare IME footer space remain P3 notes. [Final diagnostics](artifacts/create-polish/pass6/FINAL_DIAGNOSTICS.json) contain no matching fatal entries in a two-line current-process sample (vendor warning); package exits are updates/intentional stops. Frames: 84/2,920 janky (2.88%), p95 17ms/p99 34ms; [eight tab switches](artifacts/create-polish/pass6/NAVIGATION_FRAME_SAMPLE.json) add 18/265 (6.79%). These bounded samples do not guarantee crash freedom or sustained smoothness. [Restoration](artifacts/create-polish/pass6/SERVICES_RESTORED.json) confirms API healthy, preview running, original font 1.17 and Dark Create entry. TalkBack/human testing, more devices/orientations, release signing/hosting and the held video remain open. Existing records/data are preserved; no recording, unrelated project or device action is implied.
+
+
+## 23. Quick notifications and complete Activity
+
+The later premium-notifications directive refines existing PDF pp.18–19 functionality without replacing its backend. Home's bell opens `features/notifications/NotificationSheet.tsx`; it no longer changes to Activity. The native Modal shows `recentNotifications`' newest five recipient-owned events, actual unread count, contextual icons, campaign context, short descriptions and relative timestamps. Read controls, refresh and Mark all as read remain above the persistent View all activity action. Activity retains its virtualized chronological SectionList, Today/Yesterday/Earlier grouping, All/Updates/Contributions/Unread/Account filters, followed campaigns, preferences and contextual destinations. Both consume `NotificationRow.tsx`; it uses dividers and compact type instead of repeated bordered cards. The existing API returns up to 300 newest events; “full history” means that existing available feed, not newly added unlimited pagination.
+
+`useActivity` keeps the sole notification records/read state in `['activity', user.id]`. Disabled/guest reads do not issue private GETs; results require the captured API session to remain current. Background refresh merges confirmed read states so an older GET cannot restore an unread badge. `state.ts` is a shared in-flight request coordinator, not a second notification store: a WeakMap keyed by QueryClient supplies the same coordinator to both views, guards the API session epoch, deduplicates individual reads and limits existing POST `/activity/{id}/read` concurrency to 3. Batch reads capture the current unread IDs once, leave later arrivals unread and keep successful writes if some fail. Errors and pending indicators are shared; late operations cannot recreate a cleared query or affect a later identity, including reauthentication to the same account. Existing provider sign-out clears private queries. No endpoint, migration, preference rule or financial/review business logic changed.
+
+The existing `notificationAction` routes remain authoritative: campaign details, creator correction context, owned receipt/history, report/progress or account settings. Opening starts a read request without waiting; the quick sheet finishes dismissal before routing and rechecks its captured session. Home scroll/navigation stays mounted. Native Close, backdrop, Android Back, long downward drag, short-drag return and reopening pass on final pass5; contextual campaign navigation removes the overlay and Home bounds remain identical. The stable responder claims header starts through bubbling so enabled child buttons retain taps. Shared Light/Dark/System tokens and insets remain; reduced-motion source uses zero-duration transitions, with native open/Back under zero transition setting and restoration recorded. Failure feedback remains outside scrolling. Pass5 fits short feeds to content with a shrinking scroll region and capped height.
+
+**Final checkpoint — VERIFIED within recorded local scope:** [78-input pass5 freeze](artifacts/notification-center/pass5/SOURCE_INPUTS.json), digest `4ce5ef5d69ec022ec40ffe5e4eb29ea0af3e8ee02cd51d05a06fd8dff1d06535`; [81/81 frontend tests](artifacts/notification-center/pass5/frontend.log) in 898.5777ms; TypeScript/ESLint/diff exit 0. [Final source verification](artifacts/notification-center/pass5/SOURCE_VERIFICATION.json) shows zero drift for mobile and unchanged 13-input backend `622e55ee66c0872fb4a6e0a7d1f48b873e9ad0dd145fc6693b4a3d2eaa8bdecf`, with the original PDF hash unchanged. The [current-task API log](artifacts/notification-center/checks/backend.log) is 35/35 in 13.391s. [Strict binary inspection](artifacts/notification-center/pass5/BUILD_INSPECTION.json) passes 40 compiled modules, assets/fonts/licenses, ARM64/Hermes, Debug signing and exact USB-local API initialization. [APK](artifacts/android/notifications-pass5-20261016/campaign-1.0.0-INTERNAL-TEST-arm64.apk) is 45,050,500 bytes/SHA-256 `430E65719BA17029B8C62B9AE4D6707D1EB502E9336A0B5B27738468322BDEB3`. [Exact installed proof](artifacts/notification-center/pass5/METRO_OFF.json) records compatible update/no data reset, Metro absent, API healthy and cold 1,189ms/wait 1,211ms on the authorized POCO Android15/ARM64.
+
+Pass2 physical POCO captures retain shared counts 22→21→20, the owned receipt, View all Activity, filters/preferences, stale refresh/recovery and 360dp/font 1.3 Light. Its failed swipe and scrolled-away error retain their original failed scope. Pass3 [dismissal checks](artifacts/notification-center/pass3/DISMISSAL_CHECKS.json) pass swipe-down, short-drag return, Close, Android Back, backdrop and reopening. [Batch proof](artifacts/notification-center/pass3/OFFLINE_MUTATION_CHECK.json) starts with 19 unread, saves 3 and retains 16 failed/unread; healthy refresh confirms 16 and retry reaches 0 in both views. [Home state](artifacts/notification-center/pass3/HOME_STATE_CHECK.json) remains mounted/touchable. [Display/motion](artifacts/notification-center/pass3/DISPLAY_MOTION_CHECK.json) covers 360dp/font 1.3 Dark and zero-transition functional opening/Back, restoring original display/font 1.17/transition 0.5; it does not measure animation duration. [Guest/account proof](artifacts/notification-center/pass3/GUEST_ACCOUNT_CHECK.json) shows sign-out removes private feed/badges, guest-sheet Sign in reaches auth, and a separately registered fictional B sees only its own Account created event. Pass4's cold launch is 1,104ms; its verbose-error correction is source-checked, not a complete repeated matrix. Pass5 additionally removes fixed height for low-volume feeds and permits the scroll list to shrink within the cap. Final pass5 [read-failure proof](artifacts/notification-center/pass5/OFFLINE_READ_CHECK.json) confirms the compact singular message, retained unread and omitted transport prose; retry saves it. [Account recovery](artifacts/notification-center/pass5/ACCOUNT_RECOVERY_CHECK.json) verifies B read 0→guest privacy→A native sign-in/history, excluding B's event from A's recent five and retaining A's real new-sign-in event. The [final interactions](artifacts/notification-center/pass5/FINAL_INTERACTIONS.json) repeat all dismissal/reopen paths, Home bounds/touchability, contextual campaign navigation and the zero-transition functional check. Final pictures 07–11 retain five-event scrolling/Light Activity; 12–15 capture Dark sheet/context/Activity/Home. Earlier whole matrices were not repeated wholesale on pass5; a native zero-record inbox was not manufactured (Unread empty is native, zero-record layout is source-inspected).
+
+The [bounded finish review](artifacts/notification-center/FINISH_REVIEW.md) returns `ship`, resolving the P1 swipe and P2 excessive failure copy/low-volume empty height; no actionable P0/P1/P2 visual finding remains in its supplied matrix. [Current-PID diagnostics](artifacts/notification-center/pass5/FINAL_DIAGNOSTICS.json) record 208 lines, no matching fatal and 243/3,904 janky frames(6.22%), p95=17ms/p99=65ms during mixed QA. A separate [eight-transition Home↔Activity sample](artifacts/notification-center/pass5/NAVIGATION_FRAME_SAMPLE.json) adds 22/390 janky frames (5.64%). These are limited logs/frame samples, not crash-free or sustained-smoothness guarantees. [Restoration](artifacts/notification-center/pass5/SERVICES_RESTORED.json) confirms API healthy, Metro running, selected-phone USB 8787, original 1080×2400/density 440/font 1.17/keyboard 1/transition 0.5 and Dark Home. Human/TalkBack, landscape/more hardware, sustained performance, production signing/hosting and the held video remain separate. No recording or unrelated device/project action occurred.
+
+
+## 24. Targeted premium correction and supplied Campaign branding
+
+**Current premium pass12 — VERIFIED within the recorded local scope:** [Fresh source gates](artifacts/premium-quality/pass12/SOURCE_CHECKS.json) pass **91/91 in 1044.901ms**, TypeScript/full-source ESLint/diff/public Expo config. [Strict inspection](artifacts/premium-quality/pass12/BUILD_INSPECTION.json) binds **86 inputs / 45 compiled modules / six artworks / 15 native branding resources** to the **48,623,759-byte APK**, SHA `DF4C95CB9F6555DE6E5637DCF18989B7E41042E0D978F7F908EFA0697FDAEDF9`. The installed package hash matches. [Actual Metro-off launch](artifacts/premium-quality/pass12/METRO_OFF.json) is **COLD 1,418ms / wait 1,431ms**, with preserved data and a separately healthy USB-local API. [Independent finish review](artifacts/premium-quality/FINISH_REVIEW.md) closes the opened Home/Auth/keyboard findings. Earlier matrices retain [their exact scopes](artifacts/premium-quality/CANDIDATE_SCOPES.json); no whole-app final-hash rerun or human/production acceptance is inferred. Recording/external release stay held.
+
+The final premium-quality brief preserves the approved mint/neutral-black identity and working product. The later Home-only PNG supersedes earlier paired-header actions: Campaign label, 22/26 Good ideas deserve to be heard headline, short Search campaigns… field/equal-height filter action, categories and In the spotlight. Home-specific SpotlightCard retains 140-unit top-biased ocean cover, exact unchanged raster, compact Featured · demo badge, separated category/creator, full 17/22 title, real funding/stats and lifecycle-correct 48-unit action. Explicit `height: undefined` clears React Native static-image intrinsic height before its native aspect ratio determines the top-clipped image. Other campaign covers stay intact. Search/filters/See all retain discovery; the prompt strip routes to Create and stacks at width<370/fontScale≥1.25. Full advertising-purpose explanation and configured uncertain $1 reach example remain below the feed.
+
+The shared 16-unit badge shows 99+ visually while parents announce full synchronized counts. NotificationRow conditionally discloses full copy only when natural-line measurement proves truncation; permissions/cache/read/navigation remain shared. Create keeps five icons, compact Save Draft/icon Preview and save status, with adaptive 108–124-unit summary labels. Explore uses the existing bounded six-row/batch FlatList and real filters. Backing keeps its compact footer and complete scrollable policies. Shared Stats places labels below full-width icon/value rows, preserving fonts/tabular values and full accessible labels. Backend/business/financial rules remain unchanged.
+
+`features/Brand.tsx` now uses `campaign-megaphone-transparent.png` for Auth: 70-unit horizontal Welcome icon, 60-unit compact form icon, native Campaign text and tagline in both themes. The original complete poster remains unchanged for full-artwork, launcher and splash use. The transparent extraction is a separate 1254×1254 RGBA PNG, 622,358 bytes, SHA `F6DA62459FD81DD47DA127B3FA2892CE0855A703A2A76652FC5642EF0F2F6395`. [Extraction provenance](artifacts/premium-quality/brand-extraction/PROVENANCE.json) records built-in image-generation background removal and its limits: this is a synthesized extraction, not a byte/pixel-identical cutout. The original poster remains SHA `C88BA8F63DE5C155664591DA81EB9C146FCAA92C3913323974D3577E174031F3`; whole-poster icon/favicon/black 160-unit contained splash configuration is unchanged. No Python raster editing, generic replacement logo or monochrome asset was introduced. Actual pass12 normal/compact Light/Dark rendering is included in the independent bounded review; no pixel-identical extraction claim is made.
+
+The later Onboarding reference and Auth-polish steering govern Welcome and Sign In. Welcome uses horizontal branding, a 28/34 headline, amplification explanation, three manually selected landscape slides and filled/outlined entry actions. Its image is 176 units on narrow/short/enlarged-text windows and 190 otherwise. Login/Register use compact centered branding, a 24/30 heading, 64-unit icon/label/input cards and a 50-unit primary action. Actual email/password/name validation, secure/reveal control, keyboard Next/Go, API errors and busy feedback remain. Remember me is functional and initially unchecked. Guest browsing, mounted Help form state and focus-scoped Android Back remain. The guest Profile auth surface hides its tab bar while retaining all five registered destinations. Auth no longer contains a theme picker or recovery button; a static sentence truthfully explains unavailable local password recovery. Appearance remains available through existing Help/Profile settings.
+
+The later explicit Dark-default instruction supersedes the former System fallback. The same device-scoped `campaign:appearance:v1` store now starts/restores Dark only when its saved preference is absent, invalid or unreadable. Existing explicit Light, Dark and System values are preserved; System still follows live OS changes. Signed-in Profile/Settings and guest Help retain all three choices, independently of identity and drafts. No Auth-only theme store or forced overwrite is added. ThemeProvider remains above session/query/navigation; changes and sign-out preserve forms, filters, checkout and the device preference. Tests cover missing/invalid-preference Dark fallback. Actual pass11 System switching and pass12 preference/account restart preserve existing choices; no fresh-install test or user-data clearing is claimed.
+
+**Optional login persistence:** `login(email,password,remember = true)` preserves existing callers; the new checkbox starts unchecked and passes explicitly. Unchecked login removes any prior persisted session before publishing the new memory-only token/user; process restart returns to guest and retains drafts. Checked login and registration preserve existing SecureStore persistence (AsyncStorage on web). Serialized writes and authentication/API-session guards suppress obsolete commits and prevent late logout/expiry/storage cleanup crossing a new identity. Storage failure is actionable and does not publish the new identity. Eight meaningful new storage/provider tests cover save/remove, retry/failure, stale transactions, process-like restoration and logout races; no token-format/API/business-rule change.
+
+Android Auth keeps the guest Screen’s extra height avoidance disabled and measures only native IME overlap at the stable AuthBackdrop outer view. The bottom inset is the maximum of safe-area padding and actual overlap; an already-resized window adds no duplicate height. Frame revisions and focus/active guards reject stale async measurements, hide/blur clears overlap and layout changes remeasure. Android drags/taps keep the keyboard open while the form scrolls; Help explicitly dismisses it and restores the usual Screen avoidance for Help fields. iOS keeps its existing behavior. Actual pass12 screenshots/AUTH_FUNCTIONAL.json verify focused fields and complete primary actions with IME, including compact Login/Register in both themes.
+
+The unchanged 13-input backend digest `622e55ee66c0872fb4a6e0a7d1f48b873e9ad0dd145fc6693b4a3d2eaa8bdecf` retains this task’s [35/35 isolated tests in 14.300s](artifacts/premium-quality/pass1/BACKEND_CHECKS.json). Unchanged dependencies retain pass1 online Expo/Doctor 20/20 evidence; the later offline dependency check warns its validation is unreliable. No unnecessary API/online-metadata rerun, dependency, migration or build-command change is claimed. Binary inspection verifies Hermes, real USB-local API assignment, ARM64-only, Debug-v2/non-debuggable, assets/fonts/licenses and pre-build freezes; it does not establish installed behavior.
+
+[Candidate scopes](artifacts/premium-quality/CANDIDATE_SCOPES.json) retain every freeze, exact diff, build and physical matrix under its own hash. Pass1 covers creation; pass2 connected discovery/backing/Activity/report workflows; pass6 closes Home/compact Stats; pass7 proves optional Remember restart; pass9 captures the transparent-brand Auth composition; pass10 proves actual registration/isolation/restart; pass11 retains System/form checks. Pass3 was built but neither installed nor strictly inspected; pass5 built/inspected but never installed; pass8 was superseded unbuilt. Nine Create files remain source-identical from pass1, Home/Spotlight/Stats/Explore from pass6 and Session/writer from pass7, while later Screen/Auth/Profile keyboard changes are explicitly listed. This is source binding and bounded native evidence, not a wholesale final-hash rerun.
+
+[Pass12 native actions](artifacts/premium-quality/pass12/AUTH_FUNCTIONAL.json) verify full Login/Register buttons while the IME remains open in all four compact Light/Dark combinations, plus normal Dark Login; measured targets are 49.82–50.18dp. The native Register button surfaces invalid-email feedback. Guest browsing opens the five-tab public app and hides private notifications. Unchecked login returns to guest after process restart; checked login restores the original account/photo and 10/3/1 private counts. Inline mode links, hardware/header Back, Help/form preservation and saved draft-library access work. The held Ocean awareness preview QA draft was viewed without editing/submission. System preference and account restore through restart; Dark/original display are restored afterward. Exact captures 00–33 remain under pass12, with registration/isolation and live System follow-up also retaining their earlier pass10/11 scopes.
+
+[Final diagnostics](artifacts/premium-quality/pass12/FINAL_DIAGNOSTICS.json) record 46 current-PID log lines with no matching fatal/JS error markers and confirm the installed APK hash. Package-specific exit/memory/frame captures remain bounded observations, not crash-free or sustained-performance guarantees. Original 1080×2400/density 440/font 1.17/IME 1/night mode and animation 0.5 values are restored. [Service restoration](artifacts/premium-quality/pass12/SERVICES_RESTORED.json) confirms the same Campaign API healthy and owned Metro 8081 running again, with only the selected phone’s USB 8787 reverse; an initial bounded health timeout resolved without duplicate restart. No unrelated device/service or recording action is implied.
+
+The final review is bounded to actual opened captures and recorded interactions. Compact submission confirmation remains explicitly unverified. Human/TalkBack, additional hardware/orientations, fresh-install default behavior and sustained smoothness remain separate; preserved existing Light/System preferences are verified without clearing user data. Password recovery is truthfully unavailable locally. Production signing/hosting, current Telegram cutoff confirmation, the held video and external submission remain open or held. USB-local backend reachability is not hosted availability; no score or fictional engine verdict is used.

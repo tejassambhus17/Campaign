@@ -74,3 +74,9 @@ local.properties
 
 # Organizer material stays local until redistribution permission is confirmed
 /Hackathon_Requirements.pdf
+.neon
+
+# Project-local Neon agent tooling (installed on request, not application source)
+/.agents/skills/neon/
+/.agents/skills/neon-postgres/
+/skills-lock.json

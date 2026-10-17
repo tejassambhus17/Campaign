@@ -10,7 +10,7 @@ export const categories = [
   "Business",
   "Other",
 ];
-export type User = { id: string; name: string; email: string; role: string };
+export type User = { id: string; name: string; email: string; role: string; avatarVersion?: string | null };
 export type Section = {
   id: string;
   kind: "text" | "heading" | "image" | "statistic" | "action";

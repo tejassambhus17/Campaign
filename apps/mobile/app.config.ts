@@ -15,7 +15,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ...(config.plugins || []),
       [
         "./plugins/withInternalTestAndroid.cjs",
-        { enabled: process.env.CAMPAIGN_INTERNAL_TEST === "1" },
+        { enabled: process.env.CAMPAIGN_INTERNAL_TEST === "1", cloud: process.env.EXPO_PUBLIC_CLOUD_BUILD === "1" },
       ],
     ],
   };

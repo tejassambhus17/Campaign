@@ -1,0 +1,35 @@
+# Preparation only. Never attach a payment method or accept a paid fallback.
+# In Render, connect the existing private tejassambhus17/Campaign repository.
+services:
+  - type: web
+    name: campaign-api
+    runtime: python
+    plan: free
+    rootDir: services/api
+    buildCommand: pip install --disable-pip-version-check -r requirements.txt
+    startCommand: python run.py
+    healthCheckPath: /health
+    autoDeployTrigger: 'off'
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.11
+      - key: CAMPAIGN_ENV
+        value: cloud
+      - key: CAMPAIGN_MEDIA_STORAGE
+        value: cloudinary
+      - key: CAMPAIGN_DATABASE_URL
+        sync: false
+      - key: CAMPAIGN_MIGRATION_DATABASE_URL
+        sync: false
+      - key: CAMPAIGN_RECEIPT_SECRET
+        sync: false
+      - key: CAMPAIGN_REVIEWER_EMAIL
+        sync: false
+      - key: CAMPAIGN_REVIEWER_PASSWORD
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false

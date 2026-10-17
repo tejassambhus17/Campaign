@@ -1,0 +1,281 @@
+# Campaign zero-cost deployment runbook
+
+## October17 final-delivery update — current live deployment
+
+The user explicitly authorized the minimal required backend update after checks.
+Only `services/api/main.py` and `services/api/test_draft_deletion.py` were added
+to the existing private cloud branch, commit
+`e599f984d43b8b109dff63504937c946400cbbad` (parent
+`d3ec43600e57e3f2c0008f29636604b79097fe0c`). The existing service
+`srv-db985h8pd3as73ba6h80` is verified **Free**, auto-deploy **off**;
+manual deploy `dep-db9n37e1egvs73fsumfg` became live October17,13:02:41 UTC on
+that exact commit. API remains `https://campaign-api-cw8y.onrender.com`.
+No new resource/card/paid plan, environment/secret change, Neon migration or
+Cloudinary reconfiguration occurred. Normal main HEAD/index were preserved;
+the scoped cloud-branch fast-forward was required for this deployment.
+
+Before deployment, 230 frontend/93 isolated backend tests and TS/lint passed.
+After deployment, 13/13 read-only HTTPS comparisons confirm existing public
+campaigns, original account/campaign, receipt capability and Cloudinary image
+bytes are unchanged. 32/32 separate live API cases pass using exactly two new
+fictional member accounts and two unpublished QA drafts: ownership/auth checks,
+repeat deletion, direct404s, old-client-ID409 and `/me` filtering. Public IDs
+and financial snapshots remain unchanged. The retained fictional draft's native
+Cancel/Confirm deletion and HTTPS absence additionally pass7/7 checks on the
+pre-auth-clean binary; QA owner signed out, older guest draft preserved.
+Probe credentials/session state stay only in ignored `tmp/`; no existing user
+record, payment or media mutation is part of this verification.
+
+**Rollback constraint:** tombstones now exist. Do not roll back naively to code
+before tombstone handling: retain all tombstone-aware read/create guards, or
+disable only DELETE while retaining those guards. Never restore deleted payloads
+or remove tombstones to mask a rollback problem. Live concurrent-writer proof is
+still separate from isolated SQLite/mock lock tests.
+
+Current delivery is [Campaign.apk](../Campaign.apk),47,705,118 bytes,SHA256
+`1D36B4C1BF8BDAEB1E5D773FF8E20641499561FB323D0A793366F856E672344C`, fresh
+`final-campaign-auth-clean-20261017` ARM64 CloudTest, embedded2,196,144-byte Hermes,
+existing Debug signing and current HTTPS origin. The standalone Settings footer
+below guest Welcome/auth was removed without changing backend code; no further
+deployment is needed. Fresh230frontend/TS/lint and both ABI builds pass.
+Independent package checks confirm Campaign label/approved installer icon and
+splash. Current-build POCO Dark Welcome/Login/Register, scroll and Back-return
+states pass10/10 clean-auth UI checks; no form submitted. [Phone proof](../artifacts/final-delivery-20261017/AUTH_CLEAN_PHYSICAL.json)
+records fresh install-r following pre-existing package absence, no agent clear/
+uninstall. Exact-hash [installer preview](../artifacts/final-delivery-20261017/AUTH_CLEAN_INSTALLER_PREVIEW.json)
+confirms Campaign/approved logo, then Cancel/no Update/security/data changes.
+Final emulator10/10 checks also pass clean auth, Help→Settings with saved
+System/Light/INR, Back/mode links and actual unsent fictional email retention;
+[receipt](../artifacts/final-delivery-20261017/AUTH_CLEAN_NATIVE_EMULATOR.json)
+records17captures/XML and172current-PID log lines with0listed fatal/JS markers.
+Phone19-line sample also has0markers at Android15/API35/Dark/font1.17/density440.
+No auth submission, guest completion, draft or preference mutation. Production
+signing and warning-free sideloading remain unverified; earlier APKs preserved.
+See [deploy receipt](../artifacts/final-delivery-20261017/RENDER_DEPLOY.json),
+[preservation checks](../artifacts/final-delivery-20261017/AFTER_DEPLOY_HTTPS.json),
+[live delete checks](../artifacts/final-delivery-20261017/LIVE_DRAFT_DELETE.json),
+[review/rollback details](../artifacts/final-delivery-20261017/PREDEPLOY_REVIEW.md)
+and [bounded report](../artifacts/final-delivery-20261017/COMPLETION_REPORT.md).
+Earlier deployment/account holds below are historical. Recording, billing,
+Play publication and organizer submission remain held.
+
+## Historical October17 initial Free deployment and verification
+
+The existing private `tejassambhus17/Campaign` repository branch
+`codex/cloud-deployment` (commit `9f506038b5a7b8a0ee6620f8809aedd048929fb0`)
+is deployed as Render service `srv-db985h8pd3as73ba6h80`, `plan: free`, in Ohio,
+with auto-deploy off. Its public API is
+`https://campaign-api-cw8y.onrender.com`; deploy
+`dep-db985hopd3as73ba6j9g` is live. The provider injected the existing Neon
+production pooled and migration URLs, stable receipt/reviewer settings, and
+Cloudinary Free account keys as server-side environment. The Neon migration
+was not rerun. No paid service, trial, card, disk or background worker was
+selected. [Sanitized service result](../artifacts/cloud-deployment/RENDER_SERVICE.json)
+contains only environment key names.
+
+Read-only HTTPS smoke gave 200 JSON for `/health`, `/config`, and `/campaigns`.
+The [live fictional creation probe](../artifacts/cloud-deployment/cloud-probe-create.json)
+passed 27 checks through registration, five draft steps, review, explicit
+publication, authenticated Cloudinary image, simulated $1 contribution,
+receipt, Activity and Profile. The Cloudinary account independently reported
+Free and passed a signed upload/read, denied unsigned delivery and removed the
+QA object; [sanitized result](../artifacts/cloud-deployment/CLOUDINARY_LIVE.json).
+Only this Render service was restarted; distinct server PIDs 64→46 are present
+in its logs. The [same-record comparison](../artifacts/cloud-deployment/cloud-probe-verify.json)
+passed 14 checks after restart, without a second payment. The explicit
+[restart record](../artifacts/cloud-deployment/RENDER_RESTART.json) ties these
+observations together. Private probe state and credentials remain ignored.
+The helper's initial gzip-response bug failed before any network mutation;
+its empty state was archived privately and its regression test passes.
+
+The [CloudTest ARM64 APK](../artifacts/android/cloud-render-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk)
+built successfully and was compatibly installed on the authorized Android 15
+POCO. Its installed hash matches the artifact; packaged Hermes reads this
+exact HTTPS origin. With Campaign Metro off and the selected phone's USB-local
+API reverse temporarily removed, physical Home, Explore, media, details,
+registration, all five editor steps, account draft save/resume, simulated
+contribution/receipt, Activity, Profile and Light/Dark were exercised. See
+[release readiness](../RELEASE_READINESS.md), the
+[physical report](../PHYSICAL_ANDROID_TEST.md) and
+[machine-readable native scope](../artifacts/cloud-deployment/PHYSICAL_CLOUDTEST.json).
+The cable remained attached for ADB; unplugged/laptop-off acceptance is not
+claimed. The prior preparation/deferral sections
+below are historical and superseded as to provider availability. Recording
+and external submission remain held by the user.
+
+**October17 update:** the supplied Free Neon Campaign project is connected;
+production PostgreSQL and live API workflows are verified within
+[NEON_SETUP.md](NEON_SETUP.md)'s scope. Actual QA compute-restart persistence is
+recorded. FastAPI/media remain local; Render/Cloudinary/public HTTPS/cloud APK
+are pending. Preserve the established server receipt/reviewer secrets when
+configuring Render. Older deferral statements below retain historical scope.
+
+## Historical preparation result: accounts intentionally pending
+
+The October 16 cloud directive authorizes deployment engineering with a strict
+₹0 budget. The user's subsequent answer is **“Prepare everything; I'll connect
+accounts later.”** No cloud account, service, database, subscription, card, paid
+trial or external deployment was created. There is no public backend URL or
+cloud APK. Do not treat local PostgreSQL or mocked Cloudinary tests as hosted
+persistence. Recording and organizer submission remain held.
+
+The recoverable pre-change source is
+`refs/checkpoints/cloud-deployment-20261016`, commit
+`2882721fa3b0b83125bab9d195a6a8aeb9f5f3fe`. HEAD and the normal index were preserved.
+The [checkpoint evidence](../artifacts/cloud-deployment/CHECKPOINT.json) records
+the original working source, including prior uncommitted UI work.
+
+## Prepared architecture and preserved behavior
+
+- Existing Expo/React Native mobile app and FastAPI API are retained.
+- `render.yaml` describes one **Free** Python web service in `services/api`,
+  managed HTTPS, `/health`, dynamic `PORT`, and automatic deploys disabled.
+  No Render database, disk, worker, CI job or chargeable resource is defined.
+- `CAMPAIGN_DATABASE_URL` selects PostgreSQL. Explicit local database paths keep
+  SQLite. PostgreSQL migrations are separate, transactional and versioned;
+  integer cents, UTC text, JSON snapshots, foreign keys and idempotency remain.
+  A transaction advisory lock preserves the existing serialized write behavior.
+  This deliberately favors small-prototype correctness over parallel throughput.
+- Cloud mode requires a stable receipt secret, explicit reviewer credentials,
+  PostgreSQL TLS and authenticated Cloudinary storage. It never imports local
+  SQLite records, local accounts, uploads or secrets. Fresh fictional seeds are
+  the existing clearly labelled samples.
+- Campaign images retain API `/media/...` references. All provider objects are
+  authenticated; the API authorizes owner/reviewer access or an exact approved
+  public snapshot reference. Private replacements remain private until approved.
+  Image errors and successes use private/no-store caching. Native pictures send
+  authorization only to the exact API media path, with session-separated cache
+  identities. Profile photos remain authenticated database bytes/data URIs.
+- Cloud docs/OpenAPI are disabled; public-origin/host and CORS are explicit.
+  Actual-body and bounded per-client rate limits run before route parsing.
+  These limits are per process, reset on restart and are not a distributed
+  abuse service. Proxy identity must be verified on the real host; do not trust
+  arbitrary X-Forwarded-For headers. A shared proxy address can share a quota.
+- Cloud mobile mode ignores saved local connection overrides and uses separate
+  backend-scoped session and guest/account draft keys. Old local sessions and
+  drafts remain untouched. Appearance remains the same shared device setting.
+  Requests allow a bounded 90-second cold start, show delayed connection guidance,
+  and retain explicit retry. Writes are not automatically replayed.
+- `CloudTest` uses the existing package and Debug certificate, embeds Hermes and
+  disables cleartext/connection editing. It is still an **INTERNAL-TEST** APK,
+  never a production-signed release. It requires an actual public HTTPS URL.
+  Its generated filename uses `CLOUD-TEST` to distinguish it from the local fallback.
+
+## Local evidence
+
+Source and backend test evidence is in
+[`artifacts/cloud-deployment`](../artifacts/cloud-deployment). Real PostgreSQL
+tests use an isolated portable project-owned server, never a provider or the
+existing local SQLite data. Cloudinary HTTP tests are mocked. The account-later
+probe is tested through an isolated HTTP test client, not a deployed endpoint.
+
+Final source gates: **107/107 frontend tests**, TypeScript/full-source ESLint,
+PowerShell syntax/diff checks, **82/82 consolidated backend tests** and online
+Expo Doctor **20/20**. Separate actual PostgreSQL coverage passes **45/45** with
+zero skips; a real owned PG stop/start preserves the original records/session,
+receipt capability, money/report/Activity/private photo. The QA cluster was
+stopped afterward. Provider and native/cloud gates remain pending.
+
+The authorized POCO is connected and authorized: model 2312FRAFDI, Android 15 /
+API 35, ARM64. [Read-only detection](../artifacts/cloud-deployment/PHYSICAL_AVAILABILITY.json)
+did not install, launch or test a new APK. An earlier sandbox ADB failure was
+resolved by the scoped authorized check; it is not a missing-device claim.
+
+The preserved fallback is
+[`campaign-1.0.0-INTERNAL-TEST-arm64.apk`](../artifacts/android/premium-quality-pass12-20261016/campaign-1.0.0-INTERNAL-TEST-arm64.apk),
+48,623,759 bytes, SHA256
+`DF4C95CB9F6555DE6E5637DCF18989B7E41042E0D978F7F908EFA0697FDAEDF9`.
+Its previous physical launch needs no Metro, but its **backend still needs the
+laptop and USB reverse**. Its prior native evidence does not verify this new
+deployment source or independent-network access.
+
+## Account connection and first deployment
+
+1. Complete provider login/signup directly. Recheck the actual account's Free
+   eligibility and the [current provider conditions](CLOUD_PROVIDERS.md). If any
+   provider requires a card, paid trial, billing verification or paid fallback,
+   stop. Do not attach a payment method or enable overages/automatic upgrades.
+2. Create one fresh **Neon Free** project/database. Keep scale-to-zero enabled;
+   use its TLS connection string, preferably the pooled endpoint. Do not copy
+   the local database. Keep the database password in server-side secrets.
+3. Create/claim a normal permanent **Cloudinary Free Image and Video API**
+   account. Do not use an expiring unclaimed sandbox or a paid add-on. Keep
+   cloud name/API key/API secret server-side. Unsigned upload presets are not
+   needed and should not be enabled for this application.
+4. Review and push only the verified preparation source to the existing private
+   `tejassambhus17/Campaign` repository, preserving history. Do not create a new
+   repository, force-push or include local artifacts/secrets. No GitHub Actions
+   billing or paid CI is required.
+5. Connect that repository in Render and review `render.yaml` before applying.
+   Select the **Free** service and no payment method; leave Blueprint Auto Sync
+   off as well as service auto-deploy. Set the secrets listed in
+   [`services/api/.env.cloud.example`](../services/api/.env.cloud.example).
+   `run.py` does not load .env files automatically. Render injects its public
+   URL; another host must set `CAMPAIGN_PUBLIC_BASE_URL` explicitly.
+6. Keep the generated `CAMPAIGN_RECEIPT_SECRET` stable across restarts/redeploys.
+   Rotating it invalidates existing guest receipt capabilities. Use a distinct
+   strong reviewer account; an existing member-email collision must fail, never
+   promote the member. Changing the environment password does not reset an
+   already provisioned reviewer's password. No reviewer secret goes in the APK.
+7. Deploy manually. Confirm HTTPS `/health` **and** real `/config`, campaign
+   discovery, images and story responses. Verify database/media configuration
+   and Free plan directly in each provider dashboard; health alone is insufficient.
+
+## Persistence probe and cloud APK
+
+After real accounts/HTTPS are available, run the prepared probe from
+`E:\Campaign\services\api` using the project Python. Reviewer credentials are
+optional environment secrets; without them its restricted workflow is explicitly
+incomplete. The probe creates only labelled fictional QA records through API
+workflows and saves private state under ignored `tmp/cloud-deployment`.
+
+```powershell
+& '.venv\Scripts\python.exe' cloud_probe.py --url 'https://ACTUAL_BACKEND' --step create
+```
+
+Record the provider's actual restart/redeploy identifier, restart only the
+Campaign service, then run:
+
+```powershell
+& '.venv\Scripts\python.exe' cloud_probe.py --url 'https://ACTUAL_BACKEND' --step verify
+```
+
+A second successful read alone does not prove a restart occurred. Retain the
+provider restart evidence with the sanitized probe report. Never share the
+private probe-state file or credentials. Confirm media remains available and
+unsigned direct Cloudinary delivery remains denied.
+
+After that gate, from `E:\Campaign`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/android-local.ps1 -Mode CloudTest -Architecture arm64-v8a -ApiUrl 'https://ACTUAL_BACKEND' -ArtifactTag 'cloud-verified'
+```
+
+This example URL is a command placeholder, not a deployed service. Do not run
+the build against an invented hostname or distribute such an APK. Inspect the
+actual packaged API assignment, CloudTest flags, embedded bundle, manifest,
+assets/ABIs, certificate and frozen source before compatible `install -r` on
+the authorized phone. Do not uninstall, clear data or replace incompatible
+signatures without approval. Preserve the fallback APK and local data.
+
+Then test real Home/Explore/images/detail, registration/sign-in, all five steps,
+draft restore, submission/reviewer restrictions, simulated contribution/receipt,
+funding, Activity, Profile/reports and both themes on the physical phone. Start
+with Metro absent. After preparation is complete, request USB disconnection and
+mobile data or independent Wi-Fi, then test again with the laptop off. ADB reverse
+must not serve the cloud build. USB-connected screenshots, local PostgreSQL or
+source checks cannot close these independent-device gates.
+
+## Remaining gates
+
+- **BLOCKED:** provider access/provisioning, actual account Free/no-billing
+  confirmation, public HTTPS URL, hosted database/media restart persistence.
+- **BLOCKED:** cloud APK build/inspection/install and disconnected independent
+  phone verification. No cloud APK was produced or installed.
+- **IN PROGRESS:** controlled private reviewer handover, judge download location
+  and final connected deployment regression after provisioning.
+- **HELD:** recording, external submission and any paid resource. Production
+  signing and human/TalkBack/broader-device acceptance are not inferred.
+
+The immediate action required from the user is to connect the three free
+provider accounts when ready. Do not repeat that request while it is deferred.

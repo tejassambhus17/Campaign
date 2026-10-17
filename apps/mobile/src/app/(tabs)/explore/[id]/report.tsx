@@ -1,9 +1,10 @@
+import { useCurrency } from "../../../../lib/CurrencyProvider";
 import { View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { useConfig, useRefreshOnFocus } from "../../../../lib/session";
 import { api } from "../../../../lib/api";
-import { Campaign, money, number } from "../../../../lib/types";
+import { Campaign, number } from "../../../../lib/types";
 import { audienceCampaign } from "../../../../lib/public-campaign";
 import {
   Button,
@@ -125,6 +126,7 @@ function ReportMetrics({
   refundPolicy?: string;
 }) {
   const { colors, styles } = useTheme();
+  const { money, description } = useCurrency();
   const numeric = (key: string) =>
     typeof r[key] === "number" && Number.isFinite(r[key])
       ? (r[key] as number)
@@ -140,13 +142,14 @@ function ReportMetrics({
         Demo report. Payments and delivery are simulated; no live advertising results are verified.
       </Notice>
       <CampaignJourney campaign={c} report={r} />
+      <Text style={[styles.muted, { fontSize: 11, lineHeight: 17 }]}>{description}</Text>
       <View style={{ gap: 5 }}>
         <Text accessibilityRole="header" style={styles.h2}>
           Original contribution allocation
         </Text>
         <Text style={styles.muted}>
           Contributions pay for message distribution. These original amounts
-          stay visible after refunds. All amounts are USD.
+          stay visible after refunds. Accounting remains in USD; preferred-currency equivalents use the current dated reference.
         </Text>
       </View>
       <View

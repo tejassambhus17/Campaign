@@ -1,4 +1,5 @@
 import { Campaign, categories, newDraft } from "../../lib/types";
+import type { MoneyEntryRecord } from "../../lib/currency";
 
 export const STEPS = [
   "Basics",
@@ -131,6 +132,7 @@ export type Assistance = {
   action: string;
 };
 export type LocalDraft = {
+  goalEntry?: MoneyEntryRecord;
   localId: string;
   draft: Campaign;
   step: number;

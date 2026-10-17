@@ -4,28 +4,34 @@
     "slug": "campaign-amplification",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/brand/campaign-megaphone-transparent.png",
     "userInterfaceStyle": "automatic",
-    "backgroundColor": "#F7FAF8",
+    "backgroundColor": "#000000",
     "splash": {
-      "image": "./assets/icon.png",
+      "image": "./assets/brand/campaign-megaphone-transparent.png",
       "resizeMode": "contain",
-      "backgroundColor": "#F7FAF8"
+      "backgroundColor": "#000000"
     },
     "ios": {
+      "icon": "./assets/brand/campaign-logo.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.campaignamplification.mobile"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#185544"
-      },
       "predictiveBackGestureEnabled": false,
-      "package": "com.campaignamplification.mobile"
+      "package": "com.campaignamplification.mobile",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/brand/campaign-megaphone-transparent.png",
+        "backgroundColor": "#000000"
+      },
+      "blockedPermissions": [
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
-      "favicon": "./assets/icon.png",
+      "favicon": "./assets/brand/campaign-megaphone-transparent.png",
       "name": "Campaign Amplification",
       "bundler": "metro"
     },
@@ -35,7 +41,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Choose campaign and advertising images from your library.",
+          "photosPermission": "Choose a profile photo, campaign images and advertising visuals from your library.",
           "cameraPermission": false,
           "microphonePermission": false
         }
@@ -44,11 +50,13 @@
       "expo-system-ui",
       ["expo-navigation-bar", { "enforceContrast": false, "visibility": "visible" }],
       ["expo-splash-screen", {
-        "backgroundColor": "#F7FAF8",
-        "image": "./assets/icon.png",
-        "imageWidth": 88,
-        "dark": { "backgroundColor": "#000000", "image": "./assets/icon.png" }
-      }]
+        "backgroundColor": "#000000",
+        "image": "./assets/brand/campaign-megaphone-transparent.png",
+        "imageWidth": 144,
+        "resizeMode": "contain",
+        "dark": { "backgroundColor": "#000000", "image": "./assets/brand/campaign-megaphone-transparent.png" }
+      }],
+      "./plugins/withCampaignBranding.cjs"
     ],
     "scheme": "amplify",
     "description": "Community-funded message amplification. All payments and advertising results are simulated."

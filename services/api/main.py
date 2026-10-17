@@ -6,30 +6,37 @@ from contextvars import ContextVar
 from contextlib import asynccontextmanager
 from datetime import timedelta
 from decimal import Decimal
+import base64
 import hashlib
 import hmac
 import io
 import json
+import logging
 import math
 import os
 from pathlib import Path
 import re
 import secrets
-import sqlite3
 import threading
+import warnings
 from typing import Literal
 
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-from PIL import Image, UnidentifiedImageError
+from fastapi.responses import FileResponse, JSONResponse, Response
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from starlette.concurrency import run_in_threadpool
+from PIL import Image, ImageOps, UnidentifiedImageError
 from pydantic import BaseModel, Field, field_validator
 
-from db import Database, digest, hash_password, identifier, verify_password
+from db import Database, INTEGRITY_ERRORS, digest, hash_password, identifier, verify_password
 from domain import (CATEGORIES, CHANNELS, DEFAULT_PREFERENCES, EDITABLE_STATES, PUBLIC_STATES,
                     CampaignContent, cents, dollars, fee_for, estimated_reach, parse_stamp, stamp,
                     submission_errors, utcnow)
 from seed import seed_demo, localize_seed_assets
+from deployment import Deployment
+from media_storage import create_media_storage, StorageRecord, MediaNotFound, MediaStorageError
+from security import CloudRequestGuardMiddleware
 
 Image.MAX_IMAGE_PIXELS = 25_000_000
 
@@ -122,7 +129,9 @@ def user_json(user):
 
 
 def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastAPI:
+    deployment = Deployment.read()
     database = Database(db_path)
+    media_storage = create_media_storage(database.media)
     fee_rate = Decimal(os.getenv('CAMPAIGN_DEMO_FEE_RATE', '0.05'))
     people_rate = float(os.getenv('CAMPAIGN_DEMO_PEOPLE_PER_AD_DOLLAR', '27'))
     if not fee_rate.is_finite() or not 0 <= fee_rate < 1 or not math.isfinite(people_rate) or people_rate <= 0:
@@ -133,27 +142,43 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
         localize_seed_assets(database)
 
     app = FastAPI(title='Campaign Amplification Demo API', version='1.0.0',
-                  description='Local persistent prototype. Payments and advertising are simulated; no real funds move.')
+                  docs_url=None if deployment.cloud else '/docs',
+                  redoc_url=None if deployment.cloud else '/redoc',
+                  openapi_url=None if deployment.cloud else '/openapi.json',
+                  description='Persistent hackathon prototype. Payments and advertising are simulated; no real funds move.')
     app.state.database = database
-    origins = os.getenv('CAMPAIGN_CORS_ORIGINS', 'http://localhost:8081,http://127.0.0.1:8081,http://localhost:19006').split(',')
-    app.add_middleware(CORSMiddleware, allow_origins=[item.strip() for item in origins],
-                       allow_credentials=False, allow_methods=['GET', 'POST', 'PUT'],
+    app.state.media_storage = media_storage
+    app.add_middleware(CORSMiddleware, allow_origins=list(deployment.cors_origins),
+                       allow_credentials=False, allow_methods=['GET', 'POST', 'PUT', 'DELETE'],
                        allow_headers=['Authorization', 'Content-Type'])
+    if deployment.cloud:
+        app.add_middleware(CloudRequestGuardMiddleware)
+        app.add_middleware(TrustedHostMiddleware, allowed_hosts=list(deployment.allowed_hosts))
     attempts = defaultdict(deque)
     attempts_lock = threading.Lock()
     url_base = ContextVar('campaign_url_base', default='')
 
     @app.middleware('http')
     async def request_asset_urls(request: Request, call_next):
-        token = url_base.set(str(request.base_url).rstrip('/'))
+        token = url_base.set(deployment.public_url or str(request.base_url).rstrip('/'))
         try:
-            response = await call_next(request)
+            try:
+                response = await call_next(request)
+            except Exception as error:
+                if not deployment.cloud:
+                    raise
+                # Uvicorn must not receive raw SQL, connection strings or
+                # provider bodies in a public deployment's exception traceback.
+                logging.getLogger('campaign').warning('Cloud request failed (%s)', type(error).__name__)
+                response = JSONResponse({'detail': 'The request could not be completed. Please try again.'}, status_code=500)
             response.headers['X-Content-Type-Options'] = 'nosniff'
             # Campaign responses vary between a public approved snapshot and an
             # owner's private draft. Never let an HTTP cache reuse either JSON
             # representation after sign-out, endpoint switching, or funding changes.
-            if not request.url.path.startswith(('/media/', '/seed-media/')):
-                response.headers['Cache-Control'] = 'no-store'
+            if not request.url.path.startswith('/seed-media/'):
+                # Private-image errors also vary by identity and publication.
+                # Do not negatively cache a 404/401/503 before a valid read.
+                response.headers['Cache-Control'] = 'private, no-store' if request.url.path.startswith('/media/') else 'no-store'
                 vary = [value.strip() for value in response.headers.get('Vary', '').split(',') if value.strip()]
                 if 'authorization' not in {value.lower() for value in vary}:
                     vary.append('Authorization')
@@ -172,13 +197,18 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
                 section['url'] = absolute(section['url'])
         return content
 
-    def canonical_assets(content):
+    def canonical_assets(content, connection, user):
         """Persist owned media independently of the hostname used by a particular client."""
         from urllib.parse import urlparse
         from db import ROOT
         def local_reference(value):
             path = urlparse(value).path
-            if re.fullmatch(r'/media/img_[a-f0-9]{24}\.jpg', path) and (database.media / path.rsplit('/', 1)[-1]).is_file():
+            if re.fullmatch(r'/media/img_[a-f0-9]{24}\.jpg', path):
+                asset = connection.execute('SELECT owner_id FROM assets WHERE filename=?', (path.rsplit('/', 1)[-1],)).fetchone()
+                if not asset:
+                    raise HTTPException(422, 'The uploaded image is unavailable. Upload it to this Campaign environment.')
+                if asset['owner_id'] != user['id']:
+                    raise HTTPException(403, 'You can only attach images uploaded by your account.')
                 return path
             if re.fullmatch(r'/seed-media/(forest|learning|ocean|community|arts|science)\.jpg', path) and (ROOT / 'assets' / 'seed' / path.rsplit('/', 1)[-1]).is_file():
                 return path
@@ -213,8 +243,9 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
         if category != 'security' and not preferences['categories'].get(category, True):
             return
         destination = destination or default_destination(category, campaign_id, key)
-        connection.execute('''INSERT OR IGNORE INTO notifications
-            (id,user_id,campaign_id,category,title,body,created_at,dedup_key,destination_json) VALUES (?,?,?,?,?,?,?,?,?)''',
+        connection.execute('''INSERT INTO notifications
+            (id,user_id,campaign_id,category,title,body,created_at,dedup_key,destination_json) VALUES (?,?,?,?,?,?,?,?,?)
+            ON CONFLICT(user_id,dedup_key) DO NOTHING''',
                            (identifier('ntf'), user_id, campaign_id, category, title, body, stamp(), key or identifier('dedup'), json.dumps(destination)))
 
     def recipients(connection, campaign):
@@ -269,7 +300,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
 
     def get_campaign(connection, campaign_id):
         row = connection.execute('SELECT * FROM campaigns WHERE id=?', (campaign_id,)).fetchone()
-        if not row:
+        if not row or row['status'] == 'Deleted Draft':
             raise HTTPException(404, 'Campaign not found.')
         return dict(row)
 
@@ -309,8 +340,8 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
         if managed:
             content['clientDraftId'] = campaign.get('client_draft_id')
             content['feedback'] = campaign['feedback']
-            content['history'] = [dict(row) for row in connection.execute('''SELECT event_type AS type,previous_state AS previousState,
-                new_state AS newState,detail,created_at AS createdAt,version FROM campaign_events
+            content['history'] = [dict(row) for row in connection.execute('''SELECT event_type AS type,previous_state AS "previousState",
+                new_state AS "newState",detail,created_at AS "createdAt",version FROM campaign_events
                 WHERE campaign_id=? ORDER BY created_at''', (campaign['id'],))]
             if campaign['published_json'] and campaign['revision_status']:
                 content['publishedVersion'] = asset_urls(json.loads(campaign['published_json']))
@@ -378,12 +409,18 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             'refundPendingAmount': 'Awaiting simulated refund processing; not included in completed refunds. Before promotion this includes the fee.'})
         return result
 
+    def account_json(connection, user):
+        avatar = connection.execute('SELECT version FROM profile_avatars WHERE user_id=?', (user['id'],)).fetchone()
+        return {**user_json(user), 'avatarVersion': avatar['version'] if avatar else None}
+
     def session(connection, user):
         token = secrets.token_urlsafe(40)
         connection.execute('INSERT INTO sessions VALUES (?,?,?)', (digest(token), user['id'], stamp(utcnow()+timedelta(days=7))))
-        return {'token': token, 'user': user_json(user)}
+        return {'token': token, 'user': account_json(connection, user)}
 
     def auth_limit(request):
+        if deployment.cloud:
+            return  # The bounded cloud middleware applies this limit before parsing.
         address = request.client.host if request.client else 'local'
         now = utcnow().timestamp()
         with attempts_lock:
@@ -407,6 +444,12 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
 
     @app.get('/health')
     def health():
+        if deployment.cloud:
+            try:
+                with database.connect() as connection:
+                    connection.execute('SELECT 1').fetchone()
+            except Exception:
+                return JSONResponse({'status': 'unavailable', 'service': 'campaign-amplification'}, status_code=503)
         return {'status': 'ok', 'service': 'campaign-amplification', 'simulatedPayments': True}
 
     @app.get('/config')
@@ -437,7 +480,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             try:
                 connection.execute('INSERT INTO users VALUES (?,?,?,?,?,?,?)', (user['id'], user['name'], user['email'],
                                    hash_password(payload.password), 'member', json.dumps(DEFAULT_PREFERENCES), stamp()))
-            except sqlite3.IntegrityError:
+            except INTEGRITY_ERRORS:
                 raise HTTPException(409, 'An account already exists for this email.')
             notify(connection, user['id'], 'security', 'Account created', 'Your account was created. Sessions expire after seven days.')
             return session(connection, user)
@@ -493,13 +536,49 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             if content.clientDraftId:
                 existing = connection.execute('SELECT * FROM campaigns WHERE owner_id=? AND client_draft_id=?', (user['id'], content.clientDraftId)).fetchone()
                 if existing:
+                    if existing['status'] == 'Deleted Draft':
+                        raise HTTPException(409, 'This draft was deleted. Start a new draft rather than resaving its old identifier.')
                     return campaign_json(connection, dict(existing), user)
             campaign_id, created = identifier('cmp'), stamp()
-            data = canonical_assets(content.model_dump(exclude={'clientDraftId'}))
+            data = canonical_assets(content.model_dump(exclude={'clientDraftId'}), connection, user)
             data['featured'] = False
             connection.execute('''INSERT INTO campaigns (id,owner_id,data_json,status,created_at,updated_at,client_draft_id)
                 VALUES (?,?,?,'Draft',?,?,?)''', (campaign_id, user['id'], json.dumps(data), created, created, content.clientDraftId))
             return campaign_json(connection, get_campaign(connection, campaign_id), user)
+
+    @app.delete('/campaigns/{campaign_id}/draft')
+    def delete_draft(campaign_id: str, user=Depends(auth)):
+        # The same write lock as save/submit makes the lifecycle decision and
+        # content removal atomic in SQLite and pooled PostgreSQL. A minimal
+        # identifier tombstone prevents delayed POST retries from recreating it.
+        with database.transaction() as connection:
+            row = connection.execute('SELECT * FROM campaigns WHERE id=?', (campaign_id,)).fetchone()
+            if not row:
+                raise HTTPException(404, 'Draft not found.')
+            campaign = dict(row)
+            assert_owner(campaign, user)
+            if campaign['status'] == 'Deleted Draft':
+                return {'deleted': True, 'campaignId': campaign_id, 'scope': 'account'}
+            if campaign['status'] != 'Draft' or campaign['published_json'] is not None or campaign['revision_status'] is not None:
+                raise HTTPException(409, 'Only an unpublished draft can be deleted. Submitted campaigns and private revisions are preserved.')
+            if connection.execute('SELECT 1 FROM payments WHERE campaign_id=?', (campaign_id,)).fetchone() or connection.execute('SELECT 1 FROM ledger WHERE campaign_id=?', (campaign_id,)).fetchone():
+                raise HTTPException(409, 'This record has payment history and cannot be deleted as a draft.')
+            connection.execute('DELETE FROM tracking WHERE campaign_id=?', (campaign_id,))
+            connection.execute('DELETE FROM feedback WHERE campaign_id=?', (campaign_id,))
+            connection.execute('DELETE FROM campaign_events WHERE campaign_id=?', (campaign_id,))
+            # Notifications keep their historical message; an absent campaign
+            # destination resolves safely to Profile. Uploaded assets are never
+            # removed: another campaign or story may still reference them.
+            connection.execute('UPDATE notifications SET campaign_id=NULL WHERE campaign_id=?', (campaign_id,))
+            removed = connection.execute("""UPDATE campaigns SET data_json='{}',status='Deleted Draft',
+                feedback='',report_json=NULL,setup_ready=0,approved_version=NULL,deadline=NULL,
+                version=version+1,updated_at=? WHERE id=? AND owner_id=? AND status='Draft'
+                AND published_json IS NULL AND revision_status IS NULL""", (stamp(), campaign_id, user['id']))
+            if removed.rowcount != 1:
+                # Also reject a writer outside the app's normal advisory-lock
+                # protocol; rollback restores all preceding dependent changes.
+                raise HTTPException(409, 'The draft changed before deletion. Refresh its status before trying again.')
+        return {'deleted': True, 'campaignId': campaign_id, 'scope': 'account'}
 
     @app.put('/campaigns/{campaign_id}')
     def save_campaign(campaign_id: str, payload: dict, user=Depends(auth)):
@@ -512,7 +591,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
                 raise HTTPException(409, 'A newer draft was saved. Reload before editing to preserve those changes.')
             from pydantic import ValidationError
             try:
-                data = canonical_assets(CampaignContent.model_validate({**json.loads(campaign['data_json']), **payload}).model_dump())
+                data = canonical_assets(CampaignContent.model_validate({**json.loads(campaign['data_json']), **payload}).model_dump(), connection, user)
             except ValidationError as error:
                 raise HTTPException(422, json.loads(error.json(include_context=False)))
             data['featured'] = json.loads(campaign['data_json'])['featured']
@@ -572,7 +651,7 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
         with database.transaction() as connection:
             reconcile(connection)
             # Includes approved/public campaigns so the same restricted view can control the separate delivery stages.
-            rows = connection.execute("SELECT * FROM campaigns WHERE status NOT IN ('Draft','Rejected') OR revision_status IS NOT NULL ORDER BY updated_at DESC").fetchall()
+            rows = connection.execute("SELECT * FROM campaigns WHERE status NOT IN ('Draft','Rejected','Deleted Draft') OR revision_status IS NOT NULL ORDER BY updated_at DESC").fetchall()
             return [campaign_json(connection, dict(row), user) for row in rows]
 
     @app.post('/campaigns/{campaign_id}/review')
@@ -802,11 +881,11 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
     def me(user=Depends(auth)):
         with database.transaction() as connection:
             reconcile(connection)
-            campaigns = [campaign_json(connection, dict(row), user) for row in connection.execute('SELECT * FROM campaigns WHERE owner_id=? ORDER BY updated_at DESC', (user['id'],))]
+            campaigns = [campaign_json(connection, dict(row), user) for row in connection.execute("SELECT * FROM campaigns WHERE owner_id=? AND status!='Deleted Draft' ORDER BY updated_at DESC", (user['id'],))]
             payments = [payment_json(row) for row in connection.execute('SELECT * FROM payments WHERE user_id=? ORDER BY created_at DESC', (user['id'],))]
             saved = [row[0] for row in connection.execute("SELECT campaign_id FROM tracking WHERE user_id=? AND kind='save'", (user['id'],))]
             followed = [row[0] for row in connection.execute("SELECT campaign_id FROM tracking WHERE user_id=? AND kind='follow'", (user['id'],))]
-            return {'user': user_json(user), 'campaigns': campaigns, 'payments': payments, 'saved': saved,
+            return {'user': account_json(connection, user), 'campaigns': campaigns, 'payments': payments, 'saved': saved,
                     'followed': followed, 'preferences': json.loads(user['preferences_json'])}
 
     @app.put('/me/preferences')
@@ -838,7 +917,63 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
         with database.transaction() as connection:
             connection.execute('UPDATE users SET name=? WHERE id=?', (name.strip(), user['id']))
             notify(connection, user['id'], 'security', 'Profile updated', 'Your display name changed.')
-        return {**user_json(user), 'name': name.strip()}
+            return {**account_json(connection, user), 'name': name.strip()}
+
+    def avatar_json(row):
+        # The existing authenticated JSON transport handles expiry and no-store.
+        # A data URI avoids public upload URLs and persistent native image caches.
+        return {'version': row['version'] if row else None,
+                'dataUri': 'data:image/jpeg;base64,' + base64.b64encode(row['jpeg']).decode('ascii') if row else None}
+
+    @app.get('/me/avatar')
+    def profile_avatar(user=Depends(auth)):
+        with database.connect() as connection:
+            row = connection.execute('SELECT version,jpeg FROM profile_avatars WHERE user_id=?', (user['id'],)).fetchone()
+            return avatar_json(row)
+
+    @app.post('/me/avatar')
+    async def save_profile_avatar(file: UploadFile = File(), user=Depends(auth)):
+        if file.content_type not in {'image/jpeg', 'image/png', 'image/webp'}:
+            raise HTTPException(415, 'Choose a JPEG, PNG or WebP profile photo.')
+        raw = await file.read(8 * 1024 * 1024 + 1)
+        if len(raw) > 8 * 1024 * 1024:
+            raise HTTPException(413, 'Choose a profile photo that is 8 MB or smaller.')
+        try:
+            with warnings.catch_warnings():
+                warnings.simplefilter('error', Image.DecompressionBombWarning)
+                with Image.open(io.BytesIO(raw)) as original:
+                    if original.format not in {'JPEG', 'PNG', 'WEBP'} or original.width * original.height > 25_000_000 or getattr(original, 'n_frames', 1) != 1:
+                        raise ValueError('Unsupported, animated or oversized image.')
+                    original.verify()
+                with Image.open(io.BytesIO(raw)) as original:
+                    oriented = ImageOps.exif_transpose(original)
+                    oriented.thumbnail((512, 512), Image.Resampling.LANCZOS)
+                    # A fresh RGB canvas strips EXIF/GPS/ICC/text metadata and
+                    # gives transparent input a neutral white background.
+                    rgba = oriented.convert('RGBA')
+                    clean = Image.new('RGB', rgba.size, 'white')
+                    clean.paste(rgba, mask=rgba.getchannel('A'))
+                    output = io.BytesIO()
+                    clean.save(output, 'JPEG', quality=85, optimize=True)
+            data = output.getvalue()
+            if not data or len(data) > 2 * 1024 * 1024:
+                raise ValueError('Normalized image is too large.')
+        except (UnidentifiedImageError, OSError, ValueError, SyntaxError, Image.DecompressionBombError, Image.DecompressionBombWarning):
+            raise HTTPException(422, 'Choose a valid still JPEG, PNG or WebP photo of 25 megapixels or less.')
+        version = identifier('avatar')
+        # Owner is exclusively the bearer identity. Filename, URL, user IDs and
+        # any extra multipart fields never choose a path or another account.
+        with database.transaction() as connection:
+            connection.execute('''INSERT INTO profile_avatars(user_id,version,jpeg,updated_at) VALUES (?,?,?,?)
+                ON CONFLICT(user_id) DO UPDATE SET version=excluded.version,jpeg=excluded.jpeg,updated_at=excluded.updated_at''',
+                               (user['id'], version, data, stamp()))
+        return avatar_json({'version': version, 'jpeg': data})
+
+    @app.delete('/me/avatar')
+    def remove_profile_avatar(user=Depends(auth)):
+        with database.transaction() as connection:
+            connection.execute('DELETE FROM profile_avatars WHERE user_id=?', (user['id'],))
+        return avatar_json(None)
 
     @app.get('/activity')
     def activity(user=Depends(auth)):
@@ -846,13 +981,13 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             reconcile(connection)
             campaigns = {}
             notifications = []
-            for row in connection.execute('SELECT * FROM notifications WHERE user_id=? ORDER BY created_at DESC,rowid DESC LIMIT 300', (user['id'],)):
+            for row in connection.execute(f'SELECT * FROM notifications WHERE user_id=? ORDER BY created_at DESC,{database.notification_order} DESC LIMIT 300', (user['id'],)):
                 campaign_id = row['campaign_id']
                 if campaign_id and campaign_id not in campaigns:
                     found = connection.execute('SELECT * FROM campaigns WHERE id=?', (campaign_id,)).fetchone()
                     campaigns[campaign_id] = dict(found) if found else None
                 campaign = campaigns.get(campaign_id)
-                visible = bool(campaign and (can_manage(campaign, user) or
+                visible = bool(campaign and campaign['status'] != 'Deleted Draft' and (can_manage(campaign, user) or
                                (campaign['status'] in PUBLIC_STATES and campaign['published_json'])))
                 campaign_title = None
                 if visible:
@@ -938,8 +1073,8 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
             campaign = get_campaign(connection, campaign_id)
             if not can_manage(campaign, user):
                 raise HTTPException(403, 'Campaign history is restricted to its creator and reviewers.')
-            return [dict(row) for row in connection.execute('''SELECT id,event_type AS type,previous_state AS previousState,
-                new_state AS newState,detail,created_at AS createdAt,version FROM campaign_events
+            return [dict(row) for row in connection.execute('''SELECT id,event_type AS type,previous_state AS "previousState",
+                new_state AS "newState",detail,created_at AS "createdAt",version FROM campaign_events
                 WHERE campaign_id=? ORDER BY created_at,id''', (campaign_id,))]
 
     @app.post('/campaigns/{campaign_id}/updates')
@@ -989,21 +1124,61 @@ def create_app(db_path: str | Path | None = None, *, seed: bool = True) -> FastA
         asset_id = identifier('img')
         filename = f'{asset_id}.jpg'
         data = output.getvalue()
-        (database.media / filename).write_bytes(data)
-        with database.transaction() as connection:
-            connection.execute('INSERT INTO assets VALUES (?,?,?,?,?,?,?,?,?)', (asset_id, user['id'], purpose,
-                               filename, 'image/jpeg', len(data), image.width, image.height, stamp()))
-        return {'id': asset_id, 'url': str(request.base_url).rstrip('/')+f'/media/{filename}',
+        try:
+            storage_record = await run_in_threadpool(media_storage.save, filename, data)
+        except MediaStorageError:
+            raise HTTPException(503, 'Image storage is temporarily unavailable. Retry the upload.') from None
+        try:
+            with database.transaction() as connection:
+                connection.execute('INSERT INTO assets VALUES (?,?,?,?,?,?,?,?,?)', (asset_id, user['id'], purpose,
+                                   filename, 'image/jpeg', len(data), image.width, image.height, stamp()))
+                connection.execute('INSERT INTO asset_storage (asset_id,provider,public_id,version) VALUES (?,?,?,?)',
+                                   (asset_id, storage_record.provider, storage_record.public_id, storage_record.version))
+        except BaseException:
+            # Compensate only the object created by this request. Never delete
+            # an existing upload or expose provider credentials in an error.
+            try:
+                await run_in_threadpool(media_storage.delete, filename, storage_record)
+            except MediaStorageError:
+                pass  # A remote orphan is safer than deleting another asset.
+            raise
+        return {'id': asset_id, 'url': url_base.get()+f'/media/{filename}',
                 'width': image.width, 'height': image.height, 'contentType': 'image/jpeg', 'size': len(data), 'purpose': purpose}
 
     @app.get('/media/{filename}')
-    def media(filename: str):
+    def media(filename: str, user=Depends(auth_optional)):
         if not re.fullmatch(r'img_[a-f0-9]{24}\.jpg', filename):
             raise HTTPException(404, 'Image not found.')
-        path = (database.media / filename).resolve()
-        if not path.is_relative_to(database.media.resolve()) or not path.is_file():
-            raise HTTPException(404, 'Image not found.')
-        return FileResponse(path, media_type='image/jpeg', headers={'Cache-Control': 'public, max-age=86400', 'X-Content-Type-Options': 'nosniff'})
+        with database.connect() as connection:
+            asset = connection.execute('SELECT id,owner_id FROM assets WHERE filename=?', (filename,)).fetchone()
+            if not asset:
+                raise HTTPException(404, 'Image not found.')
+            permitted = bool(user and (asset['owner_id'] == user['id'] or user['role'] == 'reviewer'))
+            if not permitted:
+                # Only the approved snapshot can publish an image. A private
+                # replacement in data_json never makes its bytes public.
+                from urllib.parse import urlsplit
+                for row in connection.execute('SELECT status,published_json FROM campaigns WHERE published_json IS NOT NULL'):
+                    if row['status'] not in PUBLIC_STATES:
+                        continue
+                    content = json.loads(row['published_json'])
+                    references = [content.get('coverImage', ''), *content.get('adImages', []),
+                                  *(part.get('url', '') for part in content.get('sections', []))]
+                    if any(value and urlsplit(value).path == f'/media/{filename}' for value in references):
+                        permitted = True
+                        break
+            if not permitted:
+                raise HTTPException(404, 'Image not found.')
+            mapping = connection.execute('SELECT provider,public_id,version FROM asset_storage WHERE asset_id=?', (asset['id'],)).fetchone()
+            record = StorageRecord(mapping['provider'], mapping['public_id'], mapping['version']) if mapping else None
+        try:
+            data = media_storage.read(filename, record)
+        except MediaNotFound:
+            raise HTTPException(404, 'Image not found.') from None
+        except MediaStorageError:
+            raise HTTPException(503, 'Image storage is temporarily unavailable. Retry shortly.') from None
+        return Response(data, media_type='image/jpeg', headers={'Cache-Control': 'private, no-store',
+                                                               'Vary': 'Authorization', 'X-Content-Type-Options': 'nosniff'})
 
     @app.get('/seed-media/{filename}')
     def seed_media(filename: str):

@@ -9,7 +9,7 @@ export function accountDraftToken(entry: LocalDraft): string {
 }
 
 export function localDraftToken(entry: LocalDraft): string {
-  return JSON.stringify({ localId: entry.localId, draft: entry.draft, step: entry.step, goalInput: entry.goalInput, assistance: entry.assistance, entryMode: entry.entryMode, accountSavedToken: entry.accountSavedToken });
+  return JSON.stringify({ localId: entry.localId, draft: entry.draft, step: entry.step, goalInput: entry.goalInput, goalEntry: entry.goalEntry, assistance: entry.assistance, entryMode: entry.entryMode, accountSavedToken: entry.accountSavedToken });
 }
 
 /** Preserve any edits made while the older snapshot was being written to the account. */

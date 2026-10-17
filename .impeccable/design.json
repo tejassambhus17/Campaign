@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-16T05:37:08.316903+00:00",
+  "generatedAt": "2026-10-16T15:00:40.391938+00:00",
   "title": "Design System: Campaign",
   "extensions": {
     "colorMeta": {
@@ -8,14 +8,14 @@
         "role": "neutral",
         "displayName": "Light Application Ground",
         "tonalRamp": [
-          "oklch(15% 0.00411 157.18)",
-          "oklch(26% 0.00411 157.18)",
-          "oklch(38% 0.00411 157.18)",
-          "oklch(49% 0.00411 157.18)",
-          "oklch(61% 0.00411 157.18)",
-          "oklch(72% 0.00411 157.18)",
-          "oklch(84% 0.00411 157.18)",
-          "oklch(95% 0.00411 157.18)"
+          "oklch(15% 0.00170 247.84)",
+          "oklch(26% 0.00170 247.84)",
+          "oklch(38% 0.00170 247.84)",
+          "oklch(49% 0.00170 247.84)",
+          "oklch(61% 0.00170 247.84)",
+          "oklch(72% 0.00170 247.84)",
+          "oklch(84% 0.00170 247.84)",
+          "oklch(95% 0.00170 247.84)"
         ]
       },
       "light-paper": {
@@ -36,98 +36,98 @@
         "role": "neutral",
         "displayName": "Light Raised Surface Role",
         "tonalRamp": [
-          "oklch(15% 0.00826 157.09)",
-          "oklch(26% 0.00826 157.09)",
-          "oklch(38% 0.00826 157.09)",
-          "oklch(49% 0.00826 157.09)",
-          "oklch(61% 0.00826 157.09)",
-          "oklch(72% 0.00826 157.09)",
-          "oklch(84% 0.00826 157.09)",
-          "oklch(95% 0.00826 157.09)"
+          "oklch(15% 0.00348 219.53)",
+          "oklch(26% 0.00348 219.53)",
+          "oklch(38% 0.00348 219.53)",
+          "oklch(49% 0.00348 219.53)",
+          "oklch(61% 0.00348 219.53)",
+          "oklch(72% 0.00348 219.53)",
+          "oklch(84% 0.00348 219.53)",
+          "oklch(95% 0.00348 219.53)"
         ]
       },
       "light-ink": {
         "role": "neutral",
         "displayName": "Light Title Ink",
         "tonalRamp": [
-          "oklch(15% 0.01829 165.26)",
-          "oklch(26% 0.01829 165.26)",
-          "oklch(38% 0.01829 165.26)",
-          "oklch(49% 0.01829 165.26)",
-          "oklch(61% 0.01829 165.26)",
-          "oklch(72% 0.01829 165.26)",
-          "oklch(84% 0.01829 165.26)",
-          "oklch(95% 0.01829 165.26)"
+          "oklch(15% 0.01184 196.27)",
+          "oklch(26% 0.01184 196.27)",
+          "oklch(38% 0.01184 196.27)",
+          "oklch(49% 0.01184 196.27)",
+          "oklch(61% 0.01184 196.27)",
+          "oklch(72% 0.01184 196.27)",
+          "oklch(84% 0.01184 196.27)",
+          "oklch(95% 0.01184 196.27)"
         ]
       },
       "light-text": {
         "role": "neutral",
         "displayName": "Light Body Text",
         "tonalRamp": [
-          "oklch(15% 0.03068 157.28)",
-          "oklch(26% 0.03068 157.28)",
-          "oklch(38% 0.03068 157.28)",
-          "oklch(49% 0.03068 157.28)",
-          "oklch(61% 0.03068 157.28)",
-          "oklch(72% 0.03068 157.28)",
-          "oklch(84% 0.03068 157.28)",
-          "oklch(95% 0.03068 157.28)"
+          "oklch(15% 0.01533 209.85)",
+          "oklch(26% 0.01533 209.85)",
+          "oklch(38% 0.01533 209.85)",
+          "oklch(49% 0.01533 209.85)",
+          "oklch(61% 0.01533 209.85)",
+          "oklch(72% 0.01533 209.85)",
+          "oklch(84% 0.01533 209.85)",
+          "oklch(95% 0.01533 209.85)"
         ]
       },
       "light-muted": {
         "role": "neutral",
         "displayName": "Light Secondary Text",
         "tonalRamp": [
-          "oklch(15% 0.02890 159.73)",
-          "oklch(26% 0.02890 159.73)",
-          "oklch(38% 0.02890 159.73)",
-          "oklch(49% 0.02890 159.73)",
-          "oklch(61% 0.02890 159.73)",
-          "oklch(72% 0.02890 159.73)",
-          "oklch(84% 0.02890 159.73)",
-          "oklch(95% 0.02890 159.73)"
+          "oklch(15% 0.01860 233.37)",
+          "oklch(26% 0.01860 233.37)",
+          "oklch(38% 0.01860 233.37)",
+          "oklch(49% 0.01860 233.37)",
+          "oklch(61% 0.01860 233.37)",
+          "oklch(72% 0.01860 233.37)",
+          "oklch(84% 0.01860 233.37)",
+          "oklch(95% 0.01860 233.37)"
         ]
       },
       "light-line": {
         "role": "neutral",
         "displayName": "Light Separator",
         "tonalRamp": [
-          "oklch(15% 0.01511 158.22)",
-          "oklch(26% 0.01511 158.22)",
-          "oklch(38% 0.01511 158.22)",
-          "oklch(49% 0.01511 158.22)",
-          "oklch(61% 0.01511 158.22)",
-          "oklch(72% 0.01511 158.22)",
-          "oklch(84% 0.01511 158.22)",
-          "oklch(95% 0.01511 158.22)"
+          "oklch(15% 0.00556 211.04)",
+          "oklch(26% 0.00556 211.04)",
+          "oklch(38% 0.00556 211.04)",
+          "oklch(49% 0.00556 211.04)",
+          "oklch(61% 0.00556 211.04)",
+          "oklch(72% 0.00556 211.04)",
+          "oklch(84% 0.00556 211.04)",
+          "oklch(95% 0.00556 211.04)"
         ]
       },
       "light-outline": {
         "role": "neutral",
         "displayName": "Light Field Outline",
         "tonalRamp": [
-          "oklch(15% 0.02757 160.09)",
-          "oklch(26% 0.02757 160.09)",
-          "oklch(38% 0.02757 160.09)",
-          "oklch(49% 0.02757 160.09)",
-          "oklch(61% 0.02757 160.09)",
-          "oklch(72% 0.02757 160.09)",
-          "oklch(84% 0.02757 160.09)",
-          "oklch(95% 0.02757 160.09)"
+          "oklch(15% 0.01586 213.13)",
+          "oklch(26% 0.01586 213.13)",
+          "oklch(38% 0.01586 213.13)",
+          "oklch(49% 0.01586 213.13)",
+          "oklch(61% 0.01586 213.13)",
+          "oklch(72% 0.01586 213.13)",
+          "oklch(84% 0.01586 213.13)",
+          "oklch(95% 0.01586 213.13)"
         ]
       },
       "light-primary": {
         "role": "primary",
         "displayName": "Light Action",
         "tonalRamp": [
-          "oklch(15% 0.01829 165.26)",
-          "oklch(26% 0.01829 165.26)",
-          "oklch(38% 0.01829 165.26)",
-          "oklch(49% 0.01829 165.26)",
-          "oklch(61% 0.01829 165.26)",
-          "oklch(72% 0.01829 165.26)",
-          "oklch(84% 0.01829 165.26)",
-          "oklch(95% 0.01829 165.26)"
+          "oklch(15% 0.05181 173.21)",
+          "oklch(26% 0.05181 173.21)",
+          "oklch(38% 0.05181 173.21)",
+          "oklch(49% 0.05181 173.21)",
+          "oklch(61% 0.05181 173.21)",
+          "oklch(72% 0.05181 173.21)",
+          "oklch(84% 0.05181 173.21)",
+          "oklch(95% 0.05181 173.21)"
         ]
       },
       "light-on-primary": {
@@ -148,56 +148,56 @@
         "role": "neutral",
         "displayName": "Light Context Surface",
         "tonalRamp": [
-          "oklch(15% 0.01906 162.93)",
-          "oklch(26% 0.01906 162.93)",
-          "oklch(38% 0.01906 162.93)",
-          "oklch(49% 0.01906 162.93)",
-          "oklch(61% 0.01906 162.93)",
-          "oklch(72% 0.01906 162.93)",
-          "oklch(84% 0.01906 162.93)",
-          "oklch(95% 0.01906 162.93)"
+          "oklch(15% 0.02073 166.11)",
+          "oklch(26% 0.02073 166.11)",
+          "oklch(38% 0.02073 166.11)",
+          "oklch(49% 0.02073 166.11)",
+          "oklch(61% 0.02073 166.11)",
+          "oklch(72% 0.02073 166.11)",
+          "oklch(84% 0.02073 166.11)",
+          "oklch(95% 0.02073 166.11)"
         ]
       },
       "light-header": {
         "role": "neutral",
-        "displayName": "Light Identity / Estimate Header",
+        "displayName": "Light Neutral Header",
         "tonalRamp": [
-          "oklch(15% 0.04949 168.66)",
-          "oklch(26% 0.04949 168.66)",
-          "oklch(38% 0.04949 168.66)",
-          "oklch(49% 0.04949 168.66)",
-          "oklch(61% 0.04949 168.66)",
-          "oklch(72% 0.04949 168.66)",
-          "oklch(84% 0.04949 168.66)",
-          "oklch(95% 0.04949 168.66)"
+          "oklch(15% 0.00170 247.84)",
+          "oklch(26% 0.00170 247.84)",
+          "oklch(38% 0.00170 247.84)",
+          "oklch(49% 0.00170 247.84)",
+          "oklch(61% 0.00170 247.84)",
+          "oklch(72% 0.00170 247.84)",
+          "oklch(84% 0.00170 247.84)",
+          "oklch(95% 0.00170 247.84)"
         ]
       },
       "light-header-text": {
         "role": "neutral",
         "displayName": "Light Header Text",
         "tonalRamp": [
-          "oklch(15% 0.01829 165.26)",
-          "oklch(26% 0.01829 165.26)",
-          "oklch(38% 0.01829 165.26)",
-          "oklch(49% 0.01829 165.26)",
-          "oklch(61% 0.01829 165.26)",
-          "oklch(72% 0.01829 165.26)",
-          "oklch(84% 0.01829 165.26)",
-          "oklch(95% 0.01829 165.26)"
+          "oklch(15% 0.01184 196.27)",
+          "oklch(26% 0.01184 196.27)",
+          "oklch(38% 0.01184 196.27)",
+          "oklch(49% 0.01184 196.27)",
+          "oklch(61% 0.01184 196.27)",
+          "oklch(72% 0.01184 196.27)",
+          "oklch(84% 0.01184 196.27)",
+          "oklch(95% 0.01184 196.27)"
         ]
       },
       "light-on-header-muted": {
         "role": "neutral",
         "displayName": "Light Header Secondary",
         "tonalRamp": [
-          "oklch(15% 0.05148 161.52)",
-          "oklch(26% 0.05148 161.52)",
-          "oklch(38% 0.05148 161.52)",
-          "oklch(49% 0.05148 161.52)",
-          "oklch(61% 0.05148 161.52)",
-          "oklch(72% 0.05148 161.52)",
-          "oklch(84% 0.05148 161.52)",
-          "oklch(95% 0.05148 161.52)"
+          "oklch(15% 0.01860 233.37)",
+          "oklch(26% 0.01860 233.37)",
+          "oklch(38% 0.01860 233.37)",
+          "oklch(49% 0.01860 233.37)",
+          "oklch(61% 0.01860 233.37)",
+          "oklch(72% 0.01860 233.37)",
+          "oklch(84% 0.01860 233.37)",
+          "oklch(95% 0.01860 233.37)"
         ]
       },
       "light-peach": {
@@ -274,56 +274,56 @@
         "role": "primary",
         "displayName": "Light Progress Fill",
         "tonalRamp": [
-          "oklch(15% 0.09277 160.66)",
-          "oklch(26% 0.09277 160.66)",
-          "oklch(38% 0.09277 160.66)",
-          "oklch(49% 0.09277 160.66)",
-          "oklch(61% 0.09277 160.66)",
-          "oklch(72% 0.09277 160.66)",
-          "oklch(84% 0.09277 160.66)",
-          "oklch(95% 0.09277 160.66)"
+          "oklch(15% 0.11626 161.04)",
+          "oklch(26% 0.11626 161.04)",
+          "oklch(38% 0.11626 161.04)",
+          "oklch(49% 0.11626 161.04)",
+          "oklch(61% 0.11626 161.04)",
+          "oklch(72% 0.11626 161.04)",
+          "oklch(84% 0.11626 161.04)",
+          "oklch(95% 0.11626 161.04)"
         ]
       },
       "light-progress-track": {
         "role": "neutral",
         "displayName": "Light Progress Track",
         "tonalRamp": [
-          "oklch(15% 0.02670 163.16)",
-          "oklch(26% 0.02670 163.16)",
-          "oklch(38% 0.02670 163.16)",
-          "oklch(49% 0.02670 163.16)",
-          "oklch(61% 0.02670 163.16)",
-          "oklch(72% 0.02670 163.16)",
-          "oklch(84% 0.02670 163.16)",
-          "oklch(95% 0.02670 163.16)"
+          "oklch(15% 0.00916 161.34)",
+          "oklch(26% 0.00916 161.34)",
+          "oklch(38% 0.00916 161.34)",
+          "oklch(49% 0.00916 161.34)",
+          "oklch(61% 0.00916 161.34)",
+          "oklch(72% 0.00916 161.34)",
+          "oklch(84% 0.00916 161.34)",
+          "oklch(95% 0.00916 161.34)"
         ]
       },
       "light-subtle": {
         "role": "neutral",
-        "displayName": "Light Read Activity Surface",
+        "displayName": "Light Subtle Surface",
         "tonalRamp": [
-          "oklch(15% 0.00827 157.09)",
-          "oklch(26% 0.00827 157.09)",
-          "oklch(38% 0.00827 157.09)",
-          "oklch(49% 0.00827 157.09)",
-          "oklch(61% 0.00827 157.09)",
-          "oklch(72% 0.00827 157.09)",
-          "oklch(84% 0.00827 157.09)",
-          "oklch(95% 0.00827 157.09)"
+          "oklch(15% 0.00348 219.53)",
+          "oklch(26% 0.00348 219.53)",
+          "oklch(38% 0.00348 219.53)",
+          "oklch(49% 0.00348 219.53)",
+          "oklch(61% 0.00348 219.53)",
+          "oklch(72% 0.00348 219.53)",
+          "oklch(84% 0.00348 219.53)",
+          "oklch(95% 0.00348 219.53)"
         ]
       },
       "light-disabled-surface": {
         "role": "neutral",
         "displayName": "Light Disabled Surface",
         "tonalRamp": [
-          "oklch(15% 0.01003 155.09)",
-          "oklch(26% 0.01003 155.09)",
-          "oklch(38% 0.01003 155.09)",
-          "oklch(49% 0.01003 155.09)",
-          "oklch(61% 0.01003 155.09)",
-          "oklch(72% 0.01003 155.09)",
-          "oklch(84% 0.01003 155.09)",
-          "oklch(95% 0.01003 155.09)"
+          "oklch(15% 0.00597 170.44)",
+          "oklch(26% 0.00597 170.44)",
+          "oklch(38% 0.00597 170.44)",
+          "oklch(49% 0.00597 170.44)",
+          "oklch(61% 0.00597 170.44)",
+          "oklch(72% 0.00597 170.44)",
+          "oklch(84% 0.00597 170.44)",
+          "oklch(95% 0.00597 170.44)"
         ]
       },
       "light-disabled-text": {
@@ -386,98 +386,98 @@
         "role": "neutral",
         "displayName": "Dark Title Ink",
         "tonalRamp": [
-          "oklch(15% 0.00000 0.00)",
-          "oklch(26% 0.00000 0.00)",
-          "oklch(38% 0.00000 0.00)",
-          "oklch(49% 0.00000 0.00)",
-          "oklch(61% 0.00000 0.00)",
-          "oklch(72% 0.00000 0.00)",
-          "oklch(84% 0.00000 0.00)",
-          "oklch(95% 0.00000 0.00)"
+          "oklch(15% 0.00249 165.08)",
+          "oklch(26% 0.00249 165.08)",
+          "oklch(38% 0.00249 165.08)",
+          "oklch(49% 0.00249 165.08)",
+          "oklch(61% 0.00249 165.08)",
+          "oklch(72% 0.00249 165.08)",
+          "oklch(84% 0.00249 165.08)",
+          "oklch(95% 0.00249 165.08)"
         ]
       },
       "dark-text": {
         "role": "neutral",
         "displayName": "Dark Body Text",
         "tonalRamp": [
-          "oklch(15% 0.00000 0.00)",
-          "oklch(26% 0.00000 0.00)",
-          "oklch(38% 0.00000 0.00)",
-          "oklch(49% 0.00000 0.00)",
-          "oklch(61% 0.00000 0.00)",
-          "oklch(72% 0.00000 0.00)",
-          "oklch(84% 0.00000 0.00)",
-          "oklch(95% 0.00000 0.00)"
+          "oklch(15% 0.00669 160.07)",
+          "oklch(26% 0.00669 160.07)",
+          "oklch(38% 0.00669 160.07)",
+          "oklch(49% 0.00669 160.07)",
+          "oklch(61% 0.00669 160.07)",
+          "oklch(72% 0.00669 160.07)",
+          "oklch(84% 0.00669 160.07)",
+          "oklch(95% 0.00669 160.07)"
         ]
       },
       "dark-muted": {
         "role": "neutral",
         "displayName": "Dark Secondary Text",
         "tonalRamp": [
-          "oklch(15% 0.00000 0.00)",
-          "oklch(26% 0.00000 0.00)",
-          "oklch(38% 0.00000 0.00)",
-          "oklch(49% 0.00000 0.00)",
-          "oklch(61% 0.00000 0.00)",
-          "oklch(72% 0.00000 0.00)",
-          "oklch(84% 0.00000 0.00)",
-          "oklch(95% 0.00000 0.00)"
+          "oklch(15% 0.01314 164.69)",
+          "oklch(26% 0.01314 164.69)",
+          "oklch(38% 0.01314 164.69)",
+          "oklch(49% 0.01314 164.69)",
+          "oklch(61% 0.01314 164.69)",
+          "oklch(72% 0.01314 164.69)",
+          "oklch(84% 0.01314 164.69)",
+          "oklch(95% 0.01314 164.69)"
         ]
       },
       "dark-line": {
         "role": "neutral",
         "displayName": "Dark Separator",
         "tonalRamp": [
-          "oklch(15% 0.00000 0.00)",
-          "oklch(26% 0.00000 0.00)",
-          "oklch(38% 0.00000 0.00)",
-          "oklch(49% 0.00000 0.00)",
-          "oklch(61% 0.00000 0.00)",
-          "oklch(72% 0.00000 0.00)",
-          "oklch(84% 0.00000 0.00)",
-          "oklch(95% 0.00000 0.00)"
+          "oklch(15% 0.00662 164.56)",
+          "oklch(26% 0.00662 164.56)",
+          "oklch(38% 0.00662 164.56)",
+          "oklch(49% 0.00662 164.56)",
+          "oklch(61% 0.00662 164.56)",
+          "oklch(72% 0.00662 164.56)",
+          "oklch(84% 0.00662 164.56)",
+          "oklch(95% 0.00662 164.56)"
         ]
       },
       "dark-outline": {
         "role": "neutral",
         "displayName": "Dark Field Outline",
         "tonalRamp": [
-          "oklch(15% 0.00000 0.00)",
-          "oklch(26% 0.00000 0.00)",
-          "oklch(38% 0.00000 0.00)",
-          "oklch(49% 0.00000 0.00)",
-          "oklch(61% 0.00000 0.00)",
-          "oklch(72% 0.00000 0.00)",
-          "oklch(84% 0.00000 0.00)",
-          "oklch(95% 0.00000 0.00)"
+          "oklch(15% 0.01745 160.33)",
+          "oklch(26% 0.01745 160.33)",
+          "oklch(38% 0.01745 160.33)",
+          "oklch(49% 0.01745 160.33)",
+          "oklch(61% 0.01745 160.33)",
+          "oklch(72% 0.01745 160.33)",
+          "oklch(84% 0.01745 160.33)",
+          "oklch(95% 0.01745 160.33)"
         ]
       },
       "dark-primary": {
         "role": "primary",
         "displayName": "Dark Action",
         "tonalRamp": [
-          "oklch(15% 0.06335 166.43)",
-          "oklch(26% 0.06335 166.43)",
-          "oklch(38% 0.06335 166.43)",
-          "oklch(49% 0.06335 166.43)",
-          "oklch(61% 0.06335 166.43)",
-          "oklch(72% 0.06335 166.43)",
-          "oklch(84% 0.06335 166.43)",
-          "oklch(95% 0.06335 166.43)"
+          "oklch(15% 0.11709 162.85)",
+          "oklch(26% 0.11709 162.85)",
+          "oklch(38% 0.11709 162.85)",
+          "oklch(49% 0.11709 162.85)",
+          "oklch(61% 0.11709 162.85)",
+          "oklch(72% 0.11709 162.85)",
+          "oklch(84% 0.11709 162.85)",
+          "oklch(95% 0.11709 162.85)"
         ]
       },
       "dark-on-primary": {
         "role": "neutral",
         "displayName": "Dark On Action",
         "tonalRamp": [
-          "oklch(15% 0.00000 0.00)",
-          "oklch(26% 0.00000 0.00)",
-          "oklch(38% 0.00000 0.00)",
-          "oklch(49% 0.00000 0.00)",
-          "oklch(61% 0.00000 0.00)",
-          "oklch(72% 0.00000 0.00)",
-          "oklch(84% 0.00000 0.00)",
-          "oklch(95% 0.00000 0.00)"
+          "oklch(15% 0.04130 168.22)",
+          "oklch(26% 0.04130 168.22)",
+          "oklch(38% 0.04130 168.22)",
+          "oklch(49% 0.04130 168.22)",
+          "oklch(61% 0.04130 168.22)",
+          "oklch(72% 0.04130 168.22)",
+          "oklch(84% 0.04130 168.22)",
+          "oklch(95% 0.04130 168.22)"
         ]
       },
       "dark-mint": {
@@ -496,7 +496,7 @@
       },
       "dark-header": {
         "role": "neutral",
-        "displayName": "Dark Identity / Estimate Header",
+        "displayName": "Dark Black Header",
         "tonalRamp": [
           "oklch(15% 0.00000 0.00)",
           "oklch(26% 0.00000 0.00)",
@@ -512,28 +512,28 @@
         "role": "neutral",
         "displayName": "Dark Header Text",
         "tonalRamp": [
-          "oklch(15% 0.00000 0.00)",
-          "oklch(26% 0.00000 0.00)",
-          "oklch(38% 0.00000 0.00)",
-          "oklch(49% 0.00000 0.00)",
-          "oklch(61% 0.00000 0.00)",
-          "oklch(72% 0.00000 0.00)",
-          "oklch(84% 0.00000 0.00)",
-          "oklch(95% 0.00000 0.00)"
+          "oklch(15% 0.00249 165.08)",
+          "oklch(26% 0.00249 165.08)",
+          "oklch(38% 0.00249 165.08)",
+          "oklch(49% 0.00249 165.08)",
+          "oklch(61% 0.00249 165.08)",
+          "oklch(72% 0.00249 165.08)",
+          "oklch(84% 0.00249 165.08)",
+          "oklch(95% 0.00249 165.08)"
         ]
       },
       "dark-on-header-muted": {
         "role": "neutral",
         "displayName": "Dark Header Secondary",
         "tonalRamp": [
-          "oklch(15% 0.00000 0.00)",
-          "oklch(26% 0.00000 0.00)",
-          "oklch(38% 0.00000 0.00)",
-          "oklch(49% 0.00000 0.00)",
-          "oklch(61% 0.00000 0.00)",
-          "oklch(72% 0.00000 0.00)",
-          "oklch(84% 0.00000 0.00)",
-          "oklch(95% 0.00000 0.00)"
+          "oklch(15% 0.01314 164.69)",
+          "oklch(26% 0.01314 164.69)",
+          "oklch(38% 0.01314 164.69)",
+          "oklch(49% 0.01314 164.69)",
+          "oklch(61% 0.01314 164.69)",
+          "oklch(72% 0.01314 164.69)",
+          "oklch(84% 0.01314 164.69)",
+          "oklch(95% 0.01314 164.69)"
         ]
       },
       "dark-peach": {
@@ -610,33 +610,33 @@
         "role": "primary",
         "displayName": "Dark Progress Fill",
         "tonalRamp": [
-          "oklch(15% 0.06335 166.43)",
-          "oklch(26% 0.06335 166.43)",
-          "oklch(38% 0.06335 166.43)",
-          "oklch(49% 0.06335 166.43)",
-          "oklch(61% 0.06335 166.43)",
-          "oklch(72% 0.06335 166.43)",
-          "oklch(84% 0.06335 166.43)",
-          "oklch(95% 0.06335 166.43)"
+          "oklch(15% 0.11709 162.85)",
+          "oklch(26% 0.11709 162.85)",
+          "oklch(38% 0.11709 162.85)",
+          "oklch(49% 0.11709 162.85)",
+          "oklch(61% 0.11709 162.85)",
+          "oklch(72% 0.11709 162.85)",
+          "oklch(84% 0.11709 162.85)",
+          "oklch(95% 0.11709 162.85)"
         ]
       },
       "dark-progress-track": {
         "role": "neutral",
         "displayName": "Dark Progress Track",
         "tonalRamp": [
-          "oklch(15% 0.00000 0.00)",
-          "oklch(26% 0.00000 0.00)",
-          "oklch(38% 0.00000 0.00)",
-          "oklch(49% 0.00000 0.00)",
-          "oklch(61% 0.00000 0.00)",
-          "oklch(72% 0.00000 0.00)",
-          "oklch(84% 0.00000 0.00)",
-          "oklch(95% 0.00000 0.00)"
+          "oklch(15% 0.01180 160.69)",
+          "oklch(26% 0.01180 160.69)",
+          "oklch(38% 0.01180 160.69)",
+          "oklch(49% 0.01180 160.69)",
+          "oklch(61% 0.01180 160.69)",
+          "oklch(72% 0.01180 160.69)",
+          "oklch(84% 0.01180 160.69)",
+          "oklch(95% 0.01180 160.69)"
         ]
       },
       "dark-subtle": {
         "role": "neutral",
-        "displayName": "Dark Read Activity Surface",
+        "displayName": "Dark Subtle Surface",
         "tonalRamp": [
           "oklch(15% 0.00000 0.00)",
           "oklch(26% 0.00000 0.00)",
@@ -717,10 +717,62 @@
       "button-label": {
         "displayName": "Button Label",
         "purpose": "Button title: components/ui.tsx."
+      },
+      "activity-title": {
+        "displayName": "Activity Title",
+        "purpose": "Full Activity heading: app/(tabs)/activity.tsx."
+      },
+      "notification-sheet-title": {
+        "displayName": "Notification Sheet Title",
+        "purpose": "Native quick-sheet heading: notifications/NotificationSheet.tsx."
+      },
+      "notification-title": {
+        "displayName": "Notification Title",
+        "purpose": "Full Activity NotificationRow unread title; read state uses semibold."
+      },
+      "quick-notification-title": {
+        "displayName": "Quick Notification Title",
+        "purpose": "Compact NotificationRow unread title; read state uses semibold."
+      },
+      "notification-body": {
+        "displayName": "Notification Body",
+        "purpose": "Native two-line NotificationRow preview; full body remains accessible."
+      },
+      "notification-time": {
+        "displayName": "Notification Time",
+        "purpose": "Relative native timestamp in NotificationRow; exact time is accessible."
+      },
+      "home-title": {
+        "displayName": "Home Headline",
+        "purpose": "Focused Home correction: 22/26 Manrope Bold with -0.45 tracking; scalable real text."
+      },
+      "profile-name": {
+        "displayName": "Profile Identity",
+        "purpose": "Actual account name; 20/27 Manrope Bold, scalable."
+      },
+      "unread-badge": {
+        "displayName": "Visual Unread Count",
+        "purpose": "Shared 16-unit badge, 9/12 Bold; 1.2 text-scaling cap only here, with full count announced by parent."
       }
     },
     "shadows": [],
-    "motion": [],
+    "motion": [
+      {
+        "name": "notification-sheet-enter",
+        "value": "240ms",
+        "purpose": "Native translation with Easing.out(Easing.cubic); backdrop opacity 180ms. Both 0ms under reduced motion."
+      },
+      {
+        "name": "notification-sheet-exit",
+        "value": "190ms",
+        "purpose": "Native translation with Easing.in(Easing.cubic); backdrop opacity 150ms. Both 0ms under reduced motion."
+      },
+      {
+        "name": "notification-sheet-return",
+        "value": "180ms",
+        "purpose": "Short/cancelled drag returns to rest; 0ms under reduced motion."
+      }
+    ],
     "breakpoints": [
       {
         "name": "narrow-stack",
@@ -739,7 +791,7 @@
       "refersTo": "button-primary-light",
       "description": "Native Button primary variant from components/ui.tsx in both palettes. Browser automatic focus outline is preview-only; pressed opacity matches native.",
       "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><button type=\"button\" class=\"ds-btn\">Continue</button></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><button type=\"button\" class=\"ds-btn\">Continue</button></section></div>",
-      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:9px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:#17221D;color:#FFFFFF}.ds-dark .ds-btn{background:#A9DEC7;color:#111111}"
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#FAFBFC;color:#273234}.ds-dark{background:#000000;color:#E1E6E3}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:24px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:#103C31;color:#FFFFFF}.ds-dark .ds-btn{background:#8EF4C5;color:#08271D}"
     },
     {
       "name": "Secondary Button · Light / Dark",
@@ -747,7 +799,7 @@
       "refersTo": "button-secondary-light",
       "description": "Native Button secondary variant from components/ui.tsx in both palettes. Browser automatic focus outline is preview-only; pressed opacity matches native.",
       "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><button type=\"button\" class=\"ds-btn\">Save campaign</button></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><button type=\"button\" class=\"ds-btn\">Save campaign</button></section></div>",
-      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:9px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:#E4F3EB;color:#17221D}.ds-dark .ds-btn{background:#1E1E1E;color:#A9DEC7}"
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#FAFBFC;color:#273234}.ds-dark{background:#000000;color:#E1E6E3}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:24px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:#E9FAF2;color:#103C31}.ds-dark .ds-btn{background:#1E1E1E;color:#8EF4C5}"
     },
     {
       "name": "Ghost Button · Light / Dark",
@@ -755,7 +807,7 @@
       "refersTo": "button-ghost-light",
       "description": "Native Button ghost variant from components/ui.tsx in both palettes. Browser automatic focus outline is preview-only; pressed opacity matches native.",
       "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><button type=\"button\" class=\"ds-btn\">Back to campaign</button></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><button type=\"button\" class=\"ds-btn\">Back to campaign</button></section></div>",
-      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:9px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:transparent;color:#17221D}.ds-dark .ds-btn{background:transparent;color:#A9DEC7}"
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#FAFBFC;color:#273234}.ds-dark{background:#000000;color:#E1E6E3}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:24px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:transparent;color:#103C31}.ds-dark .ds-btn{background:transparent;color:#8EF4C5}"
     },
     {
       "name": "Danger Button · Light / Dark",
@@ -763,7 +815,7 @@
       "refersTo": "button-danger-light",
       "description": "Native Button danger variant from components/ui.tsx in both palettes. Browser automatic focus outline is preview-only; pressed opacity matches native.",
       "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><button type=\"button\" class=\"ds-btn\">Delete draft</button></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><button type=\"button\" class=\"ds-btn\">Delete draft</button></section></div>",
-      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:9px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:#A82424;color:#FFFFFF}.ds-dark .ds-btn{background:#FFB0AD;color:#121212}"
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#FAFBFC;color:#273234}.ds-dark{background:#000000;color:#E1E6E3}.ds-btn{min-height:48px;padding:12px 18px;border:0;border-radius:24px;font-family:ManropeBold,sans-serif;font-size:15px;font-weight:700;text-align:center}.ds-btn:active{opacity:.8}.ds-btn:hover{cursor:pointer}.ds-btn:focus-visible{outline:auto}.ds-light .ds-btn{background:#A82424;color:#FFFFFF}.ds-dark .ds-btn{background:#FFB0AD;color:#121212}"
     },
     {
       "name": "Field · Light / Dark",
@@ -771,7 +823,7 @@
       "refersTo": "field-light",
       "description": "Visible label, field outline and hint from Field and theme-styles.ts; focus uses the semantic focus border.",
       "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><label class=\"ds-field-label\" for=\"ds-title-light\">Campaign title</label><input class=\"ds-field\" id=\"ds-title-light\" placeholder=\"Give your message a clear title\" /><p class=\"ds-hint\">A short, specific title helps people understand.</p></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><label class=\"ds-field-label\" for=\"ds-title-dark\">Campaign title</label><input class=\"ds-field\" id=\"ds-title-dark\" placeholder=\"Give your message a clear title\" /><p class=\"ds-hint\">A short, specific title helps people understand.</p></section></div>",
-      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-field-label{display:block;font-family:ManropeSemiBold,sans-serif;font-size:14px;margin-bottom:7px}.ds-field{width:100%;min-height:52px;padding:12px 15px;border-radius:10px;border:1px solid;font-family:ManropeRegular,sans-serif;font-size:16px;box-sizing:border-box}.ds-hint{font-family:ManropeRegular,sans-serif;font-size:14px;line-height:21px;margin:7px 0 0}.ds-light .ds-field-label{color:#17221D}.ds-light .ds-field{background:#FFFFFF;color:#17221D;border-color:#73867B}.ds-light .ds-field::placeholder{color:#52655A}.ds-light .ds-field:focus{outline:0;border-color:#176541}.ds-light .ds-hint{color:#52655A}.ds-dark .ds-field-label{color:#F5F5F5}.ds-dark .ds-field{background:#121212;color:#F5F5F5;border-color:#7D7D7D}.ds-dark .ds-field::placeholder{color:#B0B0B0}.ds-dark .ds-field:focus{outline:0;border-color:#A9DEC7}.ds-dark .ds-hint{color:#B0B0B0}"
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#FAFBFC;color:#273234}.ds-dark{background:#000000;color:#E1E6E3}.ds-field-label{display:block;font-family:ManropeSemiBold,sans-serif;font-size:14px;margin-bottom:7px}.ds-field{width:100%;min-height:52px;padding:12px 15px;border-radius:10px;border:1px solid;font-family:ManropeRegular,sans-serif;font-size:16px;box-sizing:border-box}.ds-hint{font-family:ManropeRegular,sans-serif;font-size:13px;line-height:20px;margin:7px 0 0}.ds-light .ds-field-label{color:#111919}.ds-light .ds-field{background:#FFFFFF;color:#111919;border-color:#7C898C}.ds-light .ds-field::placeholder{color:#566269}.ds-light .ds-field:focus{outline:0;border-color:#176541}.ds-light .ds-hint{color:#566269}.ds-dark .ds-field-label{color:#F5F7F6}.ds-dark .ds-field{background:#121212;color:#F5F7F6;border-color:#7D8982}.ds-dark .ds-field::placeholder{color:#AEB8B3}.ds-dark .ds-field:focus{outline:0;border-color:#A9DEC7}.ds-dark .ds-hint{color:#AEB8B3}"
     },
     {
       "name": "Category Pill · Light / Dark",
@@ -779,76 +831,153 @@
       "refersTo": "pill-light",
       "description": "Resting and selected Pill states from components/ui.tsx. Browser automatic focus outline is preview-only.",
       "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><div class=\"ds-pills\"><button class=\"ds-pill ds-selected\" type=\"button\" aria-pressed=\"true\">All</button><button class=\"ds-pill\" type=\"button\" aria-pressed=\"false\">Environment</button></div></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><div class=\"ds-pills\"><button class=\"ds-pill ds-selected\" type=\"button\" aria-pressed=\"true\">All</button><button class=\"ds-pill\" type=\"button\" aria-pressed=\"false\">Environment</button></div></section></div>",
-      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-pills{display:flex;flex-wrap:wrap;gap:8px}.ds-pill{min-height:48px;padding:12px 14px;border:1px solid;border-radius:8px;font-family:ManropeSemiBold,sans-serif;font-size:13px;font-weight:600}.ds-pill:hover{cursor:pointer}.ds-pill:focus-visible{outline:auto}.ds-light .ds-pill{background:#FFFFFF;color:#24362B;border-color:#D5E0D9}.ds-light .ds-selected{background:#17221D;color:#FFFFFF;border-color:#17221D}.ds-dark .ds-pill{background:#121212;color:#E5E5E5;border-color:#303030}.ds-dark .ds-selected{background:#A9DEC7;color:#111111;border-color:#A9DEC7}"
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#FAFBFC;color:#273234}.ds-dark{background:#000000;color:#E1E6E3}.ds-pills{display:flex;flex-wrap:wrap;gap:8px}.ds-pill{min-height:48px;padding:12px 14px;border:1px solid;border-radius:24px;font-family:ManropeSemiBold,sans-serif;font-size:13px;font-weight:600}.ds-pill:hover{cursor:pointer}.ds-pill:focus-visible{outline:auto}.ds-light .ds-pill{background:#FFFFFF;color:#273234;border-color:#E2E7E8}.ds-light .ds-selected{background:#103C31;color:#FFFFFF;border-color:#103C31}.ds-dark .ds-pill{background:#121212;color:#E1E6E3;border-color:#2C302E}.ds-dark .ds-selected{background:#8EF4C5;color:#08271D;border-color:#8EF4C5}"
     },
     {
       "name": "Campaign Card and Funding · Light / Dark",
       "kind": "card",
       "refersTo": "campaign-card-light",
-      "description": "CampaignCard content shell and compact Funding from features/campaign.tsx. Documentation omits the 150-unit remote photograph; example figures are illustrative.",
+      "description": "Documentation-only full CampaignCard funding/content shell. Native uses a 160-unit cover and separate stats/backing action; this text sample omits photography and does not certify fidelity. All figures are illustrative.",
       "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><article class=\"ds-card\"><div class=\"ds-card-body\"><p class=\"ds-meta\">Environment · Demo campaign</p><h3 class=\"ds-card-title\">A message worth sharing</h3><p class=\"ds-meta\">By Campaign creator</p><p class=\"ds-funding\">$1,845 <span>of $5,000 goal</span></p><div class=\"ds-track\" role=\"progressbar\" aria-label=\"Funding progress\" aria-valuenow=\"37\" aria-valuemin=\"0\" aria-valuemax=\"100\"><div class=\"ds-fill\"></div></div><p class=\"ds-meta\">Estimated reach at goal · demo</p></div></article></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><article class=\"ds-card\"><div class=\"ds-card-body\"><p class=\"ds-meta\">Environment · Demo campaign</p><h3 class=\"ds-card-title\">A message worth sharing</h3><p class=\"ds-meta\">By Campaign creator</p><p class=\"ds-funding\">$1,845 <span>of $5,000 goal</span></p><div class=\"ds-track\" role=\"progressbar\" aria-label=\"Funding progress\" aria-valuenow=\"37\" aria-valuemin=\"0\" aria-valuemax=\"100\"><div class=\"ds-fill\"></div></div><p class=\"ds-meta\">Estimated reach at goal · demo</p></div></article></section></div>",
-      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-card{border:1px solid;border-radius:14px;overflow:hidden}.ds-card-body{padding:14px;display:flex;flex-direction:column;gap:9px}.ds-meta{font-family:ManropeRegular,sans-serif;font-size:12px;line-height:18px;margin:0}.ds-card-title{font-family:ManropeBold,sans-serif;font-size:20px;line-height:26px;font-weight:700;margin:0}.ds-funding{font-family:ManropeBold,sans-serif;font-size:17px;margin:0}.ds-funding span{font-family:ManropeRegular,sans-serif;font-size:13px}.ds-track,.ds-fill{height:6px;border-radius:3px}.ds-track{overflow:hidden}.ds-fill{width:37%}.ds-light .ds-card{background:#FFFFFF;border-color:#D5E0D9}.ds-light .ds-card-title,.ds-light .ds-funding{color:#17221D}.ds-light .ds-meta,.ds-light .ds-funding span{color:#52655A}.ds-light .ds-track{background:#D4E9DE}.ds-light .ds-fill{background:#287452}.ds-dark .ds-card{background:#121212;border-color:#303030}.ds-dark .ds-card-title,.ds-dark .ds-funding{color:#F5F5F5}.ds-dark .ds-meta,.ds-dark .ds-funding span{color:#B0B0B0}.ds-dark .ds-track{background:#363636}.ds-dark .ds-fill{background:#A9DEC7}"
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#FAFBFC;color:#273234}.ds-dark{background:#000000;color:#E1E6E3}.ds-card{border:1px solid;border-radius:14px;overflow:hidden}.ds-card-body{padding:13px;display:flex;flex-direction:column;gap:7px}.ds-meta{font-family:ManropeRegular,sans-serif;font-size:12px;line-height:18px;margin:0}.ds-card-title{font-family:ManropeBold,sans-serif;font-size:20px;line-height:25px;font-weight:700;margin:0}.ds-funding{font-family:ManropeBold,sans-serif;font-size:15px;margin:0}.ds-funding span{font-family:ManropeRegular,sans-serif;font-size:13px}.ds-track,.ds-fill{height:6px;border-radius:3px}.ds-track{overflow:hidden}.ds-fill{width:37%}.ds-light .ds-card{background:#FFFFFF;border-color:#E2E7E8}.ds-light .ds-card-title,.ds-light .ds-funding{color:#111919}.ds-light .ds-meta,.ds-light .ds-funding span{color:#566269}.ds-light .ds-track{background:#E5ECE8}.ds-light .ds-fill{background:#16865B}.ds-dark .ds-card{background:#121212;border-color:#2C302E}.ds-dark .ds-card-title,.ds-dark .ds-funding{color:#F5F7F6}.ds-dark .ds-meta,.ds-dark .ds-funding span{color:#AEB8B3}.ds-dark .ds-track{background:#303733}.ds-dark .ds-fill{background:#8EF4C5}"
     },
     {
       "name": "Five-Tab Labels · Light / Dark",
       "kind": "nav",
-      "description": "Text-only documentation view of the five native tab labels and tint states. Native Ionicons, active icon containers and device bottom inset are intentionally omitted; this is not a navigation implementation.",
+      "description": "Text-only documentation of five native tab labels/tints. Native has consistent 20-unit icons and a shared 16-unit unread badge capped at 99+ with full count announced by the tab. Icons, badge placement and device inset are omitted; this is not a navigation implementation or current native acceptance.",
       "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><nav class=\"ds-nav\" aria-label=\"Primary navigation\"><button type=\"button\" class=\"ds-tab ds-current\" aria-current=\"page\"><span>Home</span></button><button type=\"button\" class=\"ds-tab\"><span>Explore</span></button><button type=\"button\" class=\"ds-tab\"><span>Create</span></button><button type=\"button\" class=\"ds-tab\"><span>Activity</span></button><button type=\"button\" class=\"ds-tab\"><span>Profile</span></button></nav></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><nav class=\"ds-nav\" aria-label=\"Primary navigation\"><button type=\"button\" class=\"ds-tab ds-current\" aria-current=\"page\"><span>Home</span></button><button type=\"button\" class=\"ds-tab\"><span>Explore</span></button><button type=\"button\" class=\"ds-tab\"><span>Create</span></button><button type=\"button\" class=\"ds-tab\"><span>Activity</span></button><button type=\"button\" class=\"ds-tab\"><span>Profile</span></button></nav></section></div>",
-      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-nav{display:flex;border-top:1px solid;padding-top:5px;padding-bottom:8px;min-height:68px}.ds-tab{flex:1;min-width:0;background:transparent;border:0;padding:0;font-family:ManropeSemiBold,sans-serif;font-size:10px}.ds-tab span{display:block}.ds-tab:hover{cursor:pointer}.ds-tab:focus-visible{outline:auto}.ds-light .ds-nav{background:#FFFFFF;border-color:#D5E0D9}.ds-light .ds-tab{color:#52655A}.ds-light .ds-current{color:#17221D}.ds-dark .ds-nav{background:#121212;border-color:#303030}.ds-dark .ds-tab{color:#B0B0B0}.ds-dark .ds-current{color:#A9DEC7}"
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#FAFBFC;color:#273234}.ds-dark{background:#000000;color:#E1E6E3}.ds-nav{display:flex;border-top:1px solid;padding-top:5px;padding-bottom:8px;min-height:64px}.ds-tab{flex:1;min-width:0;background:transparent;border:0;padding:0;font-family:ManropeSemiBold,sans-serif;font-size:9px}.ds-tab span{display:block}.ds-tab:hover{cursor:pointer}.ds-tab:focus-visible{outline:auto}.ds-light .ds-nav{background:#FFFFFF;border-color:#E2E7E8}.ds-light .ds-tab{color:#566269}.ds-light .ds-current{color:#103C31}.ds-dark .ds-nav{background:#121212;border-color:#2C302E}.ds-dark .ds-tab{color:#AEB8B3}.ds-dark .ds-current{color:#8EF4C5}"
     },
     {
       "name": "Appearance Choices · Light / Dark",
       "kind": "custom",
-      "description": "Profile appearance radio-group shape and surfaces in both schemes. Icons are omitted. Preview state is illustrative and does not persist a real preference.",
+      "description": "System/Light/Dark settings choices. The signed-in Profile overview has a labelled Appearance entry that opens these choices instead of cycling a binary switch. Documentation state does not persist a real preference.",
       "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><div class=\"ds-appearance\" role=\"radiogroup\" aria-label=\"Appearance\"><button type=\"button\" role=\"radio\" aria-checked=\"false\" class=\"ds-choice\">System</button><button type=\"button\" role=\"radio\" aria-checked=\"true\" class=\"ds-choice ds-choice-selected\">Light</button><button type=\"button\" role=\"radio\" aria-checked=\"false\" class=\"ds-choice\">Dark</button></div></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><div class=\"ds-appearance\" role=\"radiogroup\" aria-label=\"Appearance\"><button type=\"button\" role=\"radio\" aria-checked=\"false\" class=\"ds-choice\">System</button><button type=\"button\" role=\"radio\" aria-checked=\"false\" class=\"ds-choice\">Light</button><button type=\"button\" role=\"radio\" aria-checked=\"true\" class=\"ds-choice ds-choice-selected\">Dark</button></div></section></div>",
-      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#F7FAF8;color:#24362B}.ds-dark{background:#000000;color:#E5E5E5}.ds-appearance{display:flex;flex-wrap:wrap;gap:8px}.ds-choice{flex:1;min-width:88px;min-height:64px;padding:10px 8px;border:1px solid;border-radius:12px;font-family:ManropeMedium,sans-serif;font-size:14px;text-align:center}.ds-choice-selected{font-family:ManropeBold,sans-serif}.ds-choice:active{opacity:.75}.ds-choice:hover{cursor:pointer}.ds-choice:focus-visible{outline:auto}.ds-light .ds-choice{background:#FFFFFF;color:#17221D;border-color:#73867B}.ds-light .ds-choice-selected{background:#E4F3EB;border-color:#17221D}.ds-dark .ds-choice{background:#121212;color:#F5F5F5;border-color:#7D7D7D}.ds-dark .ds-choice-selected{background:#1E1E1E;border-color:#A9DEC7}"
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font-family:ManropeSemiBold,sans-serif;font-size:12px;margin:0 0 12px}.ds-light{background:#FAFBFC;color:#273234}.ds-dark{background:#000000;color:#E1E6E3}.ds-appearance{display:flex;flex-wrap:wrap;gap:8px}.ds-choice{flex:1;min-width:88px;min-height:64px;padding:10px 8px;border:1px solid;border-radius:12px;font-family:ManropeMedium,sans-serif;font-size:14px;text-align:center}.ds-choice-selected{font-family:ManropeBold,sans-serif}.ds-choice:active{opacity:.75}.ds-choice:hover{cursor:pointer}.ds-choice:focus-visible{outline:auto}.ds-light .ds-choice{background:#FFFFFF;color:#111919;border-color:#7C898C}.ds-light .ds-choice-selected{background:#E9FAF2;border-color:#103C31}.ds-dark .ds-choice{background:#121212;color:#F5F7F6;border-color:#7D8982}.ds-dark .ds-choice-selected{background:#1E1E1E;border-color:#8EF4C5}"
+    },
+    {
+      "name": "Profile Menu · Light / Dark",
+      "kind": "custom",
+      "description": "Text-only documentation of Profile identity, truthful compact metrics and menu. Native has a labelled Appearance settings entry, 76-unit owner-selected photo or real initials and 96-unit editable photo controls. This sample omits those controls and does not certify native acceptance; dashes avoid invented counts.",
+      "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light</p><div class=\"ds-profile\"><h3 class=\"ds-name\">Your account name</h3><p class=\"ds-sub\">Creator · Backer · Changemaker</p><button class=\"ds-edit\">Edit Profile</button><div class=\"ds-metrics\"><div><b>—</b><span>Campaigns</span></div><div><b>—</b><span>Backed</span></div><div><b>—</b><span>Saved</span></div></div><div class=\"ds-menu\"><button>My Campaigns</button><button>Backed Campaigns</button><button>Payment History</button><button>Saved Campaigns</button><button>Notifications</button><button>Settings</button><button>Help & Support</button></div></div></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark</p><div class=\"ds-profile\"><h3 class=\"ds-name\">Your account name</h3><p class=\"ds-sub\">Creator · Backer · Changemaker</p><button class=\"ds-edit\">Edit Profile</button><div class=\"ds-metrics\"><div><b>—</b><span>Campaigns</span></div><div><b>—</b><span>Backed</span></div><div><b>—</b><span>Saved</span></div></div><div class=\"ds-menu\"><button>My Campaigns</button><button>Backed Campaigns</button><button>Payment History</button><button>Saved Campaigns</button><button>Notifications</button><button>Settings</button><button>Help & Support</button></div></div></section></div>",
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:220px;padding:18px}.ds-scheme{font:12px ManropeSemiBold,sans-serif;margin:0 0 12px}.ds-light{background:#FAFBFC;color:#273234}.ds-dark{background:#000000;color:#E1E6E3}.ds-name{font:700 20px/27px ManropeBold,sans-serif;margin:0}.ds-sub{font:12px/19px ManropeRegular,sans-serif;margin:4px 0}.ds-edit{border:0;background:transparent;min-height:48px;font:600 13px ManropeSemiBold,sans-serif;padding:0}.ds-metrics{display:flex;gap:8px;margin:12px 0}.ds-metrics div{flex:1;min-height:66px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}.ds-metrics b{font:700 18px/25px ManropeBold,sans-serif}.ds-metrics span{font:12px/18px ManropeRegular,sans-serif}.ds-menu{display:flex;flex-direction:column}.ds-menu button{border:0;background:transparent;text-align:left;min-height:53px;padding:10px 9px;border-radius:9px;font:500 14px/22px ManropeMedium,sans-serif;color:inherit}.ds-light .ds-name{color:#111919}.ds-light .ds-sub,.ds-light .ds-metrics span{color:#566269}.ds-light .ds-metrics div{background:#F0F3F4}.ds-light .ds-edit{color:#103C31}.ds-dark .ds-name{color:#F5F7F6}.ds-dark .ds-sub,.ds-dark .ds-metrics span{color:#AEB8B3}.ds-dark .ds-metrics div{background:#191919}.ds-dark .ds-edit{color:#8EF4C5}.ds-menu button:hover,.ds-edit:hover{cursor:pointer}.ds-menu button:active,.ds-edit:active{opacity:.7}.ds-menu button:focus-visible,.ds-edit:focus-visible{outline:auto}"
+    },
+    {
+      "name": "Quick Notifications and Activity · Light / Dark",
+      "kind": "custom",
+      "description": "Static documentation of the distinct content-sized native sheet and Activity type/color roles. Native full history previews use up to 3 body lines, quick sheet 2,with in-place full-content disclosure only after natural-line measurement proves truncation. This short sample is not truncated and omits disclosure. Native icons, scrolling, Modal gestures, safe areas, transport and real counts are omitted. Historical notification pass5 evidence remains separately scoped; current premium correction native acceptance is IN PROGRESS.",
+      "html": "<div class=\"ds-pair\"><section class=\"ds-light\"><p class=\"ds-scheme\">Light · documentation sample</p><div class=\"ds-sheet\"><div class=\"ds-grip\" aria-hidden=\"true\"></div><h3>Notifications</h3><div class=\"ds-tools\"><span>Unread updates</span><button type=\"button\">Mark all as read</button></div><div class=\"ds-notification\"><div class=\"ds-context\" aria-hidden=\"true\"></div><div><strong>Campaign update</strong><p class=\"ds-campaign\">Your campaign</p><p>Your latest campaign information appears here.</p><small>Just now</small></div><button class=\"ds-read\" type=\"button\" aria-label=\"Mark sample update as read\"><span aria-hidden=\"true\"></span></button></div><button type=\"button\" class=\"ds-viewall\">View all activity</button></div><h3 class=\"ds-activity\">Activity</h3><p class=\"ds-group\">Today</p><div class=\"ds-history\">The existing complete chronological feed, filters and preferences.</div></section><section class=\"ds-dark\"><p class=\"ds-scheme\">Dark · documentation sample</p><div class=\"ds-sheet\"><div class=\"ds-grip\" aria-hidden=\"true\"></div><h3>Notifications</h3><div class=\"ds-tools\"><span>Unread updates</span><button type=\"button\">Mark all as read</button></div><div class=\"ds-notification\"><div class=\"ds-context\" aria-hidden=\"true\"></div><div><strong>Campaign update</strong><p class=\"ds-campaign\">Your campaign</p><p>Your latest campaign information appears here.</p><small>Just now</small></div><button class=\"ds-read\" type=\"button\" aria-label=\"Mark sample update as read\"><span aria-hidden=\"true\"></span></button></div><button type=\"button\" class=\"ds-viewall\">View all activity</button></div><h3 class=\"ds-activity\">Activity</h3><p class=\"ds-group\">Today</p><div class=\"ds-history\">The existing complete chronological feed, filters and preferences.</div></section></div>",
+      "css": ".ds-pair{display:flex;flex-wrap:wrap;gap:16px}.ds-pair section{flex:1;min-width:0;padding:18px}.ds-scheme{font:12px ManropeSemiBold,sans-serif;margin:0 0 12px}.ds-light{background:#FAFBFC;color:#273234}.ds-dark{background:#000000;color:#E1E6E3}.ds-sheet{border-radius:24px 24px 0 0;padding:10px 18px 12px}.ds-grip{width:34px;height:4px;border-radius:2px;margin:0 auto 8px}.ds-sheet h3{font:700 20px/27px ManropeBold,sans-serif;margin:0}.ds-tools{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;font:12px/18px ManropeSemiBold,sans-serif;min-height:48px}.ds-tools button{min-height:48px;padding:0 8px;background:transparent;border:0;font:700 12px/18px ManropeBold,sans-serif}.ds-notification{display:flex;gap:11px;padding:12px 0;border-bottom:1px solid}.ds-notification>div:nth-child(2){flex:1;min-width:0}.ds-context{width:36px;height:36px;border-radius:18px;flex:none}.ds-notification strong{font:700 13px/18px ManropeBold,sans-serif}.ds-notification p{font:12px/18px ManropeRegular,sans-serif;margin:3px 0}.ds-notification .ds-campaign{font:500 12px/17px ManropeMedium,sans-serif}.ds-notification small{font:11px/16px ManropeRegular,sans-serif}.ds-read{min-width:48px;min-height:48px;background:transparent;border:0;align-self:flex-start;margin-left:8px}.ds-read span{display:block;margin:auto;width:7px;height:7px;border-radius:4px}.ds-viewall{min-height:48px;width:100%;margin-top:12px;padding:12px 18px;border:0;border-radius:24px;font:700 15px ManropeBold,sans-serif}.ds-activity{font:700 24px/30px ManropeBold,sans-serif;margin:20px 0 8px}.ds-group{font:600 12px/18px ManropeSemiBold,sans-serif;margin:20px 0 7px}.ds-history{font:12px/18px ManropeRegular,sans-serif;padding:15px 0;border-bottom:1px solid}.ds-light .ds-sheet{background:#FFFFFF}.ds-dark .ds-sheet{background:#121212}.ds-light .ds-grip{background:#7C898C}.ds-dark .ds-grip{background:#7D8982}.ds-light .ds-tools,.ds-light .ds-campaign,.ds-light small,.ds-light .ds-group{color:#566269}.ds-dark .ds-tools,.ds-dark .ds-campaign,.ds-dark small,.ds-dark .ds-group{color:#AEB8B3}.ds-light .ds-tools button{color:#103C31}.ds-dark .ds-tools button{color:#8EF4C5}.ds-light .ds-context{background:#E9FAF2}.ds-dark .ds-context{background:#1E1E1E}.ds-light .ds-read span{background:#16865B}.ds-dark .ds-read span{background:#8EF4C5}.ds-light .ds-notification,.ds-light .ds-history{border-color:#E2E7E8}.ds-dark .ds-notification,.ds-dark .ds-history{border-color:#2C302E}.ds-light .ds-viewall{background:#103C31;color:#FFFFFF}.ds-dark .ds-viewall{background:#8EF4C5;color:#08271D}.ds-sheet button:focus-visible{outline:auto}.ds-sheet button:active{opacity:.65}.ds-sheet button:hover{cursor:pointer}"
     }
   ],
   "narrative": {
-    "northStar": "The Clear Signal",
-    "overview": "Campaign uses a compact consumer mobile composition: campaign photographs lead discovery, clear sans-serif type gives a message its identity, and concise funding groups make the next action legible. Light pairs a mint identity area with charcoal actions. Dark uses pure black and neutral charcoal grounds, with mint reserved for accents, progress and actions.\n\nThis is the source-derived replacement for the rejected civic-publication ultramarine and large-serif system. The supplied three-screen reference informed proportions and hierarchy; its photographs, people, banking language and donation claims are not Campaign assets or product claims. The user subsequently rejected green-tinted Dark surfaces; that correction is binding while the existing Light palette stays unchanged.\n\nThis document records the React Native implementation on October 16, 2026, not user approval or completed native acceptance. It is grounded in `apps/mobile/src/lib/appearance.ts`, `theme-styles.ts`, `theme.tsx`, `components/ui.tsx` and sampled routes. The prior system remains in `artifacts/checkpoints/before-reference-redesign-20261016-101133`. Current build, capture and acceptance evidence belongs in `PROGRESS.md` and `RELEASE_READINESS.md`.",
+    "northStar": "Campaign App UI Showcase, later Create/Home/Onboarding references and exact supplied Campaign brand artwork",
+    "overview": "The user's supplied [Campaign App UI Showcase](artifacts/showcase-redesign/reference.png) is the app-wide visual direction. The later [Create reference](artifacts/create-polish/reference.png) governs the creation editor and confirmation composition. The subsequent user-supplied Home PNG (`codex-clipboard-dec309d5-dc6c-4027-a9fc-9abb765afede.png`) governs Home composition only; its illustrative data and iPhone chrome do not become product facts or Android UI. Match its app-owned compositions, proportions, image treatment, navigation, typography, spacing and Light/Dark relationships as closely as practical. The reference does not authorize replacing genuine Android system chrome, mandatory PDF content or working product behavior with a picture. This remains a React Native/Expo application with the existing FastAPI, session, query and draft architecture.\n\nThe current implementation uses compact Manrope, image-led discovery, near-white Light surfaces, black/neutral-charcoal Dark surfaces and restrained mint actions. Discovery emphasizes a real campaign's image, identity, funding and next action. Utility screens use clear rows and native controls. Profile and authentication have dedicated compositions rather than embedding every account function into one dashboard.\n\n**Current premium correction: VERIFIED within the bounded native review.** The user explicitly preserves this visual identity and requests targeted density, wrapping, notification, footer and performance corrections. The later Home reference replaces the first correction header with Campaign branding, a compact Good ideas deserve to be heard headline, search/filter controls, category strip and In the spotlight card. Its configured per-dollar reach example and complete product explanation remain in Create. Review. Amplify. below discovery. Shared compact unread badges, full notification disclosure, compact creation actions/adaptive summary rows, virtualized Explore and a labelled Profile Appearance entry refine existing components. The subsequently supplied complete Campaign PNG replaces the old generated logo. The later Onboarding/Auth-polish references use a separately documented transparent megaphone extraction, native wordmark in both themes, compact Welcome/Login forms, a carousel and a real optional Remember session contract. Auth theme/recovery controls are removed, while existing Help/Profile settings retain shared appearance choices and saved values. Actual pass6 Home/Stats findings are closed within their bounded matrix; actual pass12 keyboard/native findings are closed within the independently reviewed scope. Previous APKs, screenshots and reviews do not establish acceptance of this later source; final current-source/binary/physical evidence belongs in [PROGRESS.md](PROGRESS.md) and [RELEASE_READINESS.md](RELEASE_READINESS.md). No design score, human acceptance or sustained-performance guarantee is claimed. Recording and external release stay held.\n\n**Historical quick-notifications acceptance: VERIFIED within recorded local scope.** The Home bell's native latest-five sheet and complete existing Activity feed use shared authorized data/read state/badges. [Pass5 source checks](artifacts/notification-center/pass5/CHECKS.json), strict binary inspection and actual POCO install/Metro-off/API launch pass. Final compact error/retry, guest/account recovery, Light/Dark content sizing, contextual destination and all dismissal paths have exact evidence. [FINISH_REVIEW](artifacts/notification-center/FINISH_REVIEW.md) returns bounded `ship` after closing long failure copy and low-volume empty height; no actionable P0/P1/P2 remains in its matrix. Earlier candidate scopes remain separate. No human/TalkBack, every-device, automated similarity or sustained-performance approval is implied; recording and external release remain held.\n\n**Historical Create/photo acceptance: VERIFIED within the recorded local review.** [FINISH_REVIEW](artifacts/create-polish/FINISH_REVIEW.md) returns bounded `ship` after the exact pass6 confirmation-to-detail correction; no open P0/P1/P2 remains in its matrix. Pass3/pass5 retain the creation, photo, Light/Dark, preview, selected font-scaling and submission observations; pass6 independently binds the final source/APK and focused route/runtime follow-up. [Native results](artifacts/create-polish/NATIVE_RESULTS.md) preserve exact scopes and comparisons. This is not a wholesale pass6 recapture, human approval, pixel-perfect score or formal engine gate. Straight progress connectors/plain decorative quote lettering and spare IME footer space remain P3 notes. Sustained performance, TalkBack/human testing, other devices, production release and the held video remain separate.\n\n**Historical Showcase checkpoint:** the [independent finish review](artifacts/showcase-redesign/FINISH_REVIEW.md) compared pass4 physical surfaces and closed its sole preview-color finding with pass5 captures 05/06. Its bounded `ship` and [design QA](artifacts/showcase-redesign/design-qa.md) remain valid for that source/APK only. They do not verify the new creation/photo changes or imply human approval, pixel identity or a whole-surface automated engine gate.\n\nHistory: the civic-publication ultramarine/large-serif direction and later green-tinted Dark result were rejected. The preceding black/quality passes established useful theme and workflow behavior, now preserved while the approved Showcase replaces their compositions. Source snapshots remain under `artifacts/checkpoints/before-reference-redesign-20261016-101133` and `artifacts/showcase-redesign/before-source`. Current build and acceptance status belongs in [PROGRESS.md](PROGRESS.md) and [RELEASE_READINESS.md](RELEASE_READINESS.md).",
     "keyCharacteristics": [
-      "Compact Manrope hierarchy and image-led campaign discovery.",
-      "Unchanged mint-and-charcoal Light; black-and-neutral-charcoal Dark.",
-      "Shared semantic surfaces, visible fields and restrained native feedback.",
-      "Five persistent tabs, content-aware docks and scalable native text."
+      "Compact native Manrope hierarchy, strong campaign imagery and clear funding groups.",
+      "Near-white Light and pure-black/neutral-charcoal Dark, with mint reserved for actions and small accents.",
+      "Five persistent tabs; reference-led compact creation controls preserve the exact five-step PDF workflow.",
+      "User-selected private profile photos with initials fallback and authenticated owner-scoped persistence.",
+      "Truthful server-backed identity, finance and activity; explicitly decorative artwork and uncertain estimates.",
+      "Distinct Home quick-notifications sheet and complete Activity feed over the same recipient-scoped notification data and read actions.",
+      "Targeted density/wrapping/footer refinements preserve the approved identity and existing PDF workflows;current bounded native review is verified.",
+      "Unchanged supplied poster for launcher/splash and separately documented transparent Auth extraction/native wordmark following the later Onboarding polish."
     ],
     "rules": [
       {
         "name": "The Neutral Dark Rule",
-        "body": "Dark backgrounds, headers and large containers use their neutral semantic roles. Mint belongs to restrained accents, progress and actions; never replace the neutral grounds with green-tinted surfaces.",
+        "body": "Keep ordinary Dark backgrounds and containers black or neutral charcoal. Mint belongs to restrained actions, progress and accents; the decorative welcome raster is a specific branded artwork, not permission to recolor the app green.",
         "section": "colors"
       },
       {
         "name": "The Shared Appearance Rule",
-        "body": "Resolve colors through the existing theme provider. Appearance is a device preference independent of identity, drafts and payments; a theme change must preserve the current workflow.",
+        "body": "The later explicit Dark-default instruction supersedes the former System fallback. The same device-scoped `campaign:appearance:v1` store now starts/restores Dark only when its saved preference is absent, invalid or unreadable. Existing explicit Light, Dark and System values are preserved; System still follows live OS changes. Signed-in Profile/Settings and guest Help retain all three choices, independently of identity and drafts. No Auth-only theme store or forced overwrite is added. ThemeProvider remains above session/query/navigation; changes and sign-out preserve forms, filters, checkout and the device preference. Tests cover missing/invalid-preference Dark fallback. Actual pass11 System switching and pass12 preference/account restart preserve existing choices; no fresh-install test or user-data clearing is claimed.",
         "section": "colors"
       },
       {
         "name": "The Compact Type Rule",
-        "body": "Use the implemented Manrope hierarchy for both storytelling and tasks. Do not restore the superseded large-serif or ultramarine direction.",
+        "body": "Match the reference's compact hierarchy using Manrope and real text. Keep full titles, form instructions, financial meanings and primary actions readable at larger font scales.",
         "section": "typography"
       },
       {
         "name": "The Flat Surface Rule",
-        "body": "Establish hierarchy with semantic surfaces, one-pixel boundaries, spacing and photography. The shared native components define no shadow or motion scale.",
+        "body": "Let images, typography, spacing and semantic surfaces carry hierarchy. Do not add decorative elevation that changes the approved compositions.",
         "section": "elevation"
+      },
+      {
+        "name": "The Fixed Advertising Creative Rule",
+        "body": "The Social Ad creative remains white with dark text and a deep-green CTA in both appearances. The surrounding app canvas, segments and device frame follow the selected theme. This intentional content treatment matches the approved reference; it does not permit unrelated white surfaces in Dark UI.",
+        "section": "colors"
+      },
+      {
+        "name": "The PDF Before Illustration Rule",
+        "section": "layout",
+        "body": "The later Create reference governs composition, not product rules. Preserve five steps, a 60-character title, required creator/category, goal at Submit, current server fees/currency and submission for review. Do not copy six-step, 80-character, INR, 100MB/video/document or immediate-live sample claims."
+      },
+      {
+        "name": "The Private Profile Photo Rule",
+        "section": "components",
+        "body": "features/profile/Photo.tsx uses a 76-unit overview and 96-unit editor photo with choose/crop/change/remove, cancel/loading/error states and initials fallback. Authenticated /me/avatar and migration005 store one normalized owner-only JPEG; photo queries are server/account/version scoped and clear at sign-out. No public creator avatar or generated portrait is implied."
+      },
+      {
+        "name": "The Creation Composition Rule",
+        "section": "layout",
+        "body": "CreationUi.tsx retains 32-unit active / 24-unit inactive connected markers in stable 32-unit slots, compact controls, a 152-unit upload area and 174/110 media thumbnails. Save Draft/icon-only Preview share one upper row, with save status below the five-step indicator and active step title in content. Summary label columns are 108–124 units and stack when effective content width/fontScale is below 280; rows keep 48-unit actions. Preserve PDF ordered content, public sources, separate ads, goal at Submit, review and FundingPolicies. The premium pass1 five-step normal/compact Light/Dark matrix is independently reviewed and source-bound through pass12; earlier Create pass3/pass5 workflows/pass6 route fix retain their historical scope."
+      },
+      {
+        "name": "The Decorative Landscape Rule",
+        "section": "components",
+        "body": "assets/images/create/story-mountains.png and confirmation-coast.png are generated fictional 1774×887 scenery with provenance in artifacts/create-polish/ASSETS.md. Original Story/confirmation decorations remain outside the accessibility order; later Welcome carousel slides use explicit illustrative image labels. They never populate user campaign/ad content or change neutral Dark surfaces."
+      },
+      {
+        "name": "The Shared Notifications Rule",
+        "section": "components",
+        "body": "Home bell retains content-sized latest-five NotificationSheet; Activity retains the existing feed cap 300,filters, preferences and follows. Shared NotificationRow uses dividers/context/read treatment and in-place full-copy disclosure; UnreadBadge is 16 units, shows 99+ when needed and leaves full count to accessible parent labels. useActivity owns records/badges; state.ts coordinates guarded existing reads without a second store. Prior notification pass5 remains historical; premium pass2 row/read/disclosure evidence and pass12 Activity/sheet/guest follow-ups retain their exact independently reviewed scopes. Full-copy disclosure appears only when exact-width native natural-line measurement proves truncation; Activity previews three body lines and quick sheet two. Short events keep a compact timestamp row. Probes are temporary, inaccessible, untouchable and outside layout height; actual pass2 expansion/read interactions and pass12 Activity/sheet captures support this behavior within their recorded scopes."
+      },
+      {
+        "name": "The Approved Refinement Rule",
+        "section": "layout",
+        "body": "The latest Home-only reference supersedes earlier greeting/paired actions there. Use restrained Campaign label, 22/26 headline, short Search campaigns… control and equal-height filter action, categories and In the spotlight. Home-specific SpotlightCard has a 140-unit top-biased seed-ocean cover using unchanged raster bytes, smaller Featured · demo badge, clearly separated category/creator, real title/summary/funding/three stats and lifecycle-correct 48-unit action. Metadata stacks at fontScale≥1.25. Start a campaign sits in the prompt strip below. Full PDF explanation and configured uncertain $1 example remain lower. Shared Stats keeps label below full-width icon/value row with original fonts and full accessible label/value. Other screens/palette/business rules stay intact. Pass6 clears the static Image intrinsic height and verifies Home/Stats normal and 360dp/font 1.3 in both themes; pass5 was never installed. Home/Stats source is unchanged through pass12; native evidence keeps its pass6 scope."
+      },
+      {
+        "name": "The Supplied Campaign Brand Rule",
+        "section": "components",
+        "body": "`features/Brand.tsx` now uses `campaign-megaphone-transparent.png` for Auth: 70-unit horizontal Welcome icon, 60-unit compact form icon, native Campaign text and tagline in both themes. The original complete poster remains unchanged for full-artwork, launcher and splash use. The transparent extraction is a separate 1254×1254 RGBA PNG, 622,358 bytes, SHA `F6DA62459FD81DD47DA127B3FA2892CE0855A703A2A76652FC5642EF0F2F6395`. [Extraction provenance](artifacts/premium-quality/brand-extraction/PROVENANCE.json) records built-in image-generation background removal and its limits: this is a synthesized extraction, not a byte/pixel-identical cutout. The original poster remains SHA `C88BA8F63DE5C155664591DA81EB9C146FCAA92C3913323974D3577E174031F3`; whole-poster icon/favicon/black 160-unit contained splash configuration is unchanged. No Python raster editing, generic replacement logo or monochrome asset was introduced. Actual pass12 normal/compact Light/Dark rendering is included in the independent bounded review; no pixel-identical extraction claim is made."
+      },
+      {
+        "name": "The Current Evidence Boundary",
+        "section": "components",
+        "body": "**Current premium pass12 — VERIFIED within the recorded local scope:** [Fresh source gates](artifacts/premium-quality/pass12/SOURCE_CHECKS.json) pass **91/91 in 1044.901ms**, TypeScript/full-source ESLint/diff/public Expo config. [Strict inspection](artifacts/premium-quality/pass12/BUILD_INSPECTION.json) binds **86 inputs / 45 compiled modules / six artworks / 15 native branding resources** to the **48,623,759-byte APK**, SHA `DF4C95CB9F6555DE6E5637DCF18989B7E41042E0D978F7F908EFA0697FDAEDF9`. The installed package hash matches. [Actual Metro-off launch](artifacts/premium-quality/pass12/METRO_OFF.json) is **COLD 1,418ms / wait 1,431ms**, with preserved data and a separately healthy USB-local API. [Independent finish review](artifacts/premium-quality/FINISH_REVIEW.md) closes the opened Home/Auth/keyboard findings. Earlier matrices retain [their exact scopes](artifacts/premium-quality/CANDIDATE_SCOPES.json); no whole-app final-hash rerun or human/production acceptance is inferred. Recording/external release stay held.\n\n[Pass12 native actions](artifacts/premium-quality/pass12/AUTH_FUNCTIONAL.json) verify full Login/Register buttons while the IME remains open in all four compact Light/Dark combinations, plus normal Dark Login; measured targets are 49.82–50.18dp. The native Register button surfaces invalid-email feedback. Guest browsing opens the five-tab public app and hides private notifications. Unchecked login returns to guest after process restart; checked login restores the original account/photo and 10/3/1 private counts. Inline mode links, hardware/header Back, Help/form preservation and saved draft-library access work. The held Ocean awareness preview QA draft was viewed without editing/submission. System preference and account restore through restart; Dark/original display are restored afterward. Exact captures 00–33 remain under pass12, with registration/isolation and live System follow-up also retaining their earlier pass10/11 scopes.\n\n[Final diagnostics](artifacts/premium-quality/pass12/FINAL_DIAGNOSTICS.json) record 46 current-PID log lines with no matching fatal/JS error markers and confirm the installed APK hash. Package-specific exit/memory/frame captures remain bounded observations, not crash-free or sustained-performance guarantees. Original 1080×2400/density 440/font 1.17/IME 1/night mode and animation 0.5 values are restored. [Service restoration](artifacts/premium-quality/pass12/SERVICES_RESTORED.json) confirms the same Campaign API healthy and owned Metro 8081 running again, with only the selected phone’s USB 8787 reverse; an initial bounded health timeout resolved without duplicate restart. No unrelated device/service or recording action is implied.\n\nThe final review is bounded to actual opened captures and recorded interactions. Compact submission confirmation remains explicitly unverified. Human/TalkBack, additional hardware/orientations, fresh-install default behavior and sustained smoothness remain separate; preserved existing Light/System preferences are verified without clearing user data. Password recovery is truthfully unavailable locally. Production signing/hosting, current Telegram cutoff confirmation, the held video and external submission remain open or held. USB-local backend reachability is not hosted availability; no score or fictional engine verdict is used.\n\n[Frozen source](artifacts/premium-quality/pass12/SOURCE_INPUTS.json) digest: `6e92c273b2ca5ddea4a99119d7a8357b8cfab54d54bf365c9f31b5697cf47726`. [Final source verification](artifacts/premium-quality/pass12/SOURCE_VERIFICATION.json) and strict inspection bind the same 86 mobile/13 backend inputs; original 25-page PDF SHA remains `6A5443253C33997A7361BA91BFF4C04DAF02743ADF23CB47F7E4F1C3789E3290`."
+      },
+      {
+        "name": "The Optional Session Persistence Rule",
+        "section": "components",
+        "body": "Remember me is unchecked initially. Login passes its explicit boolean to Session; unchecked removes any older durable session before publishing the new memory-only identity, so a process restart returns to guest without deleting drafts. Checked login and registration retain existing SecureStore persistence. Serialized writes, authentication generation and API-session guards prevent late writes/logout/expiry cleanup from crossing a newer identity. Storage failure is visible and does not publish the new identity. Eight meaningful storage/provider tests cover persistence, failure and races; actual pass12 checked/unchecked process restarts are verified in AUTH_FUNCTIONAL.json."
+      },
+      {
+        "name": "The Compact Auth Rule",
+        "section": "components",
+        "body": "The later Onboarding reference and Auth-polish steering govern Welcome and Sign In. Welcome uses horizontal branding, a 28/34 headline, amplification explanation, three manually selected landscape slides and filled/outlined entry actions. Its image is 176 units on narrow/short/enlarged-text windows and 190 otherwise. Login/Register use compact centered branding, a 24/30 heading, 64-unit icon/label/input cards and a 50-unit primary action. Actual email/password/name validation, secure/reveal control, keyboard Next/Go, API errors and busy feedback remain. Remember me is functional and initially unchecked. Guest browsing, mounted Help form state and focus-scoped Android Back remain. The guest Profile auth surface hides its tab bar while retaining all five registered destinations. Auth no longer contains a theme picker or recovery button; a static sentence truthfully explains unavailable local password recovery. Appearance remains available through existing Help/Profile settings. \n\nAndroid Auth keeps the guest Screen’s extra height avoidance disabled and measures only native IME overlap at the stable AuthBackdrop outer view. The bottom inset is the maximum of safe-area padding and actual overlap; an already-resized window adds no duplicate height. Frame revisions and focus/active guards reject stale async measurements, hide/blur clears overlap and layout changes remeasure. Android drags/taps keep the keyboard open while the form scrolls; Help explicitly dismisses it and restores the usual Screen avoidance for Help fields. iOS keeps its existing behavior. Actual pass12 screenshots/AUTH_FUNCTIONAL.json verify focused fields and full primary actions with IME, including compact Login/Register in both themes."
       }
     ],
     "dos": [
-      "Do use the shared semantic Light/Dark palette and preserve the existing Light design.",
-      "Do keep Dark grounds neutral, including headers and contribution panels, with mint confined to accents and actions.",
-      "Do use Manrope static font files through the shared Text wrapper and let native text scale.",
-      "Do retain the five tabs and five visible creation steps, with space for docks, keyboard and system insets.",
-      "Do keep campaign identity, funding, estimated reach and the next action coherent, with truthful simulated or estimated labels.",
-      "Do verify the actual installed candidate at 360, 393 and 411 logical widths, font scale 1.3 and critical keyboard states before claiming visual acceptance."
+      "Do use Showcase app compositions and the later Create reference while preserving the PDF when illustration text conflicts.",
+      "Do keep ordinary Dark backgrounds pure black or neutral charcoal and use mint for restrained actions and accents.",
+      "Do preserve all mandatory PDF workflows, truthful finance, private identities, guest browsing and labelled simulations.",
+      "Do use actual account data, campaign content and current backend configuration instead of reference figures or people.",
+      "Do compare the installed Android candidate with the same reference state and theme before declaring fidelity complete.",
+      "Do preserve user data, theme continuity, draft state, safe areas and keyboard usability through the redesign.",
+      "Do keep profile photos deliberately user-selected, private and owner-scoped, with real initials when absent.",
+      "Do keep the Home bell quick sheet and full Activity history distinct while sharing authorized notification records, badges and read actions."
     ],
     "donts": [
-      "Don't reintroduce green-tinted Dark grounds, oversized serif discovery headings or ultramarine actions from rejected directions.",
-      "Don't create parallel per-screen themes, remount navigation to change appearance, or store the preference in account data.",
-      "Don't copy the reference's people, photographs, donation wording, banking balances or unsupported trust claims.",
-      "Don't add decorative gradients, nested panels, repeated slogans or new motion/shadow tokens that the native system does not define.",
-      "Don't treat old green-Dark captures, a successful build, browser snippets or source token checks as acceptance of the corrected installed appearance."
+      "Don't replace native screens with a flattened reference image, copied device chrome or a web-only implementation.",
+      "Don't reintroduce green-tinted Dark grounds, ultramarine actions or the rejected large-serif system.",
+      "Don't invent follower counts, verification badges, trust claims, fees, payment guarantees or measured reach.",
+      "Don't let theme changes reset navigation, identity, forms, drafts, filters or contribution amounts.",
+      "Don't use old APK/screenshots, generated artwork or documentation previews as current native acceptance.",
+      "Don't resume recording, cloud setup or submission without the applicable human authorization.",
+      "Don't fabricate guest notifications, duplicate notification stores/endpoints or let late read/navigation operations cross account or API-session changes."
     ]
   }
 }

@@ -3,7 +3,7 @@ export type ColorScheme = "light" | "dark";
 export const APPEARANCE_KEY = "campaign:appearance:v1";
 
 export function normalizeAppearance(value: unknown): AppearancePreference {
-  return value === "light" || value === "dark" ? value : "system";
+  return value === "light" || value === "system" ? value : "dark";
 }
 export function resolveAppearance(preference: AppearancePreference, system: unknown): ColorScheme {
   return preference === "system" ? (system === "dark" ? "dark" : "light") : preference;
@@ -14,7 +14,7 @@ export type AppearanceSnapshot = { preference: AppearancePreference; scheme: Col
 
 /** Device preference only. This store never reads or writes sessions, drafts or payments. */
 export function createAppearanceStore(storage: Storage, system: System) {
-  let state: AppearanceSnapshot = { preference: "system", scheme: resolveAppearance("system", system.getColorScheme()), ready: false, appearanceError: "" };
+  let state: AppearanceSnapshot = { preference: "dark", scheme: "dark", ready: false, appearanceError: "" };
   const listeners = new Set<() => void>();
   let revision = 0;
   let restoration: Promise<void> | undefined;
@@ -38,8 +38,8 @@ export function createAppearanceStore(storage: Storage, system: System) {
       if (revision === initialRevision) apply(normalizeAppearance(saved));
     }).catch(() => {
       if (revision === initialRevision) {
-        apply("system");
-        update({ appearanceError: "Appearance could not be restored. Following your system for now." });
+        apply("dark");
+        update({ appearanceError: "Appearance could not be restored. Using Dark for now." });
       }
     }).finally(() => update({ ready: true }));
     return restoration;
@@ -74,21 +74,21 @@ export const fonts = {
   editorial: "NewsreaderMedium", editorialStrong: "NewsreaderSemiBold",
 };
 export const lightColors = {
-  bg: "#F7FAF8", paper: "#FFFFFF", surfaceRaised: "#EEF4F0", ink: "#17221D", text: "#24362B",
-  muted: "#52655A", line: "#D5E0D9", outline: "#73867B", green: "#17221D", primary: "#17221D",
-  onPrimary: "#FFFFFF", mint: "#E4F3EB", header: "#BCE6D5", headerText: "#17221D", onHeaderMuted: "#375B49",
+  bg: "#FAFBFC", paper: "#FFFFFF", surfaceRaised: "#F0F3F4", ink: "#111919", text: "#273234",
+  muted: "#566269", line: "#E2E7E8", outline: "#7C898C", green: "#103C31", primary: "#103C31",
+  onPrimary: "#FFFFFF", mint: "#E9FAF2", header: "#FAFBFC", headerText: "#111919", onHeaderMuted: "#566269",
   orange: "#8D451E", peach: "#F9EFE5", red: "#A82424", errorSurface: "#FCECEC", success: "#216146",
   successSurface: "#E4F3EB", warning: "#795516", warningSurface: "#F7EFD9", focus: "#176541",
-  progress: "#287452", progressTrack: "#D4E9DE", subtle: "#EDF3EF", disabledSurface: "#E0E7E2", disabledText: "#596C60",
+  progress: "#16865B", progressTrack: "#E5ECE8", subtle: "#F0F3F4", disabledSurface: "#E6EBE9", disabledText: "#596C60",
   overlay: "rgba(5,15,9,0.6)", imageScrim: "rgba(5,15,9,0.62)", onImage: "#FFFFFF",
 };
 export type ThemeColors = { [K in keyof typeof lightColors]: string };
 export const darkColors: ThemeColors = {
-  bg: "#000000", paper: "#121212", surfaceRaised: "#1C1C1C", ink: "#F5F5F5", text: "#E5E5E5",
-  muted: "#B0B0B0", line: "#303030", outline: "#7D7D7D", green: "#A9DEC7", primary: "#A9DEC7",
-  onPrimary: "#111111", mint: "#1E1E1E", header: "#151515", headerText: "#F5F5F5", onHeaderMuted: "#B8B8B8",
+  bg: "#000000", paper: "#121212", surfaceRaised: "#1C1C1C", ink: "#F5F7F6", text: "#E1E6E3",
+  muted: "#AEB8B3", line: "#2C302E", outline: "#7D8982", green: "#8EF4C5", primary: "#8EF4C5",
+  onPrimary: "#08271D", mint: "#1E1E1E", header: "#000000", headerText: "#F5F7F6", onHeaderMuted: "#AEB8B3",
   orange: "#F3BB91", peach: "#392D23", red: "#FFB0AD", errorSurface: "#402625", success: "#A9DEC7",
   successSurface: "#1E1E1E", warning: "#E9CF8D", warningSurface: "#383322", focus: "#A9DEC7",
-  progress: "#A9DEC7", progressTrack: "#363636", subtle: "#191919", disabledSurface: "#242424", disabledText: "#A3A3A3",
+  progress: "#8EF4C5", progressTrack: "#303733", subtle: "#191919", disabledSurface: "#242424", disabledText: "#A3A3A3",
   overlay: "rgba(0,0,0,0.72)", imageScrim: "rgba(5,15,9,0.62)", onImage: "#FFFFFF",
 };
