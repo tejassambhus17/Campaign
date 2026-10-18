@@ -18,8 +18,13 @@ export function CampaignCover({ campaign, height = 180 }: { campaign: Campaign; 
 
 export function CampaignStats({ campaign, config, showTime = false }: { campaign: Campaign; config?: Config; showTime?: boolean }) {
   const { colors } = useTheme();
-  const report = useQuery({ queryKey: ["report", campaign.id], queryFn: () => api<Record<string, unknown>>(`/campaigns/${campaign.id}/report`), enabled: !!campaign.publishedAt });
-  const count = report.data?.contributionCount;
+  // Public list snapshots already carry this aggregate. A card must not load the
+  // full report when no additional information is needed for its contribution count.
+  const embeddedCount = (campaign as Campaign & { report?: Record<string, unknown> }).report?.contributionCount;
+  const hasEmbeddedCount = typeof embeddedCount === "number" && Number.isInteger(embeddedCount) && embeddedCount >= 0;
+  const report = useQuery({ queryKey: ["report", campaign.id], queryFn: () => api<Record<string, unknown>>(`/campaigns/${campaign.id}/report`), enabled: !!campaign.publishedAt && !hasEmbeddedCount });
+  const fallbackCount = report.data?.contributionCount;
+  const count = hasEmbeddedCount ? embeddedCount : typeof fallbackCount === "number" && Number.isInteger(fallbackCount) && fallbackCount >= 0 ? fallbackCount : undefined;
   const fundingOpen = (campaign.campaignState || campaign.status) === "Available for Funding";
   const days = fundingOpen && campaign.deadline ? Math.max(0, Math.ceil((new Date(campaign.deadline).getTime() - Date.now()) / 86400000)) : null;
   const items: { icon: React.ComponentProps<typeof Ionicons>["name"]; value: string; label: string }[] = [

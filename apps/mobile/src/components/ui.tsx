@@ -80,12 +80,15 @@ export function Screen({
   scroll = true,
   backgroundColor,
   androidKeyboardAvoidance = true,
+  compact = false,
 }: {
   children: React.ReactNode;
   scroll?: boolean;
   backgroundColor?: string;
   /** Disable where Android window resizing already handles the focused form. */
   androidKeyboardAvoidance?: boolean;
+  /** Tighter page rhythm for task screens; safe areas and touch targets stay intact. */
+  compact?: boolean;
 }) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -121,9 +124,10 @@ export function Screen({
                 width: "100%",
                 maxWidth: 640,
                 alignSelf: "center",
-                padding: 18,
-                paddingBottom: 28,
-                gap: 18,
+                paddingHorizontal: 18,
+                paddingTop: compact ? 12 : 18,
+                paddingBottom: compact ? 20 : 28,
+                gap: compact ? 12 : 18,
               }}
             >
               {children}
@@ -446,48 +450,56 @@ export function Accordion({
   children,
   initiallyOpen = false,
   keepMounted = false,
+  compact = false,
+  reveal = false,
 }: {
   title: string;
   children: React.ReactNode;
   initiallyOpen?: boolean;
   keepMounted?: boolean;
+  compact?: boolean;
+  /** A truthy/new validation request opens content; clearing it never closes an edited field. */
+  reveal?: boolean | object;
 }) {
   const { colors, styles } = useTheme();
-  const [open, setOpen] = useState(initiallyOpen);
+  const [open, setOpen] = useState(initiallyOpen || !!reveal);
+  useEffect(() => { if (reveal) setOpen(true); }, [reveal]);
   return (
-    <View style={{ borderBottomWidth: 1, borderColor: colors.line }}>
+    <View>
       <Pressable
         accessibilityRole="button"
         accessibilityState={{ expanded: open }}
-        onPress={() => setOpen(!open)}
+        onPress={() => setOpen(current => !current)}
         style={{
-          minHeight: 56,
-          paddingVertical: 15,
+          minHeight: 48,
+          paddingVertical: compact ? 9 : 11,
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
+          gap: 10,
         }}
       >
         <Text
           style={{
-            fontSize: 16,
+            fontSize: compact ? 14 : 16,
+            ...(compact ? { lineHeight: 20 } : {}),
             fontWeight: "600",
-            color: colors.ink,
+            color: open ? colors.primary : colors.ink,
             flex: 1,
           }}
         >
           {title}
         </Text>
         <Ionicons
-          name={open ? "remove" : "add"}
-          size={21}
+          name={open ? "chevron-up" : "chevron-down"}
+          size={18}
           color={colors.green}
         />
       </Pressable>
       {(open || keepMounted) && (
-        <View importantForAccessibility={open ? "auto" : "no-hide-descendants"} style={{ display: open ? "flex" : "none", paddingBottom: 18, gap: 10 }}>
+        <View importantForAccessibility={open ? "auto" : "no-hide-descendants"} style={{ display: open ? "flex" : "none", paddingBottom: compact ? 12 : 18, gap: compact ? 8 : 10 }}>
           {typeof children === "string" ? (
-            <Text style={styles.body}>{children}</Text>
+            <Text style={[styles.body, compact && { fontSize: 14, lineHeight: 21 }]}>{children}</Text>
           ) : (
             children
           )}

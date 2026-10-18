@@ -180,6 +180,7 @@ function nativeDetailComposition(selected = 'Story', enabled = false) {
     '../../../../lib/session': { useRefreshOnFocus() {}, useSession: () => ({}), useConfig: () => ({}), useMe: () => ({}) }, '../../../../features/creation/model': {},
     '../../../../features/updates': { CampaignUpdates: 'CampaignUpdates' }, '../../../../components/ui': { ...ui, fonts: {}, useTheme: () => ({ colors: {} }) },
     '../../../../features/transparency/CampaignTransparency': { CampaignTransparency: 'CampaignTransparency' },
+    '../../../../components/Information': { InfoAction: 'InfoAction' },
     '../../../../features/reports/ImpactDashboard': { ImpactDashboard: 'ImpactDashboard' },
     '../../../../features/campaign': Object.fromEntries(['CampaignCover', 'CampaignStats', 'Disclosures', 'ShareButton', 'Story', 'CampaignJourney'].map(name => [name, name])),
   });

@@ -1,32 +1,34 @@
 import { useCurrency } from "../../lib/CurrencyProvider";
 import React, { useState } from "react";
-import { ActivityIndicator, Pressable, TextInput, useWindowDimensions, View, ViewStyle } from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, TextInput, useWindowDimensions, View, ViewStyle } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { fonts, Picture, Text, useTheme } from "../../components/ui";
+import { SelectionSheet } from "../../components/Information";
 import { Campaign } from "../../lib/types";
 import { STEPS } from "./model";
 import { IMAGE_UPLOAD_HINT } from "./media";
 
 type Icon = React.ComponentProps<typeof Ionicons>["name"];
 const stepIcons: Icon[] = ["reader-outline", "create-outline", "images-outline", "people-outline", "lock-closed-outline"];
-
 export function CreationProgress({ step }: { step: number }) {
   const { colors } = useTheme();
+  const { width, fontScale } = useWindowDimensions();
+  const railWidth = Math.max(Math.min(width, 640) - 36, Math.ceil(54 * 5 * Math.max(1, fontScale)));
   return (
-    <View accessible accessibilityRole="progressbar" accessibilityLabel={`Campaign creation: ${STEPS[step]}`} accessibilityValue={{ min: 1, max: 5, now: step + 1, text: `Step ${step + 1} of 5: ${STEPS[step]}` }} accessibilityLiveRegion="polite" style={{ flexDirection: "row", paddingTop: 2, paddingBottom: 2 }}>
-      <View style={{ position: "absolute", left: "10%", right: "10%", top: 18, height: 1.5, backgroundColor: colors.line }} />
-      {step > 0 && <View style={{ position: "absolute", left: "10%", width: `${step * 20}%`, top: 18, height: 1.5, backgroundColor: colors.green }} />}
-      {["Basics", "Story", "Visuals", "Reach", "Submit"].map((title, index) => (
-        <View key={title} style={{ flex: 1, alignItems: "center", gap: 4 }}>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, flexShrink: 0 }} contentContainerStyle={{ flexGrow: 1 }}>
+      <View accessible accessibilityRole="progressbar" accessibilityLabel={`Campaign creation: ${STEPS[step]}`} accessibilityHint={`Five steps: ${STEPS.join(", ")}.`} accessibilityValue={{ min: 1, max: 5, now: step + 1, text: `Step ${step + 1} of 5: ${STEPS[step]}` }} accessibilityLiveRegion="polite" style={{ width: railWidth, flexDirection: "row", paddingTop: 2, paddingBottom: 2 }}>
+        <View style={{ position: "absolute", left: "10%", right: "10%", top: 18, height: 1.5, backgroundColor: colors.line }} />
+        {step > 0 && <View style={{ position: "absolute", left: "10%", width: `${step * 20}%`, top: 18, height: 1.5, backgroundColor: colors.green }} />}
+        {["Basics", "Story", "Visuals", "Reach", "Submit"].map((title, index) => <View key={title} style={{ flex: 1, alignItems: "center", gap: 4 }}>
           <View style={{ width: 32, height: 32, alignItems: "center", justifyContent: "center" }}>
             <View style={{ width: index === step ? 32 : 24, height: index === step ? 32 : 24, borderRadius: 16, alignItems: "center", justifyContent: "center", backgroundColor: index === step ? colors.green : colors.bg, borderWidth: index < step ? 1.5 : 1, borderColor: index <= step ? colors.green : colors.line }}>
               <Ionicons name={stepIcons[index]} size={index === step ? 19 : 14} color={index === step ? colors.onPrimary : index < step ? colors.green : colors.muted} />
             </View>
           </View>
           <Text style={{ fontSize: 11, lineHeight: 16, textAlign: "center", fontWeight: index === step ? "700" : "500", color: index === step ? colors.ink : colors.muted }}>{title}</Text>
-        </View>
-      ))}
-    </View>
+        </View>)}
+      </View>
+    </ScrollView>
   );
 }
 
@@ -50,7 +52,7 @@ export function CreationActionDock({ primary, secondary }: {
   // This occupies its own flex space below the form, so actions never float
   // over inputs. Screen handles the IME; the tab bar owns the system inset.
   return (
-    <View style={{ marginHorizontal: 18, paddingTop: 12, paddingBottom: 12 }}>
+    <View style={{ marginHorizontal: 18, paddingTop: 8, paddingBottom: 10 }}>
       <View style={{ flexDirection: stacked ? "column" : "row", alignItems: "stretch", gap: 12 }}>
         {secondary && <View style={{ flex: stacked ? undefined : 0.85, minWidth: 0, alignSelf: stacked ? "flex-start" : undefined }}>{secondary}</View>}
         <View style={{ flex: stacked ? undefined : 1.65, minWidth: 0 }}>{primary}</View>
@@ -60,17 +62,7 @@ export function CreationActionDock({ primary, secondary }: {
 }
 
 export function CategorySelect({ value, options, onChange }: { value: string; options: string[]; onChange: (value: string) => void }) {
-  const { colors } = useTheme();
-  const [open, setOpen] = useState(false);
-  const categoryIcon: Icon = value === "Environment" ? "leaf-outline" : value === "Health" ? "heart-outline" : value === "Education" ? "school-outline" : value === "Science" ? "flask-outline" : "grid-outline";
-  return <View style={{ gap: 4 }}>
-    <Pressable accessibilityRole="button" accessibilityLabel={`Category: ${value || "Choose a category"}`} accessibilityState={{ expanded: open }} onPress={() => setOpen(!open)} style={({ pressed }) => ({ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 12, paddingVertical: 8, borderWidth: 1, borderRadius: 10, borderColor: open ? colors.focus : colors.outline, backgroundColor: colors.paper, opacity: pressed ? 0.8 : 1 })}>
-      <View style={{ width: 27, height: 27, borderRadius: 14, alignItems: "center", justifyContent: "center", backgroundColor: colors.mint }}><Ionicons name={categoryIcon} size={17} color={colors.green} /></View>
-      <Text style={{ flex: 1, fontSize: 13, lineHeight: 19, color: value ? colors.ink : colors.muted }}>{value || "Choose a category"}</Text>
-      <Ionicons name={open ? "chevron-up" : "chevron-down"} size={17} color={colors.ink} />
-    </Pressable>
-    {open && <View style={{ borderWidth: 1, borderColor: colors.line, backgroundColor: colors.paper, borderRadius: 12, overflow: "hidden" }}>{options.map((option) => <Pressable key={option} accessibilityRole="radio" accessibilityLabel={option} accessibilityState={{ checked: value === option }} onPress={() => { onChange(option); setOpen(false); }} style={({ pressed }) => ({ minHeight: 48, paddingHorizontal: 14, paddingVertical: 12, flexDirection: "row", alignItems: "center", gap: 8, backgroundColor: pressed || value === option ? colors.mint : colors.paper })}><Text style={{ flex: 1, fontSize: 13, lineHeight: 19, color: colors.ink }}>{option}</Text>{value === option && <Ionicons name="checkmark" size={18} color={colors.green} />}</Pressable>)}</View>}
-  </View>;
+  return <SelectionSheet label="Category" value={value} options={options.map(option => ({ value: option, label: option }))} onSelect={onChange} testID="creation-category" />;
 }
 
 export function CreationTip({ title, children }: { title: string; children: string }) {
@@ -151,7 +143,7 @@ export function CampaignReviewSummary({ draft, onEdit }: { draft: Campaign; onEd
       {draft.coverImage ? <View style={{ width: 92, borderRadius: 10, overflow: "hidden" }}><Picture uri={draft.coverImage} height={76} /></View> : <View style={{ width: 76, height: 76, borderRadius: 10, backgroundColor: colors.paper, alignItems: "center", justifyContent: "center" }}><Ionicons name="megaphone-outline" size={28} color={colors.green} /></View>}
       <View style={{ flex: 1, gap: 2 }}><Text style={{ fontSize: 14, lineHeight: 20, fontWeight: "700" }}>{draft.title || "Your campaign"}</Text><Pressable accessibilityRole="button" accessibilityLabel="Edit campaign basics" onPress={() => onEdit(0)} style={{ minHeight: 48, flexDirection: "row", alignItems: "center", gap: 5 }}><Ionicons name="create-outline" size={15} color={colors.green} /><Text style={{ fontSize: 12, color: colors.green }}>Edit</Text></Pressable></View>
     </View>
-    <View>{rows.map((row) => <Pressable key={row.label} accessibilityRole="button" accessibilityLabel={`Edit ${row.label.toLowerCase()}: ${row.value}`} onPress={() => onEdit(row.step)} style={({ pressed }) => ({ minHeight: 48, paddingVertical: 10, flexDirection: "row", alignItems: "center", gap: 9, borderBottomWidth: 1, borderBottomColor: colors.line, opacity: pressed ? 0.65 : 1 })}>
+    <View testID="creation-edit-summary" style={{ gap: 0 }}>{rows.map((row) => <Pressable key={row.label} accessibilityRole="button" accessibilityLabel={`Edit ${row.label.toLowerCase()}: ${row.value}`} onPress={() => onEdit(row.step)} style={({ pressed }) => ({ minHeight: 48, paddingVertical: 8, flexDirection: "row", alignItems: "center", gap: 9, opacity: pressed ? 0.65 : 1 })}>
       <Ionicons name={row.icon} size={16} color={colors.muted} />
       <View style={{ flex: 1, minWidth: 0, flexDirection: stacked ? "column" : "row", alignItems: stacked ? "stretch" : "center", gap: stacked ? 4 : 12 }}>
         <Text style={{ fontSize: 12, lineHeight: 18, color: colors.ink, width: stacked ? undefined : labelWidth }}>{row.label}</Text>

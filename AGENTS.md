@@ -1,5 +1,59 @@
 # Campaign Amplification Hackathon: agent instructions
 
+**October18 app-wide disclosure hierarchy:** The latest approved
+Before/After reference governs all information dropdowns and related selections.
+Use compact summary destinations for substantial content, bounded contextual
+sheets for short explanations/options, and concise inline expansion only where
+useful (FAQs/functional editor grouping). Preserve every mandatory PDF disclosure,
+actual public assessment and financial values, demo limitations, native paging,
+five tabs/five creation steps, draft/auth isolation and explicit policy choices.
+Keep the dedicated Audience/Funding/Trust destinations and current report/detail
+return paths. Appearance/Currency remain direct Profile preferences; do not
+recreate Settings. Retain latest compact Home score/buttons/rendering fixes.
+No backend rollout, schema/provider change, data deletion, signing rotation,
+phone reset, billing, push, recording or external submission is implied by this
+frontend task. Actual release checks and remaining limits are in PROGRESS and
+RELEASE_READINESS; human and compatible physical release acceptance stay separate.
+
+**October18 compact trust and performance follow-up:** The user requests compact
+shield/number/Trust Score tiles, with Home Featured at the top right and no Demo
+suffix or classification inside the tile. Preserve separate campaign demo
+provenance and full truthful assessments. Explore uses actual matching public
+assessments for built-ins; never invent scores for stale or unassessed data.
+Home Featured has proper Back/View buttons without the old By-creator footer;
+PDF page 6 creator metadata remains visible. Memoized feed/cards and retained lazy
+category lists reduce repeated rendering while preserving native paging and
+visited reading positions. Release 1.3.1 / code 9 has scoped source/package/API/
+emulator evidence. Its final badge correction has separate confirmation; the
+performance benchmark belongs to the first candidate. Physical and human
+acceptance remain pending. No service, data, deployment, phone-reset or
+publication authority is inferred.
+
+**October18 final UI simplification:** The latest ten-screen reference governs
+Explore, campaign detail, compact five-step creation with the latest connected icon rail, contribution review,
+Trust, reports, Activity and Profile composition. Essential content/actions lead;
+secondary explanations expand accessibly. Preserve Home/Welcome/auth, approved
+themes, five tabs, all PDF information, real data, USD accounting and cloud rules.
+The mock's100-character counter does not replace60; goal remains at Submit.
+Keep native paging, draft isolation/confirmed deletion, separate media and guarded
+PDF sharing. Release1.3.0/code8 has bounded source/package/emulator evidence;
+physical/human acceptance remains pending. No backend rollout, phone reset,
+push, new recording or external submission was performed by this frontend task.
+
+**October18 Home reference correction:** The newest supplied Home image governs
+Home composition: embedded search/filter, icon topic strip, photo-led Featured
+and two-column Discover cards with truthful assessment, funding and save controls.
+It supersedes the earlier Home-filter removal: filtering now stays over mounted
+Home; only explicit See all opens Explore with the selected query/topic/sort.
+Preserve actual public campaign data and review provenance; do not copy mock
+scores, supporters, avatars or verified identity. Keep PDF pp6–7 card metadata,
+clear backing and the existing product/estimate explanation. Preserve approved
+themes, native touch areas, text scaling, cloud business rules and older APKs.
+Current release1.2.4/code7 has bounded emulator evidence only; the POCO's older
+Debug signer prevents a data-preserving dedicated-release update. No cloud
+change, phone reset, push, new video or submission occurred in this task.
+
+
 **October17 final completion directive:** The consolidated final brief authorizes
 Impact/report improvements, actual native PDF sharing, focused regression/native
 checks, same-key release builds and a Campaign-only recorded/edited demo plus a

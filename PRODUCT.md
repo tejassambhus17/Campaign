@@ -1,12 +1,25 @@
 # Campaign: product contract
 
+## Current information hierarchy
+
+Use the approved compact Campaign transparency destinations for Audience & Reach, Funding & Spending and Trust & Verification. Short context/options belong in bounded native sheets; substantial report/evidence/accounting information has focused views. Keep genuine FAQs/guarded editor groupings compact inline. Required fields, complete public sources, policy consent, real selectors and actual financial/simulation/privacy/review qualifications remain. Profile retains direct Appearance/Currency/Notifications, with no Settings screen. See [current evidence and limits](artifacts/dropdown-hierarchy-20261018/README.md).
+
+Current discovery contract: actual published, content-bound assessment badges are
+compact, with provenance/criteria behind the existing review action. Removing a
+Demo suffix from the score tile does not remove campaign demo disclosure. Home
+Back/View are proper buttons; PDF-required creator remains visible in metadata.
+Native category lists load near the current page and retain visited reading
+positions. Presentation/rendering corrections preserve account/business rules.
+
 Campaign is a React Native/Expo mobile product where communities fund distribution of a message beyond its creator's network. Contributions buy advertising reach, never direct donations or creator transfers. The 25-page Hackathon_Requirements.pdf remains authoritative; REQUIREMENTS.md retains page-level coverage.
+
+Essential campaign and funding information leads; secondary review, finance, targeting, media, preview and help details expand accessibly. Required fields, public sources, complete editorial structure, consent and policies remain. Reports lead with three actual metrics classified as measured, simulated, estimated or unavailable. Trust scores use the recorded assessment and provenance; no illustrative reference values become user data. Existing native PDF sharing, paging and account routes remain. This presentation contract changes no backend or monetary architecture.
 
 Audience: a guest discovers and reads; the same signed-in person creates, backs and follows. A separately authorized reviewer demonstrates the minimum review gates. Five persistent destinations: Home, Explore, Create, Activity, Profile.
 
 Creator sequence is fixed: Basics → Story → Campaign & Ad Visuals → Reach → Submit. Preserve backward state, automatic durable drafts, editable manual/voice-demo assistance, separate editorial/ad media, public sources, explicit goal only at Submit, preview, consent, submission and corrections. Funding, approval, preparation, distribution and completion remain distinct.
 
-Create entry first shows the informational vertical five-step overview, then offers Create Manually as the primary action and Create with your voice as the secondary, explicitly labelled voice-guided demo using typed input or keyboard dictation; live speech and AI are not connected. These actions precede compact Saved drafts rows. Resume uses the real device or account record, with step, storage scope and available save time shown truthfully; unavailable account save time is disclosed rather than invented. Device drafts remain usable when account loading fails, with a retry for the account list. This presentation preserves existing draft ownership, persistence and the exact five-step editor.
+Create entry offers Create manually as the primary action and Guided creation · demo as the secondary action, followed by the compact informational five-step overview and actual draft rows. Resume retains the real saved destination, title, step, storage scope and available save time; eligible Delete opens the existing confirmation. Opening entry creates no draft. Live speech/AI remains a labelled editable typed/dictation demo. Device drafts remain available when account loading fails, with retry for the account list. Ownership, isolation and persistence are preserved.
 
 Campaign cover is optional and has separate add/change/remove controls. Advertising images have their own add/remove controls; neither purpose silently populates the other, and editorial images remain in Story. All use the established JPEG/PNG/WebP validation and 8 MB per-image limit. Missing ad images remain visible for review instead of implying delivery readiness.
 
@@ -34,4 +47,4 @@ server success. USD remains canonical; Profile Currency can display/enter INR us
 explicit dated reference and frozen quote. Currency changes cannot change
 receipts, account balances or measured/estimated reach.
 
-Activity and My Campaigns use genuine native pages in their existing filter order, with synchronized pills and retained per-page reading positions. Home has no filter shortcut; Explore filters float over its mounted content with explicit Apply and dismiss controls. Contribution presets adapt to measured amount labels and text scaling without changing canonical USD values or checkout semantics. Current native/build evidence belongs in PROGRESS.md.
+Activity and My Campaigns use genuine native pages in their existing filter order, with synchronized pills and retained per-page reading positions. Home and Explore filters float over their own mounted content with explicit Apply and dismiss controls. The latest Home reference adds in-place query/topic/sort/funding selection; only explicit See all opens Explore with those selections. Contribution presets adapt to measured amount labels and text scaling without changing canonical USD values or checkout semantics. Current native/build evidence belongs in PROGRESS.md.

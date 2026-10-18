@@ -15,7 +15,8 @@ import { refresh, useConfig, useMe, useRefreshOnFocus, useSession } from "../../
 import { isPublicUrl } from "../../../../features/creation/model";
 import { CampaignUpdates } from "../../../../features/updates";
 import { Text, Button, fonts, ErrorState, Loading, Notice, Progress, Screen, useTheme } from "../../../../components/ui";
-import { CampaignCover, CampaignStats, Disclosures, ShareButton, Story } from "../../../../features/campaign";
+import { InfoAction } from "../../../../components/Information";
+import { CampaignCover, CampaignStats, ShareButton, Story } from "../../../../features/campaign";
 import { ImpactDashboard } from "../../../../features/reports/ImpactDashboard";
 import { CampaignTransparency } from "../../../../features/transparency/CampaignTransparency";
 import { PublicAssessment } from "../../../../lib/assessments";
@@ -36,7 +37,7 @@ function CampaignSources({ campaign }: { campaign: Campaign }) {
     }
   }
   return (
-    <View style={{ gap: 15 }}>
+    <View style={{ gap: 10 }}>
       <Text accessibilityRole="header" style={styles.h2}>Sources & evidence</Text>
       <Text style={styles.muted}>Public sources supplied by the creator for context. They do not establish independent verification.</Text>
       {campaign.sources.length ? campaign.sources.map((source, index) => (
@@ -128,7 +129,7 @@ export default function CampaignDetail() {
       >
         <View onLayout={(event) => { overviewHeight.current = event.nativeEvent.layout.height; navigation.recordHeader(event.nativeEvent.layout.height); }}>
           <View>
-            <CampaignCover campaign={c} height={Math.min(260, width * 0.6)} />
+            <CampaignCover campaign={c} height={Math.min(230, width * 0.54)} />
             <View style={{ position: "absolute", left: 12, right: 12, top: 10, flexDirection: "row", justifyContent: "space-between" }}>
               <Pressable accessibilityRole="button" accessibilityLabel="Back to Explore" onPress={() => router.dismissTo("/explore")} style={({ pressed }) => ({ width: 48, height: 48, borderRadius: 13, justifyContent: "center", alignItems: "center", backgroundColor: colors.imageScrim, opacity: pressed ? 0.7 : 1 })}>
                 <Ionicons name="arrow-back" size={23} color={colors.onImage} />
@@ -138,16 +139,15 @@ export default function CampaignDetail() {
               </Pressable>
             </View>
           </View>
-          <View style={{ paddingHorizontal: 18, paddingTop: 16, paddingBottom: 12, gap: 12 }}>
-            <Text accessibilityRole="header" style={{ fontFamily: fonts.bold, fontSize: 24, lineHeight: 30, letterSpacing: -0.5, color: colors.ink }}>{c.title || "Untitled campaign"}</Text>
-            <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
-              <View style={{ width: 38, height: 38, borderRadius: 19, backgroundColor: colors.mint, alignItems: "center", justifyContent: "center" }}><Ionicons name="megaphone-outline" size={21} color={colors.primary} /></View>
-              <View style={{ flex: 1, gap: 3 }}>
-                <Text style={{ fontSize: 13, lineHeight: 19, fontWeight: "600", color: colors.ink }}>by {c.creatorName}</Text>
-                <Text style={{ fontSize: 11, lineHeight: 17, color: colors.muted }}>{c.category} · {new Date(c.publishedAt || c.submittedAt || c.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</Text>
-              </View>
+          <View style={{ paddingHorizontal: 18, paddingTop: 12, paddingBottom: 10, gap: 8 }}>
+            <Text accessibilityRole="header" style={{ fontFamily: fonts.bold, fontSize: 21, lineHeight: 27, letterSpacing: -0.4, color: colors.ink }}>{c.title || "Untitled campaign"}</Text>
+            <Text style={{ fontSize: 12, lineHeight: 18, color: colors.muted }}>by {c.creatorName}</Text>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+              <View style={{ borderRadius: 7, backgroundColor: colors.mint, paddingHorizontal: 8, paddingVertical: 3 }}><Text style={{ fontSize: 10, lineHeight: 15, color: colors.primary, fontWeight: "600" }}>{c.category}</Text></View>
+              {c.id.startsWith("demo_") && <View style={{ borderRadius: 7, backgroundColor: colors.mint, paddingHorizontal: 8, paddingVertical: 3 }}><Text style={{ fontSize: 10, lineHeight: 15, color: colors.primary, fontWeight: "600" }}>{c.featured ? "Featured · Demo" : "Demo campaign"}</Text></View>}
+              <Text style={{ fontSize: 10, lineHeight: 15, color: colors.muted }}>{new Date(c.publishedAt || c.submittedAt || c.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</Text>
             </View>
-            {!!c.summary && <Text style={{ fontSize: 14, lineHeight: 22, color: colors.text }}>{c.summary}</Text>}
+            {!!c.summary && <Text style={{ fontSize: 13, lineHeight: 20, color: colors.text }}>{c.summary}</Text>}
             <View style={{ gap: 7, paddingTop: 3 }}>
               <View style={{ flexDirection: "row", alignItems: "baseline", justifyContent: "space-between", gap: 12 }}>
                 <Text style={{ fontSize: 17, lineHeight: 24, fontWeight: "700", fontVariant: ["tabular-nums"], color: colors.ink, flex: 1, minWidth: 0 }}>{money(c.raised)} <Text style={{ fontSize: 12, color: colors.muted }}>of {money(c.goal)}</Text></Text>
@@ -159,17 +159,17 @@ export default function CampaignDetail() {
             <CampaignStats campaign={c} config={config.data} showTime />
             <Button title={actionTitle} disabled={!canBack && !canReport} onPress={openAction} style={{ minHeight: 48 }} />
             <Text style={{ fontSize: 10, lineHeight: 16, color: colors.muted }}>
-              {publicState} · Demo campaign{c.id === "demo_ocean" ? " · AI-generated cover artwork" : ""}
+              {publicState}{c.id === "demo_ocean" ? " · AI-generated cover artwork" : ""}
             </Text>
             {c.revisionPending && <Notice>Showing the approved public version; private changes are not included.</Notice>}
             {!!message && <Notice>{message}</Notice>}
-            {!!c.feedback && <Notice>Review feedback: {c.feedback}</Notice>}
+            {!!c.feedback && <InfoAction title="Review feedback" icon="chatbubble-outline" summary="Read the reviewer's feedback."><Text style={{ fontSize: 13, lineHeight: 20, color: colors.text }}>{c.feedback}</Text></InfoAction>}
           </View>
         </View>
         <View style={{ height: navigation.readingHeight }}>
         <View onLayout={event => navigation.recordTabs(event.nativeEvent.layout.height)} style={{ flexDirection: "row", backgroundColor: colors.paper, borderBottomWidth: 1, borderColor: colors.line, paddingHorizontal: 12 }}>
-          {sections.map((item) => <Pressable key={item} accessibilityRole="tab" accessibilityLabel={item} accessibilityState={{ selected: section === item }} onPress={() => selectSection(item)} style={({ pressed }) => ({ minHeight: 48, flex: 1, paddingHorizontal: 3, paddingVertical: 13, alignItems: "center", justifyContent: "center", borderBottomWidth: 2, borderBottomColor: section === item ? colors.ink : "transparent", opacity: pressed ? 0.6 : 1 })}>
-            <Text style={{ fontSize: 12, lineHeight: 19, fontWeight: section === item ? "700" : "500", color: section === item ? colors.ink : colors.muted }}>{item}</Text>
+          {sections.map((item) => <Pressable key={item} accessibilityRole="tab" accessibilityLabel={item} accessibilityState={{ selected: section === item }} onPress={() => selectSection(item)} style={({ pressed }) => ({ minHeight: 48, flex: 1, paddingHorizontal: 3, paddingVertical: 10, alignItems: "center", justifyContent: "center", borderBottomWidth: 2, borderBottomColor: section === item ? colors.primary : "transparent", opacity: pressed ? 0.6 : 1 })}>
+            <Text style={{ fontSize: 12, lineHeight: 19, fontWeight: section === item ? "700" : "500", color: section === item ? colors.primary : colors.muted }}>{item}</Text>
           </Pressable>)}
         </View>
         <PagerView
@@ -190,16 +190,16 @@ export default function CampaignDetail() {
               nestedScrollEnabled
               scrollEnabled={navigation.contentScrollEnabled}
               keyboardShouldPersistTaps="handled"
-              contentContainerStyle={{ padding: 18, gap: 22, flexGrow: 1 }}
+              contentContainerStyle={{ padding: 18, gap: 16, flexGrow: 1 }}
             >
               {item === "Story" && <Story campaign={c} />}
               {item === "Updates" && <CampaignUpdates campaign={c} />}
               {item === "Impact" && <ImpactDashboard id={id} active={section === "Impact"} />}
               {item === "Sources" && <CampaignSources campaign={c} />}
-              <Disclosures campaign={c} config={config.data} details={item === "Story" ? <CampaignTransparency campaign={c} config={config.data} assessment={assessment.data} loading={assessment.isPending} error={assessment.isError} retry={() => { void q.refetch(); void assessment.refetch(); }} /> : undefined} />
-              <View style={{ gap: 8 }}>
-                <Button title={followed ? "Following updates" : "Follow campaign updates"} variant="secondary" icon={followed ? "notifications" : "notifications-outline"} disabled={busy} onPress={() => { void toggle("follow"); }} />
-                <ShareButton campaign={c} />
+              {item === "Story" && <CampaignTransparency campaign={c} config={config.data} assessment={assessment.data} loading={assessment.isPending} error={assessment.isError} retry={() => { void q.refetch(); void assessment.refetch(); }} />}
+              <View style={{ gap: 8, flexDirection: fontScale > 1.3 || width < 350 ? "column" : "row", alignItems: "stretch" }}>
+                <Button title={followed ? "Following updates" : "Follow updates"} variant="secondary" icon={followed ? "notifications" : "notifications-outline"} disabled={busy} onPress={() => { void toggle("follow"); }} style={{ flex: 1, minHeight: 48, paddingHorizontal: 10, paddingVertical: 9 }} />
+                <ShareButton campaign={c} compact />
               </View>
             </ScrollView>
           </View>)}

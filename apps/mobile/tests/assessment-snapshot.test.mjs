@@ -32,7 +32,7 @@ test('reviewer snapshot displays exact working content, sources, ad images, targ
 test('scoped keep-mounted accordion hides collapsed controls from layout and accessibility without discarding child state', () => {
   let open = true;
   const { Accordion } = load('../src/components/ui.tsx', {
-    'react/jsx-runtime': { jsx, jsxs: jsx }, react: { useState: () => [open, next => { open = next; }] },
+    'react/jsx-runtime': { jsx, jsxs: jsx }, react: { useState: () => [open, next => { open = typeof next === 'function' ? next(open) : next; }], useEffect: effect => effect() },
     'react-native': { View: 'View', Pressable: 'Pressable' }, 'react-native-safe-area-context': {},
     '@expo/vector-icons/Ionicons': { default: 'Icon' }, '../lib/theme': { useTheme: () => ({ colors: {}, styles: {} }) }, '../lib/appearance': { fonts: {} }, '../lib/api': {},
   });

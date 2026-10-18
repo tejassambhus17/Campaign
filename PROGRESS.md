@@ -1,7 +1,166 @@
 # Development progress
 
+## October18 — app-wide information hierarchy / 1.4.0 / code10
+
+Implemented the latest Before/After brief across every source-reviewed dropdown, accordion, sheet and selector:98 prior controls reconciled with105 current source instances. Campaign transparency has Audience & Reach, Funding & Spending and Trust & Verification destinations; short context uses native sheets, while genuine FAQs/functional editor groups retain compact inline expansion. Creation exposes required fields and editable Submit summaries; actual input options, drafts, separate media, public evidence, financial/policy/privacy/simulation information and parent Back remain. No backend change was needed.
+
+Final [Campaign.apk](artifacts/dropdown-hierarchy-20261018/Campaign.apk): **1.4.0/code10**, 68,811,090 bytes; dedicated signed ARM64+x86_64. SHA-256 `CB08EDF303BA6EB7B9720F21BE4E2879C8179CDB7D19ECCFAC91024908953397`. **398 tests**, TypeScript/full ESLint,20 package checks pass. Exact corrected emulator cold launch1241ms without Metro/reverse; native assertion totals by binary are in [delivery](artifacts/dropdown-hierarchy-20261018/DELIVERY.json). The first public/creator matrix is FF9E; the corrected final CB08 has separate shared-sheet/keyboard/theme/font/support/navigation/scroll/PDF-cancel checks. One actual keyboard-occlusion finding was fixed and visually confirmed. [Complete evidence, inventory and limits](artifacts/dropdown-hierarchy-20261018/README.md).
+
+Physical release testing remains pending because the POCO has an incompatible Debug signer; no phone command, uninstall or data clear occurred. Human testing remains pending because no unfamiliar tester is available. This pass did not repeat new-account/authentication, complete upload/payment/review lifecycle, TalkBack, every historical assessment, every editor/media state or sustained physical performance tests. Conditional Following/overflow states not present in the account were not fabricated. No cloud service, backend, migration, seed, billing, push, recording or submission changed.
+
+## October18 — Compact discovery trust, proper Home actions and render work
+
+Home Featured places the compact shield/number/Trust Score tile at the top right.
+Discover and Explore share it without a visible Demo suffix or classification.
+Campaign demo provenance and full reviews remain. Proper Back/View buttons
+replace the old footer; creator stays in compact metadata because PDF page 6
+requires it. Public GET-only checks passed for all 20
+existing built-in assessments. No score or record changed.
+
+Home feed/cards are memoized. Explore initially materializes 2 of 11 category
+lists, prewarms neighbors/jump paths and retains visited reading positions.
+Valid embedded counts avoid unnecessary report requests. The first native batch
+found one P2 mismatch: the 68 dp badge stretched when its label wrapped at font
+scale 1.17. One correction to 74 dp and a regression test closed it; the final APK
+was installed and inspected separately in Dark, Light and larger text.
+
+Final checks: 358/358 tests; TypeScript and full src/plugins ESLint exit 0;
+20/20 package checks; 11 targeted
+native checks. Broader paging/read-position/far-page/filter checks remain bound
+to the first candidate in NATIVE_MAIN/VARIANTS. A stale test mock needed useMemo
+support; its failure log remains. Native harness assumptions about cross-tab Back
+and retained Home/card scroll positions were corrected, with prior receipts
+kept; no app navigation or records changed to satisfy the harness.
+
+The performance comparison belongs to first candidate `b79dfc23b491848fa21b245de18a56a3e49faac182a3957ba16097a1b0a32a36`
+against the 1.3.0 baseline, not the final binary. Three matched warmed Home-scroll
+trials used the owned API 36 emulator, Dark, font scale 1.0, the same measured
+viewport and 12 gestures of 420 ms per trial. Janky-frame rates were 22.727%,
+5.013%, 7.945% before and 3.621%, 4.255%, 2.926% after; the medians were
+7.945% and 3.621%. No counters were
+reset or UI dumps run inside timed gestures. Ring-buffer p95 samples do not
+cover an entire trial. The final binary only widens the badge to 74 dp and updates
+its regression test; it was not benchmarked again. This is emulator observation,
+not a phone or whole-app smoothness guarantee.
+
+[Campaign.apk](artifacts/home-trust-polish-20261018/Campaign.apk) is version
+1.3.1 / code 9, signed by the dedicated Campaign key, with ARM64 and x86_64 native
+libraries. It is 68,787,214 bytes; SHA-256 `C8CC281D802AA0FC5671A61B2B8D31ED8ABB9C77D98AF1BF44716F4DD1C5A3EC`.
+Package identity, approved installer/splash logo, embedded Hermes, native patches
+and HTTPS backend remain. Final source passes 358 tests, TypeScript and full
+src/plugins ESLint; 20/20 package checks pass. The exact
+final APK received a same-key update and cold launch in 1118 ms on the owned
+API 36 emulator without Metro or reverse forwarding. [Evidence and limits](artifacts/home-trust-polish-20261018/README.md).
+
+The POCO was not touched. Physical release verification remains pending because
+its installed Debug signer differs from the dedicated release key. No phone
+uninstall, storage clear or security bypass, backend change, migration, seed,
+provider change, billing, push, recording or submission occurred. Human testing
+remains pending because no unfamiliar tester is available. Whole-app, TalkBack,
+all-device/font/network and sustained physical performance acceptance is separate.
+
+## October18 — Final UI simplification implemented and confirmation checked
+
+The ten-screen reference now guides concise Explore/detail, action-first Create
+entry with compact five-step overview and real Resume/Delete drafts, clean fields
+and separate media, audience-first Reach, editable Submit, concise contribution
+review, reference-style Trust, three-metric reports, compact Activity and Profile.
+[Required-information map](artifacts/final-ui-simplification-20261018/INFORMATION_MAP.md)
+records where mandatory details remain available. No backend change was needed.
+
+The first native batch found three P2s: wrapping Explore actions, retained scroll
+after creator transitions and weak Trust proportions. The
+[confirmation comparison](artifacts/final-ui-simplification-20261018/visual-review/VISUAL_REVIEW.accepted.md)
+closed these within inspected states. Native validation then exposed allocation
+field remount/focus loss; stable disclosure identity/reveal fixes it. The latest
+user also restored the connected five-icon progress rail; fresh native evidence
+checks that requested composition in Dark/Light/font1.3. Harness label/scroll assumptions are kept
+in separate interruption receipts, not described as application failures.
+
+| Check | Actual evidence |
+| --- | --- |
+| Source checks |349/349 frontend tests;0 failed/skipped; TypeScript/full src/plugins ESLint exit0 |
+| Package |20/20 official-tool/source checks;193 frozen inputs unchanged;86 critical backend/payment/persistence/native/PDF inputs unchanged |
+| Signing/branding |Dedicated signer retained;27 mapped icon/splash resources match; bounded8-known-value/1,265-member scan has no match |
+| Confirmation Android |Exact SHA installed same-key `-r` on Campaign_Release_36/emulator-5574/API36 x86_64, ADB5039; cold1141ms, no Metro/reverse |
+| Confirmation interactions |View/Back, amount review without Pay, assessment, report metrics/native share cancellation, Activity swipe, Profile parent Back, all five creator steps, local draft preservation and validation-target reveal |
+| Visual variants |Current corrected Explore/Trust Light and font1.3; first-candidate seven Light compositions/four font samples remain separately bound |
+| Native evidence |`NATIVE_ACCEPTANCE.*.json`, `native/*-accepted.png/xml`; final app-specific log sample in `NATIVE_LOGS.accepted.json` |
+
+[Campaign.apk](artifacts/final-ui-simplification-20261018/Campaign.apk): **1.3.0/code8**, dedicated-signed universal
+**ARM64+x86_64**, 68,786,382 bytes, SHA256 `9F3DF3FF0B12743154B5B443A4A487D9047C184B5991CF33B96F0E2888922022`.
+Package, approved installer/splash logo, minAPI24/target36, embedded Hermes,
+current HTTPS backend and dedicated certificate are preserved.
+
+[Complete handoff](artifacts/final-ui-simplification-20261018/README.md) includes changed files, exact commands, screenshots,
+source checkpoints, failure history and practical reference deviations. Product
+Design image-to-code/design QA and Impeccable documented fallback were used;
+the Impeccable engine could not load, and no engine verdict is claimed.
+
+Physical release testing remains pending: the authorized POCO retains an
+incompatible Debug signer. No phone update, uninstall, storage clear or bypass
+occurred. Unfamiliar-user testing remains pending because no tester is available.
+TalkBack, every device/font/network state, sustained performance and a full new
+account/payment/upload journey were not tested in this UI pass. Earlier video,
+payment, cloud and PDF-delivery evidence retains its exact build scope; no new
+video or external submission occurred.
+
+## October18 — Reference-led Home implemented and bounded native checks passed
+
+The newest Home reference is implemented with an integrated search/filter field,
+icon topics, image-led Featured card and two-column Discover cards. Actual public
+campaigns, assessment provenance, funding and deadlines replace the image's
+illustrative facts. View, Back, assessment, See all, saved-campaign controls and
+current notification/tour paths retain real destinations. Home filtering stays in
+place; See all explicitly hands current selections to Explore. Mandatory Home
+metadata and the advertising/review/estimated-reach explanation remain. No new
+dependency or backend/cloud change was needed.
+
+One genuine native P2 was corrected: a bright Education photo reduced caption
+contrast after font1.3 single-column reflow. The measured caption-aligned scrim
+fix passed the independent [current visual review](artifacts/home-reference-20261018/VISUAL_REVIEW.readable.md).
+Earlier candidates and the rejected contrast evidence are preserved. Actual
+reference comparison is [comparison-readable.png](artifacts/home-reference-20261018/comparison-readable.png),
+not a generated mock. Practical fidelity preserves Android chrome, 48dp targets,
+truthful data and required metadata; exact pixel identity is not claimed.
+
+| Check | Actual result |
+| --- | --- |
+| Frontend suite | 330/330 pass, 0 failed/skipped; `frontend-readable.log` |
+| TypeScript and full src/plugins ESLint | Both observed exit0; silent logs retained |
+| Official-tool / source / APK checks | 20/20; 190 frozen inputs unchanged; 27 branding resources match; bounded 8-known-value/1,265-member secret scan has no match |
+| Exact-APK native checks | 13/13: filters5, View/assessment/Back links3, Light/font1.3 reflow3, search/clear2 |
+| Native installation/launch | Same-key `-r` on owned Campaign_Release_36, emulator-5574/API36; current installed SHA matches; Activity launch978ms; no Metro8081/reverse |
+| App logs | Current PID sample672 lines; no named app crash/JS exception markers; no buffer clear |
+| Visual review | 18 new readable PNG/XML states; inspected Dark/Light/font1.3 samples pass within Home scope |
+
+[Final APK](artifacts/home-reference-20261018/Campaign.apk): Campaign1.2.4/code7,
+**ARM64+x86_64 universal dedicated release**, 68,780,494 bytes, SHA256
+`57BAD27E911883F9F4254EEC1EED555D83A76BA3AAF001E566787463D81D577A`.
+Label/logo/splash, package, minAPI24/target36, signing identity and embedded Hermes
+HTTPS configuration are preserved. [Complete handoff](artifacts/home-reference-20261018/README.md)
+lists source files, skills, commands, receipts and screenshots.
+
+Product Design image-to-code/design QA and Impeccable's documented fallback were
+used. Product context preflight found no saved context; the installed Impeccable
+engine could not load, so existing project design/context was read directly.
+No unavailable engine execution or whole-app acceptance is claimed.
+
+The before checkpoint is `refs/checkpoints/home-reference-before-20261018`
+(`58875e3ee9b6a417ebe0a0b1cbd730d04f0aa0c5`). The after checkpoint receipt is
+[home-reference-after-20261018.json](artifacts/home-reference-20261018/home-reference-after-20261018.json).
+Normal HEAD/index and prior APKs remain; no push, deploy, migration, seed,
+new video or external submission occurred. The old submission video remains
+historical for 1.2.3 and does not show this new Home.
+
+**Remaining limits:** no physical release installation (POCO has incompatible
+Debug signer; no wipe attempted), native bookmark mutation/guest handoff,
+TalkBack, exhaustive font/device/network coverage, sustained performance or full
+app regression in this pass. Human unfamiliar-user testing remains pending.
+
+
 <!-- current-code6-evidence -->
-## October18 — 1.2.3 fixes verified; local delivery prepared
+## Historical October18 — 1.2.3 fixes verified; local delivery prepared
 
 The campaign-section cutoff is fixed. Exact code6 x86 native testing passes
 18 named cases: all four section bottoms, three left-next and three right-back

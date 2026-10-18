@@ -113,6 +113,7 @@ function profileHarness({ user = { id: 'fixture-owner', name: 'Fixture Owner', e
     '../../lib/profile-navigation': profileNavigation,
     '../../lib/session': { useSession: () => session, useMe: () => ({ data: { user: session.user, payments: [], campaigns: [], saved: [] }, refetch: async () => undefined }), useCampaigns: () => ({}), useConfig: () => ({}), refresh: async () => assert.fail('sign-out must not run a stale profile refresh') },
     '../../components/ui': { ...ui, fonts: {}, useTheme: () => theme },
+    '../../components/Information': { InfoAction: 'InfoAction', InfoSheet: 'InfoSheet', SummaryLink: 'SummaryLink' },
     '../../features/auth': { AuthForm: 'AuthForm' }, '../../features/reviewer': { Reviewer: 'Reviewer' },
     '../../features/profile/Photo': { ProfilePhoto: 'ProfilePhoto', ProfilePhotoEditor: 'ProfilePhotoEditor' },
     '../../features/walkthrough/Walkthrough': { useWalkthrough: () => ({}) },

@@ -1,7 +1,97 @@
 # Android delivery readiness
 
+## October18 — app-wide information hierarchy / 1.4.0 / code10
+
+Implemented the latest Before/After brief across every source-reviewed dropdown, accordion, sheet and selector:98 prior controls reconciled with105 current source instances. Campaign transparency has Audience & Reach, Funding & Spending and Trust & Verification destinations; short context uses native sheets, while genuine FAQs/functional editor groups retain compact inline expansion. Creation exposes required fields and editable Submit summaries; actual input options, drafts, separate media, public evidence, financial/policy/privacy/simulation information and parent Back remain. No backend change was needed.
+
+Final [Campaign.apk](artifacts/dropdown-hierarchy-20261018/Campaign.apk): **1.4.0/code10**, 68,811,090 bytes; dedicated signed ARM64+x86_64. SHA-256 `CB08EDF303BA6EB7B9720F21BE4E2879C8179CDB7D19ECCFAC91024908953397`. **398 tests**, TypeScript/full ESLint,20 package checks pass. Exact corrected emulator cold launch1241ms without Metro/reverse; native assertion totals by binary are in [delivery](artifacts/dropdown-hierarchy-20261018/DELIVERY.json). The first public/creator matrix is FF9E; the corrected final CB08 has separate shared-sheet/keyboard/theme/font/support/navigation/scroll/PDF-cancel checks. One actual keyboard-occlusion finding was fixed and visually confirmed. [Complete evidence, inventory and limits](artifacts/dropdown-hierarchy-20261018/README.md).
+
+Physical release testing remains pending because the POCO has an incompatible Debug signer; no phone command, uninstall or data clear occurred. Human testing remains pending because no unfamiliar tester is available. This pass did not repeat new-account/authentication, complete upload/payment/review lifecycle, TalkBack, every historical assessment, every editor/media state or sustained physical performance tests. Conditional Following/overflow states not present in the account were not fabricated. No cloud service, backend, migration, seed, billing, push, recording or submission changed.
+
+## Historical release — compact discovery / 1.3.1 / code 9
+
+[Campaign.apk](artifacts/home-trust-polish-20261018/Campaign.apk) is version
+1.3.1 / code 9, signed by the dedicated Campaign key, with ARM64 and x86_64 native
+libraries. It is 68,787,214 bytes; SHA-256 `C8CC281D802AA0FC5671A61B2B8D31ED8ABB9C77D98AF1BF44716F4DD1C5A3EC`.
+Package identity, approved installer/splash logo, embedded Hermes, native patches
+and HTTPS backend remain. Final source passes 358 tests, TypeScript and full
+src/plugins ESLint; 20/20 package checks pass. The exact
+final APK received a same-key update and cold launch in 1118 ms on the owned
+API 36 emulator without Metro or reverse forwarding. [Evidence and limits](artifacts/home-trust-polish-20261018/README.md).
+
+Final native checks cover the 74 dp badge rail, Discover/Explore scores/review
+links, Home Back/View destinations, Dark/Light, font scales 1.17/1.3, restored
+preferences and a bounded current-process log sample. First-candidate receipts
+cover the broader paging/filter/reading matrix. Its performance comparison does
+not benchmark the final binary. All 196 frozen final inputs
+and 86 critical backend/accounting/persistence/native inputs match
+within their scopes.
+
+The POCO was not touched. Physical release verification remains pending because
+its installed Debug signer differs from the dedicated release key. No phone
+uninstall, storage clear or security bypass, backend change, migration, seed,
+provider change, billing, push, recording or submission occurred. Human testing
+remains pending because no unfamiliar tester is available. Whole-app, TalkBack,
+all-device/font/network and sustained physical performance acceptance is separate.
+
+## Historical release — final UI simplification / 1.3.0 / code8
+
+**Source/package and bounded Android confirmation passed.**
+[Campaign.apk](artifacts/final-ui-simplification-20261018/Campaign.apk): **1.3.0/code8**, dedicated-signed universal
+**ARM64+x86_64**, 68,786,382 bytes, SHA256 `9F3DF3FF0B12743154B5B443A4A487D9047C184B5991CF33B96F0E2888922022`.
+Package, approved installer/splash logo, minAPI24/target36, embedded Hermes,
+current HTTPS backend and dedicated certificate are preserved.
+Certificate SHA256 remains
+`ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07`.
+
+349 frontend tests, TypeScript/full source/plugin lint and20 package checks pass.
+The exact APK was installed with data-preserving `-r` on the owned API36 x86_64
+emulator and launched in1141ms without Metro/reverse. Confirmation covers the
+named public/creator/preference/gesture/native-share cases and corrected
+Dark/Light/font1.3 compositions. Earlier candidate scope is recorded separately.
+[Handoff, screenshots and limitations](artifacts/final-ui-simplification-20261018/README.md). Current logs contain no named
+application crash markers within the bounded current-process sample.
+
+No backend deployment, migration, seed, dependency or provider change occurred.
+Physical release testing remains pending: the authorized POCO retains an
+incompatible Debug signer. No phone update, uninstall, storage clear or bypass
+occurred. Unfamiliar-user testing remains pending because no tester is available.
+TalkBack, every device/font/network state, sustained performance and a full new
+account/payment/upload journey were not tested in this UI pass. Earlier video,
+payment, cloud and PDF-delivery evidence retains its exact build scope; no new
+video or external submission occurred.
+
+## Historical release — Home reference / 1.2.4 / code7
+
+**Home source, package and focused emulator checks passed. Physical/human/full-app
+acceptance remain separate.** [Campaign.apk](artifacts/home-reference-20261018/Campaign.apk)
+is a dedicated-signed universal **ARM64+x86_64** release, 68,780,494 bytes, SHA256
+`57BAD27E911883F9F4254EEC1EED555D83A76BA3AAF001E566787463D81D577A`.
+It retains Campaign's approved installer/splash logo, package
+`com.campaignamplification.mobile`, minAPI24/target36, embedded Hermes and the
+same HTTPS cloud endpoint. Dedicated certificate SHA256 remains
+`ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07`.
+
+330/330 frontend tests, TypeScript/full-source ESLint and 20/20 package checks
+pass. The exact final universal APK was installed with `-r` on the owned API36
+x86_64 emulator and cold-launched in978ms without Metro/reverse. Thirteen focused
+Home checks pass; actual Dark/Light/font1.3 images were inspected and a real
+caption contrast defect closed. Current-process672-line logs have no named crash
+markers. [Evidence, screenshots and limits](artifacts/home-reference-20261018/README.md).
+Build metadata is preserved unchanged as compile-time evidence; the later
+`NATIVE_INSTALL.readable.json` supplies this bounded runtime launch proof.
+
+No new backend deployment, migration, seed, provider or dependency was needed.
+The user's phone and existing records were not changed. A Debug-signed POCO
+installation cannot accept this dedicated-signed release as a data-preserving
+update; physical testing remains pending. Native bookmark mutations, full
+TalkBack/regression and sustained-performance testing were not performed here.
+The older1.2.3 APK/demo/package remain preserved as historical artifacts; that
+video does not show this updated Home. No public upload or submission occurred.
+
+
 <!-- current-code6-evidence -->
-## Current release — 1.2.3 / code6
+## Historical release — 1.2.3 / code6
 
 **Source/package and bounded emulator verification passed; local review
 package prepared. Physical and human acceptance remain pending.** The user-reported

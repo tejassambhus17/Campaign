@@ -19,7 +19,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import {
-  Accordion,
   Button,
   Empty,
   Field as BaseField,
@@ -31,6 +30,7 @@ import {
   Text,
   useTheme,
 } from "../../components/ui";
+import { InfoAction, InfoSheet, SummaryLink } from "../../components/Information";
 import { api } from "../../lib/api";
 import { detailPath } from "../../features/campaign";
 import { refresh, useConfig, useMe, useSession } from "../../lib/session";
@@ -46,7 +46,6 @@ import {
   AdPreview,
   CampaignPreview,
   FundingPolicies,
-  StoryPreview,
 } from "../../features/creation/Preview";
 import {
   Assistance,
@@ -62,11 +61,11 @@ import {
 } from "../../features/creation/model";
 import { useDraftLibrary } from "../../features/creation/useDraftLibrary";
 import { CreationTargets, TargetField as BaseTargetField, TargetGroup } from "../../features/creation/FieldTarget";
-import { CampaignReviewSummary, CategorySelect, CreationActionDock, CreationButton, CreationProgress, CreationTip, StoryComposer, StoryFormatting } from "../../features/creation/CreationUi";
+import { CampaignReviewSummary, CategorySelect, CreationActionDock, CreationButton, CreationProgress, StoryComposer, StoryFormatting } from "../../features/creation/CreationUi";
 import { CreationEntry } from "../../features/creation/CreationEntry";
 import { DraftDeleteDialog, useDraftDeletion } from "../../features/creation/DraftDeleteDialog";
 import { matchesDeletion } from "../../features/creation/draftDeletion";
-import { CampaignMediaSections } from "../../features/creation/CampaignMedia";
+import { CampaignCoverControls, CampaignMediaSections } from "../../features/creation/CampaignMedia";
 import { IMAGE_UPLOAD_HINT, uploadedMediaPatch, validatePickedImage } from "../../features/creation/media";
 import { DraftIssue, submissionIssues } from "../../features/creation/readiness";
 import { SubmissionChecklist } from "../../features/creation/SubmissionChecklist";
@@ -94,12 +93,12 @@ const TargetField = (props: React.ComponentProps<typeof BaseTargetField>) => <Ba
 
 const stepDescriptions = [
   "Give your campaign a clear identity.",
-  "Share your purpose. Help people connect with your why.",
-  "Bring your message to life with a cover and advertising images.",
-  "Choose who should hear your message and how it travels.",
-  "Almost there. Set your goal and check the details before review.",
+  "Share your purpose and the evidence behind it.",
+  "Add a cover and creative for your message.",
+  "Choose your audience and get an estimated reach.",
+  "Set your goal. Review your campaign before submitting.",
 ];
-const stepHeadings = ["Campaign Basics", "Your Story", "Campaign & Ad Visuals", "Set Your Reach", "Review & Submit"];
+const stepHeadings = ["Campaign basics", "Your story", "Campaign & Ad Visuals", "Who should see this?", "Review & submit"];
 
 function EditorAction({
   title,
@@ -160,12 +159,9 @@ function AssistanceForm({
 }) {
   const { styles } = useTheme();
   return (
-    <View style={{ gap: 16 }}>
+    <View style={{ gap: 12 }}>
       <Notice>
-        Guided demo / manual fallback · Live speech recognition and AI services
-        are not connected. Type your answers, or use your keyboard’s dictation
-        if available. A simple template will organize them into an editable
-        draft.
+        Editable guided demo · Type or use keyboard dictation. Live speech and AI are not connected.
       </Notice>
       <Field
         label="What is your message?"
@@ -206,10 +202,7 @@ function AssistanceForm({
         disabled={!values.idea.trim()}
         icon="sparkles-outline"
       />
-      <Text style={styles.muted}>
-        Only empty fields are filled. You can edit or remove every suggestion.
-        This assistance never sets your funding goal.
-      </Text>
+      <Text style={styles.muted}>Only empty fields are filled. Edit every suggestion; choose your own goal at Submit.</Text>
     </View>
   );
 }
@@ -232,6 +225,7 @@ export default function CreateScreen() {
     "entry",
   );
   const [preview, setPreview] = useState(false);
+  const [showBasicsCover, setShowBasicsCover] = useState(false);
   const [errors, setErrors] = useState<DraftErrors>({});
   const [notice, setNotice] = useState("");
   const [failure, setFailure] = useState("");
@@ -239,7 +233,6 @@ export default function CreateScreen() {
   const [localSaveState, setLocalSaveState] = useState<LocalSaveState>(null);
   const [accountSaveState, setAccountSaveState] = useState<AccountSaveState>("idle");
   const [focusedIssue, setFocusedIssue] = useState<DraftIssue | null>(null);
-  const [reviewContext, setReviewContext] = useState(false);
   const [busy, setBusy] = useState(false);
   const [loadingDraft, setLoadingDraft] = useState(false);
   const [uploading, setUploading] = useState("");
@@ -247,12 +240,13 @@ export default function CreateScreen() {
   const [assistance, setAssistance] = useState<Assistance>(emptyAssistance);
   const [placement, setPlacement] = useState("Instagram");
   const [imagePrompt, setImagePrompt] = useState("");
-  const [showStoryPreview, setShowStoryPreview] = useState(true);
   const [editingParagraphId, setEditingParagraphId] = useState<string | null>(null);
   const scroll = useRef<ScrollView>(null);
   const content = useRef<View>(null);
-  const targets = useRef(new Map<string, { view: View; input?: TextInput | null; announcement?: View | null }>());
+  const targets = useRef(new Map<string, { view: View; input?: TextInput | null; announcement?: View | null; sheet?: boolean }>());
   const pendingIssue = useRef<DraftIssue | null>(null);
+  const pendingStepScroll = useRef<{ key: string; layout: boolean; scheduled: boolean; targeted: boolean } | null>(null);
+  const committedEditorKey = useRef("");
   const activeRef = useRef(active);
   const scopeRef = useRef(scope);
   const priorScope = useRef(scope);
@@ -263,6 +257,9 @@ export default function CreateScreen() {
   const saveLocal = library.save;
   const removeLocal = library.remove;
   const canSaveLocal = library.canSave;
+  const queueStepScroll = useCallback((localId: string, entryMode: "edit" | "voice", targetStep: number) => {
+    pendingStepScroll.current = { key: `${localId}:${entryMode}:${targetStep}`, layout: false, scheduled: false, targeted: false };
+  }, []);
   const deletion = useDraftDeletion({
     scope, library,
     disabled: busy || !!uploading || loadingDraft || library.loading || !!library.error,
@@ -279,6 +276,7 @@ export default function CreateScreen() {
         setServerConflict(null);
         setFocusedIssue(null);
         pendingIssue.current = null;
+        pendingStepScroll.current = null;
         openedParameter.current = "";
       }
       setNotice(target.campaignId ? "Account draft and its device copies deleted." : "Device draft deleted.");
@@ -308,11 +306,12 @@ export default function CreateScreen() {
     setLocalSaveState(null);
     setAccountSaveState("idle");
     setFocusedIssue(null);
-    setReviewContext(false);
     setAssistance(emptyAssistance);
     setBusy(false);
     setUploading("");
     setServerConflict(null);
+    pendingStepScroll.current = null;
+    pendingIssue.current = null;
     openedParameter.current = "";
   }, [scope]);
 
@@ -351,8 +350,11 @@ export default function CreateScreen() {
             scope,
             entryMode: voice ? "voice" : "edit",
           };
+      const nextMode = voice || entry?.entryMode === "voice" ? "voice" : "edit";
+      pendingIssue.current = null;
+      queueStepScroll(next.localId, nextMode, next.step);
       setActive(next);
-      setMode(voice || entry?.entryMode === "voice" ? "voice" : "edit");
+      setMode(nextMode);
       setPreview(false);
       setAccepted(false);
       setErrors({});
@@ -363,9 +365,8 @@ export default function CreateScreen() {
       setImagePrompt("");
       setFocusedIssue(null);
       setAccountSaveState("idle");
-      scroll.current?.scrollTo({ y: 0, animated: false });
     },
-    [scope, canSaveLocal],
+    [scope, canSaveLocal, queueStepScroll],
   );
 
   const loadCloud = useCallback(
@@ -516,7 +517,6 @@ export default function CreateScreen() {
       )
         return;
       openedParameter.current = `${scope}:${id}`;
-      setReviewContext(params.context === "review");
       // Consume this visit's intent while Create is focused. A later notification
       // for the same campaign must reopen the editor after exiting or submitting.
       router.setParams({ draft: undefined, context: undefined });
@@ -524,7 +524,6 @@ export default function CreateScreen() {
     }, [
       params.localDraft,
       params.draft,
-      params.context,
       ready,
       libraryScope,
       library.loading,
@@ -555,6 +554,13 @@ export default function CreateScreen() {
     setFocusedIssue(null);
   }
   const changeStep = useCallback((step: number) => {
+    pendingIssue.current = null;
+    setFocusedIssue(null);
+    const current = activeRef.current;
+    // A native reset belongs to the next committed page, never the old form.
+    // Same-step validation keeps the current reading/focus position.
+    if (current && current.step !== step) queueStepScroll(current.localId, "edit", step);
+    else pendingStepScroll.current = null;
     setActive((previous) =>
       previous
         ? { ...previous, step, updatedAt: new Date().toISOString() }
@@ -564,13 +570,20 @@ export default function CreateScreen() {
     setFailure("");
     setNotice((current) => Object.values(stepSuccessNotices).includes(current) ? "" : current);
     setPreview(false);
-    scroll.current?.scrollTo({ y: 0, animated: false });
-  }, []);
+  }, [queueStepScroll]);
   const revealTarget = useCallback(() => {
     const issue = pendingIssue.current;
     if (!issue || activeRef.current?.step !== issue.step || !content.current) return;
     const target = targets.current.get(issue.field);
     if (!target) return;
+    if (target.sheet) {
+      pendingIssue.current = null;
+      requestAnimationFrame(() => {
+        target.input?.focus();
+        AccessibilityInfo.announceForAccessibility(`${STEPS[issue.step]}. ${issue.title}. ${issue.message}`);
+      });
+      return;
+    }
     target.view.measureLayout(content.current, (_x, y) => {
       if (pendingIssue.current?.id !== issue.id) return;
       pendingIssue.current = null;
@@ -583,13 +596,14 @@ export default function CreateScreen() {
       }, 120);
     }, () => {});
   }, []);
-  const registerTarget = useCallback((key: string, view: View | null, input?: TextInput | null, announcement?: View | null) => {
-    if (view) targets.current.set(key, { view, input, announcement });
+  const registerTarget = useCallback((key: string, view: View | null, input?: TextInput | null, announcement?: View | null, sheet = false) => {
+    if (view) targets.current.set(key, { view, input, announcement, sheet });
     else targets.current.delete(key);
     if (view && pendingIssue.current?.field === key) requestAnimationFrame(revealTarget);
   }, [revealTarget]);
   function jumpToIssue(issue: DraftIssue) {
     changeStep(issue.step);
+    if (pendingStepScroll.current) pendingStepScroll.current.targeted = true;
     setMode("edit");
     setFocusedIssue(issue);
     pendingIssue.current = issue;
@@ -1018,6 +1032,36 @@ export default function CreateScreen() {
   }
   const saveStatus = working ? draftSaveLabel(working, localSaveState, accountSaveState, !!user) : "";
   const step = working?.step || 0;
+  const editorContentKey = working && mode !== "entry" && mode !== "submitted"
+    ? `${working.localId}:${preview ? "preview" : mode}:${step}`
+    : mode;
+  committedEditorKey.current = editorContentKey;
+  function flushStepScroll() {
+    const pending = pendingStepScroll.current;
+    if (!pending || !pending.layout || pending.scheduled) return;
+    pending.scheduled = true;
+    requestAnimationFrame(() => {
+      if (pendingStepScroll.current !== pending || committedEditorKey.current !== pending.key) return;
+      pendingStepScroll.current = null;
+      // Registering a validation target may already have revealed it. A later
+      // page-layout frame must never pull that focused field back to the top.
+      if (pending.targeted) { revealTarget(); return; }
+      scroll.current?.scrollTo({ y: 0, animated: false });
+    });
+  }
+  function editorLayout(key: string) {
+    const pending = pendingStepScroll.current;
+    if (pending?.key !== key) return;
+    pending.layout = true;
+    flushStepScroll();
+  }
+  function editorSize(key: string) {
+    const pending = pendingStepScroll.current;
+    if (pending?.key !== key) return;
+    // Equal-height pages may not emit a new content-size event. Their keyed
+    // native View layout still commits; size changes only help flush that work.
+    flushStepScroll();
+  }
   const locked = busy || !!uploading;
   const goBack = useCallback(() => {
     if (preview) {
@@ -1116,7 +1160,7 @@ export default function CreateScreen() {
                 {mode === "submitted"
                   ? "Submitted for review"
                   : mode === "entry"
-                    ? "Create campaign"
+                    ? "Create a campaign"
                     : preview
                       ? "Preview"
                       : mode === "voice"
@@ -1140,9 +1184,10 @@ export default function CreateScreen() {
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
           contentContainerStyle={local.content}
+          onContentSizeChange={() => editorSize(editorContentKey)}
         >
           <CreationTargets.Provider value={{ issue: focusedIssue, register: registerTarget }}>
-          <View ref={content} style={{ gap: 16 }}>
+          <View key={editorContentKey} ref={content} onLayout={() => editorLayout(editorContentKey)} style={{ gap: 12 }}>
           {!!failure && <Notice tone="error">{failure}</Notice>}
           {!!notice && notice !== "Your saved draft is ready to continue." && (
             <View accessibilityLiveRegion="polite" style={{ flexDirection: "row", alignItems: "flex-start", gap: 8, padding: 10, borderRadius: 10, backgroundColor: colors.paper }}>
@@ -1379,7 +1424,7 @@ export default function CreateScreen() {
             <>
               <View
                 pointerEvents={locked ? "none" : "auto"}
-                style={{ gap: 16, opacity: busy ? 0.65 : 1 }}
+                style={{ gap: 14, opacity: busy ? 0.65 : 1 }}
               >
                 {mode === "voice" ? (
                   <AssistanceForm
@@ -1392,14 +1437,14 @@ export default function CreateScreen() {
                 ) : (
                   <>
                     <View style={{ gap: 5, paddingTop: 2, paddingBottom: 2 }}>
-                      <Text accessibilityRole="header" style={{ fontSize: 22, lineHeight: 29, fontWeight: "700", letterSpacing: -0.45, color: colors.ink }}>{step + 1}. {stepHeadings[step]}</Text>
+                      <Text accessibilityRole="header" style={{ fontSize: 22, lineHeight: 28, fontWeight: "700", letterSpacing: -0.45, color: colors.ink }}>{stepHeadings[step]}</Text>
                       {step !== 2 && <Text style={{ fontSize: 13, lineHeight: 19, color: colors.muted }}>{stepDescriptions[step]}</Text>}
                     </View>
                     {!!draft.feedback && (
-                      <Accordion key={`${draft.id}:${reviewContext}`} title="Reviewer feedback" initiallyOpen={reviewContext}>
+                      <View testID="creation-reviewer-feedback" style={{ gap: 8 }}><Text style={local.sectionTitle}>Reviewer feedback</Text>
                         <Text style={styles.body}>{draft.feedback}</Text>
                         <Button title="Review submission checklist" variant="ghost" onPress={() => changeStep(4)} />
-                      </Accordion>
+                      </View>
                     )}
                     {step === 0 && (
                       <>
@@ -1410,7 +1455,7 @@ export default function CreateScreen() {
                           onChangeText={(title) => change({ title })}
                           error={errors.title}
                           placeholder="A clear idea worth sharing"
-                          hint={`${draft.title.length}/60 · Default ad headline.`}
+                          hint={`${draft.title.length}/60 · Also used as the ad headline unless you add one.`}
                         />
                         <TargetGroup target="category">
                           <Text style={local.fieldLabel}>Category *</Text>
@@ -1436,64 +1481,23 @@ export default function CreateScreen() {
                           maxLength={2000}
                           value={draft.summary}
                           onChangeText={(summary) => change({ summary })}
-                          placeholder="What is the message, who is it for, and why does it matter?"
-                          style={{ minHeight: 100 }}
-                          hint={`${draft.summary.length}/2000 characters · A short introduction to your message.`}
+                          placeholder="Briefly introduce your message (1–2 sentences)."
+                          style={{ minHeight: 88 }}
+                          hint={`${draft.summary.length}/2000`}
                         />
-                        <Accordion title="Optional campaign cover image">
-                          <View style={{ gap: 13 }}>
-                            {!!draft.coverImage && (
-                              <Picture uri={draft.coverImage} height={180} />
-                            )}
-                            <Field
-                              label="Public cover image URL"
-                              value={draft.coverImage}
-                              onChangeText={(coverImage) =>
-                                change({ coverImage })
-                              }
-                              autoCapitalize="none"
-                              keyboardType="url"
-                            />
-                            <Button
-                              title={
-                                user
-                                  ? "Upload cover image"
-                                  : "Sign in to upload a cover"
-                              }
-                              onPress={() => {
-                                if (user) void upload("cover");
-                                else void signIn();
-                              }}
-                              variant="secondary"
-                              icon="image-outline"
-                            />
-                            {!!draft.coverImage && (
-                              <Button
-                                title="Remove cover"
-                                onPress={() => change({ coverImage: "" })}
-                                variant="ghost"
-                              />
-                            )}
-                          </View>
-                        </Accordion>
-                        <Accordion title="Drafting assistance · demo fallback">
-                          <AssistanceForm
-                            values={assistance}
-                            onChange={updateAssistance}
-                            onApply={applyAssistance}
-                          />
-                        </Accordion>
+                        <SummaryLink compact title="Campaign cover" summary={draft.coverImage ? "Cover added · change or remove" : "Optional · add a campaign image"} icon="image-outline" onPress={() => setShowBasicsCover(true)} testID="creation-basics-cover" />
+                        <InfoSheet visible={showBasicsCover} title="Campaign cover" onClose={() => setShowBasicsCover(false)} testID="creation-basics-cover-sheet">
+                          <CampaignCoverControls draft={draft} disabled={locked} onUpload={() => { setShowBasicsCover(false); requestAnimationFrame(() => { if (user) void upload("cover"); else void signIn(); }); }} onChange={change} />
+                          <Field label="Public cover image URL" value={draft.coverImage} onChangeText={(coverImage) => change({ coverImage })} autoCapitalize="none" keyboardType="url" />
+                          <Text style={local.secondary}>{IMAGE_UPLOAD_HINT} per upload. Your cover stays separate from advertising images.</Text>
+                        </InfoSheet>
+                        <SummaryLink compact title="Drafting assistance" summary="Editable guided demo · no live speech or AI" icon="mic-outline" onPress={() => { setMode("voice"); setActive(previous => previous ? { ...previous, entryMode: "voice", updatedAt: new Date().toISOString() } : previous); scroll.current?.scrollTo({ y: 0, animated: false }); }} testID="creation-guided-destination" />
                       </>
                     )}
                     {step === 1 && (
                       <>
                         <StoryComposer text={primaryParagraph?.text || ""} format={primaryParagraph?.format || "normal"} position={primaryParagraphIndex} total={draft.sections.length} onChangeText={(text) => editPrimaryParagraph({ text })} onFormat={(format) => editPrimaryParagraph({ format })} onMove={(direction) => { if (primaryParagraph) { setEditingParagraphId(primaryParagraph.id); moveSection(primaryParagraphIndex, direction); } }} onRemove={() => { if (primaryParagraph) { change({ sections: draft.sections.filter((section) => section.id !== primaryParagraph.id) }); setEditingParagraphId(null); } }} />
-                        <CreationTip title="Be real. Be human.">People support clear, honest stories.</CreationTip>
-                        <View style={{ height: 88, borderRadius: 12, overflow: "hidden", backgroundColor: "#000000" }}>
-                          <Image accessible={false} source={require("../../../assets/images/create/story-mountains.png")} style={{ position: "absolute", width: "100%", height: 177, bottom: 0 }} resizeMode="cover" />
-                          <Text style={{ position: "absolute", left: 20, right: 20, bottom: 13, color: "#FFFFFF", fontSize: 14, lineHeight: 20, fontWeight: "600", textAlign: "center" }}>Every big change starts with a story.</Text>
-                        </View>
-                        <Accordion key={focusedIssue?.field === "storyHeadline" ? "story-headline-focus" : "story-heading"} title="Headline & introduction" initiallyOpen={focusedIssue?.field === "storyHeadline"}>
+                        <View testID="creation-story-heading" style={{ gap: 8 }}>
                         <View style={{ gap: 14 }}>
                         <TargetField target="storyHeadline"
                           label="Story headline"
@@ -1513,7 +1517,7 @@ export default function CreateScreen() {
                           placeholder="Invite people into the story."
                         />
                         </View>
-                        </Accordion>
+                        </View>
                         {draft.sections.map((section, index) => section.id === primaryParagraph?.id ? null : (
                           <View
                             key={section.id}
@@ -1725,12 +1729,8 @@ export default function CreateScreen() {
                           )}
                         </View>
                         <TargetGroup target="sources">
-                          <Text style={styles.h2}>Sources & evidence</Text>
-                          <Text style={styles.muted}>
-                            Your sources stay visible to everyone who reads the
-                            campaign. A source is context, rather than a claim
-                            of independent verification.
-                          </Text>
+                          <Text style={local.sectionTitle}>Sources & evidence</Text>
+                          <Text style={local.secondary}>Public sources support your story; they are not independent verification.</Text>
                           {draft.sources.map((source, index) => (
                             <View
                               style={[styles.card, { padding: 16, gap: 13 }]}
@@ -1797,29 +1797,7 @@ export default function CreateScreen() {
                             <Text style={styles.error}>{errors.sources}</Text>
                           )}
                         </TargetGroup>
-                        <Button
-                          title={
-                            showStoryPreview
-                              ? "Hide live story preview"
-                              : "Show live story preview"
-                          }
-                          variant="ghost"
-                          onPress={() => setShowStoryPreview(!showStoryPreview)}
-                          icon="eye-outline"
-                        />
-                        {showStoryPreview && (
-                          <View
-                            style={{
-                              borderTopWidth: 1,
-                              borderColor: colors.line,
-                              paddingTop: 22,
-                              gap: 19,
-                            }}
-                          >
-                            <Text style={styles.h2}>Story preview</Text>
-                            <StoryPreview draft={draft} />
-                          </View>
-                        )}
+                        <SummaryLink compact title="Preview story" summary="Read your draft with its public sources" icon="eye-outline" onPress={() => { setPreview(true); scroll.current?.scrollTo({ y: 0, animated: false }); }} testID="creation-story-preview" />
                       </>
                     )}
                     {step === 2 && (
@@ -1833,18 +1811,18 @@ export default function CreateScreen() {
                         <TargetGroup target="advertising">
                           {!!errors.visuals && <Text style={styles.error}>{errors.visuals}</Text>}
                         </TargetGroup>
-                        <Accordion key={focusedIssue?.field === "coverImage" || focusedIssue?.field.startsWith("ad-image:") ? focusedIssue.field : "media-urls"} title="Manage images & public URLs" initiallyOpen={focusedIssue?.field === "coverImage" || !!focusedIssue?.field.startsWith("ad-image:")}>
+                        <InfoAction title="Manage public image URLs" summary="Optional cover and advertising image links" icon="link-outline" reveal={focusedIssue?.field === "coverImage" || focusedIssue?.field.startsWith("ad-image:") ? focusedIssue : false} keepMounted testID="creation-image-urls">
                           <View style={{ gap: 14 }}>
-                            <TargetField target="coverImage" label="Cover image URL" value={draft.coverImage} autoCapitalize="none" keyboardType="url" onChangeText={(coverImage) => change({ coverImage })} />
+                            <TargetField sheet target="coverImage" label="Cover image URL" value={draft.coverImage} autoCapitalize="none" keyboardType="url" onChangeText={(coverImage) => change({ coverImage })} />
                             {draft.adImages.map((url, index) => <View key={index} style={{ gap: 6 }}>
-                              <TargetField target={`ad-image:${index}`} label={`Advertising image ${index + 1} URL`} value={url} autoCapitalize="none" keyboardType="url" onChangeText={(next) => change({ adImages: draft.adImages.map((item, position) => position === index ? next : item) })} />
+                              <TargetField sheet target={`ad-image:${index}`} label={`Advertising image ${index + 1} URL`} value={url} autoCapitalize="none" keyboardType="url" onChangeText={(next) => change({ adImages: draft.adImages.map((item, position) => position === index ? next : item) })} />
                               <Button title={`Remove advertising image ${index + 1}`} variant="ghost" onPress={() => change({ adImages: draft.adImages.filter((_, position) => position !== index) })} />
                             </View>)}
                             <Button title="Add advertising image URL" onPress={() => change({ adImages: [...draft.adImages, ""] })} variant="ghost" icon="link-outline" />
                             <Text style={styles.muted}>{IMAGE_UPLOAD_HINT} per upload. Videos and documents are not supported in this prototype.</Text>
                           </View>
-                        </Accordion>
-                        <Accordion title="Image generation · manual fallback">
+                        </InfoAction>
+                        <InfoAction title="Image prompt helper" summary="Manual fallback · no live image generator" icon="sparkles-outline" testID="creation-image-prompt">
                           <View style={{ gap: 13 }}>
                             <Text style={styles.body}>
                               A live image generator is not connected. Build a
@@ -1873,7 +1851,7 @@ export default function CreateScreen() {
                               </View>
                             )}
                           </View>
-                        </Accordion>
+                        </InfoAction>
                         <Field
                           label="Ad headline"
                           maxLength={150}
@@ -1882,7 +1860,7 @@ export default function CreateScreen() {
                           placeholder={
                             draft.title.slice(0, 60) || "Your ad headline"
                           }
-                          hint="Leave blank to use the beginning of your campaign title."
+                          hint="Optional · Defaults to your campaign title."
                         />
                         <Field
                           label="Ad description"
@@ -1901,8 +1879,8 @@ export default function CreateScreen() {
                           onChangeText={(cta) => change({ cta })}
                           placeholder="Learn more"
                         />
-                        <View style={{ gap: 14 }}>
-                          <Text style={styles.h2}>Placement preview</Text>
+                        <InfoAction title="Preview advertising placements" summary="See your creative in an illustrative placement" icon="eye-outline" testID="creation-ad-preview">
+                        <View style={{ gap: 10 }}>
                           <View style={local.pills}>
                             {channels.map((channel) => (
                               <Pill
@@ -1914,13 +1892,10 @@ export default function CreateScreen() {
                             ))}
                           </View>
                           <AdPreview draft={draft} placement={placement} />
-                          <Text style={styles.muted}>
-                            Illustrative supported placement. Final crops, copy,
-                            and placements may change during review; no
-                            advertising has been published.
-                          </Text>
+                          <Text style={local.secondary}>Illustrative preview. Crops, copy and placements may change during review; no ads are published.</Text>
                         </View>
-                        <Accordion title="Creative quality check">
+                        </InfoAction>
+                        <InfoAction title="Creative quality check" summary="Readability, permission and context" icon="checkmark-circle-outline" testID="creation-creative-help">
                           <Text style={styles.body}>
                             Can you understand the message at a glance? Is the
                             text readable on a phone? Does the image have
@@ -1928,33 +1903,45 @@ export default function CreateScreen() {
                             a verified claim? Use these prompts to refine your
                             creative before review.
                           </Text>
-                        </Accordion>
+                        </InfoAction>
                       </>
                     )}
                     {step === 3 && (
                       <>
                         <TargetField target="geography"
-                          label="Target geographic locations *"
+                          label="Audience locations *"
                           maxLength={1000}
                           value={draft.geography}
                           onChangeText={(geography) => change({ geography })}
-                          placeholder="For example, Pune and nearby communities"
+                          placeholder="Global, or specific cities and countries"
                           error={errors.geography}
-                          hint="Use cities, regions, or countries. The platform will confirm available targeting."
+                          hint="Where should your message be shown?"
                         />
                         <View style={{ gap: 5 }}>
-                          <Text style={local.fieldLabel}>Target audience</Text>
+                          <Text style={local.fieldLabel}>Audience interests</Text>
                           <View style={local.pills}>{["Everyone", "Students", "Professionals", "Communities"].map((audience) => <Pill key={audience} title={audience} selected={audience === "Everyone" ? !draft.interests : draft.interests === audience} onPress={() => change({ interests: audience === "Everyone" ? "" : audience })} />)}</View>
                         </View>
                         <Field
-                          label="Audience characteristics & interests"
+                          label="Describe your audience"
                           multiline
                           maxLength={1000}
                           value={draft.interests}
                           onChangeText={(interests) => change({ interests })}
-                          placeholder="What does this audience care about?"
-                          hint="Describe relevant interests. Avoid private personal information or sensitive individual targeting."
+                          placeholder="Optional interests or audience characteristics"
+                          style={{ minHeight: 72 }}
+                          hint="Use broad interests; avoid private or sensitive personal information."
                         />
+                        <View style={{ borderWidth: 1, borderColor: colors.outline, borderRadius: 12, backgroundColor: colors.paper, padding: 14, gap: 7 }}>
+                          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}><Ionicons name="cellular-outline" size={20} color={colors.green} /><Text style={{ fontSize: 13, lineHeight: 19, fontWeight: "700", color: colors.ink }}>Estimated reach</Text></View>
+                          <Text style={local.secondary}>{draft.goal && config.data
+                            ? `Around ${number(estimate(draft.goal, config.data))} people, based on your saved funding goal.`
+                            : draft.goal ? "Connect to load current estimate assumptions."
+                            : "Choose your funding goal at Submit to see an estimate."}</Text>
+                          <InfoAction title="How is this estimated?" icon="information-circle-outline" testID="creation-reach-estimate">
+                            <Text style={local.secondary}>{config.data ? `Demo model: ${config.data.peoplePerAdDollar} people per advertising dollar after the ${(config.data.feeRate * 100).toFixed(0)}% fee.` : "Current fees and estimate assumptions must load before submission."} Actual reach depends on inventory, prices, targeting, delivery and performance; it is never guaranteed.</Text>
+                            <Text style={local.secondary}>Your locations, channels and allocation are proposals. The platform may finalize them during review.</Text>
+                          </InfoAction>
+                        </View>
                         <TargetGroup target="channels">
                           <Text style={local.fieldLabel}>
                             Distribution channels *
@@ -1973,9 +1960,9 @@ export default function CreateScreen() {
                             <Text style={styles.error}>{errors.channels}</Text>
                           )}
                         </TargetGroup>
-                        <View style={{ gap: 12 }}>
-                          <Text style={styles.h2}>Proposed ad allocation</Text>
-                          <Text style={{ fontSize: 12, lineHeight: 18, color: colors.muted }}>Split 100% of the budget after fees. You set your funding goal at Submit.</Text>
+                        <View key="reach-allocation" testID="creation-budget-allocation" style={{ gap: 8 }}><Text style={local.fieldLabel}>Budget allocation</Text>
+                        <View style={{ gap: 10 }}>
+                          <Text style={local.secondary}>Split 100% of the advertising budget after fees.</Text>
                           <View style={{ flexDirection: fontScale > 1.3 ? "column" : "row", gap: 10 }}>{draft.channels.map((channel) => (
                             <View key={channel} style={{ flex: 1 }}>
                             <TargetField target={`allocation:${channel}`}
@@ -2010,11 +1997,12 @@ export default function CreateScreen() {
                             )}
                             %
                           </Text>
-                          {!!errors.allocation && (
+                          {!!errors.allocation && !focusedIssue?.field.startsWith("allocation:") && (
                             <Text style={styles.error}>
                               {errors.allocation}
                             </Text>
                           )}
+                        </View>
                         </View>
                         <TargetField target="durationDays"
                           label="Campaign duration · days *"
@@ -2031,45 +2019,16 @@ export default function CreateScreen() {
                           hint={
                             fundingLocked
                               ? "Duration is locked after publication to protect backer expectations."
-                              : "Demo policy: 1–90 days. The platform confirms the distribution schedule during review."
+                              : "1–90 days · Distribution schedule confirmed during review."
                           }
                         />
                         {!fundingLocked && <View style={local.pills}>{[14, 30, 60].map((days) => <Pill key={days} title={`${days} days`} selected={draft.durationDays === days} onPress={() => change({ durationDays: days })} />)}</View>}
-                        <View style={[styles.card, { padding: 20, gap: 13 }]}>
-                          <Text style={styles.label}>
-                            Your audience preview
-                          </Text>
-                          <Text style={styles.h2}>
-                            {draft.geography || "Choose a place to start"}
-                          </Text>
-                          <Text style={styles.body}>
-                            {draft.interests ||
-                              "Broad audience within your selected locations"}
-                          </Text>
-                          <Text style={styles.muted}>
-                            {draft.channels.join(" + ") ||
-                              "No channel selected"}{" "}
-                            · {draft.durationDays || "—"} days
-                          </Text>
-                          <Text style={styles.body}>
-                            {draft.goal && config.data
-                              ? `${number(estimate(draft.goal, config.data))} people, estimated from your saved funding goal`
-                              : draft.goal
-                                ? "Reach estimate unavailable until current funding policies load."
-                              : "Set your goal at Submit to see the estimated audience reach."}
-                          </Text>
-                        </View>
-                        <AdPreview
-                          draft={draft}
-                          placement={draft.channels[0] || "Instagram"}
-                        />
-                        <Notice>
-                          Your settings are proposals. The platform may finalize
-                          targeting, placements, and allocation during review.
-                          Reach depends on inventory, prices, targeting,
-                          delivery, and performance. A fixed audience size is
-                          never guaranteed.
-                        </Notice>
+                        <InfoAction title="Audience & placement preview" summary={`${draft.geography || "Locations not set"} · ${draft.channels.length} channels · ${draft.durationDays || "—"} days`} icon="eye-outline" testID="creation-audience-preview">
+                          <Text style={local.sectionTitle}>{draft.geography || "Choose your locations"}</Text>
+                          <Text style={local.secondary}>{draft.interests || "Broad audience within your selected locations"}</Text>
+                          <Text style={local.secondary}>{draft.channels.join(" + ") || "No channel selected"} · {draft.durationDays || "—"} days</Text>
+                          <AdPreview draft={draft} placement={draft.channels[0] || "Instagram"} />
+                        </InfoAction>
                       </>
                     )}
                     {step === 4 && (
@@ -2095,8 +2054,8 @@ export default function CreateScreen() {
                               setErrors({});
                           }}
                         />
-                        {config.data ? <View style={[styles.card, { padding: 16, gap: 10 }]}>
-                          <Text style={styles.h2}>
+                        {config.data ? <View style={[styles.card, { padding: 14, gap: 8 }]}>
+                          <Text style={local.sectionTitle}>
                             Est. {number(fundingQuote.reach)} people
                           </Text>
                           <View
@@ -2127,15 +2086,10 @@ export default function CreateScreen() {
                               {money(fundingQuote.adBudget)}
                             </Text>
                           </View>
-                          <Text style={styles.muted}>
-                            Demo assumption:{" "}
-                            {config.data.peoplePerAdDollar} people per
-                            advertising dollar, after fees. This is an estimate,
-                            not guaranteed delivery or measured unique reach.
-                          </Text>
+                          <Text style={local.secondary}>Illustrative reach · {config.data.peoplePerAdDollar} people per advertising dollar after fees. Actual results vary.</Text>
                         </View> : <Notice>Current fees and reach estimates are unavailable. Connect to load funding policies before submitting; your draft can still be edited and saved.</Notice>}
                         <SubmissionChecklist issues={submissionIssues(draft, working.goalInput, accepted)} onSelect={jumpToIssue} />
-                        <Accordion title="Complete campaign preview"><CampaignPreview draft={draft} config={config.data} /></Accordion>
+                        <SummaryLink compact title="Complete campaign preview" summary="Review the campaign page, ad and funding plan" icon="eye-outline" onPress={() => { setPreview(true); scroll.current?.scrollTo({ y: 0, animated: false }); }} testID="creation-complete-preview" />
                         {config.isLoading ? (
                           <ActivityIndicator
                             color={colors.green}
@@ -2157,13 +2111,7 @@ export default function CreateScreen() {
                             />
                           </View>
                         ) : null}
-                        <Notice>
-                          Contributions fund message distribution, rather than
-                          direct support for the cause. Submission starts a
-                          review. Approval is required before publication, and
-                          funding completion does not automatically start
-                          advertising.
-                        </Notice>
+                        <Text style={local.secondary}>Contributions fund advertising. Submission starts review; approval and completed funding do not start ads automatically.</Text>
                         <FundingPolicies config={config.data} />
                         <TargetGroup target="rules">
                         <Pressable
@@ -2190,12 +2138,8 @@ export default function CreateScreen() {
                             size={26}
                             color={colors.green}
                           />
-                          <Text style={[styles.body, { flex: 1 }]}>
-                            I confirm that my message is accurate to the best of
-                            my knowledge, that I can use the supplied media, and
-                            that I accept the campaign rules, review process,
-                            fees, allocation, refund, and unspent-funds policies
-                            shown above.
+                          <Text style={[local.secondary, { flex: 1 }]}>
+                            I confirm my message is accurate to the best of my knowledge and I can use this media. I accept the review rules, fees, allocation, refund and unspent-funds policies available here.
                           </Text>
                         </Pressable>
                         </TargetGroup>
@@ -2263,7 +2207,7 @@ export default function CreateScreen() {
               <CreationButton title="Continue manually" onPress={manualMode} disabled={locked} icon="arrow-forward" />
             ) : (
               <CreationButton
-                title={step === 4 ? "Submit for Review" : "Next"}
+                                title={step === 4 ? "Submit for Review" : "Continue"}
                 icon={step === 4 ? "paper-plane-outline" : "arrow-forward"}
                 loading={busy}
                 disabled={!!uploading || (step === 4 && config.isLoading)}
@@ -2306,6 +2250,8 @@ const makeLocalStyles = (colors: ReturnType<typeof useTheme>["colors"]) =>
   },
   pills: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   fieldLabel: { fontSize: 12, lineHeight: 17, fontWeight: "600", color: colors.ink },
+  sectionTitle: { fontSize: 15, lineHeight: 21, fontWeight: "700", color: colors.ink },
+  secondary: { fontSize: 12, lineHeight: 18, color: colors.muted },
   editorTitle: {
     fontSize: 17,
     lineHeight: 23,

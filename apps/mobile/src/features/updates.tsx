@@ -13,7 +13,8 @@ import {
   Text,
   useTheme,
 } from "../components/ui";
-import { AdPreview } from "./creation/Preview";
+import { SummaryLink } from "../components/Information";
+import { router } from "expo-router";
 
 export function CampaignUpdates({ campaign: c }: { campaign: Campaign }) {
   const { colors, styles } = useTheme();
@@ -93,7 +94,7 @@ export function CampaignUpdates({ campaign: c }: { campaign: Campaign }) {
         </Text>
       )}
       {canPublish && (
-        <Accordion title="Publish a campaign update">
+        <Accordion compact keepMounted title="Publish a campaign update">
           <Text style={styles.muted}>
             This update will be public and may appear in followers’ activity.
           </Text>
@@ -121,19 +122,7 @@ export function CampaignUpdates({ campaign: c }: { campaign: Campaign }) {
         </Accordion>
       )}
       {!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}
-      <Accordion title="Advertising creative preview">
-        <Text style={styles.muted}>
-          Intended advertising placement. This preview does not indicate a live
-          advertisement.
-        </Text>
-        <AdPreview draft={c} placement={c.channels[0]} />
-        {!c.adImages.length && (
-          <Notice>
-            No advertising image supplied. A reviewer must check asset readiness
-            before distribution.
-          </Notice>
-        )}
-      </Accordion>
+      <SummaryLink compact title="Advertising creative" summary="See the proposed images and distribution plan" icon="images-outline" onPress={() => router.push(`/explore/${encodeURIComponent(c.id)}/audience`)} />
     </View>
   );
 }

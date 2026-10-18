@@ -1,5 +1,37 @@
 # Physical Android test
 
+## October18 information hierarchy — 1.4.0/code10; physical pending
+
+Only owned emulator-5574/Campaign_Release_36/API36/x86_64/ADB5039 was updated and tested with compatible dedicated-signature APKs. Exact [receipts and limitations](artifacts/dropdown-hierarchy-20261018/README.md) separate first-candidate and corrected-final evidence. No POCO command, connection attempt, installation, settings change, uninstall or storage clear occurred. Its installed Debug signature cannot accept this dedicated release as a compatible update. Human testing is also pending; no unfamiliar tester is available.
+
+## October 18 — 1.3.1 / code 9; physical verification pending
+
+Only the owned Campaign_Release_36 API 36 / x86_64 emulator was updated/tested,
+using same-key updates without clearing data. No POCO commands, settings changes,
+installation or wipe occurred. Its Debug signer cannot receive this dedicated
+release as a compatible update. Frame measurements belong to the first candidate
+on the emulator; the final badge correction has separate emulator confirmation.
+[Current evidence](artifacts/home-trust-polish-20261018/README.md). Earlier physical results retain their binary scope.
+
+## October18 final UI release1.3.0/code8 — physical verification pending
+
+The universal ARM64+x86_64 dedicated release was installed/tested only on the
+owned API36 x86_64 emulator. [Actual current evidence](artifacts/final-ui-simplification-20261018/README.md).
+The authorized POCO's existing Debug signer differs; this task made no phone
+commands, installation, uninstall, data clear or settings change. No physical
+acceptance of1.3.0 is claimed. Historical phone results retain their exact build
+scope. Human usability remains pending because no unfamiliar tester is available.
+
+## October18 Home reference release — physical verification pending
+
+Current Home build1.2.4/code7 is a dedicated-signed universal ARM64+x86_64 APK.
+Only the owned API36 emulator was updated/tested for this task. No POCO install,
+data clear, uninstall or phone settings change occurred: the existing phone build
+has a different Debug signer and cannot accept this release as a compatible
+data-preserving update. Earlier physical results below keep their exact binary
+scope and do not verify this new Home. See [current evidence](artifacts/home-reference-20261018/README.md).
+
+
 <!-- current-code6-evidence -->
 ## Current 1.2.3 / code6 — physical test still pending
 

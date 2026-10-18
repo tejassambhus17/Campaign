@@ -100,7 +100,7 @@ function flatten(tree) { if (Array.isArray(tree)) return tree.flatMap(flatten); 
 function hooks() { let cursor = 0; const slots = []; return { reset: () => { cursor = 0; }, useState: initial => { const i = cursor++; if (!(i in slots)) slots[i] = typeof initial === 'function' ? initial() : initial; return [slots[i], next => { slots[i] = typeof next === 'function' ? next(slots[i]) : next; }]; } }; }
 test('actual Submit goal field retains text/rate through preference rerender and converts only its explicit edit', () => {
   const state = hooks(), updates = []; let selected = { snapshot: inr, preference: 'INR', rate, loading: false };
-  const component = load('../src/features/creation/GoalAmountField.tsx', { react: { useState: state.useState }, 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { View: 'View' }, '../../components/ui': { Button: 'Button', Text: 'Text', useTheme: () => ({ styles: {} }) }, '../../lib/CurrencyProvider': { useCurrency: () => selected }, '../../lib/currency': fx, './FieldTarget': { TargetField: 'TargetField' } });
+  const component = load('../src/features/creation/GoalAmountField.tsx', { react: { useState: state.useState }, 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { View: 'View' }, '../../components/ui': { Button: 'Button', Text: 'Text', useTheme: () => ({ styles: {} }) }, '../../lib/CurrencyProvider': { useCurrency: () => selected }, '../../lib/currency': fx, './FieldTarget': { TargetField: 'TargetField' }, '../../components/Information': { InfoAction: 'InfoAction' } });
   const render = () => { state.reset(); return flatten(component.GoalAmountField({ value: 25, editable: true, onChange: value => updates.push(value) })); };
   assert.equal(render().find(n => n.type === 'TargetField').props.value, '2081.25');
   selected = { ...selected, snapshot: usd, preference: 'USD', rate: null };
@@ -112,7 +112,7 @@ function goalHarness() {
   const state = hooks(), updates = [];
   let props = { value: 25, entry: undefined, editable: true }, preference = { snapshot: inr, preference: 'INR', rate, loading: false };
   let theme = { styles: { muted: { color: '#aaa' } }, scheme: 'dark' };
-  const component = load('../src/features/creation/GoalAmountField.tsx', { react: { useState: state.useState }, 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { View: 'View' }, '../../components/ui': { Button: 'Button', Text: 'Text', useTheme: () => theme }, '../../lib/CurrencyProvider': { useCurrency: () => preference }, '../../lib/currency': fx, './FieldTarget': { TargetField: 'TargetField' } });
+  const component = load('../src/features/creation/GoalAmountField.tsx', { react: { useState: state.useState }, 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { View: 'View' }, '../../components/ui': { Button: 'Button', Text: 'Text', useTheme: () => theme }, '../../lib/CurrencyProvider': { useCurrency: () => preference }, '../../lib/currency': fx, './FieldTarget': { TargetField: 'TargetField' }, '../../components/Information': { InfoAction: 'InfoAction' } });
   const render = () => { state.reset(); return flatten(component.GoalAmountField({ ...props, onChange: (canonical, entry) => { updates.push({ canonical, entry }); } })); };
   return { render, updates, replace: next => { props = { ...props, ...next }; }, preference: next => { preference = next; }, theme: next => { theme = next; } };
 }
@@ -161,6 +161,7 @@ function checkoutHarness() {
     '@tanstack/react-query': { useQuery: () => ({ data: campaign, isPending: false, isError: false }) },
     '../../../../lib/api': { api: async (path, options) => { calls.push({ path, options }); if (path === '/contributions') return new Promise(resolve => { resolvePayment = resolve; }); return {}; } },
     '../../../../lib/types': types, '../../../../lib/session': { useConfig: () => config, refresh: async () => { refreshes++; } }, '../../../../lib/public-campaign': { audienceCampaign: c => c },
+    '../../../../components/Information': { InfoSheet: 'InfoSheet', SummaryLink: 'SummaryLink' },
     '../../../../components/ui': { ...ui, fonts: {}, useTheme: () => ({ colors: new Proxy({}, { get: () => '#121212' }), styles: {}, scheme: 'dark' }) },
     '../../../../features/campaign': { CampaignCover: 'CampaignCover', Disclosures: 'Disclosures', Funding: 'Funding', ShareButton: 'ShareButton' },
     '../../../../features/contributions/ContributionPresets': { ContributionPresets },
@@ -198,6 +199,21 @@ test('actual checkout invalid custom input disables confirmation and preserves e
   assert.equal(tree.find(n => n.props.title === 'Continue to payment').props.disabled, true); assert.match(h.text(tree), /USD \$1–\$10,000/);
   tree.find(n => n.type === 'TextInput').props.onChangeText('83.25'); tree = h.render(); assert.equal(tree.find(n => n.props.title === 'Continue to payment').props.disabled, false);
   assert.equal(h.calls.length, 0);
+});
+test('checkout policy sheet cancellation preserves the selected amount, frozen currency and Choose stage', () => {
+  const h = checkoutHarness(); let tree = h.render();
+  const before = tree.find(n => n.type === 'TextInput').props.value;
+  assert.equal(tree.find(n => n.type === 'InfoSheet').props.visible, false);
+  tree.find(n => n.props.testID === 'contribution-funding-help').props.onPress(); tree = h.render();
+  assert.equal(tree.find(n => n.type === 'InfoSheet').props.visible, true);
+  tree.find(n => n.type === 'InfoSheet').props.onClose(); tree = h.render();
+  assert.equal(tree.find(n => n.type === 'InfoSheet').props.visible, false);
+  assert.equal(tree.find(n => n.type === 'TextInput').props.value, before);
+  assert.ok(tree.find(n => n.props.title === 'Continue to payment')); assert.deepEqual(h.calls, []);
+  tree.find(n => n.props.testID === 'contribution-funding-help').props.onPress(); tree = h.render();
+  tree.find(n => n.props.title === 'Continue to payment').props.onPress(); tree = h.render();
+  assert.equal(tree.find(n => n.type === 'InfoSheet').props.visible, false);
+  assert.ok(tree.find(n => n.props.title === 'Pay ₹2,081.25 · demo')); assert.deepEqual(h.calls, []);
 });
 test('known funding-policy changes stop confirmation and require a visible second review, without silently refreshing the FX snapshot', async () => {
   const h = checkoutHarness(); h.render().find(n => n.props.title === 'Continue to payment').props.onPress();

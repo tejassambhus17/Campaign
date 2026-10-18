@@ -52,8 +52,8 @@ test('release metadata retains identity and increments code; unused capabilities
   const lock = JSON.parse(readFileSync(new URL('../package-lock.json', import.meta.url), 'utf8'));
   assert.equal(expo.name, 'Campaign');
   assert.equal(expo.android.package, 'com.campaignamplification.mobile');
-  assert.equal(expo.version, '1.2.3');
-  assert.equal(expo.android.versionCode, 6);
+  assert.equal(expo.version, '1.4.0');
+  assert.equal(expo.android.versionCode, 10);
   assert.equal(pkg.version, expo.version);
   assert.equal(lock.version, expo.version);
   assert.equal(lock.packages[''].version, expo.version);

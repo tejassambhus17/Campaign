@@ -1,7 +1,27 @@
 # Local Android build and verification
 
+## Current hierarchy release — 1.4.0/code10
+
+[Current signed APK and evidence](../artifacts/dropdown-hierarchy-20261018/README.md). Use the established Release ARM64+x86_64 command and verified HTTPS endpoint with a fresh artifact tag; both dropdown-hierarchy-20261018 and dropdown-hierarchy-confirmed-20261018 already exist. Dedicated signing, normal vital lint and pinned native Print/core patches remain. Compilation, package inspection and installed interaction checks have distinct receipts. Never clear/uninstall the Debug-signed POCO to force a release update.
+
+## Current release — 1.3.0/code8 final UI simplification
+
+Current universal ARM64+x86_64 release and exact evidence are in
+[release readiness](../RELEASE_READINESS.md). Build with the existing dedicated
+key and unchanged HTTPS endpoint, using a new artifact tag:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/android-local.ps1 -Mode Release -Architecture 'arm64-v8a,x86_64' -ApiUrl 'https://campaign-api-cw8y.onrender.com' -ArtifactTag 'final-ui-accepted-20261018'
+```
+
+This named tag already exists; preserve it and use a fresh tag for future builds.
+Normal vital lint and pinned Print/core patches remain enabled. Do not remove
+buildFromSource or signer guards. A same-key update was checked on the owned
+emulator; the Debug-signed POCO cannot accept this dedicated release without a
+separately approved data/signing plan. Never uninstall/clear it to force install.
+
 <!-- current-code6-evidence -->
-## Current release — 1.2.3 / code6
+## Historical release — 1.2.3 / code6
 
 Use the existing commands below with a fresh artifact tag. Current ARM64
 Campaign.apk is49,470,159bytes, SHA256

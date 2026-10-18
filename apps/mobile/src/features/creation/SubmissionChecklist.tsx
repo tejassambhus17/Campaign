@@ -21,10 +21,9 @@ export function SubmissionChecklist({ issues, onSelect }: { issues: DraftIssue[]
   );
   return (
     <View style={{ gap: 10, paddingVertical: 8 }}>
-      <Text accessibilityRole="header" style={styles.h2}>Submission checklist</Text>
-      <Text accessibilityLiveRegion="polite" style={styles.body}>{required.length ? `${required.length} required ${required.length === 1 ? "issue" : "issues"} to resolve. Select one to edit its field.` : "Required fields are ready. Review the previews and policies before submitting."}</Text>
-      {!!required.length && <Accordion title={`Required · ${required.length}`} initiallyOpen>{required.map(row)}</Accordion>}
-      {!!optional.length && <Accordion title={`Optional improvements · ${optional.length}`}><Text style={styles.muted}>These suggestions do not block submission.</Text>{optional.map(row)}</Accordion>}
+      <Text accessibilityLiveRegion="polite" style={{ fontSize: 13, lineHeight: 19, fontWeight: "600", color: required.length ? colors.red : colors.green }}>{required.length ? `${required.length} required ${required.length === 1 ? "item" : "items"} to complete` : "Required fields are ready for review."}</Text>
+      {!!required.length && <View testID="creation-required-issues" style={{ gap: 0 }}>{required.map(row)}</View>}
+      {!!optional.length && <Accordion compact title={`Optional improvements · ${optional.length}`}><Text style={styles.muted}>These suggestions do not block submission.</Text>{optional.map(row)}</Accordion>}
     </View>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View } from "react-native";
 import { Button, Text, useTheme } from "../../components/ui";
+import { InfoAction } from "../../components/Information";
 import { useCurrency } from "../../lib/CurrencyProvider";
 import { formatMoney, formatNativeMoney, inputForUsd, moneyInputWithinLimits, MoneyEntryRecord, referenceDescription, restoreMoneyEntry, usdFromInput } from "../../lib/currency";
 import { TargetField } from "./FieldTarget";
@@ -43,9 +44,9 @@ export function GoalAmountField({ value, entry, onChange, editable, error }: { v
         setField({ ...current, input: next, pending: next });
         onChange(!valid || usd === null || usd === 0 ? "" : usd.toFixed(2), next);
       }} placeholder="Enter the goal you choose" error={raw && !withinLimits ? `Enter ${formatMoney(0.01, snapshot)}–${formatMoney(100000, snapshot)} with up to two decimals.` : error}
-      hint={editable ? `You choose the goal. Demo limits: ${formatMoney(0.01, snapshot)}–${formatMoney(100000, snapshot)} (USD $0.01–$100,000). Up to two decimals; USD cents are authoritative.` : "Your published goal is locked to protect existing backer expectations. Story and creative changes still require review."} />
+      hint={editable ? `You choose the goal · ${formatMoney(0.01, snapshot)}–${formatMoney(100000, snapshot)}.` : "Published goal locked to protect backer expectations."} />
     {snapshot.currency === "INR" && <Text style={[styles.muted, { fontSize: 12, lineHeight: 18 }]}>Canonical USD goal: {converted === null ? "Enter an amount" : `${formatNativeMoney(converted)} USD`}. Conversion rounds once to USD cents.</Text>}
-    <Text style={[styles.muted, { fontSize: 11, lineHeight: 17 }]}>{referenceDescription(snapshot)}</Text>
+    <InfoAction title="Currency & goal details" summary={`${snapshot.currency} entry · original reference preserved`} icon="cash-outline" testID="creation-goal-currency"><Text style={[styles.muted, { fontSize: 12, lineHeight: 18 }]}>{referenceDescription(snapshot)} Demo limits: USD $0.01–$100,000, up to two decimals. Accounting stays in USD cents; story and creative changes still require review.</Text></InfoAction>
     {(currency.preference !== snapshot.currency || currency.rate?.date !== snapshot.rate?.date) && editable && <Button title={`Use current ${currency.preference} preference`} variant="ghost" disabled={currency.loading || currency.snapshot.unavailable} onPress={() => { const next = { raw: inputForUsd(value, currency.snapshot), canonicalUsd: value, snapshot: currency.snapshot }; setField({ ...current, input: next, pending: next }); onChange(value ? value.toFixed(2) : "", next); }} />}
   </View>;
 }

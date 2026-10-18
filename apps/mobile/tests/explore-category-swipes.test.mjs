@@ -63,7 +63,7 @@ function harness({ campaigns = [forest, books], pending = false, error = false }
     '../../../lib/types': { categories },
     '../../../lib/session': { useCampaigns: () => ({ data: campaigns, isPending: pending, isError: error, error: new Error('fixture unavailable'), refetch: () => refetches++ }), useConfig: () => ({ data: { fixture: true } }) },
     '../../../features/campaign': { CampaignCard: 'CampaignCard' },
-    '../../../features/explore/FilterOverlay': { FilterOverlay: 'FilterOverlay' },
+    '../../../features/explore/FilterOverlay': { FilterOverlay: 'FilterOverlay', campaignSortOptions: ['Featured', 'Newest', 'Most funded', 'Closest to goal'] },
     '../../../components/ui': { Text: 'Text', Button: 'Button', Empty: 'Empty', ErrorState: 'ErrorState', Loading: 'Loading', Pill: 'Pill', Screen: 'Screen', fonts: { sans: 'Manrope' }, useTheme: () => ({ colors: new Proxy({}, { get: () => '#121212' }), styles: { row: {}, muted: {}, body: {}, title: {} }, scheme: 'dark' }) },
   }).default;
   let currentTree, currentPager, currentHeader;
@@ -86,7 +86,7 @@ function harness({ campaigns = [forest, books], pending = false, error = false }
     commands, chipScrolls, refetches: () => refetches, route: values => { params = values; }, motion: value => motionListener(value) };
 }
 
-test('Explore uses native horizontal pages in exact category order with real adjacent filtered lists and no fade/drag simulation', () => {
+test('Explore uses native horizontal pages in exact category order with real prewarmed adjacent lists and no fade/drag simulation', () => {
   const h = harness(), pager = h.render();
   assert.equal(pager.props.orientation, 'horizontal'); assert.equal(pager.props.layoutDirection, 'ltr');
   assert.equal(pager.props.overdrag, false); assert.equal(pager.props.overScrollMode, 'never');
@@ -95,12 +95,34 @@ test('Explore uses native horizontal pages in exact category order with real adj
   assert.equal(h.pages().every(page => page.type === 'View' && page.props.collapsable === false), true);
   assert.deepEqual(h.list(0).props.data.map(campaign => campaign.id), ['forest', 'books']);
   assert.deepEqual(h.list(1).props.data.map(campaign => campaign.id), ['forest']);
-  assert.deepEqual(h.list(4).props.data.map(campaign => campaign.id), ['books']);
-  assert.deepEqual(h.list(2).props.data, []);
+  assert.equal(h.list(4), undefined, 'unopened distant topics do not materialize image/query cards');
+  assert.equal(h.list(2), undefined);
   const card = h.list(1).props.renderItem({ item: forest });
   assert.equal(card.type, 'CampaignCard'); assert.equal(card.props.campaign, forest);
   assert.equal(h.header().some(node => node.type === 'FlatList'), false);
   assert.equal(h.header().find(node => node.type === 'TextInput').props.accessibilityLabel, 'Search campaigns');
+});
+
+test('Explore prewarms native neighbors, retains visited reading containers and fills animated category jumps', () => {
+  const h = harness(); h.render(); h.render();
+  const mounted = () => h.pages().map((_, index) => h.list(index) ? index : null).filter(index => index !== null);
+  const keys = h.pages().map(page => page.key);
+  assert.deepEqual(mounted(), [0, 1]);
+  h.drag(); h.swipe(1); h.render();
+  assert.deepEqual(mounted(), [0, 1, 2], 'next neighbor is available before the next drag');
+  h.drag(); h.swipe(2); h.render();
+  assert.deepEqual(mounted(), [0, 1, 2, 3]);
+  h.drag(); h.swipe(0); h.render();
+  assert.deepEqual(mounted(), [0, 1, 2, 3], 'returning never unmounts a visited list');
+  h.header().find(node => node.type === 'Pill' && node.props.title === 'Education').props.onPress(); h.render();
+  assert.deepEqual(mounted(), [0, 1, 2, 3, 4, 5], 'every intermediate animated page and the destination neighbors are ready');
+  assert.deepEqual(h.list(4).props.data.map(campaign => campaign.id), ['books']);
+  assert.deepEqual(h.pages().map(page => page.key), keys, 'page identities remain stable while list contents load once');
+  h.motion(true); h.render();
+  h.header().find(node => node.type === 'Pill' && node.props.title === categories.at(-1)).props.onPress(); h.render();
+  assert.deepEqual(mounted(), [0, 1, 2, 3, 4, 5, 9, 10], 'reduced-motion jumps do not render untraversed middle pages');
+  h.swipe(-1); h.swipe(99); h.render();
+  assert.deepEqual(mounted(), [0, 1, 2, 3, 4, 5, 9, 10]);
 });
 
 test('native page selection synchronizes category pills and a11y while pill taps invoke the native pager', () => {
@@ -130,9 +152,10 @@ test('all native category pages share search/sort/funding settings and remain mo
   assert.equal(h.header().find(node => node.type === 'TextInput').props.value, 'forest');
   assert.equal(h.overlay().props.draft.funding, true);
   assert.deepEqual(h.list(0).props.data.map(campaign => campaign.id), ['forest']);
-  assert.deepEqual(h.list(1).props.data.map(campaign => campaign.id), ['forest']); assert.deepEqual(h.list(4).props.data, []);
+  assert.deepEqual(h.list(1).props.data.map(campaign => campaign.id), ['forest']); assert.equal(h.list(4), undefined);
   assert.deepEqual(h.pages().map(page => page.key), keys);
   for (let i = 0; i < keys.length; i++) {
+    if (!h.list(i)) continue;
     assert.equal(h.list(i).props.keyboardDismissMode, 'on-drag');
     assert.equal(h.list(i).props.onScroll, undefined); assert.equal(h.list(i).props.onContentSizeChange, undefined);
   }
@@ -140,7 +163,7 @@ test('all native category pages share search/sort/funding settings and remain mo
   assert.equal(h.selected(), 'All'); assert.deepEqual(h.list(0).props.data.map(campaign => campaign.id), ['forest', 'books']);
 });
 
-test('Explore overlays staged options without changing results until Apply and preserves dismissed choices', () => {
+test('Explore stages options until Apply and reopening begins with the filters actually applied', () => {
   const h = harness(); h.render(); h.render();
   const pages = h.pages().map(page => page.key);
   const open = () => { h.header().find(node => node.props.accessibilityLabel === 'Campaign filters and sort').props.onPress(); h.render(); };
@@ -153,7 +176,8 @@ test('Explore overlays staged options without changing results until Apply and p
   h.overlay().props.onClose(); h.render();
   assert.equal(h.overlay().props.visible, false);
   assert.equal(h.pages()[0].props.pointerEvents, 'auto');
-  open(); assert.deepEqual(h.overlay().props.draft, { sort: 'Most funded', funding: true });
+  open(); assert.deepEqual(h.overlay().props.draft, { sort: 'Featured', funding: false }, 'dismissed edits cannot masquerade as the active result filters');
+  h.overlay().props.onChange({ sort: 'Most funded', funding: true }); h.render();
   h.overlay().props.onApply(); h.render();
   assert.equal(h.overlay().props.visible, false);
   assert.deepEqual(h.list(0).props.data.map(c => c.id), ['forest']);
@@ -162,6 +186,22 @@ test('Explore overlays staged options without changing results until Apply and p
   assert.deepEqual(h.list(0).props.data.map(c => c.id), ['forest'], 'Clear is staged until Apply too');
   h.overlay().props.onApply(); h.render();
   assert.deepEqual(h.list(0).props.data.map(c => c.id), ['forest', 'books']);
+});
+
+test('Home filter handoff and route-open intent show applied sort/funding and Apply preserves those results', () => {
+  for (const immediateOpen of [false, true]) {
+    const h = harness();
+    h.route({ sort: 'Most funded', funding: '1', ...(immediateOpen ? { openFilters: 'handoff' } : {}) });
+    h.render(); h.render();
+    assert.deepEqual(h.list(0).props.data.map(campaign => campaign.id), ['forest']);
+    if (!immediateOpen) { h.header().find(node => node.props.accessibilityLabel === 'Campaign filters and sort').props.onPress(); h.render(); }
+    assert.equal(h.overlay().props.visible, true);
+    assert.deepEqual(h.overlay().props.draft, { sort: 'Most funded', funding: true });
+    h.overlay().props.onApply(); h.render();
+    assert.deepEqual(h.list(0).props.data.map(campaign => campaign.id), ['forest'], 'Apply without edits retains the handoff result set');
+    h.overlay().props.onClose(); h.render();
+    assert.equal(h.overlay().props.visible, false, 'unchanged route intent must not reopen the dismissed overlay');
+  }
 });
 
 test('legacy openFilters intent opens the overlay while keeping its route search/category and native pages intact', () => {

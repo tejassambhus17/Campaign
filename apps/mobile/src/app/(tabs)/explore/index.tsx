@@ -18,7 +18,7 @@ import {
 import { Campaign, categories } from "../../../lib/types";
 import { useCampaigns, useConfig } from "../../../lib/session";
 import { CampaignCard } from "../../../features/campaign";
-import { CampaignFilters, FilterOverlay } from "../../../features/explore/FilterOverlay";
+import { CampaignFilters, FilterOverlay, campaignSortOptions } from "../../../features/explore/FilterOverlay";
 
 const categoryOrder = ["All", ...categories];
 
@@ -26,15 +26,28 @@ export default function Explore() {
   const { colors, styles, scheme } = useTheme();
   const { fontScale } = useWindowDimensions();
   const searchHeight = Math.max(48, Math.ceil(19 * fontScale + 20));
-  const params = useLocalSearchParams<{ q?: string; category?: string; openFilters?: string }>();
+  const params = useLocalSearchParams<{ q?: string; category?: string; sort?: string; funding?: string; openFilters?: string }>();
   const q = useCampaigns();
   const config = useConfig();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  // Keep the current page and its neighbor ready before a native drag. Once a
+  // page has been visited/prewarmed its list stays mounted, retaining its own
+  // reading position, while unopened distant categories incur no card work.
+  const [loadedPages, setLoadedPages] = useState(() => new Set([0, 1]));
+  const prewarmPages = useCallback((index: number, from = index) => {
+    setLoadedPages(previous => {
+      const next = new Set(previous);
+      for (let page = Math.max(0, Math.min(index, from) - 1); page <= Math.min(categoryOrder.length - 1, Math.max(index, from) + 1); page++) next.add(page);
+      return next.size === previous.size ? previous : next;
+    });
+  }, []);
   const [sort, setSort] = useState("Featured");
   const [sortOpen, setSortOpen] = useState(false);
   const [funding, setFunding] = useState(false);
   const [draftFilters, setDraftFilters] = useState<CampaignFilters>({ sort: "Featured", funding: false });
+  const appliedFilters = useRef<CampaignFilters>({ sort, funding });
+  appliedFilters.current = { sort, funding };
   const filterButton = useRef<View>(null);
   const [reduceMotion, setReduceMotion] = useState(true);
   const pager = useRef<PagerView>(null);
@@ -46,11 +59,14 @@ export default function Explore() {
   const stripGeometry = useRef({ width: 0, contentWidth: 0, offset: 0 });
   const selectCategory = useCallback((index: number, animate = true) => {
     if (!Number.isInteger(index) || !categoryOrder[index]) return;
+    // A multi-category chip jump can animate past intermediate pages. Warm
+    // that range too so its native transition never crosses empty content.
+    prewarmPages(index, animate && !reduceMotion ? categoryOrder.indexOf(selectedCategory.current) : index);
     requestedPage.current = index;
     setCategory(categoryOrder[index]);
     if (animate && !reduceMotion) pager.current?.setPage(index);
     else pager.current?.setPageWithoutAnimation(index);
-  }, [reduceMotion]);
+  }, [reduceMotion, prewarmPages]);
   const selectCategoryRef = useRef(selectCategory);
   selectCategoryRef.current = selectCategory;
   const closeFilters = () => {
@@ -60,7 +76,7 @@ export default function Explore() {
       if (target) AccessibilityInfo.setAccessibilityFocus(target);
     });
   };
-  const openFilters = () => { Keyboard.dismiss(); setSortOpen(true); };
+  const openFilters = () => { Keyboard.dismiss(); setDraftFilters({ sort, funding }); setSortOpen(true); };
   useFocusEffect(useCallback(() => () => setSortOpen(false), []));
   useEffect(() => {
     let active = true, changed = false;
@@ -90,17 +106,31 @@ export default function Explore() {
     } else if (params.q !== undefined) selectCategoryRef.current(categoryOrder.indexOf(selectedCategory.current), false);
   }, [params.q, params.category]);
   useEffect(() => {
-    if (params.openFilters) { Keyboard.dismiss(); setSortOpen(true); }
-  }, [params.openFilters]);
+    if (!params.openFilters) return;
+    // A route can apply filters and open the sheet in the same render. Seed
+    // from its validated values before asynchronous state updates settle.
+    const sortValue = Array.isArray(params.sort) ? params.sort[0] : params.sort;
+    const fundingValue = Array.isArray(params.funding) ? params.funding[0] : params.funding;
+    setDraftFilters({
+      sort: sortValue && campaignSortOptions.some(option => option === sortValue) ? sortValue : appliedFilters.current.sort,
+      funding: fundingValue !== undefined ? fundingValue === "1" : appliedFilters.current.funding,
+    });
+    Keyboard.dismiss();
+    setSortOpen(true);
+  }, [params.openFilters, params.sort, params.funding]);
+  useEffect(() => {
+    const sortValue = Array.isArray(params.sort) ? params.sort[0] : params.sort;
+    if (sortValue && campaignSortOptions.some((option) => option === sortValue)) setSort(sortValue);
+    if (params.funding !== undefined) setFunding((Array.isArray(params.funding) ? params.funding[0] : params.funding) === "1");
+  }, [params.sort, params.funding]);
   const pageResults = useMemo(
     () => categoryOrder.map((pageCategory) => discoverCampaigns(q.data || [], { search, category: pageCategory, sort, funding })),
     [q.data, search, sort, funding],
   );
   const selectedIndex = Math.max(0, categoryOrder.indexOf(category));
-  const filtered = pageResults[selectedIndex];
   const filtersActive = !!search.trim() || category !== "All" || funding || sort !== "Featured";
   const renderCampaign = useCallback(
-    ({ item }: { item: Campaign }) => <CampaignCard campaign={item} config={config.data} compact />,
+    ({ item }: { item: Campaign }) => <CampaignCard campaign={item} config={config.data} compact presentation="explore" />,
     [config.data],
   );
   const reset = () => {
@@ -113,8 +143,8 @@ export default function Explore() {
   };
   return (
     <Screen scroll={false}>
-      <ScrollView accessibilityElementsHidden={sortOpen} importantForAccessibility={sortOpen ? "no-hide-descendants" : "auto"} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" style={{ flexGrow: 0, maxHeight: "55%" }} contentContainerStyle={{ paddingHorizontal: 18, paddingTop: 16, paddingBottom: 4, width: "100%", maxWidth: 640, alignSelf: "center", gap: 10 }}>
-      <Text accessibilityRole="header" style={[styles.title, { marginBottom: 3 }]}>Explore{"\n"}campaigns</Text>
+      <ScrollView accessibilityElementsHidden={sortOpen} importantForAccessibility={sortOpen ? "no-hide-descendants" : "auto"} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" style={{ flexGrow: 0, maxHeight: "55%" }} contentContainerStyle={{ paddingHorizontal: 18, paddingTop: 12, paddingBottom: 4, width: "100%", maxWidth: 640, alignSelf: "center", gap: 8 }}>
+      <Text accessibilityRole="header" style={{ fontFamily: fonts.bold, fontSize: 23, lineHeight: 29, color: colors.ink, letterSpacing: -0.4 }}>Explore{"\n"}campaigns</Text>
       <View style={[styles.row, { gap: 8 }]}>
         <View style={{ flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: 7, height: searchHeight, borderRadius: 25, backgroundColor: colors.subtle, paddingHorizontal: 13 }}>
           <Ionicons name="search-outline" size={17} color={colors.muted} />
@@ -142,9 +172,6 @@ export default function Explore() {
         </View>
       </ScrollView>
       {filtersActive && <View style={{ ...styles.row, justifyContent: "space-between", gap: 4 }}><Text style={{ ...styles.muted, fontSize: 12, flex: 1 }}>{[search.trim() ? `“${search.trim()}”` : "", category !== "All" ? category : "", funding ? "Open for backing" : "", sort !== "Featured" ? sort : ""].filter(Boolean).join(" · ")}</Text><Button title="Reset" icon="close" variant="ghost" onPress={reset} style={{ paddingHorizontal: 8 }} /></View>}
-      {!q.isPending && !q.isError && <Text style={{ ...styles.muted, fontSize: 11, lineHeight: 16 }}>
-        {filtered.length} {filtered.length === 1 ? "campaign" : "campaigns"} · demonstration data
-      </Text>}
       </ScrollView>
       <PagerView ref={pager} style={{ flex: 1 }} initialPage={0} orientation="horizontal" layoutDirection="ltr" overScrollMode="never" overdrag={false} offscreenPageLimit={1} keyboardDismissMode="on-drag"
         onPageSelected={(event) => {
@@ -152,11 +179,12 @@ export default function Explore() {
           if (!Number.isInteger(index) || !categoryOrder[index]) return;
           if (requestedPage.current !== null && requestedPage.current !== index) return;
           requestedPage.current = null;
+          prewarmPages(index);
           setCategory(categoryOrder[index]);
         }}
         onPageScrollStateChanged={(event) => { if (event.nativeEvent.pageScrollState === "dragging") requestedPage.current = null; }}>
       {categoryOrder.map((pageCategory, index) => <View key={pageCategory} collapsable={false} style={{ width: "100%", height: "100%" }} accessibilityElementsHidden={sortOpen || selectedIndex !== index} importantForAccessibility={!sortOpen && selectedIndex === index ? "auto" : "no-hide-descendants"} pointerEvents={!sortOpen && selectedIndex === index ? "auto" : "none"}>
-      <FlatList
+      {loadedPages.has(index) && <FlatList
         data={q.isPending || q.isError ? [] : pageResults[index]}
         keyExtractor={(campaign) => campaign.id}
         renderItem={renderCampaign}
@@ -167,6 +195,7 @@ export default function Explore() {
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         contentContainerStyle={{ paddingHorizontal: 18, paddingTop: 2, paddingBottom: 28, width: "100%", maxWidth: 640, alignSelf: "center", flexGrow: 1 }}
+        ListHeaderComponent={!q.isPending && !q.isError && pageResults[index].length ? <View style={{ flexDirection: "row", gap: 8, alignItems: "center", paddingTop: 8, paddingBottom: 10 }}><Text accessibilityRole="header" style={{ flex: 1, color: colors.ink, fontFamily: fonts.bold, fontSize: 17, lineHeight: 24 }}>{sort === "Featured" && pageResults[index][0]?.featured ? "Featured" : "Campaigns"}</Text><Text style={{ color: colors.muted, fontSize: 11, lineHeight: 17 }}>{pageResults[index].length} {pageResults[index].length === 1 ? "campaign" : "campaigns"}</Text></View> : null}
         ListEmptyComponent={q.isPending ? (
         <Loading />
       ) : q.isError ? (
@@ -186,7 +215,7 @@ export default function Explore() {
               }
             />
       )}
-      />
+      />}
       </View>)}
       </PagerView>
       <FilterOverlay visible={sortOpen} draft={draftFilters} onChange={setDraftFilters} reduceMotion={reduceMotion} onClose={closeFilters} onApply={() => {

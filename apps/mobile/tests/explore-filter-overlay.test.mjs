@@ -77,35 +77,84 @@ test('Android Back, outside, close, Cancel and accessibility escape dismiss with
   assert.equal(h.closes(), 5); assert.equal(h.applies(), 0);
 });
 
-test('Home removes its Explore-redirect filter control while keeping search, categories and primary routes', () => {
-  const state = [], navigation = []; let cursor = 0;
-  const react = { useCallback: callback => callback, useEffect: () => {}, useRef: initial => ({ current: initial }), useState: initial => {
+test('Home filters its mounted campaign cards, stages floating options and carries current filters through See all', t => {
+  const state = [], navigation = [], focus = []; let cursor = 0, keyboardDismissals = 0;
+  const priorFrame = globalThis.requestAnimationFrame;
+  globalThis.requestAnimationFrame = callback => { callback(); return 1; };
+  t.after(() => { if (priorFrame === undefined) delete globalThis.requestAnimationFrame; else globalThis.requestAnimationFrame = priorFrame; });
+  const react = { useCallback: callback => callback, useMemo: factory => factory(), useEffect: () => {}, useRef: initial => ({ current: initial }), useState: initial => {
     const index = cursor++; if (!(index in state)) state[index] = initial;
-    return [state[index], value => { state[index] = value; }];
+    return [state[index], value => { state[index] = typeof value === 'function' ? value(state[index]) : value; }];
   } };
-  const ui = Object.fromEntries(['Text', 'Button', 'Empty', 'ErrorState', 'Loading', 'Notice', 'Pill', 'Screen'].map(name => [name, name]));
+  const publicModel = load('../src/lib/public-campaign.ts', {});
+  const discovery = load('../src/lib/discovery.ts', {});
+  const homeModel = load('../src/features/home/model.ts', { '../../lib/discovery': discovery, '../../lib/public-campaign': publicModel });
+  const campaign = (id, overrides = {}) => ({ id, title: `${id} reach`, category: 'Environment', creatorName: 'Fictional creator', summary: 'Community research', status: 'Available for Funding', raised: 20, goal: 100, createdAt: '2026-10-01T00:00:00Z', ...overrides });
+  const rows = [campaign('forest', { publishedAt: '2026-10-15T00:00:00Z' }), campaign('demo_ocean', { featured: true, raised: 80 }), campaign('books', { category: 'Education', status: 'Completed', raised: 100 }), campaign('health', { category: 'Health' }), campaign('community', { category: 'Community' })];
+  const ui = Object.fromEntries(['Text', 'Button', 'Empty', 'ErrorState', 'Loading', 'Notice', 'Screen'].map(name => [name, name]));
   const component = load('../src/app/(tabs)/index.tsx', {
     react, 'react/jsx-runtime': { jsx, jsxs: jsx },
-    'react-native': { Keyboard: { dismiss: () => {} }, Pressable: 'Pressable', ScrollView: 'ScrollView', TextInput: 'TextInput', View: 'View', useWindowDimensions: () => ({ width: 393, height: 850, fontScale: 1.17 }) },
+    'react-native': { AccessibilityInfo: { setAccessibilityFocus: handle => focus.push(handle) }, findNodeHandle: node => node?.handle, Keyboard: { dismiss: () => keyboardDismissals++ }, Pressable: 'Pressable', ScrollView: 'ScrollView', TextInput: 'TextInput', View: 'View', useWindowDimensions: () => ({ width: 393, height: 850, fontScale: 1.17 }) },
     'expo-router': { router: { push: href => navigation.push(href) }, useFocusEffect: () => {}, useLocalSearchParams: () => ({}) },
     '../../lib/CurrencyProvider': { useCurrency: () => ({ money: String }) }, '@expo/vector-icons/Ionicons': { default: 'Icon' },
     '../../components/ui': { ...ui, fonts: {}, useTheme: () => ({ colors: new Proxy({}, { get: () => '#121212' }), styles: { row: {}, body: {}, muted: {} }, scheme: 'dark' }) },
-    '../../lib/session': { useSession: () => ({ user: null, ready: true, onboardingError: '' }), useActivity: () => ({ data: [] }), useCampaigns: () => ({ data: [] }), useConfig: () => ({}) },
-    '../../lib/types': { categories: ['Environment', 'Health', 'Education', 'Public Policy'], number: String },
-    '../../features/campaign': { CampaignCard: 'CampaignCard' }, '../../features/creation/model': { STEPS: [] }, '../../features/creation/useDraftLibrary': {},
+    '../../lib/session': { useSession: () => ({ user: null, ready: true, onboardingError: '' }), useActivity: () => ({ data: [] }), useCampaigns: () => ({ data: rows }), useConfig: () => ({}) },
+    '../../lib/types': { categories: ['Environment', 'Health', 'Education', 'Community', 'Public Policy'], number: String },
+    '../../features/home/HomeDiscoveryCard': { HomeDiscoveryCard: 'HomeDiscoveryCard' }, '../../features/home/model': homeModel,
+    '../../features/explore/FilterOverlay': { FilterOverlay: 'FilterOverlay' }, '../../features/creation/model': { STEPS: [] }, '../../features/creation/useDraftLibrary': {},
     '../../features/notifications/NotificationSheet': { NotificationSheet: 'NotificationSheet' }, '../../lib/api': {}, '../../components/UnreadBadge': { UnreadBadge: 'UnreadBadge' },
     '../../features/home/SpotlightCard': { SpotlightCard: 'SpotlightCard' },
     '../../features/walkthrough/Walkthrough': { useWalkthrough: () => ({}), useWalkthroughTarget: () => null, WalkthroughInvitation: 'WalkthroughInvitation' },
   }).default;
   const render = () => { cursor = 0; return nodes(component()); };
+  const overlay = all => all.find(node => node.type === 'FilterOverlay');
+  const featured = all => all.find(node => node.type === 'SpotlightCard')?.props.campaign.id;
+  const input = all => all.find(node => node.type === 'TextInput');
+  const category = (all, value) => all.find(node => node.props.accessibilityLabel === `${value} campaigns`);
+  const openFilters = all => all.find(node => node.props.accessibilityLabel === 'Home campaign filters and sort').props.onPress();
   let all = render();
-  assert.equal(all.some(node => node.props.accessibilityLabel === 'Campaign filters and sort' || node.props.name === 'options-outline'), false);
-  all.find(node => node.type === 'TextInput').props.onChangeText(' coast '); all = render();
-  all.find(node => node.type === 'TextInput').props.onSubmitEditing();
-  assert.deepEqual(navigation.at(-1), { pathname: '/explore', params: { q: 'coast', category: 'All' } });
-  all.find(node => node.type === 'Pill' && node.props.title === 'Environment').props.onPress();
-  assert.deepEqual(navigation.at(-1), { pathname: '/explore', params: { q: 'coast', category: 'Environment' } });
-  all.find(node => node.props.accessibilityLabel === 'Start a campaign').props.onPress();
+  assert.equal(overlay(all).props.visible, false);
+  assert.equal(featured(all), 'demo_ocean');
+  input(all).props.onChangeText(' reach '); all = render();
+  input(all).props.onSubmitEditing();
+  category(all, 'Environment').props.onPress(); all = render();
+  assert.equal(input(all).props.value, ' reach ');
+  assert.equal(category(all, 'Environment').props.accessibilityState.selected, true);
+  assert.deepEqual(all.filter(node => node.type === 'HomeDiscoveryCard').map(node => node.props.campaign.id), ['forest']);
+  assert.deepEqual(navigation, [], 'search submission and category changes stay on Home');
+
+  openFilters(all); all = render();
+  assert.equal(overlay(all).props.visible, true);
+  assert.equal(all.find(node => node.type === 'ScrollView').props.importantForAccessibility, 'no-hide-descendants');
+  overlay(all).props.onChange({ sort: 'Newest', funding: true }); all = render();
+  assert.equal(featured(all), 'demo_ocean', 'staged sort does not alter mounted results');
+  overlay(all).props.onClose(); all = render();
+  assert.equal(overlay(all).props.visible, false);
+  assert.equal(featured(all), 'demo_ocean', 'Cancel leaves applied choices unchanged');
+  openFilters(all); all = render();
+  assert.deepEqual(overlay(all).props.draft, { sort: 'Featured', funding: false }, 'opening again starts from applied options');
+  overlay(all).props.onChange({ sort: 'Newest', funding: true }); all = render();
+  overlay(all).props.onApply(); all = render();
+  assert.equal(overlay(all).props.visible, false);
+  assert.equal(featured(all), 'forest', 'Apply changes the actual filtered and sorted cards');
+  assert.equal(all.find(node => node.type === 'ScrollView').props.importantForAccessibility, 'auto');
+  assert.ok(focus.length >= 2 && focus.every(handle => handle === 17), 'closing restores focus to the mounted filter control');
+  assert.deepEqual(navigation, [], 'opening, changing, cancelling and applying filters never redirect');
+  all.find(node => node.props.accessibilityLabel === 'See all featured campaign').props.onPress();
+  assert.deepEqual(navigation.at(-1), { pathname: '/explore', params: { q: 'reach', category: 'Environment', sort: 'Newest', funding: '1' } });
+
+  category(all, 'Community').props.onPress(); all = render();
+  assert.equal(featured(all), 'community', 'Communities uses the actual canonical Community category');
+  input(all).props.onChangeText('no matching message'); all = render();
+  assert.equal(all.find(node => node.type === 'Empty').props.title, 'No campaigns match');
+  const emptyAction = all.find(node => node.type === 'Empty').props.action;
+  assert.equal(emptyAction.props.title, 'Clear filters');
+  emptyAction.props.onPress(); all = render();
+  assert.equal(input(all).props.value, '');
+  assert.equal(category(all, 'All').props.accessibilityState.selected, true);
+  assert.equal(featured(all), 'demo_ocean');
+  all.find(node => node.type === 'Button' && node.props.title === 'Start a campaign').props.onPress();
   assert.equal(navigation.at(-1), '/create');
-  assert.equal(navigation.some(href => typeof href === 'object' && href.params.openFilters), false);
+  assert.ok(keyboardDismissals > 0);
+  assert.equal(rows[0].id, 'forest', 'Home filtering leaves server order intact');
 });

@@ -8,7 +8,7 @@ export function AssessmentSnapshot({ workspace }: { workspace: AssessmentWorkspa
   const { styles } = useTheme();
   const { money } = useCurrency();
   const content = workspace.content;
-  return <Accordion title={`Inspect exact ${workspace.target === "working" ? "working" : "published"} content · version ${workspace.assessedVersion}`}>
+  return <Accordion compact title={`Inspect exact ${workspace.target === "working" ? "working" : "published"} content · version ${workspace.assessedVersion}`}>
     <Text style={styles.muted}>This snapshot is the content bound to the assessment. Working content is visible here only to authorized reviewers.</Text>
     <Text style={styles.h2}>{content.title}</Text>
     <Text style={styles.body}>{content.category} · {content.creatorName}</Text>

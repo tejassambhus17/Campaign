@@ -1,4 +1,94 @@
-# Current trust section: bounded native design QA — October 17
+# Campaign: bounded native design QA
+
+## October18 app-wide hierarchy — bounded native review
+
+The original After reference, actual baseline screenshots and two exact-binary batches were inspected. One P1 URL-sheet/IME occlusion was found and corrected; actual focused input/Close bounds and screenshot confirm closure. [Finding](artifacts/dropdown-hierarchy-20261018/VISUAL_FINDING.keyboard.md); [independent review](artifacts/dropdown-hierarchy-20261018/VISUAL_REVIEW.md); [per-area verification](artifacts/dropdown-hierarchy-20261018/VERIFICATION_MATRIX.md). Normal Dark, selected Light/font1.3 variants and scroll endpoints are scoped evidence, not complete-device/TalkBack/human acceptance. No repeated micro-polish loop or invented visual score was used.
+
+## Current October 18 — compact discovery follow-up
+
+final result: passed
+
+[The bounded native review](artifacts/home-trust-polish-20261018/VISUAL_REVIEW.md)
+records the user image, first-candidate finding and final 74 dp correction.
+Final top-right geometry, readable badge text, Discover/Explore, Home buttons
+and metadata were checked in named Dark/Light/font samples. Actual data, demo
+provenance and the PDF-required creator take priority over mock content. Images
+show appearance; performance records belong to the first candidate and do not
+benchmark the final binary. Physical, whole-app, human and TalkBack acceptance
+is not implied. Historical reviews below retain their own binary scope.
+
+## Current October18 ten-screen UI and connected creation progress
+
+final result: passed
+
+This bounded result covers the final1.3.0/code8 APK SHA256
+`9F3DF3FF0B12743154B5B443A4A487D9047C184B5991CF33B96F0E2888922022`.
+[Full review](artifacts/final-ui-simplification-20261018/visual-review/VISUAL_REVIEW.accepted.md)
+records all four discovered P2 closures, evidence, intentional differences and
+limits. The latest connected five-icon progress image supersedes the mock's
+segmented bar; exact five-step behavior remains. Root opened the combined
+[ten-screen comparison](artifacts/final-ui-simplification-20261018/visual-review/REFERENCE_VS_NATIVE.accepted.png),
+[progress comparison](artifacts/final-ui-simplification-20261018/visual-review/CREATION_PROGRESS.reference-vs-accepted.png)
+and actual enlarged Basics. The independent review opened all ten focused pairs.
+
+Actual native screenshots are1080x2280, owned API36 emulator; app content crop
+`[0,72,1080,2214]`. Reference1536x1024 board and later1080x402 progress crop are
+normalized to300px comparison width with preserved aspect, excluding synthetic
+iOS status/bezel and Android system rows. CSS viewport is inapplicable; no
+stretched or generated implementation, numerical similarity or pixel identity.
+
+| Required surface | Current inspected conclusion |
+| --- | --- |
+| Typography |Bundled Manrope retained; current labels/actions/financial values readable; Back wrapping fixed; font1.3 reflow remains legible. |
+| Layout/spacing |Reference content/action order, compact drafts/forms/rows, three metrics and disclosures; post-layout creator transition fixed; allocation correction keeps focus. |
+| Colors/tokens |Black/neutral-charcoal Dark, mint and existing Light retained. Candidate-only44contrast samples remain separately bound, not a new whole-app certification. |
+| Images/assets/icons |Actual campaign photos/data; stronger score shield and latest five matching connected icon identities. Approved logo/splash preserved by27 package resource comparisons. |
+| Copy/content |Concise primary information, mandatory PDF fields/disclosures reachable. Real data, creator/title60/Submit goal and uncertainty take precedence over mock facts. |
+
+Final receipts cover named public/creator/gesture/parent/share-cancel cases,
+all five Dark progress states and selected Light/font1.3 variants.32 actual final
+PNG/XML pairs remain under `native/*-accepted`. Screenshots prove appearance,
+separate interaction receipts prove those actions. Original Dark/font1.0 verified
+after cold launch; Home restored. The Impeccable engine was unavailable; the
+documented project-contract fallback and Product Design comparison method were
+used. Physical POCO, human/TalkBack/full-app/device/network/performance acceptance
+remain pending or outside this pass. Earlier evidence below remains historical.
+
+## October18 newest Home reference — passed within inspected scope
+
+Latest source: [supplied reference](artifacts/home-reference-20261018/reference.png).
+Actual installed universal APK:1.2.4/code7, SHA256
+`57BAD27E911883F9F4254EEC1EED555D83A76BA3AAF001E566787463D81D577A`.
+The owned API36 emulator rendered the actual app; no generated visual is used
+as native evidence. [Normalized practical comparison](artifacts/home-reference-20261018/comparison-readable.png)
+keeps the reference's content crop separate from Android system chrome/header.
+
+Image-led composition, category icons, compact Featured/assessment badges,
+funding/progress/creator/action groups and two-column discovery follow the
+reference. Existing Manrope, black/mint and Light surfaces remain. Actual public
+campaign identities, review classifications, funding and contribution counts
+replace fictional mock values; required metadata and >=48dp native targets make
+some groups taller. No invented avatar stack/verified identity or exact pixel
+identity is claimed. Scalable discovery becomes one column when necessary.
+
+An actual P2 bright-photo caption issue at font1.3 was corrected using measured
+caption placement, then independently confirmed on fresh native captures.
+The representative white-title contrast increased2.465:1→14.757:1 and body
+sample1.994:1→11.842:1. These samples do not establish whole-screen WCAG
+conformance. [Current review](artifacts/home-reference-20261018/VISUAL_REVIEW.readable.md)
+has no blocking visible findings in its inspected images; earlier rejected
+candidate evidence remains preserved.
+
+Inspected current states include Dark/Light Home and discovery, font1.3 reflow
+and floating filters. Eighteen current PNG/XML states and13 named interaction
+checks are recorded separately: screenshots do not prove gestures or mutations.
+Product Design image-to-code/design QA and Impeccable documented fallback were
+used; its engine did not load. Physical POCO, TalkBack, every campaign/font/network
+state, save mutations and complete app/performance acceptance remain unverified.
+The older trust and Home reviews below retain their own historical scope.
+
+
+## Historical October17 trust section
 
 final result: passed
 

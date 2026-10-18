@@ -18,6 +18,7 @@ function load(path, modules = {}) {
 const currency = load('../src/lib/currency.ts');
 const { isReportSnapshot, canShareReport, createReportDocument, budgetParts,
   escapeReportHtml, reportFilename, reportHtml, reportDate } = load('../src/lib/report.ts', { './currency': currency });
+const { reportSummary } = load('../src/features/reports/summary.ts');
 
 // Fixed public contract fixture, based on the actual isolated HTTP completed
 // example in final-completion-20261017/backend. Tests never read production or
@@ -97,6 +98,42 @@ function fundingFixture() {
   Object.assign(r.metricAvailability, { simulatedReach: 'unavailable', impressions: 'unavailable', clicks: 'unavailable' });
   return r;
 }
+
+test('three report metrics use recorded funds and spending, with planning reach before delivery', () => {
+  const document = createReportDocument(fundingFixture(), usd());
+  const before = structuredClone(document), rows = reportSummary(document);
+  assert.deepEqual(rows.map(row => [row.label, row.value]), [
+    ['Funds raised', '$100'], ['Ad spending', '$0'], ['Est. reach', '2,565'],
+  ]);
+  assert.deepEqual(document, before, 'presentation must not change the frozen accounting snapshot');
+});
+
+test('report summary distinguishes simulated delivery from explicitly classified measured reach, including true zero', () => {
+  const r = fixture();
+  assert.equal(reportSummary(createReportDocument(r, usd()))[2].label, 'Simulated reach');
+  assert.equal(reportSummary(createReportDocument(r, usd()))[2].value, '2,193');
+  r.measuredReach = 0;
+  assert.equal(reportSummary(createReportDocument(r, usd()))[2].label, 'Simulated reach', 'an unclassified number cannot claim measured delivery');
+  r.metricAvailability.measuredReach = 'measured';
+  const measured = reportSummary(createReportDocument(r, usd()))[2];
+  assert.equal(measured.label, 'Measured reach'); assert.equal(measured.value, '0');
+});
+
+test('missing or unavailable reach stays unavailable instead of becoming a zero or fabricated estimate', () => {
+  const r = fixture();
+  r.measuredReach = null; r.simulatedReach = null; r.estimatedReach = null;
+  assert.equal(reportSummary(createReportDocument(r, usd()))[2].value, 'Unavailable');
+  r.estimatedReach = 987; r.metricAvailability.estimatedReach = 'unavailable';
+  assert.equal(reportSummary(createReportDocument(r, usd()))[2].value, 'Unavailable');
+});
+
+test('report summary carries the exact frozen INR equivalents and canonical USD amounts', () => {
+  const document = createReportDocument(fixture(), inr());
+  const rows = reportSummary(document);
+  assert.equal(rows[0].value, '₹8,325'); assert.equal(rows[0].canonical, '$100 USD');
+  assert.equal(rows[1].value, '₹7,513.31'); assert.equal(rows[1].canonical, '$90.25 USD');
+  assert.equal(rows[2].value, '2,193', 'currency changes must not convert reach');
+});
 
 test('public completed and pre-delivery report contracts are accepted without requiring live metrics', () => {
   for (const r of [fixture(), fundingFixture()]) {

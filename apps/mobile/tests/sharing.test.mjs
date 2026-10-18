@@ -22,6 +22,7 @@ const source = ts.transpileModule(
 new Function('require', 'module', 'exports', source)(
   (name) => name === 'react-native'
     ? { Platform: { OS: 'android' }, Share: { share: async (value) => { shared.push(value); } } }
+    : name === 'react' ? { default: { memo: component => component } }
     : name === '../lib/public-campaign' ? publicModule.exports : {},
   module,
   module.exports,

@@ -38,6 +38,7 @@ import { Reviewer } from "../../features/reviewer";
 import { ProfilePhoto, ProfilePhotoEditor } from "../../features/profile/Photo";
 import { useWalkthrough } from "../../features/walkthrough/Walkthrough";
 import { MyCampaigns } from "../../features/profile/MyCampaigns";
+import { InfoAction, InfoSheet, SummaryLink } from "../../components/Information";
 import { profileEntry, profileSection, publicProfileSection, ProfileSection } from "../../lib/profile-navigation";
 const information: Record<string, string> = {
   About:
@@ -51,7 +52,7 @@ const information: Record<string, string> = {
   Contact:
     "Organizer contact and submission channel are listed in the official brief. No support mailbox is configured for this prototype. For a local demo issue, contact the person who provided the application.",
   Terms:
-    "Prototype terms: no real money is collected, and no advertising is purchased. Contributions simulate message amplification. The demo uses a 5% included platform fee and $1–$10,000 contribution limits. Cancelling before promotion refunds all simulated contributions; unspent advertising funds are refunded proportionally. Partial funding requires explicit review approval.",
+    "Prototype terms: no real money is collected, and no advertising is purchased. Contributions simulate message amplification. Current fees and contribution limits are unavailable until funding policies load; check the final contribution review before confirming. Cancelling before promotion refunds all simulated contributions; unspent advertising funds are refunded proportionally. Partial funding requires explicit review approval.",
   Privacy:
     "Public backer names are private by default. Payment and receipt records are available only to the relevant account or private guest receipt capability. Demo sessions are stored securely on native devices; web preview uses browser storage. Do not enter sensitive personal information into campaign stories. No live ad tracking is enabled.",
   "Community Guidelines":
@@ -180,7 +181,6 @@ export default function Profile() {
   );
   const help = (
     <View style={{ gap: 8 }}>
-      <Text style={[styles.muted, { marginBottom: 8 }]}>A little clarity for your next step.</Text>
       <Button title="Take the app tour" variant="secondary" icon="compass-outline" onPress={() => { void (async () => {
         try {
           await session.completeOnboarding();
@@ -189,10 +189,8 @@ export default function Profile() {
           router.navigate("/");
         } catch { setFailed(true); setMessage("Could not save your welcome choice. Try again; your current data is unchanged."); }
       })(); }} />
-      {Object.entries(information).map(([title, body]) => <Accordion key={title} title={title}>
-        {title === "Terms" && config.data ? ["purpose", "fees", "allocation", "refunds", "unspent", "partialFunding"].map(key => config.data.policies[key]).join("\n\n") : body}
-      </Accordion>)}
-      {!isCloudBuild && (__DEV__ || process.env.EXPO_PUBLIC_INTERNAL_TEST === "1") && <Accordion title="Demo connection settings">
+      <HelpInformation config={config.data} />
+      {!isCloudBuild && (__DEV__ || process.env.EXPO_PUBLIC_INTERNAL_TEST === "1") && <InfoAction title="Demo connection settings" icon="server-outline" keepMounted testID="help-demo-connection">
         <Text style={styles.muted}>Use an API address reachable from your device. Switching servers signs you out; saved drafts remain on this device. A standalone build needs a configured backend.</Text>
         <Field label="Backend address" value={address} onChangeText={setAddress} autoCapitalize="none" autoCorrect={false} editable={!busy} />
         <Button title="Save connection & reconnect" loading={busy} onPress={() => run(async () => {
@@ -205,10 +203,10 @@ export default function Profile() {
           await AsyncStorage.setItem("campaign-api-url", next);
           await api("/health");
         }, "Backend connection verified.")} />
-      </Accordion>}
+      </InfoAction>}
       {!session.user && <><AccountRow icon="contrast-outline" title="Appearance" onPress={() => open("Appearance")} /><AccountRow icon="cash-outline" title="Currency" onPress={() => open("Currency")} /></>}
       <Button title="View the product reference" variant="ghost" icon="open-outline" onPress={() => { void Linking.openURL("https://campaign-one-pearl.vercel.app/").catch(() => { setFailed(true); setMessage("The product reference could not be opened. Check your connection and try again."); }); }} />
-      <Text style={[styles.muted, { fontSize: 12, textAlign: "center", paddingVertical: 12 }]}>Campaign · Prototype 1.0</Text>
+      <Text style={[styles.muted, { fontSize: 12, textAlign: "center", paddingVertical: 8 }]}>Campaign · Mobile prototype</Text>
     </View>
   );
 
@@ -225,15 +223,15 @@ export default function Profile() {
     </ScrollView>}
   </Screen>;
 
-  if (!session.user) return <Screen key={section}>
-    {section === "Overview" ? <View style={{ gap: 22 }}>
-      <Text accessibilityRole="header" style={styles.title}>Profile</Text>
+  if (!session.user) return <Screen compact key={section}>
+    {section === "Overview" ? <View style={{ gap: 14 }}>
+      <Text accessibilityRole="header" style={[styles.title, { fontSize: 24, lineHeight: 30 }]}>Profile</Text>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 15 }}>
         <View accessible={false} style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: colors.subtle, alignItems: "center", justifyContent: "center" }}><Ionicons name="person-outline" size={31} color={colors.muted} /></View>
         <View style={{ flex: 1, gap: 4 }}><Text style={[styles.h2, { fontSize: 21, lineHeight: 29 }]}>Guest profile</Text><Text style={styles.muted}>Your space to explore and create.</Text></View>
       </View>
       <View style={{ gap: 10 }}>
-        <Text style={styles.muted}>Sign in to save to your account, upload media and submit a campaign. Your device drafts stay here.</Text>
+        <Text style={[styles.muted, { fontSize: 13, lineHeight: 20 }]}>Sign in for account drafts, uploads and submission. Your device drafts stay here.</Text>
         <Button title="Sign in" onPress={() => beginAuth("login")} />
         <Button title="Create account" variant="secondary" onPress={() => beginAuth("register")} />
       </View>
@@ -255,8 +253,8 @@ export default function Profile() {
     </View>
   </Screen>;
 
-  return <Screen key={`${section}:${focusedPayment?.id || ""}`}>
-    {section === "Overview" ? <View style={{ gap: 14 }}>
+  return <Screen compact key={`${section}:${focusedPayment?.id || ""}`}>
+    {section === "Overview" ? <View style={{ gap: 10 }}>
       {(session.onboarding === "welcome" || !!session.onboardingError) && <View style={{ gap: 8 }}>
         <Notice>{session.onboardingError || "You're signed in. Save your welcome preference to continue to Campaign."}</Notice>
         <Button title="Continue to Campaign" loading={busy} onPress={() => { void (async () => {
@@ -267,11 +265,11 @@ export default function Profile() {
           finally { setBusy(false); }
         })(); }} />
       </View>}
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 14, paddingHorizontal: 3, paddingBottom: 2 }}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Edit profile photo" onPress={() => open("Edit")}><ProfilePhoto user={me.data?.user || session.user} /></Pressable>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 3 }}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Edit profile photo" onPress={() => open("Edit")}><ProfilePhoto size={64} user={me.data?.user || session.user} /></Pressable>
         <View style={{ flex: 1, gap: 4 }}>
           <Text accessibilityRole="header" style={[styles.h2, { fontSize: 20, lineHeight: 27 }]}>{me.data?.user.name || session.user.name}</Text>
-          <Text style={[styles.muted, { fontSize: 12, lineHeight: 19 }]}>{session.user.role === "reviewer" ? "Reviewer · Creator · Backer" : "Creator · Backer · Changemaker"}</Text>
+          <Text style={[styles.muted, { fontSize: 12, lineHeight: 17 }]}>{session.user.role === "reviewer" ? "Reviewer · Creator · Backer" : "Creator · Backer · Changemaker"}</Text>
           <Pressable accessibilityRole="button" accessibilityLabel="Edit profile" onPress={() => open("Edit")} style={{ minHeight: 48, alignSelf: "flex-start", justifyContent: "center" }}>
             <Text style={{ color: colors.green, fontFamily: fonts.semibold, fontSize: 13 }}>Edit Profile</Text>
           </Pressable>
@@ -280,9 +278,9 @@ export default function Profile() {
       <View style={{ flexDirection: "row", gap: 8 }}>
         {[{ label: "Campaigns", value: own.length, next: "Created" }, { label: "Backed", value: successfulCampaignIds.size, next: "Backed" }, { label: "Saved", value: me.data?.saved.length || 0, next: "Saved" }].map(metric => (
           <Pressable key={metric.label} accessibilityRole="button" accessibilityLabel={`View ${metric.label.toLowerCase()}`} onPress={() => open(metric.next as ProfileSection)}
-            style={({ pressed }) => ({ flex: 1, minHeight: 68, borderRadius: 12, backgroundColor: pressed ? colors.mint : colors.subtle, alignItems: "center", justifyContent: "center", gap: 2, paddingVertical: 8, paddingHorizontal: 3 })}>
-            <Text style={{ fontFamily: fonts.bold, fontSize: 18, lineHeight: 25, fontVariant: ["tabular-nums"] }}>{me.data ? number(metric.value) : "—"}</Text>
-            <Text style={[styles.muted, { fontSize: 12, lineHeight: 18 }]}>{metric.label}</Text>
+            style={({ pressed }) => ({ flex: 1, minHeight: 56, borderRadius: 10, backgroundColor: pressed ? colors.mint : colors.subtle, alignItems: "center", justifyContent: "center", gap: 2, paddingVertical: 6, paddingHorizontal: 3 })}>
+            <Text style={{ fontFamily: fonts.bold, fontSize: 17, lineHeight: 23, fontVariant: ["tabular-nums"] }}>{me.data ? number(metric.value) : "—"}</Text>
+            <Text style={[styles.muted, { fontSize: 11, lineHeight: 16 }]}>{metric.label}</Text>
           </Pressable>
         ))}
       </View>
@@ -316,9 +314,9 @@ export default function Profile() {
         <Button title="Open Activity" icon="notifications-outline" onPress={() => router.push("/activity")} />
       </View> : section === "Payments" ? <View style={{ gap: 16 }}>
         <Text style={styles.muted}>Simulated payments for message distribution. No real money has moved.</Text>
-        <Text style={[styles.muted, { fontSize: 11, lineHeight: 17 }]}>Historical USD records. Preferred-currency figures are current reference equivalents, not the original recorded amount. {description}</Text>
+        <InfoAction title="Currency & original amounts" icon="cash-outline" testID="payment-currency-context"><Text style={[styles.muted, { fontSize: 13, lineHeight: 20 }]}>Original records stay in USD. Other currencies are current reference equivalents. {description}</Text></InfoAction>
         {focusedPayment?.userId === session.user.id ? <PrivatePayment paymentId={focusedPayment.id} payments={me.data.payments} userId={session.user.id} onClose={() => setFocusedPayment(null)} /> : !me.data.payments.length ? <Empty title="No contributions yet" body="Your contributions and private receipts will appear here." action={<Button title="Explore campaigns" onPress={() => router.push("/explore")} />} /> : me.data.payments.map(p => (
-          <View key={p.id} style={{ backgroundColor: colors.paper, borderWidth: 1, borderColor: colors.line, borderRadius: 14, padding: 16, gap: 11 }}>
+          <View key={p.id} style={{ backgroundColor: colors.paper, borderWidth: 1, borderColor: colors.line, borderRadius: 14, padding: 12, gap: 8 }}>
             <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", gap: 12 }}>
               <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: "60%", minWidth: 0, gap: 5 }}><Text style={[styles.body, { fontFamily: fonts.semibold }]}>{p.title}</Text><Text style={[styles.muted, { fontSize: 12 }]}>{p.status.charAt(0).toUpperCase() + p.status.slice(1)} · {new Date(p.createdAt).toLocaleDateString()}</Text></View>
               <Text style={[styles.h2, { fontSize: 20, lineHeight: 28, flexShrink: 1, fontVariant: ["tabular-nums"] }]}>{money(p.amount)}</Text>
@@ -337,19 +335,60 @@ export default function Profile() {
 
 function AccountRow({ icon, title, onPress }: { icon: React.ComponentProps<typeof Ionicons>["name"]; title: string; onPress: () => void }) {
   const { colors } = useTheme();
-  return <Pressable accessibilityRole="button" accessibilityLabel={title} onPress={onPress} style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 15, minHeight: 53, paddingVertical: 10, paddingHorizontal: 9, borderRadius: 9, backgroundColor: pressed ? colors.mint : "transparent" })}>
-    <Ionicons name={icon} size={22} color={colors.ink} /><Text style={{ flex: 1, fontSize: 14, lineHeight: 22, fontFamily: fonts.medium }}>{title}</Text><Ionicons name="chevron-forward" size={17} color={colors.muted} />
+  return <Pressable accessibilityRole="button" accessibilityLabel={title} onPress={onPress} style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 48, paddingVertical: 7, paddingHorizontal: 4, borderRadius: 9, backgroundColor: pressed ? colors.mint : "transparent" })}>
+    <Ionicons name={icon} size={20} color={colors.ink} /><Text style={{ flex: 1, fontSize: 13, lineHeight: 20, fontFamily: fonts.medium }}>{title}</Text><Ionicons name="chevron-forward" size={16} color={colors.muted} />
   </Pressable>;
+}
+
+/** Help topics are destinations; only genuine, short questions expand inline. */
+function HelpInformation({ config }: { config?: Config }) {
+  const { styles } = useTheme();
+  const [topic, setTopic] = useState<string | null>(null);
+  const triggers = useRef<Record<string, View | null>>({});
+  const returnFocus = useRef<View>(null);
+  const groups = [
+    { title: "Using Campaign", topics: [
+      { title: "How It Works", icon: "megaphone-outline" }, { title: "FAQs", icon: "help-circle-outline" },
+      { title: "Help", icon: "create-outline" }, { title: "Contact", icon: "chatbubble-outline" },
+    ] },
+    { title: "About & policies", topics: [
+      { title: "About", icon: "information-circle-outline" }, { title: "Partners", icon: "people-outline" },
+      { title: "Terms", icon: "document-text-outline" }, { title: "Privacy", icon: "lock-closed-outline" },
+      { title: "Community Guidelines", icon: "shield-checkmark-outline" },
+    ] },
+  ] as const;
+  const faqs = [
+    ["Do contributions go to the cause?", "No. Contributions fund advertising and message distribution, not direct donations to the cause."],
+    ["Is audience reach guaranteed?", "No. Reach is an estimate and depends on the audience and advertising delivery conditions."],
+    ["Are payments and advertising real?", "All checkout and advertising results in this prototype are simulated. No real money is charged or advertising purchased."],
+  ];
+  const policies = [
+    ["purpose", "What contributions fund"], ["fees", "Platform fees"], ["allocation", "Advertising allocation"],
+    ["refunds", "Refunds"], ["unspent", "Remaining funds"], ["partialFunding", "Partial funding"],
+  ];
+  return <View style={{ gap: 14 }}>
+    {groups.map(group => <View key={group.title} style={{ gap: 7 }}>
+      <Text accessibilityRole="header" style={[styles.muted, { fontSize: 12, lineHeight: 18 }]}>{group.title}</Text>
+      {group.topics.map(item => <SummaryLink key={item.title} title={item.title} icon={item.icon} compact
+        testID={`help-topic-${item.title.toLowerCase().replaceAll(" ", "-")}`} triggerRef={node => { triggers.current[item.title] = node; }}
+        onPress={() => { returnFocus.current = triggers.current[item.title]; setTopic(item.title); }} />)}
+    </View>)}
+    <InfoSheet visible={!!topic} title={topic || "Help"} onClose={() => setTopic(null)} returnFocusRef={returnFocus} testID="help-topic-sheet">
+      {topic === "FAQs" ? faqs.map(([question, answer]) => <Accordion compact key={question} title={question}><Text style={[styles.body, { fontSize: 13, lineHeight: 20 }]}>{answer}</Text></Accordion>)
+        : topic === "Terms" && config ? policies.map(([key, title]) => <View key={key} style={{ gap: 4 }}><Text style={[styles.body, { fontSize: 14, lineHeight: 21, fontFamily: fonts.semibold }]}>{title}</Text><Text style={[styles.muted, { fontSize: 13, lineHeight: 20 }]}>{config.policies[key]}</Text></View>)
+        : <Text style={[styles.body, { fontSize: 13, lineHeight: 21 }]}>{topic ? information[topic] : ""}</Text>}
+    </InfoSheet>
+  </View>;
 }
 
 function NotificationPreferences({ me, busy, run }: { me: Me; busy: boolean; run: (action: () => Promise<unknown>, success: string) => Promise<void> }) {
   const { colors, styles } = useTheme();
   return <View>
-    {(["campaigns", "payments"] as const).map(category => <View key={category} style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 12, minHeight: 86, paddingVertical: 12, borderBottomWidth: 1, borderColor: colors.line }}>
+    {(["campaigns", "payments"] as const).map(category => <View key={category} style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 12, minHeight: 64, paddingVertical: 8 }}>
       <View style={{ flex: 1, gap: 5 }}><Text style={[styles.body, { fontFamily: fonts.semibold }]}>{category === "campaigns" ? "Campaign updates" : "Payment updates"}</Text><Text style={[styles.muted, { fontSize: 13, lineHeight: 20 }]}>{category === "campaigns" ? "Reviews, funding and distribution" : "Contribution and refund status"}</Text></View>
       <Switch accessibilityLabel={category === "campaigns" ? "Campaign updates" : "Payment updates"} value={me.preferences.categories[category] !== false} disabled={busy} trackColor={{ false: colors.outline, true: colors.green }} thumbColor={colors.onPrimary} onValueChange={value => { void run(() => api("/me/preferences", { method: "PUT", body: { categories: { [category]: value } } }), `${category === "campaigns" ? "Campaign" : "Payment"} notification preference saved.`); }} />
     </View>)}
-    <View style={{ paddingVertical: 18, gap: 6 }}><Text style={[styles.body, { fontFamily: fonts.semibold }]}>Security notices · Always on</Text><Text style={[styles.muted, { fontSize: 13, lineHeight: 21 }]}>In-app delivery is active. Push and email are not connected in this prototype.</Text></View>
+    <View style={{ paddingVertical: 10, gap: 4 }}><Text style={[styles.body, { fontFamily: fonts.semibold }]}>Security notices · Always on</Text><Text style={[styles.muted, { fontSize: 12, lineHeight: 18 }]}>In-app updates only. Push and email are not connected in this prototype.</Text></View>
   </View>;
 }
 
@@ -589,12 +628,6 @@ function AppearanceSettings() {
   return (
     <View style={{ gap: 10 }}>
       <View style={{ gap: 3 }}>
-        <Text
-          accessibilityRole="header"
-          style={[styles.h2, { fontSize: 19, lineHeight: 26 }]}
-        >
-          Appearance
-        </Text>
         <Text style={styles.muted}>
           {preference === "system"
             ? `Follows your device · ${scheme === "dark" ? "Dark" : "Light"}`

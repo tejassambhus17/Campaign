@@ -78,12 +78,12 @@ export function AssessmentEditor({ campaignId, published, revisionPending }: { c
           <Button title="Discard unsaved edits and reload current assessment" variant="secondary" disabled={busy} onPress={() => { setRecord(null); setDirty(false); setFeedback(""); }} />
         </> : !record ? <Button title={workspace.data.completed ? "View recorded assessment" : workspace.data.draft ? "Resume assessment draft" : "Start assessment draft"} loading={busy} onPress={() => { void prepare(); }} /> : record.status === "published" ? <>
           <Notice>Assessment published · {record.total}/100 · {record.classification}. Published records are immutable.</Notice>
-          {record.criteria.map(criterion => <Accordion key={criterion.id} title={`${criterion.title} · ${criterion.points}/${criterion.maximum}`}>
+          {record.criteria.map(criterion => <Accordion compact key={criterion.id} title={`${criterion.title} · ${criterion.points}/${criterion.maximum}`}>
             {criterion.checks.map(check => <View key={check.id} style={{ gap: 6 }}><Text style={styles.h2}>{check.title}</Text><Text style={styles.body}>{check.reason}</Text>{check.evidence.map((evidence, index) => <Text key={index} style={styles.muted}>{evidence.visibility === "private" ? "Private reviewer evidence: " : "Public evidence: "}{evidence.reference} — {evidence.note}</Text>)}{!!check.missing.length && <Text style={styles.muted}>Missing: {check.missing.join(" · ")}</Text>}</View>)}
           </Accordion>)}
         </> : <>
           <Text style={styles.muted}>Public explanation, missing information and limitations are visible when published. Put confidential material only in evidence explicitly marked private.</Text>
-          {record.criteria.map(criterion => <Accordion key={criterion.id} title={`${criterion.title} · maximum ${criterion.maximum}`}>
+          {record.criteria.map(criterion => <Accordion compact keepMounted key={criterion.id} title={`${criterion.title} · maximum ${criterion.maximum}`}>
             {criterion.checks.map(check => {
               const definition = workspace.data.rubric.criteria.find(value => value.id === criterion.id)!.checks.find(value => value.id === check.id)!;
               const evidence = check.evidence[0];

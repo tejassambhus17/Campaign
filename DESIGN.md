@@ -1,4 +1,36 @@
 ---
+
+## Current information hierarchy — October 18
+
+The approved After reference guides compact Campaign transparency cards:
+Audience & Reach, Funding & Spending, Trust & Verification. Use small semantic
+icons, clear headings, actual one-line summaries and restrained forward chevrons.
+Substantial details have real parent-aware destinations; short context/options
+use bounded native sheets with safe areas, large-text reflow, dismissal and
+focus restoration. Keep genuine FAQs and editable reviewer groups as compact
+inline disclosures with clear chevrons; avoid repeated plus/divider strips and
+duplicate content. Functional radios/chips/selectors remain fully available.
+
+Preserve pure-black/neutral-charcoal Dark, mint interactions, existing Light,
+Manrope, current Home score tiles/buttons, native gesture paging and at least
+48dp touch controls. Required financial/review/privacy/simulation/source details
+stay accessible at the decision point. Use actual application data; never copy
+the reference's invented fees/scores/reach or imply independent verification.
+The inventory maps every reviewed/retained/changed control. [Current native
+comparison](artifacts/dropdown-hierarchy-20261018/README.md); [screenshots](artifacts/dropdown-hierarchy-20261018/native-confirmed).
+
+## Latest compact discovery follow-up — October 18
+
+Home Featured's score tile belongs at the photo's top right, aligned with Featured
+on the left. The normal tile is 74 dp square with a shield, number and Trust Score.
+Keep text scaling and larger-text reflow; omit the tile's Demo suffix and
+classification. Discover/Explore share the component. Campaign demo markers/full
+reviews retain provenance. Home has outlined Back and mint View buttons, side by
+side where they fit and stacked only when needed. Required creator is compact
+metadata; remove the old By footer. Preserve black/charcoal, existing Light,
+Manrope and 48 dp interactive targets. This is a focused correction.
+[Native comparison](artifacts/home-trust-polish-20261018/VISUAL_REVIEW.md).
+
 name: Campaign
 description: Approved native mint-and-charcoal composition with compact discovery, shared notifications and user-supplied Campaign branding
 colors:
@@ -273,6 +305,62 @@ components:
 
 # Design System: Campaign
 
+## Latest ten-screen simplification — October18
+
+The [latest reference](artifacts/final-ui-simplification-20261018/reference.png)
+governs Explore/detail, five-step creation, contribution, Trust, reports,
+Activity and Profile. Existing Home/Welcome/auth compositions remain. Preserve
+Manrope, pure-black/neutral-charcoal Dark, existing Light and mint accents.
+Essential information/actions lead, secondary details use accessible compact
+disclosures. Native48dp targets and font scaling remain. Explore has photo-led
+cards; detail has image/identity/summary/funding/backing before four native pages.
+Create actions precede a compact overview and real drafts. Editor fields/media,
+audience/estimate and editable Submit are concise with a persistent action dock.
+Trust uses a broader reference-style shield, score/status and explicit provenance.
+Reports lead with three real metrics and expand financial/distribution details.
+Profile uses compact identity/counts/direct rows; Activity keeps grouped history.
+
+The single correction batch closes Explore action wrapping, creator transition
+scroll and Trust proportions. [Bounded confirmation review](artifacts/final-ui-simplification-20261018/visual-review/VISUAL_REVIEW.accepted.md)
+uses actual Android images; reference data/miniature controls/iOS chrome are not
+copied as facts. Pixel identity, physical/full-a11y acceptance or an Impeccable
+engine verdict is not claimed. Earlier composition evidence below is historical.
+
+
+
+## Latest Home reference — October18
+
+The latest [Home reference](artifacts/home-reference-20261018/reference.png)
+supersedes earlier Home compositions only. Preserve the approved Manrope,
+pure-black/neutral-charcoal Dark, existing Light theme and mint accents. The
+reference's surrounding green stage, fictional92/Excellent score, supporters,
+avatars and verified checkmark are not app data or new theme requirements.
+
+The compact product promise and bell precede a rounded search field with an
+embedded divided filter target. Icon topic pills use actual categories. Featured
+Campaign uses a rounded full-photo card with compact featured/demo and truthful
+assessment badges, measured dark caption scrim, funding groups/progress, real
+creator and View/Back actions. Discover uses four real photo cards in two columns,
+with existing saved-campaign hearts, review badges and required metadata; narrow
+width or fontScale>=1.25 changes to one column. Touch targets stay >=48dp and
+font scaling stays enabled. Current title roles are approximately20–21/26,
+discovery14/19 and compact metadata10–12; do not shrink unrelated shared controls.
+
+Filtering opens over mounted Home using staged Apply/Cancel; ordinary search
+and topics update its actual feed. Explicit See all carries validated query,
+category, sort and backing eligibility to Explore. No new navigation or account
+architecture is introduced. Caption Y and artwork dimensions are measured so
+the gradient darkens before wrapped text on bright photographs. Mandatory Home
+product/estimate explanations remain below discovery.
+
+[Current native comparison](artifacts/home-reference-20261018/comparison-readable.png)
+and [bounded independent review](artifacts/home-reference-20261018/VISUAL_REVIEW.readable.md)
+cover inspected Dark, Light and font1.3 states on exact1.2.4/code7. Earlier Home
+captures are historical. The Impeccable engine was unavailable; project sources
+and documented fallback were used, not a regenerated engine verdict/sidecar.
+Physical/TalkBack and whole-app acceptance are not implied.
+
+
 ## Overview
 
 **Creative North Star: "Campaign App UI Showcase" with the later Create and Home references**
@@ -349,7 +437,10 @@ Buttons keep primary, secondary, ghost and danger variants, visible disabled/loa
 
 `UnreadBadge.tsx` is the shared visual badge for the Home bell and Activity icon: minimum width/height 16, four-unit horizontal padding, eight-unit radius and `99+` above 99. Zero has no visual badge. It consumes the same actual unread count; the enclosing 48-unit bell or tab announces the full count. Decorative badge text stays outside the accessibility tree, avoiding duplicate announcements and adjacent-tab overlap.
 
-### Home and Explore
+### Historical Home composition and preserved Explore behavior
+
+The October18 Home section above supersedes the Home-specific layout/filter
+details in the following historical implementation notes.
 
 The later Home-only reference uses a restrained CAMPAIGN brand label, 22/26 Good ideas deserve to be heard headline, short discovery subtitle and bordered bell. The Home container uses 16-unit gutters, six-unit top padding and ten-unit groups. The shorter Search campaigns… placeholder stays within a shared search/filter height of `max(48, ceil(19 × fontScale + 20))`;  the latter opens Explore with current search/All category and its existing filter/sort panel expanded. Categories begin All, Environment, Health, Education, Public Policy, then retain the remaining categories in the horizontal strip. In the spotlight has a 17/23 section title and See all discovery action. The supplied logo asset remains unchanged elsewhere.
 

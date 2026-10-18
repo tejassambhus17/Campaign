@@ -95,6 +95,7 @@ export function Reviewer() {
               const targets = exceptionalTargets[state] || [];
               return (
                 <Accordion
+                  compact
                   key={c.id}
                   title={`${c.title} · ${c.status}`}
                   initiallyOpen={c.status === "Submitted for Review"}
@@ -296,7 +297,7 @@ export function Reviewer() {
                       onPress={() => router.push(`/explore/${c.id}/report`)}
                     />
                     {!!targets.length && (
-                      <Accordion title="Exceptional campaign outcomes">
+                      <Accordion compact keepMounted title="Exceptional campaign outcomes">
                         <Field
                           label="Reason for exceptional outcome"
                           value={notes[c.id] || ""}

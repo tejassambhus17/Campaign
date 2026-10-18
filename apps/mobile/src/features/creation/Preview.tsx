@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { Linking, Pressable, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
-  Accordion,
   Notice,
   Picture,
   Text,
   fonts,
   useTheme,
 } from "../../components/ui";
+import { InfoAction } from "../../components/Information";
 import {
   Campaign,
   Config,
@@ -108,7 +108,7 @@ export function StoryPreview({
     }
   }
   return (
-    <View style={{ gap: 20 }}>
+    <View style={{ gap: 14 }}>
       {!!draft.storyHeadline &&
         draft.storyHeadline.trim() !== campaignHeader?.title.trim() && (
           <Text
@@ -213,10 +213,8 @@ export function StoryPreview({
         </Text>
       )}
       {!!draft.sources.length && (
-        <Accordion
-          title={`Sources & evidence (${draft.sources.length})`}
-          initiallyOpen
-        >
+        <View style={{ gap: 8 }}>
+          <Text accessibilityRole="header" style={{ fontSize: 15, lineHeight: 22, fontWeight: "700", color: colors.ink }}>Sources & evidence ({draft.sources.length})</Text>
           <Text style={styles.muted}>
             {campaignHeader
               ? "Public sources provided by the creator for context and evidence."
@@ -258,17 +256,17 @@ export function StoryPreview({
               </Text>
             </Pressable>
           ))}
-        </Accordion>
+        </View>
       )}
       {!!linkError && <View accessibilityLiveRegion="polite"><Notice tone="error">{linkError} The source URL remains visible above so you can copy it.</Notice></View>}
     </View>
   );
 }
 
-export function FundingPolicies({ config }: { config?: Config }) {
+export function FundingPolicies({ config, initiallyOpen = false }: { config?: Config; initiallyOpen?: boolean }) {
   const { colors, styles } = useTheme();
   return (
-      <Accordion title="Funding policies & campaign rules" initiallyOpen>
+      <InfoAction title="Funding policies & campaign rules" summary="Fees, refunds, unspent funds and review conditions" icon="document-text-outline" initiallyOpen={initiallyOpen} testID="creation-funding-policies">
         <Text style={styles.body}>
           Demo policy · No real payments or advertisements. Contributions
           support distribution of this message and are never paid directly to
@@ -297,7 +295,7 @@ export function FundingPolicies({ config }: { config?: Config }) {
           approval is required before publication; funding completion does not
           launch advertising automatically.
         </Text>
-      </Accordion>
+      </InfoAction>
   );
 }
 
@@ -364,11 +362,8 @@ export function CampaignPreview({
         )}
       </View>
       }
-      <Text style={styles.muted}>
-        Draft preview · Approval is required before publication. Contributions fund message distribution. Story and advertising assets remain separate.
-      </Text>
-      <View style={{ gap: 12 }}>
-        <Text style={styles.h2}>Audience & distribution</Text>
+      <Text style={[styles.muted, { fontSize: 11, lineHeight: 17 }]}>Draft preview · approval is required before publication. No live advertising.</Text>
+      <InfoAction title="Audience & distribution" summary={`${draft.geography || "Locations not set"} · ${draft.channels.length} channels · ${draft.durationDays} days`} icon="people-outline" testID="creation-preview-audience">
         <Text style={styles.body}>
           {draft.geography || "Geography not set"}
           {draft.interests ? ` · ${draft.interests}` : ""}
@@ -393,16 +388,8 @@ export function CampaignPreview({
           These are your proposed settings. The platform may finalize targeting,
           placements, and allocation during review.
         </Text>
-      </View>
-      <View
-        style={{
-          borderTopWidth: 1,
-          borderColor: colors.line,
-          paddingTop: 20,
-          gap: 12,
-        }}
-      >
-        <Text style={styles.h2}>Funding review</Text>
+      </InfoAction>
+      <InfoAction title="Funding review" summary={draft.goal ? `${money(draft.goal)} goal · ${funding ? `Est. ${number(funding.reach)} people` : "Estimate unavailable"}` : "Choose your funding goal at Submit"} icon="wallet-outline" testID="creation-preview-funding">
         <Text style={[styles.muted, { fontSize: 11, lineHeight: 17 }]}>{description}</Text>
         <View
           style={{
@@ -440,7 +427,8 @@ export function CampaignPreview({
         <Text style={styles.muted}>
           {config ? `Demo model: ${config.peoplePerAdDollar} people per advertising dollar after the ${(config.feeRate * 100).toFixed(0)}% fee. Reach depends on prices, inventory, targeting, delivery, and performance; it is never guaranteed.` : "Connect to load current fees, funding policies and estimate assumptions. Your draft remains editable; no fee or audience estimate is assumed."}
         </Text>
-      </View>
+        <Text style={styles.muted}>Contributions fund message distribution, not direct donations. Story and advertising assets remain separate.</Text>
+      </InfoAction>
       <FundingPolicies config={config} />
     </View>
   );

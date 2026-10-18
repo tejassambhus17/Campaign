@@ -1,7 +1,87 @@
 # Campaign Amplification Hackathon: initialization guide
 
+## Current startup — information hierarchy / 1.4.0 / code 10
+
+Continue in `E:\Campaign` using the existing Expo/native toolchain, dedicated key,
+package identity and verified HTTPS configuration. This frontend hierarchy pass
+adds no dependency, migration, provider setup or backend rollout. Preserve older
+APKs, public/user data and pinned native/PDF patches; use a fresh artifact tag.
+
+Current artifact: [artifacts/dropdown-hierarchy-20261018/Campaign.apk](artifacts/dropdown-hierarchy-20261018/Campaign.apk), 68811090 bytes,
+SHA-256 `CB08EDF303BA6EB7B9720F21BE4E2879C8179CDB7D19ECCFAC91024908953397`. Source: 398 frontend tests,
+398 passed,0 failed/skipped; TypeScript exit0; ESLint exit0,0 warnings.
+Package inspection: 20/20 pass. Native scope: owned API36 x86_64 emulator, with per-binary scopes;
+result: named checks pass; physical/human/full-app acceptance pending. [Evidence](artifacts/dropdown-hierarchy-20261018/README.md) and
+[screenshots](artifacts/dropdown-hierarchy-20261018/native-confirmed) record exact artifact binding and limits.
+No unperformed physical/human/full-app check is inferred.
+
+## Historical startup — compact discovery / 1.3.1 / code 9
+
+Continue in E:\Campaign with the existing setup, key and toolchain. These frontend
+corrections need no dependency, cloud setup or migration. Preserve previous APKs
+and pinned native patches; future builds require a fresh tag.
+
+[Campaign.apk](artifacts/home-trust-polish-20261018/Campaign.apk) is version
+1.3.1 / code 9, signed by the dedicated Campaign key, with ARM64 and x86_64 native
+libraries. It is 68,787,214 bytes; SHA-256 `C8CC281D802AA0FC5671A61B2B8D31ED8ABB9C77D98AF1BF44716F4DD1C5A3EC`.
+Package identity, approved installer/splash logo, embedded Hermes, native patches
+and HTTPS backend remain. Final source passes 358 tests, TypeScript and full
+src/plugins ESLint; 20/20 package checks pass. The exact
+final APK received a same-key update and cold launch in 1118 ms on the owned
+API 36 emulator without Metro or reverse forwarding. [Evidence and limits](artifacts/home-trust-polish-20261018/README.md).
+
+Performance receipts use the first candidate. The final 74 dp badge correction
+has separate exact-binary confirmation and was not benchmarked again.
+
+The POCO was not touched. Physical release verification remains pending because
+its installed Debug signer differs from the dedicated release key. No phone
+uninstall, storage clear or security bypass, backend change, migration, seed,
+provider change, billing, push, recording or submission occurred. Human testing
+remains pending because no unfamiliar tester is available. Whole-app, TalkBack,
+all-device/font/network and sustained physical performance acceptance is separate.
+
+## Historical startup — final UI simplification / 1.3.0 / code8
+
+Continue in `E:\Campaign` with the existing Expo/FastAPI setup and dedicated
+release workflow. No new dependency, migration, seed, provider or deployment is
+needed. Preserve pinned Print/core patches and build guards.
+
+[Campaign.apk](artifacts/final-ui-simplification-20261018/Campaign.apk): **1.3.0/code8**, dedicated-signed universal
+**ARM64+x86_64**, 68,786,382 bytes, SHA256 `9F3DF3FF0B12743154B5B443A4A487D9047C184B5991CF33B96F0E2888922022`.
+Package, approved installer/splash logo, minAPI24/target36, embedded Hermes,
+current HTTPS backend and dedicated certificate are preserved.
+
+349 frontend tests, TypeScript/full-source ESLint,20 package checks and the named
+confirmation emulator checks pass. [Evidence/commands/limits](artifacts/final-ui-simplification-20261018/README.md) distinguish
+the initial candidate from the corrected installed APK. Prior APKs remain.
+Physical release testing remains pending: the authorized POCO retains an
+incompatible Debug signer. No phone update, uninstall, storage clear or bypass
+occurred. Unfamiliar-user testing remains pending because no tester is available.
+TalkBack, every device/font/network state, sustained performance and a full new
+account/payment/upload journey were not tested in this UI pass. Earlier video,
+payment, cloud and PDF-delivery evidence retains its exact build scope; no new
+video or external submission occurred.
+
+## Historical startup — Home reference / 1.2.4 / code7
+
+Continue in `E:\Campaign` with the existing Expo/FastAPI architecture. The newest
+[Campaign.apk](artifacts/home-reference-20261018/Campaign.apk) contains ARM64 and
+x86_64, the unchanged dedicated signer, embedded Hermes and current HTTPS backend.
+No new dependencies, cloud deployment, migration or seed was needed. Existing
+Print/core source patches and release build guards remain mandatory.
+
+[Handoff and commands](artifacts/home-reference-20261018/README.md) record the
+330 frontend tests, TypeScript/ESLint, 20 package checks and 13 focused native
+Home checks. The API36 owned emulator ran the exact accepted universal APK.
+Current screenshots are `*readable.png` in the task's native folder; earlier
+candidate screenshots are retained as history. Phone installation remains
+pending because its existing Debug certificate differs. Never uninstall/clear
+phone data to make this release install. The older 1.2.3 package and video are
+preserved and do not demonstrate the new Home.
+
+
 <!-- current-code6-evidence -->
-## Current startup — 1.2.3 / code6
+## Historical startup — 1.2.3 / code6
 
 Continue in E:\Campaign; no reset, new provider or migration is needed. Current
 signed APK and evidence: [RELEASE_READINESS.md](RELEASE_READINESS.md).

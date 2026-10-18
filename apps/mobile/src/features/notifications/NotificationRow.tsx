@@ -50,14 +50,15 @@ export function NotificationRow({
   const expanded = expandedId === item.id;
   const [textWidth, setTextWidth] = useState(0);
   const [measurement, setMeasurement] = useState<TextMeasurement | null>(null);
-  const bodyLines = compact ? 2 : 3;
-  const measurementKey = JSON.stringify([item.id, item.title, title, item.body, compact, unread, textWidth, fontScale, scheme]);
+  const history = presentation === "history";
+  const bodyLines = compact || history ? 2 : 3;
+  const measurementKey = JSON.stringify([item.id, item.title, title, item.body, compact, presentation, unread, textWidth, fontScale, scheme]);
   const currentMeasurementKey = useRef(measurementKey);
   currentMeasurementKey.current = measurementKey;
   const measured = measurement?.key === measurementKey ? measurement.overflow : {};
   const overflowing = Object.values(measured).some(Boolean);
   const canDisclose = expanded || overflowing;
-  const headingStyle: TextStyle = { color: colors.ink, fontSize: compact ? 13 : 14, lineHeight: compact ? 18 : 20, fontWeight: unread ? "700" : "600", letterSpacing: -0.15 };
+  const headingStyle: TextStyle = { color: colors.ink, fontSize: compact || history ? 13 : 14, lineHeight: compact ? 18 : history ? 19 : 20, fontWeight: unread ? "700" : "600", letterSpacing: -0.15 };
   const campaignStyle: TextStyle = { color: colors.muted, fontSize: 12, lineHeight: 17, fontWeight: "500" };
   const bodyStyle: TextStyle = { color: colors.text, fontSize: 12, lineHeight: 18 };
 
@@ -73,7 +74,7 @@ export function NotificationRow({
   }
   return (
     <View style={{ flexDirection: "row", gap: 8, borderBottomWidth: presentation === "history" ? 0 : 1, borderBottomColor: colors.line, backgroundColor: presentation === "history" ? "transparent" : unread ? colors.paper : "transparent" }}>
-      <View style={{ flex: 1, paddingLeft: compact ? 12 : 0, paddingTop: 12, paddingBottom: 4 }}>
+      <View style={{ flex: 1, paddingLeft: compact ? 12 : 0, paddingTop: history ? 8 : 12, paddingBottom: history ? 2 : 4 }}>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`${unread ? "Unread. " : ""}${item.title}. ${title ? `${title}. ` : ""}${item.body}. ${activityTime(item.createdAt)}. ${action.title}.`}
@@ -81,7 +82,7 @@ export function NotificationRow({
           onPress={onOpen}
           style={({ pressed }) => ({ flexDirection: "row", alignItems: "flex-start", gap: 11, minHeight: 48, opacity: pressed ? 0.65 : 1 })}
         >
-          <View accessible={false} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: unread ? colors.mint : colors.surfaceRaised, alignItems: "center", justifyContent: "center", marginTop: 2 }}>
+          <View accessible={false} style={{ width: 36, height: 36, borderRadius: 18, borderWidth: history ? 1 : 0, borderColor: colors.line, backgroundColor: history ? "transparent" : unread ? colors.mint : colors.surfaceRaised, alignItems: "center", justifyContent: "center", marginTop: 2 }}>
             <Ionicons name={notificationIcon(item)} size={19} color={unread ? colors.green : colors.muted} />
           </View>
           <View onLayout={(event) => setTextWidth(event.nativeEvent.layout.width)} style={{ flex: 1, minWidth: 0, gap: 2 }}>

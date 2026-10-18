@@ -5,7 +5,7 @@ import { DraftIssue } from "./readiness";
 
 type TargetContext = {
   issue: DraftIssue | null;
-  register: (key: string, view: View | null, input?: TextInput | null, announcement?: View | null) => void;
+  register: (key: string, view: View | null, input?: TextInput | null, announcement?: View | null, sheet?: boolean) => void;
 };
 export const CreationTargets = createContext<TargetContext>({ issue: null, register: () => {} });
 
@@ -22,15 +22,15 @@ export function TargetGroup({ target, children }: { target: string; children: Re
   );
 }
 
-export function TargetField({ target, ...props }: React.ComponentProps<typeof Field> & { target: string }) {
+export function TargetField({ target, sheet = false, ...props }: React.ComponentProps<typeof Field> & { target: string; sheet?: boolean }) {
   const { issue, register } = useContext(CreationTargets);
   const { colors, styles } = useTheme();
   const anchor = useRef<View>(null);
   const input = useRef<TextInput>(null);
   return (
-    <View ref={(node) => { anchor.current = node; register(target, node, input.current); }} onLayout={() => register(target, anchor.current, input.current)} style={{ gap: 7 }}>
+    <View ref={(node) => { anchor.current = node; register(target, node, input.current, null, sheet); }} onLayout={() => register(target, anchor.current, input.current, null, sheet)} style={{ gap: 7 }}>
       {issue?.field === target && <Text accessibilityRole="alert" accessibilityLiveRegion="polite" style={[styles.body, { color: colors.green }]}>{issue.message}</Text>}
-      <Field {...props} inputRef={(node) => { input.current = node; register(target, anchor.current, node); }} />
+      <Field {...props} inputRef={(node) => { input.current = node; register(target, anchor.current, node, null, sheet); }} />
     </View>
   );
 }

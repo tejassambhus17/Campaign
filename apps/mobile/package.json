@@ -1,6 +1,6 @@
 {
   "name": "campaign-amplification",
-  "version": "1.2.3",
+  "version": "1.4.0",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
@@ -53,7 +53,10 @@
   "expo": {
     "autolinking": {
       "android": {
-        "buildFromSource": ["expo-modules-core", "expo-print"]
+        "buildFromSource": [
+          "expo-modules-core",
+          "expo-print"
+        ]
       }
     }
   },

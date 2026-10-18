@@ -117,10 +117,11 @@ function activityFixture({ selected = 'All', user = { id: 'fictional-owner' }, p
     selectFilter: value => events.push(['pill', value]), onPageSelected: value => events.push(['page', value]), onPageScrollStateChanged: value => events.push(['state', value]),
     recordStrip() {}, recordContent() {}, recordOffset() {}, recordFilter() {} };
   const component = load('../src/app/(tabs)/activity.tsx', {
-    react: { useMemo: fn => fn() }, 'react/jsx-runtime': { jsx, jsxs: jsx },
+    react: { useMemo: fn => fn(), useEffect() {}, useRef: initial => ({ current: initial }), useState: initial => [initial, () => undefined] }, 'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': { Platform: { OS: 'android' }, Pressable: 'Pressable', RefreshControl: 'RefreshControl', ScrollView: 'ScrollView', SectionList: 'SectionList', View: 'View' },
     'expo-router': { router: { push: value => events.push(['route', value]) } }, '@tanstack/react-query': { useQuery: () => ({ data: [], refetch: () => counters.refetch++ }) },
     '../../components/NativePager': { default: 'PagerView' }, '../../lib/api': {}, '../../lib/activity': activityModel,
+    '../../components/Information': { InfoSheet: 'InfoSheet', SummaryLink: 'SummaryLink' },
     '../../lib/session': { useSession: () => ({ user }), useMe: () => ({ data: { followed: [], campaigns: [] }, refetch: () => counters.refetch++ }),
       useActivity: () => { counters.activityQueries++; return query; }, useRefreshOnFocus() {} },
     '../../features/notifications/NotificationRow': { NotificationRow: 'NotificationRow' },
@@ -167,7 +168,7 @@ test('Activity pages retain per-filter empty/retry/refresh states and guests do 
     all.props.refreshControl.props.onRefresh(); assert.ok(h.counters.refetch >= 2);
   }
   const guest = activityFixture({ user: null }); assert.equal(nodes(guest.tree).some(node => node.type === 'PagerView'), false);
-  const empty = nodes(guest.tree).find(node => node.type === 'Empty'); assert.match(empty.props.body, /activity stays private/);
+  const empty = nodes(guest.tree).find(node => node.type === 'Empty'); assert.match(empty.props.body, /private campaign updates/);
   empty.props.action.props.onPress(); assert.deepEqual(guest.events, [['route', '/profile?auth=login']]);
   const account = activityFixture({ selected: 'Account' }), pager = nodes(account.tree).find(node => node.type === 'PagerView');
   assert.equal(pager.props.children[4].props.importantForAccessibility, 'auto'); assert.equal(pager.props.children[0].props.pointerEvents, 'none');

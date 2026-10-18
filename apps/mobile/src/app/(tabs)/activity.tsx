@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Platform,
   Pressable,
@@ -10,7 +10,7 @@ import {
 import { Href, router } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import PagerView from "../../components/NativePager";
-import { api } from "../../lib/api";
+import { api, captureApiSession } from "../../lib/api";
 import { Campaign } from "../../lib/types";
 import {
   ActivityFilter,
@@ -26,10 +26,10 @@ import {
 import { NotificationRow } from "../../features/notifications/NotificationRow";
 import { useNotificationActions } from "../../features/notifications/useNotificationActions";
 import { activityPages, useActivityPages } from "../../features/notifications/useActivityPages";
+import { InfoSheet, SummaryLink } from "../../components/Information";
 import {
   Text,
   useTheme,
-  Accordion,
   Button,
   IconButton,
   Empty,
@@ -43,6 +43,9 @@ import {
 export default function Activity() {
   const { colors } = useTheme();
   const { user } = useSession();
+  const [followingOwner, setFollowingOwner] = useState<string | null>(null);
+  const followingTrigger = useRef<View>(null);
+  useEffect(() => { setFollowingOwner(null); }, [user?.id]);
   const me = useMe();
   const q = useActivity();
   const actions = useNotificationActions();
@@ -63,18 +66,18 @@ export default function Activity() {
   const heading = (
     <Text
       accessibilityRole="header"
-      style={{ color: colors.ink, fontSize: 24, lineHeight: 30, fontWeight: "700", letterSpacing: -0.45 }}
+      style={{ color: colors.ink, fontSize: 22, lineHeight: 28, fontWeight: "700", letterSpacing: -0.35 }}
     >
       Activity
     </Text>
   );
   if (!user) {
     return (
-      <Screen>
+      <Screen compact>
         {heading}
         <Empty
           title="Your updates, in one place"
-          body="Sign in for review decisions, funding milestones and receipts. Your activity stays private."
+          body="Sign in for private campaign updates and contribution receipts."
           action={<Button title="Sign in" onPress={() => router.push("/profile?auth=login")} />}
         />
       </Screen>
@@ -89,7 +92,7 @@ export default function Activity() {
     if (me.data?.followed.length) void campaigns.refetch();
   }
   const header = (
-    <View style={{ gap: 8 }}>
+    <View style={{ gap: 6 }}>
       <View
         style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 }}
       >
@@ -169,9 +172,9 @@ export default function Activity() {
       )}
     </View>
   );
-  const following = !!me.data?.followed.length && (
-    <View style={{ marginTop: 20 }}>
-      <Accordion title={`Following ${me.data.followed.length} ${me.data.followed.length === 1 ? "campaign" : "campaigns"}`}>
+  const followingTitle = `Following ${me.data?.followed.length || 0} ${me.data?.followed.length === 1 ? "campaign" : "campaigns"}`;
+  const followingContent = !!me.data?.followed.length && (
+    <View style={{ gap: 12 }}>
         {campaigns.isPending ? (
           <ActivityLoading />
         ) : campaigns.isError ? (
@@ -187,7 +190,11 @@ export default function Activity() {
                 <Button
                   title="Read campaign"
                   variant="ghost"
-                  onPress={() => router.push(`/explore/${encodeURIComponent(id)}`)}
+                  onPress={() => {
+                    const current = captureApiSession();
+                    setFollowingOwner(null);
+                    requestAnimationFrame(() => { if (current()) router.push(`/explore/${encodeURIComponent(id)}`); });
+                  }}
                 />
               </View>
             ) : (
@@ -197,7 +204,6 @@ export default function Activity() {
             );
           })
         )}
-      </Accordion>
     </View>
   );
   const empty = (pageFilter: ActivityFilter) => q.isPending ? (
@@ -226,7 +232,7 @@ export default function Activity() {
     <Screen scroll={false}>
       <ScrollView
         style={{ flexGrow: 0, maxHeight: "55%" }}
-        contentContainerStyle={{ width: "100%", maxWidth: 640, alignSelf: "center", paddingHorizontal: 18, paddingTop: 18, paddingBottom: 4 }}
+        contentContainerStyle={{ width: "100%", maxWidth: 640, alignSelf: "center", paddingHorizontal: 18, paddingTop: 10, paddingBottom: 2 }}
         keyboardShouldPersistTaps="handled"
       >
         {header}
@@ -261,8 +267,8 @@ export default function Activity() {
         initialNumToRender={8}
         maxToRenderPerBatch={8}
         windowSize={7}
-        contentContainerStyle={{ width: "100%", maxWidth: 640, alignSelf: "center", paddingHorizontal: 18, paddingBottom: 28, flexGrow: 1 }}
-        ListFooterComponent={following || null}
+        contentContainerStyle={{ width: "100%", maxWidth: 640, alignSelf: "center", paddingHorizontal: 18, paddingBottom: 20, flexGrow: 1 }}
+        ListFooterComponent={me.data?.followed.length ? <View style={{ marginTop: 12 }}><SummaryLink title={followingTitle} summary="Campaigns you follow" icon="notifications-outline" compact testID={`activity-following-${page.value.toLowerCase()}`} triggerRef={navigation.selectedIndex === index ? followingTrigger : undefined} onPress={() => setFollowingOwner(user.id)} /></View> : null}
         refreshControl={Platform.OS === "web" ? undefined : (
           <RefreshControl
             refreshing={q.isRefetching}
@@ -273,7 +279,7 @@ export default function Activity() {
           />
         )}
         renderSectionHeader={({ section }) => (
-          <Text accessibilityRole="header" style={{ color: colors.muted, fontSize: 12, lineHeight: 18, fontWeight: "600", paddingTop: 16, paddingBottom: 6 }}>
+          <Text accessibilityRole="header" style={{ color: colors.muted, fontSize: 12, lineHeight: 18, fontWeight: "600", paddingTop: 12, paddingBottom: 4 }}>
             {section.title}
           </Text>
         )}
@@ -295,6 +301,9 @@ export default function Activity() {
       />
       </View>)}
       </PagerView>
+      <InfoSheet visible={followingOwner === user.id} title={followingTitle} onClose={() => setFollowingOwner(null)} returnFocusRef={followingTrigger} testID="activity-following-sheet">
+        {followingContent}
+      </InfoSheet>
     </Screen>
   );
 }

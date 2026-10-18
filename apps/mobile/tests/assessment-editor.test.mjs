@@ -56,6 +56,15 @@ test('opening review UI never creates an assessment; explicit start and exact co
   assert.equal(h.get('title', 'Published version').props.disabled, true); // unsaved hydration cannot be silently discarded by changing target
 });
 
+test('editable criterion disclosures retain their controls while collapsed', async () => {
+  const h = harness();
+  await h.open(); await h.prepare();
+  const criterion = nodes(h.render()).find(node => node.type === 'Accordion');
+  assert.equal(criterion.props.keepMounted, true);
+  assert.equal(criterion.props.compact, true);
+  assert.ok(nodes(criterion).some(node => node.props.label === 'Public reason for this result'));
+});
+
 test('save retains explicit evidence/privacy/missing fields and never writes campaign state or client score', async () => {
   const h = harness(); await h.open(); await h.prepare();
   h.get('accessibilityLabel', 'Source support: check performed').props.onValueChange(true);

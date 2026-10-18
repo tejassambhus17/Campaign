@@ -12,6 +12,7 @@ import { audienceCampaign } from "../../../../lib/public-campaign";
 import { Text, Button, IconButton, PageHeader, fonts, ErrorState, Loading, Notice, Pill, Screen, useTheme } from "../../../../components/ui";
 import { CampaignCover, Disclosures, Funding, ShareButton } from "../../../../features/campaign";
 import { ContributionPresets } from "../../../../features/contributions/ContributionPresets";
+import { InfoSheet, SummaryLink } from "../../../../components/Information";
 
 export default function BackCampaign() {
   const { colors, styles, scheme } = useTheme();
@@ -33,8 +34,6 @@ export default function BackCampaign() {
   const [showPolicies, setShowPolicies] = useState(false);
   const [receipt, setReceipt] = useState<Record<string, unknown> | null>(null);
   const scroll = useRef<ScrollView>(null);
-  const policyPosition = useRef(0);
-  const scrollToPolicies = useRef(false);
   const key = useRef("");
   const paying = useRef(false);
   const value = usdFromInput(amount, moneySnapshot) ?? NaN;
@@ -44,6 +43,7 @@ export default function BackCampaign() {
   const goBack = useCallback(() => {
     if (paying.current) return;
     Keyboard.dismiss();
+    setShowPolicies(false);
     if (stage === "review") setStage("choose");
     else router.dismissTo(`/explore/${id}`);
   }, [id, stage]);
@@ -83,11 +83,6 @@ export default function BackCampaign() {
   }
   function openPolicies() {
     Keyboard.dismiss();
-    if (showPolicies) {
-      scroll.current?.scrollTo({ y: policyPosition.current, animated: true });
-      return;
-    }
-    scrollToPolicies.current = true;
     setShowPolicies(true);
   }
   if (q.isPending) return <Screen><Loading /></Screen>;
@@ -117,17 +112,22 @@ export default function BackCampaign() {
   ];
   return (
     <Screen scroll={false}>
+      <InfoSheet visible={showPolicies && stage !== "result"} title="Funding & currency details" onClose={() => setShowPolicies(false)} testID="contribution-funding-details">
+        <Text style={[styles.muted, { fontSize: 12, lineHeight: 19 }]}>Backing “{c.title}”. {referenceDescription(moneySnapshot)}</Text>
+        {moneySnapshot.currency === "INR" && <Text style={[styles.muted, { fontSize: 12, lineHeight: 19 }]}>Canonical contribution: {formatNativeMoney(valid ? value : 0)} USD. Conversion rounds once to USD cents.</Text>}
+        <Disclosures campaign={c} config={config.data} />
+      </InfoSheet>
       <ScrollView ref={scroll} key={stage} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={{ width: "100%", maxWidth: 640, alignSelf: "center", paddingHorizontal: 20, paddingTop: 4, paddingBottom: 24, gap: 16 }}>
+        <View style={{ width: "100%", maxWidth: 640, alignSelf: "center", paddingHorizontal: 18, paddingTop: 0, paddingBottom: 20, gap: 14 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: -10 }}>
             <IconButton label={stage === "review" ? "Back to contribution amount" : "Back to campaign"} icon="chevron-back" disabled={busy} onPress={goBack} />
             {stage === "choose" && <IconButton label="Funding policies and refunds" icon="ellipsis-horizontal" onPress={openPolicies} />}
           </View>
-          <View style={{ gap: 8 }}>
-            <Text accessibilityRole="header" style={{ fontFamily: fonts.bold, fontSize: 25, lineHeight: 33, letterSpacing: -0.5, color: colors.ink }}>
+          <View style={{ gap: 6 }}>
+            <Text accessibilityRole="header" style={{ fontFamily: fonts.bold, fontSize: 24, lineHeight: 32, letterSpacing: -0.5, color: colors.ink }}>
               {stage === "choose" ? "Make an impact" : stage === "review" ? "Review contribution" : success ? "Contribution confirmed" : `Payment ${payment?.status}`}
             </Text>
-            {stage === "choose" && <Text style={{ fontSize: 14, lineHeight: 22, color: colors.muted }}>Your contribution helps amplify this message to more people.</Text>}
+            {stage === "choose" && <Text style={{ fontSize: 13, lineHeight: 20, color: colors.muted }}>Your contribution helps amplify this message to more people.</Text>}
           </View>
           {stage !== "choose" && <View style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingBottom: 4 }}>
             <View style={{ width: 58, height: 58, borderRadius: 12, overflow: "hidden" }}><CampaignCover campaign={c} height={58} /></View>
@@ -141,49 +141,40 @@ export default function BackCampaign() {
               <View style={{ gap: 7 }}>
                 <Text style={{ fontSize: 12, lineHeight: 18, color: colors.muted }}>Custom amount · {moneySnapshot.currency}</Text>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 12, borderWidth: 1, borderColor: !valid ? colors.red : amountFocused ? colors.focus : colors.line, backgroundColor: colors.paper, borderRadius: 12, paddingHorizontal: 16 }}>
-                  <Text style={{ fontSize: 21, color: colors.muted }}>{moneySnapshot.currency === "INR" ? "₹" : "$"}</Text>
-                  <TextInput accessibilityLabel={`Custom amount (${moneySnapshot.currency})`} value={amount} keyboardType="decimal-pad" keyboardAppearance={scheme} editable={!busy} onFocus={() => setAmountFocused(true)} onBlur={() => setAmountFocused(false)} onChangeText={(text) => { setAmount(text); key.current = ""; }} selectionColor={colors.primary} style={{ flex: 1, minHeight: 58, paddingVertical: 12, paddingHorizontal: 0, color: colors.ink, fontFamily: fonts.medium, fontSize: 21, lineHeight: 28 }} />
+                  <Text style={{ fontSize: 18, color: colors.muted }}>{moneySnapshot.currency === "INR" ? "₹" : "$"}</Text>
+                  <TextInput accessibilityLabel={`Custom amount (${moneySnapshot.currency})`} value={amount} keyboardType="decimal-pad" keyboardAppearance={scheme} editable={!busy} onFocus={() => setAmountFocused(true)} onBlur={() => setAmountFocused(false)} onChangeText={(text) => { setAmount(text); key.current = ""; }} selectionColor={colors.primary} style={{ flex: 1, minHeight: 52, paddingVertical: 10, paddingHorizontal: 0, color: colors.ink, fontFamily: fonts.medium, fontSize: 18, lineHeight: 25 }} />
                 </View>
                 {!valid && <Text accessibilityRole="alert" style={styles.error}>Enter {money(1)}–{money(10000)} with up to two decimal places (canonical demo limits: USD $1–$10,000).</Text>}
               </View>
-              <Text style={[styles.muted, { fontSize: 11, lineHeight: 18 }]}>{referenceDescription(moneySnapshot)}</Text>
-              {moneySnapshot.currency === "INR" && <Text style={[styles.muted, { fontSize: 12, lineHeight: 18 }]}>Canonical contribution: {formatNativeMoney(valid ? value : 0)} USD. Conversion rounds once to USD cents.</Text>}
               {(currency.preference !== moneySnapshot.currency || currency.rate?.date !== moneySnapshot.rate?.date) && <Button title={`Use current ${currency.preference} preference`} variant="ghost" disabled={busy || currency.loading || currency.snapshot.unavailable} onPress={() => { setAmount(inputForUsd(valid ? value : 25, currency.snapshot)); setMoneySnapshot(currency.snapshot); key.current = ""; }} />}
-              <View style={{ borderWidth: 1, borderColor: colors.line, backgroundColor: colors.paper, borderRadius: 12, padding: 16, gap: 12 }}>
+              <View style={{ backgroundColor: colors.paper, borderRadius: 12, padding: 14, gap: 10 }}>
                 {detailRows.map(([label, value]) => <View key={label} style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between", gap: 14 }}>
                   <Text style={{ flex: 1, fontSize: 12, lineHeight: 19, color: colors.muted }}>{label}</Text>
                   <Text style={{ flexShrink: 1, textAlign: "right", fontSize: 13, lineHeight: 19, fontWeight: "700", color: colors.ink }}>{value}</Text>
                 </View>)}
               </View>
-              <View style={{ borderWidth: 1, borderColor: colors.primary, backgroundColor: colors.mint, borderRadius: 14, padding: 16, flexDirection: "row", gap: 13, alignItems: "center" }}>
-                <Ionicons name="trending-up" size={30} color={colors.primary} />
+              <View style={{ borderWidth: 1, borderColor: colors.line, backgroundColor: colors.paper, borderRadius: 12, padding: 12, flexDirection: "row", gap: 10, alignItems: "flex-start" }}>
+                <Ionicons name="trending-up" size={22} color={colors.primary} />
                 <View style={{ flex: 1, gap: 5 }}>
                   <Text style={{ fontSize: 12, lineHeight: 19, color: colors.text }}>Your {money(currentQuote.amount)} could show this message to around {number(currentQuote.reach)} people.</Text>
                   <Text style={{ fontSize: 10, lineHeight: 16, color: colors.muted }}>Illustrative estimate. Actual results vary.</Text>
                 </View>
               </View>
-              <Text style={{ fontSize: 12, lineHeight: 19, color: colors.muted }}>Backing “{c.title}”. Funds pay for advertising, not a direct donation.</Text>
-              <Button title={showPolicies ? "Hide funding policies" : "Fees, refunds & funding policies"} variant="ghost" icon={showPolicies ? "chevron-up" : "chevron-down"} onPress={() => setShowPolicies(!showPolicies)} style={{ paddingHorizontal: 0, minHeight: 44 }} />
-              {showPolicies && <View onLayout={(event) => {
-                policyPosition.current = event.nativeEvent.layout.y;
-                if (scrollToPolicies.current) {
-                  scrollToPolicies.current = false;
-                  scroll.current?.scrollTo({ y: policyPosition.current, animated: true });
-                }
-              }}><Disclosures campaign={c} config={config.data} /></View>}
+              <Text style={{ fontSize: 11, lineHeight: 18, color: colors.muted }}>Funds pay for advertising, not a direct donation.</Text>
+              <SummaryLink compact title="Funding & currency details" summary="Refunds, remaining funds and the exchange-rate reference" icon="information-circle-outline" onPress={openPolicies} testID="contribution-funding-help" />
             </>
           ) : stage === "review" ? (
             <>
               <Funding campaign={c} config={config.data} compact />
-              <Text style={[styles.muted, { fontSize: 12, lineHeight: 18 }]}>Recorded total: {formatNativeMoney(currentQuote.total)} USD. {referenceDescription(moneySnapshot)} Each displayed equivalent is rounded independently; the USD breakdown is authoritative.</Text>
               <View style={{ backgroundColor: colors.paper, borderRadius: 14, padding: 16, gap: 13, borderWidth: 1, borderColor: colors.line }}>
                 {detailRows.map(([label, value]) => <View key={label} style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", gap: 14, paddingTop: label === "Total simulated payment" ? 12 : 0, borderTopWidth: label === "Total simulated payment" ? 1 : 0, borderColor: colors.line }}>
                   <Text style={{ flex: 1, fontSize: 13, lineHeight: 20, fontWeight: label === "Total simulated payment" ? "700" : "400", color: label === "Total simulated payment" ? colors.ink : colors.muted }}>{label}</Text>
                   <Text style={{ flexShrink: 1, textAlign: "right", fontWeight: "700", fontSize: 14, lineHeight: 20, color: colors.ink }}>{value}</Text>
                 </View>)}
               </View>
-              <View style={{ gap: 11 }}>
-                <Text style={{ ...styles.body, fontSize: 14, lineHeight: 22 }}>Your contribution pays for distribution of this message, not direct charitable support for the cause.</Text>
+              <Text style={[styles.muted, { fontSize: 11, lineHeight: 18 }]}>Recorded total: {formatNativeMoney(currentQuote.total)} USD. {referenceDescription(moneySnapshot)} Each equivalent is rounded independently; the USD breakdown is authoritative.</Text>
+              <View style={{ gap: 8 }}>
+                <Text style={{ ...styles.body, fontSize: 13, lineHeight: 20 }}>Contributions fund advertising, not direct donations.</Text>
                 <Text style={{ ...styles.muted, fontSize: 12, lineHeight: 20 }}>{config.data?.policies.refunds || "Demo refund policy: full simulated refund before promotion. After promotion, unspent net advertising funds are refunded proportionally; the platform fee is retained."}</Text>
                 <Text style={{ ...styles.muted, fontSize: 12, lineHeight: 20 }}>{config.data?.policies.unspent}{" "}{config.data?.policies.partialFunding}</Text>
                 <Text style={{ ...styles.muted, fontSize: 12, lineHeight: 20 }}>Selecting “Pay · demo” acknowledges these prototype funding terms. Your name stays private by default. No card information is needed.</Text>
@@ -227,7 +218,7 @@ export default function BackCampaign() {
       </ScrollView>
       {stage !== "result" && <View style={{ backgroundColor: colors.bg, borderTopWidth: 1, borderColor: colors.line }}>
         <View style={{ width: "100%", maxWidth: 640, alignSelf: "center", paddingHorizontal: 20, paddingTop: 8, paddingBottom: 8, gap: 6 }}>
-          <Button title={stage === "choose" ? "Continue to payment" : `Pay ${money(currentQuote.total)} · demo`} loading={busy} disabled={!valid || q.isError || publicState !== "Available for Funding"} onPress={stage === "choose" ? () => { Keyboard.dismiss(); setError(""); setReviewQuote(currentQuote); setReviewFeeRate(feeRate); setStage("review"); } : pay} style={{ minHeight: 48, paddingVertical: 10 }} />
+          <Button title={stage === "choose" ? "Continue to payment" : `Pay ${money(currentQuote.total)} · demo`} loading={busy} disabled={!valid || q.isError || publicState !== "Available for Funding"} onPress={stage === "choose" ? () => { Keyboard.dismiss(); setShowPolicies(false); setError(""); setReviewQuote(currentQuote); setReviewFeeRate(feeRate); setStage("review"); } : pay} style={{ minHeight: 48, paddingVertical: 10 }} />
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 5 }}><Ionicons name="shield-checkmark-outline" size={13} color={colors.muted} /><Text style={{ fontSize: 10, lineHeight: 16, color: colors.muted }}>Simulated checkout · no real money</Text></View>
         </View>
       </View>}

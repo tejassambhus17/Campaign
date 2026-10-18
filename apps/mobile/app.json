@@ -2,7 +2,7 @@
   "expo": {
     "name": "Campaign",
     "slug": "campaign-amplification",
-    "version": "1.2.3",
+    "version": "1.4.0",
     "orientation": "portrait",
     "icon": "./assets/brand/campaign-megaphone-transparent.png",
     "userInterfaceStyle": "automatic",
@@ -19,7 +19,7 @@
     },
     "android": {
       "predictiveBackGestureEnabled": false,
-      "versionCode": 6,
+      "versionCode": 10,
       "package": "com.campaignamplification.mobile",
       "adaptiveIcon": {
         "foregroundImage": "./assets/brand/campaign-megaphone-transparent.png",
@@ -53,14 +53,26 @@
       ],
       "expo-font",
       "expo-system-ui",
-      ["expo-navigation-bar", { "enforceContrast": false, "visibility": "visible" }],
-      ["expo-splash-screen", {
-        "backgroundColor": "#000000",
-        "image": "./assets/brand/campaign-megaphone-transparent.png",
-        "imageWidth": 144,
-        "resizeMode": "contain",
-        "dark": { "backgroundColor": "#000000", "image": "./assets/brand/campaign-megaphone-transparent.png" }
-      }],
+      [
+        "expo-navigation-bar",
+        {
+          "enforceContrast": false,
+          "visibility": "visible"
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#000000",
+          "image": "./assets/brand/campaign-megaphone-transparent.png",
+          "imageWidth": 144,
+          "resizeMode": "contain",
+          "dark": {
+            "backgroundColor": "#000000",
+            "image": "./assets/brand/campaign-megaphone-transparent.png"
+          }
+        }
+      ],
       "./plugins/withCampaignActivityResults.cjs",
       "./plugins/withCampaignPdfRendering.cjs",
       "./plugins/withCampaignBranding.cjs"

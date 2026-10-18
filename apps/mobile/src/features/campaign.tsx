@@ -7,9 +7,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { StoryPreview } from "./creation/Preview";
 import { Campaign, Config, estimate, number } from "../lib/types";
 import { audienceCampaign } from "../lib/public-campaign";
+import { CampaignTrustBadge } from "./transparency/DiscoveryTrustBadge";
 import {
   Text,
-  Accordion,
   Button,
   Notice,
   Progress,
@@ -51,7 +51,7 @@ export function Funding({ campaign: c, config, compact = false, showEstimate = t
     {showEstimate && <Text style={{ color: colors.muted, fontSize: compact ? 10 : 12, lineHeight: compact ? 14 : 18 }}>{config ? `Est. ${number(estimate(c.goal, config))} people at goal` : "Reach estimate unavailable"}</Text>}
   </View>;
 }
-export function CampaignCard({ campaign, config, compact = false }: { campaign: Campaign; config?: Config; compact?: boolean }) {
+export const CampaignCard = React.memo(function CampaignCard({ campaign, config, compact = false, presentation }: { campaign: Campaign; config?: Config; compact?: boolean; presentation?: "explore" }) {
   const { colors, styles } = useTheme();
   const { width, fontScale } = useWindowDimensions();
   const c = audienceCampaign(campaign);
@@ -60,6 +60,33 @@ export function CampaignCard({ campaign, config, compact = false }: { campaign: 
   const open = () => router.push(detailPath(c.id));
   const canBack = state === "Available for Funding";
   const back = () => router.push(`/explore/${c.id}/back`);
+  if (presentation === "explore") return <View testID="explore-campaign-card" style={{ borderWidth: 1, borderColor: colors.line, borderRadius: 14, overflow: "hidden", backgroundColor: colors.paper, marginBottom: 14 }}>
+    <View>
+      <Pressable accessibilityRole="button" accessibilityLabel={`Read ${c.title}. ${c.category}. By ${c.creatorName}. ${state}.`} onPress={open} style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}>
+        <CampaignCover campaign={c} height={Math.min(188, width * 0.43)} />
+      </Pressable>
+      <View pointerEvents="box-none" style={{ position: "absolute", top: 10, left: 10, right: 10, flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+        {c.featured || c.id.startsWith("demo_") ? <View style={{ minWidth: 0, flexShrink: 1, borderRadius: 8, backgroundColor: colors.primary, paddingHorizontal: 9, paddingVertical: 5 }}><Text style={{ color: colors.onPrimary, fontSize: 11, lineHeight: 16, fontWeight: "700" }}>{c.featured ? "Featured" : "Demo campaign"}{c.featured && c.id.startsWith("demo_") ? " · Demo" : ""}</Text></View> : <View style={{ flex: 1 }} />}
+        <CampaignTrustBadge campaign={c} testID={`explore-assessment-${c.id}`} />
+      </View>
+    </View>
+    <Pressable accessibilityRole="button" accessibilityLabel={`Read ${c.title}. ${c.category}. By ${c.creatorName}. ${state}.`} onPress={open} style={({ pressed }) => ({ paddingHorizontal: 13, paddingTop: 10, gap: 4, opacity: pressed ? 0.8 : 1 })}>
+      <Text style={{ fontSize: 17, lineHeight: 23, fontWeight: "700", color: colors.ink }} numberOfLines={2}>{c.title}</Text>
+      <Text style={{ color: colors.muted, fontSize: 11, lineHeight: 17 }} numberOfLines={2}>{c.category} · By {c.creatorName}</Text>
+      {!!c.summary && <Text style={{ color: colors.text, fontSize: 12, lineHeight: 18 }} numberOfLines={2}>{c.summary}</Text>}
+    </Pressable>
+    <View style={{ padding: 13, paddingTop: 9, gap: 10 }}>
+      <Funding campaign={c} config={config} compact showEstimate={false} />
+      <CampaignStats campaign={c} config={config} showTime />
+      <View style={{ flexDirection: "column", gap: 2 }}>
+        <Button title="View campaign" icon="arrow-forward" onPress={open} style={{ paddingVertical: 10 }} />
+        {canBack && <Pressable accessibilityRole="button" accessibilityLabel={`Back ${c.title}`} onPress={back} style={({ pressed }) => ({ minHeight: 48, paddingHorizontal: 8, paddingVertical: 8, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, opacity: pressed ? 0.65 : 1 })}>
+          <Text style={{ color: colors.primary, fontSize: 13, lineHeight: 19, fontWeight: "600", flexShrink: 1 }}>Back campaign</Text>
+          <Ionicons name="arrow-forward" size={16} color={colors.primary} />
+        </Pressable>}
+      </View>
+    </View>
+  </View>;
   if (compact) return <Pressable accessibilityRole="button" accessibilityLabel={`Read ${c.title}. ${c.category}. By ${c.creatorName}. ${state}. ${c.summary}`} onPress={open} style={({ pressed }) => ({ flexDirection: "row", gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderColor: colors.line, opacity: pressed ? 0.75 : 1 })}>
     <View style={{ width: width < 370 ? 86 : 96, borderRadius: 11, overflow: "hidden", alignSelf: "flex-start" }}><CampaignCover campaign={c} height={132} /></View>
     <View style={{ flex: 1, minWidth: 0, gap: 4 }}>
@@ -89,67 +116,65 @@ export function CampaignCard({ campaign, config, compact = false }: { campaign: 
       <Button title={canBack ? "Back this campaign" : "Read campaign"} onPress={canBack ? back : open} style={{ marginTop: 3 }} />
     </View>
   </Pressable>;
-}
+});
 export function Story({ campaign: c }: { campaign: Campaign }) {
-  const { styles } = useTheme();
+  const { colors, styles } = useTheme();
+  const [expanded, setExpanded] = useState(false);
+  const preview = c.intro?.trim() && c.intro.trim() !== c.summary?.trim() ? c.intro : c.sections.find(section => section.kind === "text")?.text;
   return (
-    <View style={{ gap: 18 }}>
-      <StoryPreview
+    <View style={{ gap: 9 }}>
+      {expanded ? <StoryPreview
         draft={c}
         campaignHeader={{ title: c.title, summary: c.summary }}
-      />
-      {!c.sources.length && (
-        <Text style={styles.muted}>No supporting sources added.</Text>
-      )}
-      <Text style={styles.muted}>
-        Sources are creator-supplied context, not independent verification of
-        this campaign.
-      </Text>
+      /> : <>
+        {!!c.storyHeadline && c.storyHeadline.trim() !== c.title?.trim() && <Text accessibilityRole="header" style={{ color: colors.ink, fontSize: 18, lineHeight: 25, fontWeight: "700" }}>{c.storyHeadline}</Text>}
+        {!!preview && <Text numberOfLines={5} style={styles.body}>{preview}</Text>}
+      </>}
+      <Button title={expanded ? "Show less" : "Read full story"} icon={expanded ? "chevron-up" : "chevron-down"} variant="ghost" onPress={() => setExpanded(!expanded)} style={{ alignSelf: "flex-start", paddingHorizontal: 0 }} />
+      <Text style={{ color: colors.muted, fontSize: 11, lineHeight: 17 }}>Creator-supplied sources are available in Sources.</Text>
     </View>
   );
 }
 export function Disclosures({
   campaign: c,
   config,
-  details,
 }: {
   campaign: Campaign;
   config?: Config;
-  details?: React.ReactNode;
 }) {
   const { styles } = useTheme();
   const { money } = useCurrency();
   return (
-    <View>
-      <Accordion title="Where your contribution goes">
-        <Text style={styles.body}>
+    <View style={{ gap: 16 }}>
+      <View style={{ gap: 6 }}><Text accessibilityRole="header" style={[styles.h2, { fontSize: 14, lineHeight: 21 }]}>Where your contribution goes</Text>
+        <Text style={[styles.body, { fontSize: 13, lineHeight: 20 }]}>
           Your contribution pays for distribution of this message. It is not a
           direct donation to the cause or a transfer to the creator.
         </Text>
-        <Text style={styles.body}>
+        <Text style={[styles.body, { fontSize: 13, lineHeight: 20 }]}>
           {config
             ? `Demo policy: ${Number((config.feeRate * 100).toFixed(2))}% included platform fee, with the remainder reserved for advertising. No additional transaction fee; the amount you select is your total simulated payment.`
             : "Current fee settings are unavailable. Load the contribution review before paying to see the included fee, advertising budget and total."}
         </Text>
-        <Text style={styles.body}>
+        <Text style={[styles.body, { fontSize: 13, lineHeight: 20 }]}>
           {config?.policies.refunds ||
             "Cancellation before promotion refunds the full simulated contribution. After promotion, only unspent net advertising funds are refunded proportionally; the platform fee is retained."}
         </Text>
-        <Text style={styles.body}>
+        <Text style={[styles.body, { fontSize: 13, lineHeight: 20 }]}>
           {config?.policies.unspent ||
             "Unspent net advertising funds are refunded proportionally on completion."}
         </Text>
-        <Text style={styles.body}>
+        <Text style={[styles.body, { fontSize: 13, lineHeight: 20 }]}>
           {config?.policies.partialFunding ||
             "Partial funding requires explicit reviewer approval before distribution."}
         </Text>
-      </Accordion>
-      {details || <Accordion title="Intended audience & distribution">
-        <Text style={styles.body}>
+      </View>
+      <View style={{ gap: 6 }}><Text accessibilityRole="header" style={[styles.h2, { fontSize: 14, lineHeight: 21 }]}>Intended audience & distribution</Text>
+        <Text style={[styles.body, { fontSize: 13, lineHeight: 20 }]}>
           {c.geography || "Location not selected"} ·{" "}
           {c.interests || "Broad audience"}
         </Text>
-        <Text style={styles.body}>
+        <Text style={[styles.body, { fontSize: 13, lineHeight: 20 }]}>
           Channels: {c.channels?.join(", ") || "Not selected"}. Duration:{" "}
           {c.durationDays} days. Proposed allocation:{" "}
           {Object.entries(c.allocation || {})
@@ -157,16 +182,15 @@ export function Disclosures({
             .join(" · ")}
           .
         </Text>
-        <Text style={styles.muted}>
+        <Text style={[styles.muted, { fontSize: 12, lineHeight: 19 }]}>
           Creator selections are proposals. The platform finalizes eligible
           placements and targeting during review. Advertising may use broad
           location and interests; private backer identities are not shared for
           targeting. No live distribution partner is connected in this demo.
         </Text>
-        <Button title="See the audience and distribution plan" variant="ghost" onPress={() => router.push(`/explore/${c.id}/audience`)} />
-      </Accordion>}
-      <Accordion title="How review works">
-        <Text style={styles.body}>
+      </View>
+      <View style={{ gap: 6 }}><Text accessibilityRole="header" style={[styles.h2, { fontSize: 14, lineHeight: 21 }]}>How review works</Text>
+        <Text style={[styles.body, { fontSize: 13, lineHeight: 20 }]}>
           A restricted reviewer inspects the message, supporting sources,
           creative assets and proposed audience before publication. A campaign
           may be approved, returned for changes or rejected. This demo shows the
@@ -175,17 +199,16 @@ export function Disclosures({
           Campaign&apos;s documented prototype rubric; it is not independent
           fact-checking, identity verification or advertising-platform approval.
         </Text>
-        <Button title="See the campaign assessment" variant="ghost" onPress={() => router.push(`/explore/${c.id}/assessment`)} />
-      </Accordion>
-      {!details && <Accordion title="How estimated reach is calculated">
-        <Text style={styles.body}>
+      </View>
+      <View style={{ gap: 6 }}><Text accessibilityRole="header" style={[styles.h2, { fontSize: 14, lineHeight: 21 }]}>How estimated reach is calculated</Text>
+        <Text style={[styles.body, { fontSize: 13, lineHeight: 20 }]}>
           {config
             ? `Illustrative model: ${config.peoplePerAdDollar} people per advertising dollar after the platform fee. ${money(1)} contributed is approximately ${number(estimate(1, config))} people.`
             : "The configured audience estimate is unavailable until the current settings load."}{" "}
           Actual reach depends on inventory, price, targeting, delivery and performance.
           Unique reach and impressions are different metrics. No audience size is guaranteed.
         </Text>
-      </Accordion>}
+      </View>
     </View>
   );
 }
@@ -193,10 +216,10 @@ export function ShareButton({ campaign, compact = false }: { campaign: Campaign;
   const { styles } = useTheme();
   const [error, setError] = useState("");
   return (
-    <View style={{ gap: 8, flexShrink: 1, minWidth: 0 }}>
+    <View style={{ gap: 8, flexShrink: 1, minWidth: 0, flex: compact ? 1 : undefined }}>
       <Button
         title={compact ? "Share" : "Share campaign"}
-        variant="ghost"
+        variant={compact ? "secondary" : "ghost"}
         icon="share-outline"
         disabled={!campaign.publishedAt}
         onPress={() =>

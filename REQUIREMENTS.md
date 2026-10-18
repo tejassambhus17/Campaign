@@ -1,6 +1,70 @@
 # Requirements and verification matrix
 
-## October18 current evidence — four-section scrolling, code6 export and connected journey
+## October18 information hierarchy — scoped verification supplement
+
+The PDF baseline is preserved. PDF9 Basics optional cover remains accessible there; exact five steps/title60/creator-set Submit goal, public story sources and editable drafts remain. PDF12–15 financial, audience, review/simulation and source limitations are reorganized into reachable views, without changed values or requirements. IMPLEMENTED and VERIFIED only within [named source/native cases](artifacts/dropdown-hierarchy-20261018/README.md); [per-control verification](artifacts/dropdown-hierarchy-20261018/VERIFICATION_MATRIX.md) identifies retained/conditional/unverified states.398 tests, TypeScript/ESLint and20 package checks pass; physical/human/full-lifecycle acceptance remains pending. No baseline, assessment, database or provider state was regenerated.
+
+## October 18 — compact discovery; 1.3.1 / code 9 scoped supplement
+
+PDF pages 6–8 card identity, category, summary, funding/reach and clear backing
+remain. Removing the old By-creator footer moves the actual creator into compact
+visible metadata, preserving page 6. Page 14 simulation/review transparency stays
+in campaign demo markers/full reviews; only the score tile's Demo suffix and
+classification are removed. Actual content-bound scores cover all
+20 built-ins. Stale/unassessed/loading/error states have
+no invented number. IMPLEMENTED and VERIFIED within named source/public API/native
+cases in [current evidence](artifacts/home-trust-polish-20261018/README.md). Native paging, filters and reading state
+remain, with less initial render work. Final source passes 358 tests,
+TypeScript/ESLint and 20/20 package checks. The 74 dp
+correction has separate final-binary font/theme/action confirmation. Performance
+records belong to the first candidate. Physical, human, whole-app and sustained
+performance acceptance remain pending. Historical PDF matrix bytes below are
+preserved; no official requirement or cloud data changed.
+
+## October18 final UI simplification — 1.3.0/code8 scoped supplement
+
+The entire25-page PDF was reread before this implementation. Its existing
+requirements baseline remains primary and byte-preserved. The ten-screen image
+changes presentation, not required fields, accounting, data or business rules.
+
+| Area | Status and evidence | Limits |
+| --- | --- | --- |
+| PDF7–8 discovery and12–15 detail |IMPLEMENTED; actual card metadata/funding/backing, complete expandable article, four native sections/public sources retained. VERIFIED within named confirmation routes/captures. |No new save/follow mutations or full native paging regression inferred. |
+| PDF9–12 creation |IMPLEMENTED; compact actions/overview/drafts,60-character title, separate media, goal at Submit, preview/consent/policies/validation retained. VERIFIED bounded five-step/local fixture and corrected transition/reveal. |No upload, account save, submission or actual draft deletion in this pass. |
+| PDF15–16 contribution |IMPLEMENTED; canonical USD, frozen currency quote, actual fee/ad allocation/reach, total/progress/terms before Pay retained. VERIFIED $25 review without payment. |No new successful checkout claimed. |
+| PDF14 / approved Trust supplement |IMPLEMENTED; actual score/status/provenance first, evidence/criteria/limitations on demand. VERIFIED current shield/assessment route. |No independent verification, invented score or eligibility rule. |
+| PDF16–19 report |IMPLEMENTED; three classified snapshot metrics and complete financial/distribution/results disclosures. VERIFIED current metrics/native PDF chooser cancellation. |Earlier PDF delivery/repeated-render evidence keeps its original binary; no new report sent. |
+| PDF4,18–19 Activity/Profile |IMPLEMENTED; compact private history and real identity/counts, direct existing destinations. VERIFIED Activity gestures and Profile parent Back. |No read/profile/sign-out/account mutation inferred from browsing. |
+| Android |VERIFIED20 package checks, exact-APK owned API36 emulator install and Metro-off cold launch; current named screenshot comparison passed. |Physical/human/TalkBack/full-app acceptance pending. |
+
+349/349 frontend tests, TypeScript/ESLint exit0;193 frozen source inputs and86
+critical preserved inputs unchanged. [Evidence/limits](artifacts/final-ui-simplification-20261018/README.md) binds this supplement
+to SHA256 `9F3DF3FF0B12743154B5B443A4A487D9047C184B5991CF33B96F0E2888922022`. Screenshots prove appearance; interaction receipts prove named
+actions. Earlier1.2.4/Home and older evidence below is historical, not a new-binary
+whole-app claim.
+
+## October18 newest Home reference — 1.2.4/code7 scoped supplement
+
+The original25-page PDF remains primary. Historical rows and evidence below
+remain byte-preserved and keep their original build scope. This frontend-only
+request changes Home composition; no new backend behavior or official requirement
+is inferred from illustrative reference data.
+
+| Scope | Status and current evidence | Limits |
+| --- | --- | --- |
+| PDF pp6–7 Home purpose and required campaign metadata | IMPLEMENTED; actual title/category/creator/summary, raised/goal/progress, estimated-at-goal reach and Back retained in reference-led photo cards. Product promise above search; creation/review/amplification and labelled per-dollar estimate below discovery. | Placement is a mobile interpretation; mock identities/counts are not requirements. |
+| Latest Home image and necessary working controls | VERIFIED within 13 named emulator cases: in-place topic/search/filter, staged dismissal/apply, See all query handoff, detail/assessment/backing destinations and Dark/Light/font1.3 layout. Actual save controls use existing account API and session guards. | Save mutation/guest handoff was not exercised natively; no payment or campaign records changed. |
+| Photo caption readability and native presentation | VERIFIED within inspected actual captures and corrected bright Education font1.3 case. Independent bounded visual review passes;18 current PNG/XML states retained. | No pixel identity, all-image/font/device or full-accessibility claim. |
+| Android packaging and launch | VERIFIED within20 package checks and exact-APK API36 emulator install/Metro-off launch. Version1.2.4/code7, dedicated signer and approved branding, universal ARM64+x86_64. | ARM64 physical/human testing pending. Existing POCO Debug signer prevents a compatible release update; no data clear. |
+
+330 frontend tests and observed TypeScript/ESLint exit0 pass;190 frozen source
+inputs have zero drift. [Current task evidence](artifacts/home-reference-20261018/README.md)
+binds all receipts to SHA256 `57BAD27E911883F9F4254EEC1EED555D83A76BA3AAF001E566787463D81D577A`.
+Current backend and previous journey/PDF/demo evidence are preserved; the latter
+does not become a new whole-app code7 test or updated Home video.
+
+
+## Historical October18 evidence — four-section scrolling, code6 export and connected journey
 
 The original 25-page PDF remains authoritative; its unchanged SHA256 is
 `6A5443253C33997A7361BA91BFF4C04DAF02743ADF23CB47F7E4F1C3789E3290`.

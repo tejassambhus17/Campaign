@@ -1,5 +1,95 @@
 # Campaign Amplification Hackathon: project context
 
+**D46 — October 18: app-wide information hierarchy.** The newest
+Before/After reference replaces repeated public-information accordion stacks
+with compact icon/summary/chevron destinations and bounded native contextual
+sheets. Campaign Story retains its native pager and sticky backing dock; one
+Campaign transparency section leads to Audience & Reach, Funding & Spending,
+and Trust & Verification. Audience uses approved public content and the existing
+estimate configuration. Funding/report details use the existing report document
+and currency snapshot; no screenshot figures or new accounting rules are added.
+Trust keeps its actual shield/status/provenance with detailed evidence on its
+dedicated page. Reports lead with three classified metrics and organized detail
+destinations; complete financial/distribution/source limitations remain available.
+
+Shared SummaryLink/InfoSheet/InfoAction/SelectionSheet components support clear
+destinations, accessible dismissal/focus and explicit input selection. Brief FAQs
+and functional reviewer editor groups retain restrained inline chevrons. Help's
+nine topics use local sheets; three FAQs expand individually. Currency/payment
+context is sheet-based. Activity keeps its unboxed list and native filters, with
+one controlled Following sheet. Appearance, Currency, notification switches,
+native paging, account isolation and Profile parent Back remain. Creation keeps
+exactly Basics → Story → Campaign & Ad Visuals → Reach → Submit, the connected
+icon rail, required fields/validation destinations, separate media, real drafts
+and creator-set Submit goal. Controlled draft values stay outside optional sheets;
+native child mount continuity across Android Modal closure is not claimed.
+Android sheets use explicit keyboard padding and a window/IME-top viewport cap
+with one shrinkable scroll area, so a focused field and Close remain above IME.
+
+No backend/schema/provider/dependency/auth/payment architecture changed. All
+required information is mapped in the app-wide inventory, including retained
+controls. Source tests, actual native checks and package inspection have separate
+evidence scopes; no complete-app acceptance follows from a build alone.
+
+**D45 — October 18: compact assessment badges and discovery rendering.** Home and
+Explore share one badge/query module bound to actual public content hashes and
+existing assessment cache/session scope. Tiles show a shield, actual number and
+Trust Score; campaign demo markers/full reviews retain provenance. A 74 dp normal
+tile keeps its label on one line at the sampled phone font scale, with accessible
+larger-text reflow. Creator moves from the old Featured footer into compact
+visible metadata (PDF page 6), leaving space for proper Back/View buttons.
+Public GET-only checks cover all 20 existing built-in assessments without new
+records or scores. Home feed/card memoization avoids repeated work during drag,
+tour and filter-only updates. Explore initially loads current/neighbor lists,
+prewarms animated jump paths and retains opened lists/reading positions. Valid
+embedded contribution counts avoid full-report fetches per card, with fallback
+validation preserved. No backend/business rule changed. Release 1.3.1 evidence is
+bounded: the first candidate has the performance/interaction matrix; the final
+badge-only correction has its own package and native font/theme/action checks.
+See PROGRESS and RELEASE_READINESS for actual results and acceptance limits.
+
+**D44 — October18 progressive disclosure and release1.3.0/code8:** The latest
+ten-screen image refines the existing mint/charcoal native design. Essential
+information/actions lead; secondary finance, assessment, preview and help expand
+in place. Optional compact shared controls leave other default sizes unchanged.
+Explore uses photo cards and seeds staged filters from applied selections,
+including Home handoff. Detail retains all four native pages/public Sources;
+Read full story reveals the complete article. Create has primary entry actions,
+compact five-step overview/real drafts, cleaner fields, purpose-separated media,
+validation-target revelation and creator-set goal at Submit. Explicit step
+changes reset reading position only after the new layout commits; ordinary
+rerenders preserve position. Reports lead with three classified real snapshot
+metrics. Trust retains assessment status/demo provenance and on-demand evidence.
+No backend, monetary, authentication, model/persistence or native PDF architecture
+changed. [Current binary/evidence/limits](artifacts/final-ui-simplification-20261018/README.md); historical whole-journey/video
+results are not relabelled as current release acceptance.
+
+**D43 — October18 reference-led Home and release1.2.4/code7:**
+The latest Home image replaces Home composition only. Existing public campaign
+snapshots feed a new Home selector and Home-specific photo cards; shared detail,
+Explore cards, accounting and lifecycle rules remain. The embedded filter now
+opens the existing overlay over mounted Home with staged Apply/Cancel. Search,
+topic and shared sort/funding predicates filter locally; explicit See all carries
+them to Explore through validated route parameters. This supersedes earlier
+Home-filter removal. No backend, dependency, media or account architecture changed.
+
+Featured/Discover retain actual public identity, category, summary, money,
+estimated-at-goal reach and clear backing. Existing hash-bound assessment APIs
+supply labelled demo review scores; mock counts, identity checkmarks and avatars
+are not fabricated. Hearts reuse account-scoped saved campaigns and auth handoff.
+Discovery uses two columns normally, one for enlarged text/narrow widths.
+Measured caption positions drive the photo scrim so bright images remain readable
+after reflow. Existing notification/tour/draft and product-disclosure paths remain.
+
+The exact universal release is 68,780,494 bytes, SHA256
+`57BAD27E911883F9F4254EEC1EED555D83A76BA3AAF001E566787463D81D577A`.
+330 frontend tests, TypeScript/ESLint, 20 package checks, 13 focused emulator
+checks and the inspected Dark/Light/font1.3 captures pass within their named
+scope. [Evidence and limitations](artifacts/home-reference-20261018/README.md).
+The phone was not changed; physical/new save mutations/TalkBack/full regression
+are unverified. Older journey/PDF/video evidence retains its exact binary scope.
+
+
 <!-- current-code6-evidence -->
 **D42 — October18 guarded PDF rendering and release1.2.3/code6:**
 The existing architecture/business rules remain. A demonstrated repeated native
