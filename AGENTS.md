@@ -1,5 +1,59 @@
 # Campaign Amplification Hackathon: agent instructions
 
+**October17 final completion directive:** The consolidated final brief authorizes
+Impact/report improvements, actual native PDF sharing, focused regression/native
+checks, same-key release builds and a Campaign-only recorded/edited demo plus a
+local submission package. This explicitly supersedes the earlier recording hold
+for that app-only footage. Preserve the completed Trust/library rollout; do not
+rerun migrations/seeds. Necessary compatible backend updates require isolated
+tests, protected backup, audited source and the same Free service; new schema,
+data changes or permissions outside the approved scope require one concrete
+approval. Keep the private repository, user data, prior APKs and dedicated key.
+No phone wipe/incompatible update, billing or external submission. Human
+usability testing is pending: the user says no unfamiliar tester is available.
+Planning deadline is October19 23:00 Asia/Kolkata, user-stated, not independently
+verified organizer evidence. Final package/destination still need submission approval.
+
+**October17 scoped trust rollout approved:** The user explicitly approved the
+concrete `docs/TRUST_ROLLOUT.md` plan: owner/SYSTEM-protected local production
+backup/read-only preservation snapshot, reviewed backend-only fast-forward to
+the existing private cloud branch, manual deployment to the same Render Free
+service with auto-deploy off, additive migration007, guarded missing fourteen
+app-owned demos/up to twenty matching illustrative assessments, HTTPS/data
+preservation checks and release verification with isolated QA records. This
+supersedes the trust rollout permission gate below for that exact plan. Preserve
+existing records and provider configuration; stop on target/Free-plan mismatch.
+No new cloud resources, billing, phone-data reset, recording or submission.
+
+**October17 trust/transparency and dedicated release task:** The latest attached
+brief authorizes additive assessment APIs/storage, an explainable versioned
+30/20/20/15/15 prototype rubric, a reference-style native shield, public review/
+audience/finance explanations, and an explicit stable-ID demo expansion toward
+two per existing topic. Preserve public/private revision separation, accounting,
+existing records and all prior UI workflows. New user campaigns are unassessed;
+demo scores require individual recorded evidence and prominent demo provenance.
+Local isolated tests, native screenshots and dedicated release-key preparation/
+compilation are authorized at zero cost. Live migration/seeding/deployment must
+first have a concrete reviewed backup/dry-run/rollback plan and consolidated
+authorization under the new brief; prior draft-delete deployment approval is not
+blanket permission for live trust records. Protect signing material in ignored
+local storage; never fall back to Android Debug for the new Release mode. Do not
+install a differently signed APK over the POCO's existing build, clear/uninstall
+data or change package identity. Use a clean isolated emulator for release QA.
+Recording, billing, new cloud resources, Play enrollment and submission stay held.
+
+**October17 Profile and navigation corrections:** The latest user removes the
+Settings screen entirely. Completed guests see a real guest Profile with explicit
+Sign in/Create account actions; first Welcome remains separate. Appearance and
+Currency are direct Profile destinations, Notifications has one Profile entry,
+and Sign out follows all account rows without an auth-screen success strip.
+Preserve actual parent Back navigation, explicit auth/draft handoffs and legacy
+links. Add genuine left-next/right-previous native paging to Activity and My
+Campaigns, fix scalable contribution presets, remove Home's filter shortcut and
+show Explore filters over its mounted list. Earlier Settings-location instructions
+below are superseded by this explicit request. Current backend/services/data,
+approved themes, package/signing and no-recording/publication holds remain.
+
 **October17 clean Welcome/auth follow-up:** The later user screenshot rejects the
 standalone Settings control below Welcome/Login. Remove that guest-Profile
 footer from all shared authentication modes; keep device Settings available

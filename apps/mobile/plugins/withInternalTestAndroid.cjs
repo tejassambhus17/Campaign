@@ -37,6 +37,12 @@ module.exports = function withInternalTestAndroid(
           path.join(destination, name),
         );
       }
+      for (const name of ["Lucide-ISC.txt", "React-Native-SVG-MIT.txt", "Expo-MIT.txt"]) {
+        await fs.copyFile(
+          path.join(result.modRequest.projectRoot, "assets/licenses", name),
+          path.join(destination, name),
+        );
+      }
       return result;
     },
   ]);

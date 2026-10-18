@@ -1,0 +1,18 @@
+{
+  "package": "expo-print",
+  "version": "55.0.19",
+  "files": [
+    {
+      "source": "android/src/main/java/expo/modules/print/PrintPDFRenderTask.kt",
+      "patchedFile": "PrintPDFRenderTask.kt",
+      "upstreamSha256": "8a7ef81a8501173a22435d0454cd4c12418246a0f97c361a34658d79a457a763",
+      "patchedSha256": "cc6f893735e402e17884b5e4b2bd0f6f9451d86f5828d68f942ae1b18b5c7b0f"
+    },
+    {
+      "source": "android/src/main/java/expo/modules/print/PrintModule.kt",
+      "patchedFile": "PrintModule.kt",
+      "upstreamSha256": "86756fea943cdd58785385c64e2f3fb6b77311959ad5e62a5f6c3314b428ba7c",
+      "patchedSha256": "aea7299151ec97719c48bda221986831c1e1758d8a3382a404d24df3473501e2"
+    }
+  ]
+}

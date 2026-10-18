@@ -1,0 +1,17 @@
+{
+  "package": "expo-modules-core",
+  "version": "55.0.26",
+  "source": "android/src/main/java/expo/modules/kotlin/AppContext.kt",
+  "upstreamSha256": "1a0e42e937256c4fa35857816fe7b07c2df7d08b1e038bf5c87a948db97c6430",
+  "patchedSha256": "0444319849a45c12bc7b2e8bf1eb5d92e48e0b96d3280a2e2c01e12bb4b6bea0",
+  "replacements": [
+    {
+      "before": "  private var hostWasDestroyed = false\n",
+      "after": "  private var hostWasDestroyed = false\n\n  // Campaign: ReactActivityDelegateWrapper can defer the old host's destruction\n  // until after its replacement resumed. Track identity, not only that callback.\n  private var lastResumedActivity: WeakReference<Activity>? = null\n"
+    },
+    {
+      "before": "    // We need to re-register activity contracts when reusing AppContext with new Activity after host destruction.\n    if (hostWasDestroyed) {\n      hostWasDestroyed = false\n      registry.registerActivityContracts()\n    }\n\n    activityResultsManager.onHostResume(activity)\n",
+      "after": "    val activityChanged = lastResumedActivity?.let { it.get() !== activity } ?: false\n    lastResumedActivity = WeakReference(activity)\n    // Publish the live host before any contract registration can observe it.\n    activityResultsManager.onHostResume(activity)\n\n    // Rebind surviving modules even if the old host's delayed destroy callback\n    // was ignored by ReactHost after currentActivity had already changed.\n    if (hostWasDestroyed || activityChanged) {\n      hostWasDestroyed = false\n      registry.registerActivityContracts()\n    }\n\n"
+    }
+  ]
+}

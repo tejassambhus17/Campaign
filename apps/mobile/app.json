@@ -2,7 +2,7 @@
   "expo": {
     "name": "Campaign",
     "slug": "campaign-amplification",
-    "version": "1.0.0",
+    "version": "1.2.3",
     "orientation": "portrait",
     "icon": "./assets/brand/campaign-megaphone-transparent.png",
     "userInterfaceStyle": "automatic",
@@ -19,6 +19,7 @@
     },
     "android": {
       "predictiveBackGestureEnabled": false,
+      "versionCode": 6,
       "package": "com.campaignamplification.mobile",
       "adaptiveIcon": {
         "foregroundImage": "./assets/brand/campaign-megaphone-transparent.png",
@@ -27,7 +28,11 @@
       "blockedPermissions": [
         "android.permission.SYSTEM_ALERT_WINDOW",
         "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.VIBRATE",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
       ]
     },
     "web": {
@@ -56,6 +61,8 @@
         "resizeMode": "contain",
         "dark": { "backgroundColor": "#000000", "image": "./assets/brand/campaign-megaphone-transparent.png" }
       }],
+      "./plugins/withCampaignActivityResults.cjs",
+      "./plugins/withCampaignPdfRendering.cjs",
       "./plugins/withCampaignBranding.cjs"
     ],
     "scheme": "amplify",

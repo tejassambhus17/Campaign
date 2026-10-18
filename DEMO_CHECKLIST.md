@@ -1,6 +1,30 @@
 # Demo recording checklist
 
-## Active reference redesign
+## Current completed local demo — October18
+
+- [x] Actual connected fictional journey: discovery, five-step creation,
+  save/restart/resume, previews, submission, separate review/funding, one
+  simulated contribution, receipt/Activity, controlled distribution and report.
+- [x] Explicit code5 unchanged-UI / code6 native-PDF provenance; failed raw
+  attempts excluded, real wait intervals preserved, no speedup or loop.
+- [x] Actual 16-scene, 4m08.43 narrated MP4 created and fully decoded.
+- [x] Continuous muted 1× playback reached the end; encoded sample/key-frame
+  review and waveform/clipping checks passed within their recorded scope.
+- [x] Current native public PDF obtained through the actual Android chooser;
+  receiver selected off camera, no private capability or credentials delivered.
+- [ ] Human listening and unfamiliar-user feedback (no tester available).
+- [ ] Physical ARM64/disconnected mobile-data acceptance without phone-data loss.
+- [ ] Recipient-accessible download and exact organizer destination/send approval.
+
+[Actual video](artifacts/delivery/Campaign-1.2.3/Campaign-demo.mp4),
+[evidence](artifacts/final-completion-20261017/demo/FINAL_VIDEO_ACCEPTANCE.json),
+[package](artifacts/delivery/Campaign-1.2.3/README.md).
+No whole-app100% or competition-result claim follows from these checks.
+
+## Historical reference-redesign checkpoint — superseded
+
+The earlier holds and checked film below are historical evidence, not the
+current filming instruction or final-video acceptance.
 
 The latest product-quality pass has separate [source/native evidence](docs/PRODUCT_QUALITY.md) and corrected tagged APKs. None of these functional tests or screenshots resumes recording or verifies a current video. See [release readiness](RELEASE_READINESS.md) for the actual installed-build scope.
 

@@ -142,7 +142,7 @@ export async function api<T>(
 ): Promise<T> {
   if (!base)
     throw new Error(
-      "Backend address is not configured. Set a reachable HTTPS API address in Settings or EXPO_PUBLIC_API_URL.",
+      "Backend address is not configured. Set a reachable HTTPS API address in Help connection settings or EXPO_PUBLIC_API_URL.",
     );
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), requestTimeoutMs);

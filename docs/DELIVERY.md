@@ -1,6 +1,37 @@
 # Delivery and Android release
 
-## Active reference replacement
+## Current local delivery — Campaign1.2.3
+
+The [local package](../artifacts/delivery/Campaign-1.2.3/README.md) contains the
+dedicated release-signed Campaign.apk, actual narrated MP4, native screenshots,
+actual public USD/INR PDF reports, installation guide, public certificate,
+unsent submission draft and checksum manifest. No private credentials, signing
+key or receipt capability is included. Older APKs and source work are preserved.
+
+ARM64 APK: 49,470,159 bytes; SHA256
+`19E7A02C19956A08CD2DD4896006A4C23A418AADAD132822EC384E08CB0FA75A`.
+Demo: 4m08.43, 12,780,503 bytes; SHA256
+`8D9A30295AA1EB36394964249888E320CF92C263997CBF69109C0356EF83D9BC`.
+See [readiness](../RELEASE_READINESS.md) and [demo evidence](DEMO.md).
+
+A recoverable local source checkpoint uses
+`refs/checkpoints/final-completion-123-20261018`; the normal branch/index and
+private remote remain unchanged. The exact commit is in the package manifest.
+The existing HTTPS backend remains commit04e206a177a2450ec68bb3dae20f487b75847493
+on the same Free Render/Neon/Cloudinary setup. No further deployment was needed.
+
+The POCO still has a different Debug signer; no incompatible install, uninstall,
+data clearing or security bypass was attempted. Physical ARM64/mobile-data,
+unfamiliar-human usability, human listening, encrypted off-device key backup,
+recipient download access and exact submission approval remain pending. A local
+path is not a public download link. No organizer upload/message/submission has
+occurred. Current Telegram destination, official cutoff/timezone and file/video
+limits remain unverified; the user's planning target is October19,23:00 IST.
+
+## Historical reference-replacement checkpoint — superseded
+
+The following older candidates and recording/cloud-deferral instructions are
+historical; they do not describe the current release or authorization.
 
 The latest candidate is the targeted product-quality pass, preserving Light and pure-black Dark. Corrected APKs are under `artifacts/android/quality-addendum-pass2-20261016/`; [release readiness](../RELEASE_READINESS.md) identifies their exact hashes and installed evidence. Cloud setup and a judge-reachable backend remain deferred; the emulator API default is not an external release arrangement. Functional QA screenshots do not constitute a new demo film.
 

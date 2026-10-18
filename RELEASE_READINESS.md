@@ -1,8 +1,335 @@
 # Android delivery readiness
 
-## October17 final delivery — current bounded acceptance
+<!-- current-code6-evidence -->
+## Current release — 1.2.3 / code6
 
-**Built:** [Campaign.apk](Campaign.apk), ARM64 CloudTest, **47,705,118 bytes
+**Source/package and bounded emulator verification passed; local review
+package prepared. Physical and human acceptance remain pending.** The user-reported
+campaign scroll cutoff and subsequent repeat-PDF-export issue are closed within
+their tested cases. [Native acceptance](artifacts/final-completion-20261017/pdf-render-fix/FINAL_RELEASE_FOR_CAPTURE.json),
+[scroll screenshots](artifacts/final-completion-20261017/pdf-render-fix/SCROLL_VISUAL_REVIEW.md),
+[actual PDFs](artifacts/final-completion-20261017/pdf-render-fix/pdf/review-current/PDF_REVIEW.md).
+
+| Artifact | Bytes | SHA256 |
+| --- | ---: | --- |
+| [Campaign.apk](artifacts/delivery/Campaign-1.2.3/Campaign.apk), ARM64 | 49,470,159 | `19E7A02C19956A08CD2DD4896006A4C23A418AADAD132822EC384E08CB0FA75A` |
+| [x86 QA](artifacts/android/final-completion-pdf-source2-20261017/campaign-1.2.3-RELEASE-x86_64.apk) | 50,889,086 | `13FF6C67FAE94EA10804EAE4577F1FE154949A08B27C4525C357B89B3D885A14` |
+
+Both: package `com.campaignamplification.mobile`, version1.2.3/code6, minimum
+API24/target36, non-debuggable dedicated release, approved Campaign logo/splash,
+Hermes and current HTTPS backend. Certificate SHA256
+`ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07`.
+69/69 package checks;324 frontend tests; TypeScript/lint and guarded native
+fixtures/SDK controls pass. Cold x86 launch2136ms is Activity timing, not
+free-host wake time. Current physical ARM64 installation has not occurred.
+
+The final demo retains explicitly identified code5 unchanged-UI scenes and a
+new code6 report-share scene. The actual 4m08.43 MP4 passed full decode, bounded frame/privacy review
+and continuous muted 1× playback. The local package includes the report,
+screenshots, installation guide and manifest. No public link or external
+submission is claimed. See [progress](PROGRESS.md).
+Human usability/listening, independent phone/mobile-data, secure off-device key
+backup and destination/download approval remain separate gates.
+<!-- /current-code6-evidence -->
+
+**Historical code5 gate:** code5 passed the designated connected native
+creation/review/backing/distribution journey and two actual USD/INR PDF shares
+(all eight pages inspected). A later repeat PDF export remained busy. Final
+package/video acceptance is held for a narrow native renderer cleanup/error/
+timeout correction and replacement-build verification. The final read-only
+preservation audit passed across all 15 tables with no unrelated changes.
+Prior scoped scroll/font checks remain valid for their recorded states. See
+PROGRESS and `artifacts/final-completion-20261017/activity-lifecycle-fix/PDF_REPEAT_EXPORT_REVIEW.md`.
+
+The [20-check code5 connected-journey receipt](artifacts/final-completion-20261017/activity-lifecycle-fix/NATIVE_CONNECTED_JOURNEY.json)
+and [eight additional personally inspected PNG/XML states](artifacts/final-completion-20261017/activity-lifecycle-fix/NATIVE_JOURNEY_VISUAL_REVIEW.md)
+now supplement the earlier Impact/PDF and four-section cutoff evidence. No new
+blocking visible defect was found in Light report accounting, confirmation,
+simulated receipt, Trust detail/rubric and audience captures. This does not close
+the repeated-export P1 or accept the replacement code6 build, final video/package,
+physical device, human usability or external delivery.
+
+## Historical October18 build checkpoint — 1.2.2/code5 scoped font pass
+
+**Built and package-verified; final native journey/demo/package acceptance is
+IN PROGRESS.** The user's four-section scrolling correction is implemented.
+Six actual code5 font 1.3 PNG/XML states close the prior code4 P1: complete tab,
+Story, Trust action/disclaimer, Impact metric/caveat and Create editor text now
+reflows within expanded bounds. Final Story/Impact actions remain clear of the
+dock. [Independent visual evidence](artifacts/final-completion-20261017/activity-lifecycle-fix/FONT_SCALE_VISUAL_REVIEW.md).
+The normal-size four-page matrix now passes its named final-action reachability,
+three forward/reverse native transitions, retained Story offset, boundary and
+long/short downward-return cases. Independent PNG/XML review confirms all four
+bottoms clear of the dock and short Updates full-top Back at 94px. The exact-build
+[capture acceptance](artifacts/final-completion-20261017/activity-lifecycle-fix/FINAL_RELEASE_FOR_CAPTURE.json)
+permits continued QA/demo filming in this scope, with the complete connected
+journey still pending. This is not whole-product acceptance or a motion benchmark.
+
+| Candidate | Bytes | SHA256 |
+| --- | ---: | --- |
+| [ARM64 1.2.2/code5](artifacts/android/final-completion-lifecycle-20261017/campaign-1.2.2-RELEASE-arm64.apk) | 49,453,767 | `BB7E889F4299E0534B8EF95F349CF1E8474FA7CA0877BEFDB4F5C14BE1BB65DF` |
+| [x86_64 1.2.2/code5](artifacts/android/final-completion-lifecycle-20261017/campaign-1.2.2-RELEASE-x86_64.apk) | 50,872,694 | `11755A1675CCD0264ADB661DD4D3EF916B220CA686599333891414AD02A2BC9A` |
+
+[60/60 package/source checks](artifacts/final-completion-20261017/activity-lifecycle-fix/RELEASE_BUILD_VERIFICATION.json)
+pass with zero source drift and unchanged package/dedicated certificate, min API24/
+target36, HTTPS and identical 2,417,328-byte Hermes. Both APKs contain the reviewed
+guarded Activity-result weak-host rebind and permit normal font-scale recreation;
+the rejected `fontScale` override is removed. Bounded known-secret scan passes.
+[Supported-Node frontend receipt](artifacts/final-completion-20261017/activity-lifecycle-fix/frontend-supported-node.log)
+records 314/314, with focused native-patch/signing tests and corrected TypeScript/
+lint evidence. Failed earlier tooling attempts retain their historical scope.
+
+The current [native receipt](artifacts/final-completion-20261017/activity-lifecycle-fix/native/NATIVE_CHECKS.json)
+records font 1.3 Story/Impact bottom reach plus named cover/ad picker/open/cancel
+and actual draft-resume cases after ordinary font-change recreation. The visual
+review does not independently prove those performed operations. Recreation
+returns Create to its entry in the tested path; actual Resume was used. No claim
+is made that the editor stayed mounted, or that every media/lifecycle path passes.
+Code4's real failure is preserved below and is not relabelled as accepted.
+
+**Remaining:** complete the exact code5 connected journey and native PDF
+verification, actual final demo/full playback/privacy/audio review, exact final
+package/manifest/recipient download access, physical ARM64/disconnected mobile
+data, human usability/listening (tester unavailable), off-device encrypted key
+recovery and exact package/destination approval. Existing code4 idle-host/fresh
+checks and BF6D PDF samples are historical; no code5 cold-host/fresh/PDF result is
+invented. Backend stays on the existing verified Free service, auto-deploy off.
+No whole-app, physical, human or external-submission acceptance is claimed.
+
+## Historical October18 checkpoint — 1.2.1/code4 rejected for native font clipping
+
+**Release BLOCKED.** Current native evidence addresses the user's four-section
+vertical-cutoff report: Story/Updates/Impact/Sources final actions are reachable
+at font1.0, with intact funding dock/safe areas, native forward/reverse paging,
+retained Story offset and long/short downward handoff. The short-page capture
+shows partial overview expansion. Font1.3 final-action reach also passes, but
+enlarged tab labels, Story disclosures/actions, Impact availability/caveat text
+and Create media guidance/Back/Next text clip within smaller retained bounds.
+Two independent reviewers opened actual PNG/XML and agree this is a P1 content
+readability regression, not ordinary content passing outside a scroll viewport.
+[Exact-binary review and bounds](artifacts/final-completion-20261017/fontscale-fix/FONT_SCALE_SCROLL_REVIEW.md).
+
+| Held candidate | Bytes | SHA256 |
+| --- | ---: | --- |
+| [ARM64 1.2.1/code4](artifacts/android/final-completion-fontscale-20261017/campaign-1.2.1-RELEASE-arm64.apk) | 49,453,763 | `F69E2D9DD0ADD6A38ABD4CA0F425AD4AE075682D8E551A9DB9319E4DF1B6AB52` |
+| [x86_64 1.2.1/code4](artifacts/android/final-completion-fontscale-20261017/campaign-1.2.1-RELEASE-x86_64.apk) | 50,872,690 | `8DE64E6E6B500B7A042C75A89FF54276969F0E43B482DB459FFE83F7722C0515` |
+
+Same Campaign package/dedicated signer, minAPI24/target36. Both ABIs contain the
+same2,417,328-byte Hermes. [58/58 package/source checks](artifacts/final-completion-20261017/fontscale-fix/RELEASE_BUILD_VERIFICATION.json)
+and bounded known-secret scan pass with no frozen-source drift.
+[312/312 frontend tests](artifacts/final-completion-20261017/fontscale-fix/frontend-tests.log),
+including five manifest-mod cases, TypeScript and full-source lint pass.
+Package/source checks do not override a demonstrated native readability failure.
+
+[Native checks](artifacts/final-completion-20261017/fontscale-fix/native/NATIVE_CHECKS.json)
+record18 geometry/navigation cases, one idle-host case and six picker/open/cancel
+cases passing on exactcode4. The picker cases include font1.3→1.0 without process
+restart and unchanged empty cover/ad collections after cancel. They close only
+those operations: the manifest `fontScale` workaround still leaves visible text
+clipping and is insufficient for release. The integration owner is researching
+a direct Activity-result registration correction and removal of the override;
+no replacement patch/build/native proof is accepted yet. Final connected-journey
+recording is held until the blocker is resolved.
+
+Actual idle-to-ready is now observed in one bounded code4 run:
+[1,102.7seconds idle /1,217ms Activity launch / API data visible by30.891seconds](artifacts/final-completion-20261017/fontscale-fix/HOST_IDLE_NATIVE.json).
+Read-only provider [before](artifacts/final-completion-20261017/fontscale-fix/PROVIDER_before-cold-open.json)
+and [after](artifacts/final-completion-20261017/fontscale-fix/PROVIDER_after-cold-open.json)
+snapshots show zero instances then a new RUNNING instance created20:00:12Z on
+the same Free service, auto-deploy off. Actual loading/populated native PNGs were
+opened. The API timing is a sampled upper bound, not a general guarantee;
+third-party traffic cannot be excluded. Physical/mobile-data behavior is pending.
+
+Separate fresh API36 emulator5580 passes
+[24/24 exactcode4 install/Welcome/carousel/Guest Home/Profile checks](artifacts/final-completion-20261017/fontscale-fix/fresh-native/FINAL_FRESH_QA_SUMMARY.json),
+with1,597ms first Activity launch and264 app-PID lines/zero listed error markers.
+The16.65-second silent discovery clip has a full-decode receipt and sampled
+frames, without full human privacy/listening acceptance; it is not the required
+complete final demo. These are bounded historical-candidate results, not an
+override for the reproduced font P1 or a whole-app/performance/physical pass.
+
+**Remaining release gates:** corrected exact-binary font1.0→1.3→1.0
+Settings/recreation/layout/picker proof, all required connected workflow and
+native PDF verification, complete final demo/full playback/privacy/audio review,
+final package/manifest/recipient download access, physical ARM64 and disconnected
+mobile data, human usability (tester explicitly unavailable), encrypted
+off-device key recovery and exact package/destination approval. Preserve the
+POCO Debug installation: its signer differs, so no uninstall/data wipe or
+incompatible update. The backend's existing135SQLite/76PostgreSQL,
+12HTTPS/15-table preservation evidence remains scoped and unchanged.
+
+The code4 delivery folder is preliminary and explicitly discloses the blocker;
+no final manifest/video/public link was invented. BF6D PDF samples, screenshots
+and earlier clips below retain their historical scope. No external submission,
+whole-app, Play, production-security or human acceptance is claimed.
+
+## Historical October18 release1.2.0 — built; scoped emulator and actual PDF acceptance
+
+**Built and package-verified, with bounded installed evidence. Broader final
+journey/demo/package and physical/human acceptance remain IN PROGRESS.**
+
+| Candidate | Bytes | SHA256 |
+| --- | ---: | --- |
+| [ARM64 release1.2.0](artifacts/android/final-completion-20261017/campaign-1.2.0-RELEASE-arm64.apk) | 49,453,755 | `FAF23F19D375BF6B78B3F2706DFCBFED5F4CAD1312D26E3F47CA9710C0696F69` |
+| [x86_64 release1.2.0](artifacts/android/final-completion-20261017/campaign-1.2.0-RELEASE-x86_64.apk) | 50,872,682 | `BF6DA803F43721A4380336A622D8943CB880730D591CC1BFB3904456979C04E4` |
+
+Both are Campaign, package`com.campaignamplification.mobile`, version1.2.0/code3,
+min API24/target36, nondebuggable, cleartext disabled, and signed by the unchanged
+Campaign certificate`ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07`.
+[56/56 package/source checks](artifacts/final-completion-20261017/RELEASE_BUILD_VERIFICATION.json)
+pass with sourceDrift=[]: frozen source/compiled modules, both ABIs' identical
+2,417,328-byte Hermes, HTTPS-only initialization, native Print/Sharing/FileSystem,
+scoped FileProviders/URI grants, licenses and normal vital lint. The
+[known-secret byte scan](artifacts/final-completion-20261017/RELEASE_SECRET_SCAN.json)
+finds no matches; this is not a general security certification.
+
+Exact BF6D [compatible emulator installation](artifacts/final-completion-20261017/NATIVE_INSTALL.json)
+preserved data and cold-launched in1271ms without Metro/reverse. It passes
+[18 named scroll checks](artifacts/final-completion-20261017/native/NATIVE_CHECKS.json):
+all four section bottoms, native forward/reverse paging, retained reading state,
+long/short downward return and font1.3 Story/Impact final actions. Independently
+opened PNG/XML confirms the named actions/dock/safe-area bounds; see
+[scope and filename caveat](artifacts/final-completion-20261017/SCROLL_REVIEW.md).
+Other font/theme/device/intermediate-content cases are not inferred.
+
+Actual native Completed/science exports pass [USD](artifacts/final-completion-20261017/pdf/completed-science-inspection/PDF_REVIEW.md)
+and [INR](artifacts/final-completion-20261017/pdf/completed-science-inr-inspection/PDF_REVIEW.md)
+reviews: four pages each rendered/opened, native chooser plus local QA-recipient
+read grant recorded, same public report snapshot/content hash and financial
+figures as cloud/native funding samples. INR reference is2026-10-17 at₹94.94;
+canonical accounting remains USD. No clipping, blank page, missing currency or
+financial mismatch was demonstrated. Sparse continuation pages and qualified
+illustrative seed-state date are retained nonblocking observations; the seed
+date is not actual completion time. External-recipient delivery, other report
+states, native failure races and PDF screen-reader usability remain unverified.
+
+Source checks pass299frontend plus8sharing, TypeScript/full-source ESLint and
+135SQLite/76actual isolated PostgreSQL. The same Render Free service is live at
+`04e206a177a2450ec68bb3dae20f487b75847493`, auto-deploy off;
+[15-table preservation/12HTTPS checks](artifacts/final-completion-20261017/backend/cloud-rollout/AFTER.json)
+pass after protected backup/isolated restore, with no migration/seed/provider or
+billing change. Active HTTPS/cold Activity checks do not prove idle-host wakeup.
+
+**Remaining:** broader final connected journey, final actual demo/full playback/
+privacy/audio review, package/manifest/recipient-accessible download, real host
+idle-to-ready, physical ARM64/disconnected mobile-data, unassisted human test
+(no unfamiliar tester available), and off-device encrypted key recovery. The
+POCO's preserved Debug signer differs; do not wipe/uninstall/bypass signing to
+install this release. Historical phone checks below do not transfer to1.2.0.
+Campaign-only recording is authorized; external submission requires approval of
+the exact package/destination. No whole-app, Play, production-security or human
+acceptance is claimed. Earlier artifacts/evidence below remain historical.
+
+## Historical October17 dedicated release1.1.0 — built, cloud verified and bounded native acceptance
+
+The [current ARM64 release](Campaign-1.1.0-release-arm64.apk) is49,393,005 bytes,
+SHA256`2BC46C23E395C8BA5DEFC72EC1B92C09EFBFDEF6767A7AAAB1B5518D7485DAB9`.
+Display Campaign, package com.campaignamplification.mobile,1.1.0 / code 2,
+min API 24/target 36,arm64-v8a. `apksigner` verifies the dedicated RSA3072 Campaign
+certificate`ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07`.
+44/44 current package checks, normal vital-lint builds, embedded Hermes/HTTPS/
+brand/license/permissions checks and known-secret scan pass.111/33/6 frozen
+runtime/test/script inputs have0 drift.279frontend/126 SQLite/67 PostgreSQL tests,
+TypeScript and ESLint pass.
+
+**DEPLOYED / VERIFIED ON CLOUD:** approved existing Render Free commitcbd4f90…,
+additive007,14 new $0 demos/20illustrative assessments,243/243 HTTPS checks.20 built-ins/
+22 public at rollout; original13-table rows exact, protected backup restored.
+No provider changes, paid resources, auto-deploy activation or secret rotation.
+
+**VERIFIED IN RELEASE APK within exact-x86 cases:** main B199…0D5C27/27checks cover
+account/reviewer/draft/submission/assessment/approval/funding/simulated checkout/
+receipt/Activity/Trust/audience/light-dark/font 1.3/network-error recovery.661PID
+lines have0 listed crash/JS/nativeSVG/skip markers, empty app crash buffer. Separate
+fresh final install/Welcome/real carousel gestures pass16checks. Initial fresh
+System UI ANR recovered with Wait remains a limitation; no universal performance
+claim. Initial D8EB registration/create/upload evidence is historical; additional
+fresh exact-final21/21checks cover guest/registration/all5steps/two native uploads/
+picker cancellation/creator goal/account save-resume, with20captures and702PID
+lines/0listed markers. Two wrong harness assumptions are retained/superseded. See [full report](artifacts/trust-release-20261017/COMPLETION_REPORT.md)
+and current suffixed `RELEASE_BUILD_VERIFICATION.visual-final.json`.
+
+**Remaining release gates:** physical ARM64 installation is pending because the
+POCO has a different Debug signer; no phone access/data reset was performed.
+Preserved Debug Campaign.apk is not the new dedicated release. Human-operated
+encrypted off-device key backup, comprehensive TalkBack/font 1.8/tablet/sustained
+performance and organizer/video acceptance remain unverified/held. Local-only
+old reviewer credential-file recovery remains documented; live reviewer login
+passed. Release signing cannot guarantee removal of Android sideload/Play Protect
+warnings. No recording, Play publication or organizer submission.
+
+Final post-native SQL verification (17:59:08 UTC) confirms all original rows in
+thirteen tables exact and all twenty demo assessments unchanged. Public count23
+includes the new approved QA campaign. A separate, unattributed guest$25 Ocean
+contribution is preserved; it increased derived funding$2,465→$2,490 while original
+rows/content/assessment remained intact. It is distinct from the known native QA
+$5 checkout. See POST_NATIVE_READ_ONLY.json and the full report; do not attribute
+all new payments to the QA actors or describe derived totals as unchanged.
+
+## Historical October17 Profile/navigation corrections — delivered, bounded native acceptance
+
+**VERIFIED within scoped checks; updated APK delivered.** Completed guests get Guest
+profile instead of Welcome. Explicit auth entry and first-launch Welcome stay
+separate; five tabs return for guest Profile. Settings is removed, superseding
+the previous Help→Settings result. Appearance/Currency are direct Profile
+sections, Notifications has one destination, and Sign out is last with no
+success strip. Nested Profile Back preserves its actual parent. Activity's five
+filters and My Campaigns' six status groups use real native pages, retaining their
+queries, privacy/read semantics, status membership and independent scroll lists.
+Measured contribution presets reflow complete currency amounts. Home loses its
+filter redirect; Explore's bounded transparent card stages options over the
+visible page until Apply, preserving pending choices on dismissal.
+
+**Source verification:** 259/259 tests pass in 6,179.7936 ms, TypeScript and
+full-source ESLint exit 0; [freeze](artifacts/profile-flow-fixes-20261017/SOURCE_INPUTS.json)
+captures 100 runtime inputs and 28 test files. See [current report](artifacts/profile-flow-fixes-20261017/COMPLETION_REPORT.md)
+and [test output](artifacts/profile-flow-fixes-20261017/frontend.log).
+
+**Built/package-verified:** new ARM64/x86_64 candidates compile in47s/1m31s with
+normal vital lint. ARM64 is47,718,998bytes/SHA256
+`966E629B902555102A490816DDB1932330E8E41BADC1B23DC20894BF21F1F47D`;
+both embed identical2,210,024-byte Hermes. [30/30 independent audit checks](artifacts/profile-flow-fixes-20261017/BUILD_VERIFICATION.json)
+pass source freeze/compiled-module binding, Campaign label, approved icon/splash,
+existing Android Debug certificate, ABI and actual current HTTPS initialization.
+
+**Bounded emulator checks:**73/73effective cases pass, with2annotated invalid QA
+assertions superseded.31screenshots/27independently opened states cover guest/
+auth/Profile/logout, Activity/My Campaigns forward/reverse/bounds/pills, staged
+Explore filters and whole INR labels at font1.0/1.3. Initial install recovery
+used one targeted userdata-preserving reboot/no ADB server restart. A later
+unclassified emulator/UI-automation stall leaves final font/UI/draft readback
+pending.119PID lines show0fatal/JS markers but46Choreographer skipped-frame
+warnings(max546); these results do not establish crash-free/smooth behavior.
+
+**Physical QA:**55/55checks pass on authorized POCO, Android15/API35/ARM64,
+existingADB5039. Compatible install-r updates prior1D36→exact966E, with977ms/
+1017ms Metro-independent cold launch and no USB reverse. Guest/auth/Back/Help,
+Home/Explore filters, complete INR presets/first-last selection, all6My Campaigns
+and5Activity pages forward/reverse, and clean bottom Sign out pass. Existing
+fictional QA login/sign-out only; eight unread remain eight, no read/campaign/
+draft/payment mutations. Guest/Dark/USD/font1.17/density440 restored.19registered
+phone screenshots;35independently reviewed images(27emulator+8phone), with root
+additionally inspecting phone Activity/sign-out states.152PID lines show0fatal/JS
+or skipped-frame markers; no broad stability/performance guarantee.
+
+**Delivered:** [Campaign.apk](Campaign.apk),47,718,998bytes(45.51MiB), SHA256
+`966E629B902555102A490816DDB1932330E8E41BADC1B23DC20894BF21F1F47D`;
+[delivery receipt](artifacts/profile-flow-fixes-20261017/CAMPAIGN_APK.json).
+Prior1D36 artifact is preserved. Recoverable source ref:
+`refs/checkpoints/profile-flow-fixes-20261017`;
+[SOURCE_CHECKPOINT.json](artifacts/profile-flow-fixes-20261017/SOURCE_CHECKPOINT.json)
+stores the generated commit and preservation proof.
+Source passes are not installed/native smoothness or whole-app verification.
+No backend/dependency/provider/signing/palette redesign changes; no redeploy
+needed. Keep existing HTTPS, package identity, compatible Android Debug signing,
+previous APK and user data. The late emulator stall/final restoration readback,
+production/warning-free installation, broad native
+accessibility/performance and external release remain separate gates. No
+recording, paid resource, publication, submission or data reset.
+
+## Historical October17 final delivery — bounded acceptance
+
+**Built:** [auth-clean APK](artifacts/android/final-campaign-auth-clean-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk), ARM64 CloudTest, **47,705,118 bytes
 (45.50 MiB)**, SHA256
 `1D36B4C1BF8BDAEB1E5D773FF8E20641499561FB323D0A793366F856E672344C`.
 Fresh auth-clean ARM64/x86_64 compilation passes in1m57s/1m56s with vital lint;

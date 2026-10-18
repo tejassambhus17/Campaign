@@ -53,6 +53,7 @@ export type Campaign = {
   deadline?: string;
   featured?: boolean;
   version?: number;
+  publicContentHash?: string | null;
   feedback?: string;
   revisionPending?: boolean;
   rulesAccepted?: boolean;

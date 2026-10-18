@@ -25,6 +25,7 @@ const ledger = {
   id: 'cmp-public', ownerId: 'owner-one', raised: 75, status: 'Available for Funding',
   campaignState: 'Available for Funding', createdAt: '2026-10-01T08:00:00Z',
   publishedAt: '2026-10-02T09:00:00Z', deadline: '2026-10-16T09:00:00Z',
+  publicContentHash: 'exact-approved-content',
 };
 
 test('ordinary audience responses keep their approved content and ledger without mutating the cache', () => {

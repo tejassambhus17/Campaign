@@ -57,6 +57,7 @@ export function audienceCampaign(campaign: Campaign): Campaign | null {
     campaignState: campaign.campaignState,
     createdAt: campaign.createdAt,
     publishedAt: campaign.publishedAt,
+    publicContentHash: campaign.publicContentHash,
     deadline: campaign.deadline,
     featured: campaign.featured,
     revisionPending: true,

@@ -23,7 +23,7 @@ export function AdPreview({
   draft,
   placement = "Instagram",
 }: {
-  draft: Campaign;
+  draft: Pick<Campaign, "creatorName" | "adImages" | "adHeadline" | "title" | "adDescription" | "summary" | "cta">;
   placement?: string;
 }) {
   const { colors, styles } = useTheme();
@@ -86,7 +86,7 @@ export function StoryPreview({
   draft,
   campaignHeader,
 }: {
-  draft: Campaign;
+  draft: Pick<Campaign, "storyHeadline" | "intro" | "sections" | "sources">;
   campaignHeader?: Pick<Campaign, "title" | "summary">;
 }) {
   const { colors, styles } = useTheme();

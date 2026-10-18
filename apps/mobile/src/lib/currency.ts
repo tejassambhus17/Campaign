@@ -91,7 +91,7 @@ export function conversionCaption(snapshot: MoneySnapshot, now = Date.now()) {
   return `INR estimate · Frankfurter ${snapshot.rate.date}${rateStale(snapshot.rate, now) ? " · cached/stale" : snapshot.rate.cached ? " · cached" : ""}`;
 }
 export function referenceDescription(snapshot: MoneySnapshot, now = Date.now()) {
-  if (snapshot.unavailable) return "INR conversion unavailable. Amounts and entry stay in USD; retry Currency in Settings.";
+  if (snapshot.unavailable) return "INR conversion unavailable. Amounts and entry stay in USD; retry Currency in Profile.";
   if (snapshot.currency === "USD" || !snapshot.rate) return "Campaign accounting remains in USD.";
   return `Frankfurter reference · ${snapshot.rate.date} · $1 USD = ${formatNativeMoney(snapshot.rate.rate, "INR")}${rateStale(snapshot.rate, now) ? " · cached/stale" : snapshot.rate.cached ? " · cached" : ""}. Display estimate, not a live payment quote. Rounded to minor units; accounting stays in USD.`;
 }

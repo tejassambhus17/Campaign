@@ -1,4 +1,38 @@
-# Current Home and onboarding references: native design QA
+# Current trust section: bounded native design QA — October 17
+
+final result: passed
+
+The single correction/confirmation cycle closes the trust-card **P1 shield size/weight** and **P2 classification crowding** from [round 1](artifacts/trust-release-20261017/VISUAL_REVIEW.round1.md). [The complete final review](artifacts/trust-release-20261017/VISUAL_REVIEW.final.md) contains the measurements, five fidelity surfaces, full state/evidence inventory and limits. This result covers the opened native trust surfaces, not the whole application, physical-phone compatibility, cloud correctness, performance or submission readiness.
+
+## Visual truth, viewport and opened comparison evidence
+
+- Source: [trust reference](artifacts/trust-release-20261017/reference-trust-score.jpg), **1290×971**; actual-card crop `(49,14,1243,958)` = **1194×944**. Source CSS viewport, density and font scale are unknown.
+- Focused comparisons: [Dark](artifacts/trust-release-20261017/trust-comparison-visual-final-dark.png) and [Light](artifacts/trust-release-20261017/trust-comparison-visual-final-light.png), both **opened with source and implementation together**. [Metadata](artifacts/trust-release-20261017/TRUST_COMPARISON_INPUTS.visual-final.json) normalizes actual cards to equal **393-pixel width**, preserving aspect ratio and excluding source page margins/native system chrome.
+- Full current native captures: [Dark](artifacts/trust-release-20261017/release-emulator/visual-final-trust-dark.png), [Light](artifacts/trust-release-20261017/release-emulator/visual-final-trust-light.png), and [larger text](artifacts/trust-release-20261017/release-emulator/visual-final-trust-large-text.png), all opened. These are **1080×2280**, Android16/API36/x86_64, isolated `Campaign_Release_36`, density **2.75**, approximately **392.7×829.1 dp**, reported font scales **1.0 / 1.3**. Actual default card bounds `(50,594)–(1031,1638)`; larger-text card `(50,630)–(1031,1535)`.
+- Also opened: current [assessment evidence](artifacts/trust-release-20261017/release-emulator/visual-final-assessment-evidence.png), [audience plan](artifacts/trust-release-20261017/release-emulator/visual-final-audience-plan.png), and [advertising preview](artifacts/trust-release-20261017/release-emulator/visual-final-ad-preview.png).
+- The parent task identifies the corrected installed x86 APK as SHA256 `B199EB536F577CFA36F8BC866FC948C19681B2CFEF030DF3DF488BBC8E960D5C`; this reviewer did not install or independently hash it. This is Android-native evidence, so a browser-rendered capture is inapplicable.
+
+## Findings, fixes and final fidelity surfaces
+
+**Round 1:** the shield normalized to about **250×250 / 18-pixel stroke**, compared with the source's **142×182 / 3.3-pixel stroke**; the longer classification met its edges. The parent applied one batch: a real library vector shield with tall shape/thin outline, bounded wrapping classification, and normal-flow text when enlarged.
+
+**Confirmation:** the new actual shield bounds `(335,889)–(746,1400)` normalize to about **165×205 / 3.2-pixel stroke**. It is slender and the number is prominent. Complete “Moderate review” / “coverage” text fits with clear outline separation in both themes; font1.3 places the complete text below a small shield without overlap. Both earlier findings are **resolved**. No further actionable P0/P1/P2 is visible in these captures.
+
+| Required surface | Confirmation |
+|---|---|
+| Fonts/typography | Approved Manrope roles, bold centered number, natural two-line classification, complete font1.3 text and no visible fallback. Exact source website family is unknown. |
+| Spacing/layout | Fine tall shield restores hierarchy; centered card and page rhythm remain coherent. Required demo/disclaimer copy explains extra height versus the web source. Default and1.3 content fit without visible overlap. |
+| Colors/tokens | Existing black/neutral Dark, mint accent and softly tinted Light remain readable. Earlier unchanged token-pair ratios range5.80:1–12.62:1; no full-accessibility certification is inferred. |
+| Image/asset quality | Real vector/native shield is sharp with a clean continuous thin outline; no cropped raster or visual placeholder. Visible ad imagery is sharp and cleanly contained. |
+| Copy/content | Actual56, illustrative heading, prominent demo provenance, review-coverage wording and disclaimer are intentional truthful adaptations. Evidence limitations and proposed/preview/no-live-delivery copy remain explicit. Detail-page self-link omission is accepted. |
+
+No app, build, device or cloud edit was made by this reviewer, and no automatic engine/detector run is claimed. Static captures do not establish interactions, TalkBack, performance, every score state, font1.8, other device classes or complete Story section order. The final review records those limits. This is the **one allowed post-fix confirmation**, and no further visual/build loop is requested.
+
+**Same-confirmation context addendum:** Opened current [Story placement](artifacts/trust-release-20261017/release-emulator/visual-final-story-trust-dark.png) and matching XML: the complete corrected card `(50,295)–(1031,1503)` includes its clean classification, actual review action `(97,1181)–(985,1313)` (approximately48dp high) and full disclaimer; the following Audience & distribution heading `(50,1564)–(1031,1633)` sits above the separate funding dock. No overlap is visible. Also opened the [simulated receipt](artifacts/trust-release-20261017/release-emulator/visual-final-simulated-receipt.png) and [offline/retry state](artifacts/trust-release-20261017/release-emulator/visual-final-offline-retry.png) for blatant clipping only: the visible text, controls and cards are readable without horizontal clipping or overlap. Long-content scroll edges are not treated as inaccessible content. These supporting captures are not separate reference matches, interaction proof or accounting/network verification. The bounded **passed** verdict is unchanged; no additional polish round occurred.
+
+---
+
+# Historical Home and onboarding references: native design QA
 
 final result: passed
 

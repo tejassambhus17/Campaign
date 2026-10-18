@@ -4,8 +4,10 @@ import PagerView from "../components/NativePager";
 import { detailSections, type DetailSection, requestedDetailSection } from "./detail-sections";
 
 /** Native pages own their vertical reading state; no content replacement or JS
- * animation runs on a swipe frame. The shared overview collapses before a page
- * begins scrolling, and the section bar stays above the horizontal pager.
+ * animation runs on a swipe frame. The shared overview is followed by one
+ * viewport-height reading surface containing the tabs and flexing native pager.
+ * Its outer scroll range is therefore exactly the overview height, so the
+ * collapse gate cannot strand disabled pages below a partially visible header.
  */
 export function useDetailSections(id: string, requested: string | string[] | undefined, scroll: RefObject<ScrollView | null>) {
   const requestedSection = requestedDetailSection(requested);
@@ -34,7 +36,14 @@ export function useDetailSections(id: string, requested: string | string[] | und
       scroll.current?.scrollTo({ y: 0, animated: false });
     }
   }, [id, requestedSection, scroll]);
-  const recordScroll = (y: number) => {
+  const recordViewport = (height: number) => {
+    if (Number.isFinite(height) && height > 0) setViewport(height);
+  };
+  const recordScroll = (y: number, measuredViewport?: number) => {
+    // Native scroll events carry the currently usable height after the dock,
+    // font/layout or keyboard changes, independently of initial onLayout timing.
+    if (measuredViewport !== undefined) recordViewport(measuredViewport);
+    if (!Number.isFinite(y)) return;
     const state = overview.current;
     state.y = Math.max(0, y);
     const next = state.height > 0 && state.y >= state.height - 2;
@@ -43,6 +52,7 @@ export function useDetailSections(id: string, requested: string | string[] | und
   return {
     section, pager,
     initialPage: detailSections.indexOf(requestedSection),
+    readingHeight: viewport > 0 ? viewport : 520 + tabsHeight,
     pageHeight: viewport > 0 ? Math.max(1, viewport - tabsHeight) : 520,
     contentScrollEnabled: collapsed,
     selectSection: (next: DetailSection) => {
@@ -60,9 +70,13 @@ export function useDetailSections(id: string, requested: string | string[] | und
       setSection(detailSections[position]);
     },
     onPageScrollStateChanged: (state: string) => { if (state === "dragging") pending.current = null; },
-    recordTabs: (height: number) => setTabsHeight(height),
+    recordTabs: (height: number) => { if (Number.isFinite(height) && height > 0) setTabsHeight(height); },
     recordScroll,
-    recordHeader: (height: number) => { overview.current.height = height; recordScroll(overview.current.y); },
-    recordViewport: (height: number) => setViewport(height),
+    recordHeader: (height: number) => {
+      if (!Number.isFinite(height) || height <= 0) return;
+      overview.current.height = height;
+      recordScroll(overview.current.y);
+    },
+    recordViewport,
   };
 }

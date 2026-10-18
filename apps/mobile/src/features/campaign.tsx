@@ -111,9 +111,11 @@ export function Story({ campaign: c }: { campaign: Campaign }) {
 export function Disclosures({
   campaign: c,
   config,
+  details,
 }: {
   campaign: Campaign;
   config?: Config;
+  details?: React.ReactNode;
 }) {
   const { styles } = useTheme();
   const { money } = useCurrency();
@@ -142,7 +144,7 @@ export function Disclosures({
             "Partial funding requires explicit reviewer approval before distribution."}
         </Text>
       </Accordion>
-      <Accordion title="Intended audience & distribution">
+      {details || <Accordion title="Intended audience & distribution">
         <Text style={styles.body}>
           {c.geography || "Location not selected"} ·{" "}
           {c.interests || "Broad audience"}
@@ -161,17 +163,21 @@ export function Disclosures({
           location and interests; private backer identities are not shared for
           targeting. No live distribution partner is connected in this demo.
         </Text>
-      </Accordion>
+        <Button title="See the audience and distribution plan" variant="ghost" onPress={() => router.push(`/explore/${c.id}/audience`)} />
+      </Accordion>}
       <Accordion title="How review works">
         <Text style={styles.body}>
           A restricted reviewer inspects the message, supporting sources,
           creative assets and proposed audience before publication. A campaign
           may be approved, returned for changes or rejected. This demo shows the
-          process; it does not claim independent verification or assign a trust
-          score.
+          process. Policy approval, evidence assessment, advertising readiness
+          and actual delivery are separate. Any published Trust Score follows
+          Campaign&apos;s documented prototype rubric; it is not independent
+          fact-checking, identity verification or advertising-platform approval.
         </Text>
+        <Button title="See the campaign assessment" variant="ghost" onPress={() => router.push(`/explore/${c.id}/assessment`)} />
       </Accordion>
-      <Accordion title="How estimated reach is calculated">
+      {!details && <Accordion title="How estimated reach is calculated">
         <Text style={styles.body}>
           {config
             ? `Illustrative model: ${config.peoplePerAdDollar} people per advertising dollar after the platform fee. ${money(1)} contributed is approximately ${number(estimate(1, config))} people.`
@@ -179,7 +185,7 @@ export function Disclosures({
           Actual reach depends on inventory, price, targeting, delivery and performance.
           Unique reach and impressions are different metrics. No audience size is guaranteed.
         </Text>
-      </Accordion>
+      </Accordion>}
     </View>
   );
 }

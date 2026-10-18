@@ -1,6 +1,176 @@
 # Campaign Amplification Hackathon: initialization guide
 
-**Current October17 delivery:** [Campaign.apk](Campaign.apk), ARM64 CloudTest,
+<!-- current-code6-evidence -->
+## Current startup — 1.2.3 / code6
+
+Continue in E:\Campaign; no reset, new provider or migration is needed. Current
+signed APK and evidence: [RELEASE_READINESS.md](RELEASE_READINESS.md).
+Run the established release workflow with a fresh artifact tag. Pinned native
+Print/core patches and `buildFromSource` autolinking are mandatory; do not use
+an unchecked prebuilt AAR or remove the version/byte guards. The same HTTPS
+backend and dedicated key remain. No physical Debug-to-release update is safe
+without a separate approved migration; preserve the phone and older APKs.
+<!-- /current-code6-evidence -->
+
+## Historical October18 startup — release 1.2.2 / code 5
+
+Continue the existing Expo 55 / React Native / TypeScript application and FastAPI
+backend in `E:\Campaign`. The backend remains commit
+`04e206a177a2450ec68bb3dae20f487b75847493` on the same Render Free HTTPS service,
+with existing Neon/psycopg and Cloudinary configuration, auto-deploy off. This
+frontend/native correction required no new deployment, migration or seed.
+
+| Current dedicated release artifact | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [ARM64](artifacts/android/final-completion-lifecycle-20261017/campaign-1.2.2-RELEASE-arm64.apk) | 49,453,767 | `BB7E889F4299E0534B8EF95F349CF1E8474FA7CA0877BEFDB4F5C14BE1BB65DF` |
+| [x86_64 QA](artifacts/android/final-completion-lifecycle-20261017/campaign-1.2.2-RELEASE-x86_64.apk) | 50,872,694 | `11755A1675CCD0264ADB661DD4D3EF916B220CA686599333891414AD02A2BC9A` |
+
+Both retain `com.campaignamplification.mobile`, the dedicated Campaign certificate,
+approved icon/splash, embedded Hermes and `https://campaign-api-cw8y.onrender.com`.
+Use the existing Release commands in [ANDROID_LOCAL.md](docs/ANDROID_LOCAL.md)
+with a new artifact tag; never fall back to Debug signing or overwrite old APKs.
+The POCO still has a different Debug signer: physical ARM64 release installation
+is pending, with no uninstall, storage clear, incompatible update or bypass allowed.
+
+The guarded `expo-modules-core` 55.0.26 patch rebinds Activity results when the weak
+host identity changes. It replaces the rejected code 4 `fontScale` configuration
+override; Android font-change recreation/scaling remains enabled. In the tested
+path recreation returns Create to its entry, then actual Resume restores the
+saved Visuals step. Do not claim an ephemeral editor route remained mounted.
+
+[314 frontend tests](artifacts/final-completion-20261017/activity-lifecycle-fix/frontend-supported-node.log),
+TypeScript/full-source lint, [60 package checks](artifacts/final-completion-20261017/activity-lifecycle-fix/RELEASE_BUILD_VERIFICATION.json),
+25 branding-pixel/15 launcher-byte comparisons and bounded known-secret scans pass.
+The [current freeze](artifacts/final-completion-20261017/activity-lifecycle-fix/RELEASE_SOURCE_INPUTS.inspection-final2.json)
+binds 123 runtime, 36 test, 6 build, 161 native dependency and 9 inspection inputs,
+with zero recorded drift. These source/package results are distinct from runtime QA.
+
+Exact x86 evidence now includes scoped section scroll/paging/font 1.3/picker
+recreation checks, [24 fresh-install Welcome/guest checks](artifacts/final-completion-20261017/activity-lifecycle-fix/fresh-native/FINAL_FRESH_QA_SUMMARY.json),
+and the actual resumed fictional campaign journey through submission, restricted
+review, separate funding opening, one simulated $25 payment and controlled demo
+completion. Native [USD](artifacts/final-completion-20261017/activity-lifecycle-fix/pdf/render-usd/PDF_REVIEW.md)
+and [INR](artifacts/final-completion-20261017/activity-lifecycle-fix/pdf/render-inr/PDF_REVIEW.md)
+reports reached the local QA recipient; all four pages of each have bounded review.
+This does not verify the entire application, physical hardware or an external recipient.
+
+App-only demo production is authorized by the latest brief and remains in progress;
+raw captures do not establish an accepted edited film. Human usability/listening,
+physical ARM64/disconnected mobile-data checks, encrypted off-device key recovery
+and final package/destination approval remain open. No unfamiliar tester is available.
+Earlier version, recording-hold and hosting-deferral paragraphs below are dated
+history, not the current setup. See PROGRESS.md and RELEASE_READINESS.md for the
+operator's changing delivery status; this guide does not submit or publish anything.
+
+**Historical October17 trust/library and dedicated release setup:** Read
+[D39](PROJECT_CONTEXT.md), [rubric](docs/TRUST_RUBRIC.md),
+[library](docs/DEMO_LIBRARY.md), [rollout](docs/TRUST_ROLLOUT.md) and
+[signing runbook](docs/ANDROID_RELEASE_SIGNING.md) before extending this work.
+The architecture remains Expo55/React Native/TypeScript plus existing FastAPI,
+Neon/psycopg and Cloudinary. Additive migration 007 stores version-bound
+assessments/seed registration. Exact `publicContentHash` matching prevents cached
+cross-version scores; reviewer inspection uses its authorized workspace snapshot.
+Policy approval, rubric coverage, ad readiness and delivery remain independent.
+The explicit stable-ID demo manifest targets 20 app-owned examples (2 per category),
+not automatic per-launch seeding or user-campaign auto-scoring. Existing Free
+backend commit `cbd4f90d5108f40beb8474813cc42d475f095354` is live with reviewed
+seeding: 243/243 cloud checks, 20 built-in demos / 22 public campaigns at verification
+and original rows across 13 tables preserved. Read the separate cloud acceptance
+receipt; a frontend rebuild alone does not establish this result.
+
+The reference correction uses pinned `react-native-svg` 15.15.3 and
+`lucide-react-native` 1.59.0 with full bundled MIT/ISC licenses. Install from the
+existing mobile lockfile and regenerate with the local CNG build; an older native
+binary cannot provide the new SVG module. Fresh review confirms the prior
+heavy/oversized shield and outline-crossing label are resolved in both themes
+and font scale 1.3, within the captured states. No palette/navigation redesign occurred.
+
+Use the existing compatible bundled Node and project SDK/JDK. From E:\Campaign:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\configure-android-release-signing.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\android-local.ps1 -Mode Release -Architecture arm64-v8a -ApiUrl https://campaign-api-cw8y.onrender.com -ArtifactTag <fresh-reviewed-tag>
+# For clean isolated release QA, build the same frozen source with -Architecture x86_64.
+```
+
+Setup reuses the established dedicated key and never overwrites existing material.
+Release mode fails if credentials/key are unavailable; there is no Debug fallback.
+Protected ignored `tmp/android-signing/` contains `campaign-release.jks`, DPAPI
+CurrentUser `release-signing.clixml`, public certificate receipt and verified
+same-machine backups. No password is printed or passed in command arguments.
+Keep this directory out of Git/APK/cloud. Human-operated
+`scripts/backup-android-release-signing.ps1` can export the same key to a hidden-
+password-protected PKCS12; execution and an encrypted off-device copy remain
+manual pending steps. DPAPI copying alone does not support another machine.
+
+Current distinct [Campaign-1.1.0-release-arm64.apk](Campaign-1.1.0-release-arm64.apk)
+is 49,393,005 bytes / 47.10 MiB, SHA256
+`2BC46C23E395C8BA5DEFC72EC1B92C09EFBFDEF6767A7AAAB1B5518D7485DAB9`;
+package `com.campaignamplification.mobile`, version 1.1.0 / code 2, ARM64 / minimum API 24,
+target 36, approved Campaign icon/splash and current HTTPS/Hermes. Dedicated
+certificate SHA256
+`ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07`.
+Prior Campaign.apk 47,718,998 bytes / SHA966E…F47D remains preserved. Do not replace it
+with this different signer as an automatic phone update or clear/uninstall the
+POCO. Physical ARM64 release installation remains pending. Main isolated
+Campaign_Release_36/5574 accepted the same-key visual update; separate fresh
+Campaign_Release_Fresh_36/5576 has completed its bounded clean-install QA and
+was gracefully stopped, preserving userdata. These recorded checks refer only
+to the exact installed B199…0D5C x86 binary.
+
+[Final freeze](artifacts/trust-release-20261017/RELEASE_SOURCE_INPUTS.visual-final.json)
+binds 111 runtime / 33 test / 6 build-script inputs, zero drift. 279 frontend tests,
+TypeScript/full-source lint and both ABI builds pass; [44 package/source checks](artifacts/trust-release-20261017/RELEASE_BUILD_VERIFICATION.visual-final.json)
+verify signatures, 77 compiled modules, packaged HTTPS/Hermes/branding and scoped
+secret/permission checks, packaged native SVG libraries and full library-license bytes.
+Main 5574 cold launch is 2106ms. [Fresh 5576 QA](artifacts/trust-release-20261017/FRESH_VISUAL_RELEASE_NATIVE.json)
+passes 16 bounded Welcome/swipe/dot checks after a 5908ms first launch and a
+documented System UI ANR overlay resolved with one Wait. Screenshots and 450
+app-process lines / 0 listed error markers support only this limited scope, not
+whole-app smoothness or physical acceptance. E555/D8EB and the pre-correction
+build/launch reports remain historical and are not reused as new-binary proof.
+Recording, paid resources, Play/organizer publication stay held.
+
+**Historical October17 Profile correction — delivered, scoped native verification:**
+Settings is removed. Completed guests now use Guest profile with explicit
+Sign in/Create account; ordinary first launch retains Welcome. Appearance and
+Currency open directly from Profile, Notifications has one destination, Sign
+out follows the rows and does not add an auth success strip. Nested Profile
+Back uses its actual parent. Activity/My Campaigns reuse the installed native
+pager for 5/6 pages. Contribution presets reflow measured monetary labels; Home
+has no filter shortcut, while Explore has a floating staged filter card over
+its mounted results. The exact creator workflow and existing saved data remain.
+
+[259 frontend tests](artifacts/profile-flow-fixes-20261017/frontend.log), TypeScript
+and full-source ESLint pass; [freeze](artifacts/profile-flow-fixes-20261017/SOURCE_INPUTS.json)
+binds 100 runtime/28 test files. No dependency/setup/backend/provider/signing/theme
+redesign change or cloud redeploy is required. Existing Android commands and
+current HTTPS configuration remain. ARM64/x86_64 builds pass47s/1m31s with vital
+lint; [30/30 independent package/source checks](artifacts/profile-flow-fixes-20261017/BUILD_VERIFICATION.json)
+pass. ARM64 candidate47,718,998bytes/SHA966E…F47D; both ABIs embed identical
+2,210,024-byte Hermes and retain Campaign branding/compatible Debug signing.
+Emulator73/73effective native checks pass, with2superseded QA assertions,
+31captures and27independently reviewed states. Its late unclassified automation
+stall leaves final UI/font/draft reread pending;119PID lines include46skipped-
+frame warnings(max546), despite0fatal/JS markers. No smoothness/crash-free claim.
+Authorized POCO now passes55/55checks on existingADB5039, compatible old1D36→new
+966E install-r, Metro-free977ms launch/no reverse, guest/auth/Back/Help/filter,
+full INR presets, My Campaigns/Activity page directions and clean QA sign-out.
+Original guest/Dark/USD/font1.17/density440 restored; no campaign/draft/payment/
+read mutations.19registered phone screenshots,35independently opened images
+overall; phone152PID lines/0fatalJS/0skipped-frame warnings. No unrelated
+device/ADB reset or whole-app/performance inference.
+
+Delivered [Campaign.apk](Campaign.apk):47,718,998bytes(45.51MiB), SHA256
+`966E629B902555102A490816DDB1932330E8E41BADC1B23DC20894BF21F1F47D`.
+Read [delivery receipt](artifacts/profile-flow-fixes-20261017/CAMPAIGN_APK.json)
+and [current report](artifacts/profile-flow-fixes-20261017/COMPLETION_REPORT.md).
+Previous1D36 APK is preserved; no redeploy or push was necessary/performed.
+Recoverable source ref: `refs/checkpoints/profile-flow-fixes-20261017`;
+[SOURCE_CHECKPOINT.json](artifacts/profile-flow-fixes-20261017/SOURCE_CHECKPOINT.json)
+stores the generated commit and preservation proof. D37 evidence remains historical.
+
+**Previous October17 delivery:** [auth-clean APK](artifacts/android/final-campaign-auth-clean-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk), ARM64 CloudTest,
 47,705,118 bytes, SHA256
 `1D36B4C1BF8BDAEB1E5D773FF8E20641499561FB323D0A793366F856E672344C`.
 Build source is `artifacts/android/final-campaign-auth-clean-20261017/`;

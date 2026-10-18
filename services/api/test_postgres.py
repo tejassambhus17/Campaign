@@ -20,6 +20,7 @@ from db import ROOT
 from main import create_app
 import test_api
 import test_cloud_api
+import test_assessments
 
 TEST_URL = os.getenv('CAMPAIGN_TEST_POSTGRES_URL', '')
 
@@ -129,6 +130,53 @@ class PostgresCloudBoundaryTests(test_cloud_api.CloudBoundaryTests):
     setUp = PostgresApiTests.setUp
     tearDown = PostgresApiTests.tearDown
     make_schema = PostgresApiTests.make_schema
+
+
+@unittest.skipUnless(TEST_URL, 'Requires an explicitly configured isolated PostgreSQL test database.')
+class PostgresAssessmentTests(test_assessments.AssessmentTests):
+    setUp = PostgresApiTests.setUp
+    tearDown = PostgresApiTests.tearDown
+    make_schema = PostgresApiTests.make_schema
+
+
+@unittest.skipUnless(TEST_URL, 'Requires an explicitly configured isolated PostgreSQL test database.')
+class PostgresDemoLibraryTests(unittest.TestCase):
+    setUp = PostgresApiTests.setUp
+    tearDown = PostgresApiTests.tearDown
+    make_schema = PostgresApiTests.make_schema
+    register = test_api.ApiTests.register
+
+    def test_additive_library_and_assessments_apply_rerun_preserve_original_rows(self):
+        from decimal import Decimal
+        from demo_library import apply_plan, plan
+        from domain import CATEGORIES
+        from seed import seed_demo
+        database = self.app.state.database
+        seed_demo(database, Decimal('0.05'), 27)
+        with database.connect() as connection:
+            before = {table: {row['id']: dict(row) for row in connection.execute(f'SELECT * FROM {table}')}
+                      for table in ['users', 'campaigns', 'campaign_events', 'payments', 'ledger']}
+            preview = plan(connection)
+        self.assertEqual(sum(preview['categoryCountsBefore'].values()), 6)
+        self.assertEqual(preview['categoryCountsAfter'], {category: 2 for category in CATEGORIES})
+        first = apply_plan(database, preview['planSHA256'])
+        self.assertEqual(len(first['insertedIds']), 14)
+        with database.connect() as connection:
+            self.assertEqual(connection.execute('SELECT COUNT(*) FROM campaign_assessments').fetchone()[0], 20)
+            second_preview = plan(connection)
+        second = apply_plan(database, second_preview['planSHA256'])
+        self.assertEqual(second['insertedIds'], [])
+        with database.connect() as connection:
+            for table, rows in before.items():
+                after = {row['id']: dict(row) for row in connection.execute(f'SELECT * FROM {table}')}
+                for key, value in rows.items():
+                    self.assertEqual(after[key], value, f'{table}:{key}')
+            self.assertEqual(connection.execute('SELECT COUNT(*) FROM campaigns').fetchone()[0], 20)
+            self.assertEqual(connection.execute('SELECT COUNT(*) FROM campaign_assessments').fetchone()[0], 20)
+        public = self.client.get('/campaigns/demo_sleep/assessment')
+        self.assertEqual(public.status_code, 200, public.text)
+        self.assertEqual(public.json()['assessment']['assessmentType'], 'demo')
+        self.assertEqual(len(self.client.get('/campaigns?category=Health').json()), 2)
 
 
 if __name__ == '__main__':

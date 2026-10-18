@@ -50,7 +50,7 @@ test('resolved server destinations open the editor, report, payments or account 
     ['report', 'View progress & report', '/explore/campaign-one/report'],
     ['campaign', 'Read campaign', '/explore/campaign-one'],
     ['payments', 'Payment history', '/profile?section=Payments'],
-    ['profile', 'Account settings', '/profile?section=Settings'],
+    ['profile', 'Account details', '/profile?section=Edit'],
   ]) {
     assert.deepEqual(notificationAction({ destination: { type, campaignId: 'campaign-one' } }), { title, href });
   }
@@ -64,15 +64,15 @@ test('owned payment destinations retain the exact private receipt context withou
   assert.equal(notificationAction({ destination: { type: 'payments', paymentId: 'one?token=secret&section=Settings' } }).href,
     '/profile?section=Payments&payment=one%3Ftoken%3Dsecret%26section%3DSettings');
   assert.equal(notificationAction({ destination: { type: 'profile', paymentId: 'not-owned' } }).href,
-    '/profile?section=Settings');
+    '/profile?section=Edit');
 });
 
 test('safe server fallbacks override stale IDs and legacy notifications have useful destinations', () => {
-  assert.equal(notificationAction({ campaignId: 'old-private', category: 'payments', destination: { type: 'profile' } }).href, '/profile?section=Settings');
+  assert.equal(notificationAction({ campaignId: 'old-private', category: 'payments', destination: { type: 'profile' } }).href, '/profile?section=Edit');
   assert.equal(notificationAction({ campaignId: 'old-public', category: 'payments' }).href, '/profile?section=Payments');
   assert.equal(notificationAction({ campaignId: 'old-public' }).href, '/explore/old-public');
-  assert.equal(notificationAction({ category: 'security' }).href, '/profile?section=Settings');
-  assert.equal(notificationAction({ destination: { type: 'creator' } }).href, '/profile?section=Settings');
+  assert.equal(notificationAction({ category: 'security' }).href, '/profile?section=Edit');
+  assert.equal(notificationAction({ destination: { type: 'creator' } }).href, '/profile?section=Edit');
   assert.equal(notificationAction({ campaignId: 'one?section=Settings' }).href, '/explore/one%3Fsection%3DSettings');
 });
 

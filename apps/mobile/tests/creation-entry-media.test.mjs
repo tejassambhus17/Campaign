@@ -249,6 +249,6 @@ test('real uploads keep cover, advertising and story media distinct and preserve
 test('guest upload uses existing durable sign-in handoff without opening picker or changing media', async () => {
   const h = screenHarness({ signedIn: false });
   h.render().find(n => n.type === 'CampaignMediaSections').props.onUpload('cover'); await settle(); h.render();
-  assert.equal(h.pickerCalls(), 0); assert.deepEqual(h.apiCalls, []); assert.deepEqual(h.navigation, ['/profile']);
+  assert.equal(h.pickerCalls(), 0); assert.deepEqual(h.apiCalls, []); assert.deepEqual(h.navigation, ['/profile?auth=login']);
   assert.equal(h.saved.length, 1); assert.equal(h.saved[0].localId, 'local-one'); assert.equal(h.saved[0].step, 2); assert.equal(h.saved[0].draft.coverImage, '/media/original-cover.jpg');
 });

@@ -1,7 +1,7 @@
 import { useCurrency } from "../../lib/CurrencyProvider";
 import { formatNativeMoney } from "../../lib/currency";
 import { CurrencySettings } from "../../features/profile/CurrencySettings";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AccessibilityInfo, BackHandler, Linking, Pressable, ScrollView, Switch, View } from "react-native";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -27,7 +27,6 @@ import {
   IconButton,
   Loading,
   Notice,
-  Pill,
   Picture,
   Progress,
   Screen,
@@ -38,32 +37,8 @@ import { AuthForm } from "../../features/auth";
 import { Reviewer } from "../../features/reviewer";
 import { ProfilePhoto, ProfilePhotoEditor } from "../../features/profile/Photo";
 import { useWalkthrough } from "../../features/walkthrough/Walkthrough";
-const groups: Record<string, string[]> = {
-  Drafts: ["Draft"],
-  "Under Review": ["Submitted for Review", "Approved"],
-  "Published / Funding": [
-    "Available for Funding",
-    "Funding Goal Reached",
-    "Funding Period Ends",
-  ],
-  Promoting: ["Distribution Preparation", "Promoting"],
-  Completed: ["Completed"],
-  "Requires Action": [
-    "Changes Requested",
-    "Rejected",
-    "Cancelled",
-    "Refund Pending",
-    "Failed",
-  ],
-};
-const emptyGroupTitles: Record<string, string> = {
-  Drafts: "No drafts yet",
-  "Under Review": "No campaigns under review",
-  "Published / Funding": "No published campaigns",
-  Promoting: "No campaigns in distribution",
-  Completed: "No completed campaigns",
-  "Requires Action": "No campaigns need your attention",
-};
+import { MyCampaigns } from "../../features/profile/MyCampaigns";
+import { profileEntry, profileSection, publicProfileSection, ProfileSection } from "../../lib/profile-navigation";
 const information: Record<string, string> = {
   About:
     "Campaign helps important messages travel beyond their creators’ existing networks. Community contributions fund advertising and distribution, not direct donations to the cause.",
@@ -83,30 +58,33 @@ const information: Record<string, string> = {
     "Use accurate, respectful messaging and relevant sources. Do not publish private information, harassment or misleading claims. Submitted campaigns require review; material changes require another review before advertising updates.",
 };
 
-type ProfileSection = "Overview" | "Created" | "Backed" | "Saved" | "Payments" | "Notifications" | "Settings" | "Edit" | "Appearance" | "Help" | "Review";
 const sectionTitles: Record<ProfileSection, string> = {
   Overview: "Profile", Created: "My Campaigns", Backed: "Backed Campaigns", Saved: "Saved Campaigns",
-  Payments: "Payment History", Notifications: "Notifications", Settings: "Settings", Edit: "Edit Profile",
-  Appearance: "Appearance", Help: "Help & Support", Review: "Campaign Review",
+  Payments: "Payment History", Notifications: "Notifications", Edit: "Account details",
+  Appearance: "Appearance", Currency: "Currency", Help: "Help & Support", Review: "Campaign Review",
 };
 
 export default function Profile() {
   const { money, description } = useCurrency();
-  const { colors, styles, scheme, preference, ready: appearanceReady, appearanceError } = useTheme();
-  const params = useLocalSearchParams<{ section?: string; payment?: string }>();
+  const { colors, styles, appearanceError } = useTheme();
+  const params = useLocalSearchParams<{ section?: string; payment?: string; auth?: string }>();
   const session = useSession();
   const tour = useWalkthrough();
   const me = useMe();
   const campaigns = useCampaigns();
   const config = useConfig();
   const [section, setSection] = useState<ProfileSection>("Overview");
-  const [filter, setFilter] = useState("Drafts");
+  const [history, setHistory] = useState<ProfileSection[]>([]);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   const [address, setAddress] = useState(getApiUrl());
   const [name, setName] = useState("");
   const [focusedPayment, setFocusedPayment] = useState<{ id: string; userId: string } | null>(null);
+  const identity = useRef(session.user?.id);
+  identity.current = session.user?.id;
+  const entry = profileEntry({ signedIn: !!session.user, onboarding: session.onboarding, auth: params.auth, section: params.section });
+  const showingAuth = !session.user && entry !== "profile";
   useEffect(() => {
     if (!message || failed) return;
     AccessibilityInfo.announceForAccessibility(message);
@@ -119,10 +97,16 @@ export default function Profile() {
     setBusy(false);
     setFocusedPayment(null);
     setSection("Overview");
+    setHistory([]);
   }, [session.user?.id]);
   useEffect(() => {
-    if (params.section && Object.prototype.hasOwnProperty.call(sectionTitles, params.section)) {
-      setSection(params.section as ProfileSection);
+    if (session.user && params.auth) router.setParams({ auth: undefined });
+  }, [session.user, params.auth]);
+  useEffect(() => {
+    const next = profileSection(params.section);
+    if (next && (session.user || publicProfileSection(next))) {
+      setSection(next);
+      setHistory([]);
       setMessage("");
       if (params.section === "Payments" && params.payment && session.user) {
         setFocusedPayment({ id: params.payment, userId: session.user.id });
@@ -132,9 +116,9 @@ export default function Profile() {
   }, [params.section, params.payment, session.user]);
   const back = useCallback(() => {
     if (focusedPayment) setFocusedPayment(null);
-    else setSection("Overview");
+    else { setSection(history[history.length - 1] || "Overview"); setHistory(previous => previous.slice(0, -1)); }
     setMessage("");
-  }, [focusedPayment]);
+  }, [focusedPayment, history]);
   useFocusEffect(useCallback(() => {
     const sub = BackHandler.addEventListener("hardwareBackPress", () => {
       if (section === "Overview") return false;
@@ -155,20 +139,41 @@ export default function Profile() {
     } finally { setBusy(false); }
   }
   function open(next: ProfileSection) {
+    if (next !== section) setHistory(previous => [...previous, section]);
     setSection(next); setMessage(""); setFocusedPayment(null);
     if (next === "Edit") setName(me.data?.user.name || session.user?.name || "");
     if (session.user) void me.refetch();
     if (next === "Saved" || next === "Backed") void campaigns.refetch();
   }
+  async function signOut() {
+    if (busy) return;
+    const owner = session.user?.id;
+    setBusy(true); setMessage(""); setFailed(false);
+    try {
+      await session.logout();
+      setSection("Overview"); setHistory([]);
+      router.setParams({ auth: undefined, section: undefined, payment: undefined });
+    } catch (error) {
+      if (!identity.current || identity.current === owner) {
+        setFailed(true); setMessage((error as Error).message);
+      }
+    } finally { setBusy(false); }
+  }
+  function closeAuth() {
+    setSection("Overview"); setHistory([]); setMessage("");
+    router.setParams({ auth: undefined, section: undefined, payment: undefined });
+  }
+  function beginAuth(mode: "login" | "register") {
+    setSection("Overview"); setHistory([]); setMessage("");
+    router.setParams({ auth: mode });
+  }
   const own = me.data?.campaigns || [];
   const successfulCampaignIds = new Set(me.data?.payments.filter(p => p.status === "successful").map(p => p.campaignId));
-  const list = section === "Created" ? own.filter(c => groups[filter]?.includes(c.status))
-    : section === "Saved" ? (campaigns.data || []).filter(c => me.data?.saved.includes(c.id))
+  const list = section === "Saved" ? (campaigns.data || []).filter(c => me.data?.saved.includes(c.id))
     : section === "Backed" ? (campaigns.data || []).filter(c => successfulCampaignIds.has(c.id)) : [];
-  const appearanceLabel = `Appearance settings, ${preference === "system" ? `System, currently ${scheme}` : preference}`;
   const heading = (
     <View style={{ flexDirection: "row", alignItems: "center", gap: 6, minHeight: 48, marginLeft: -10 }}>
-      <IconButton label={focusedPayment ? "Back to payment history" : "Back to Profile"} icon="arrow-back" onPress={back} />
+      <IconButton label={focusedPayment ? "Back to payment history" : history.length && history[history.length - 1] !== "Overview" ? `Back to ${sectionTitles[history[history.length - 1]]}` : "Back to Profile"} icon="arrow-back" onPress={back} />
       <Text accessibilityRole="header" style={[styles.h2, { fontSize: 21, lineHeight: 29, flex: 1 }]}>{focusedPayment ? "Payment Details" : sectionTitles[section]}</Text>
       {session.user && <IconButton label="Refresh your profile" icon="refresh-outline" loading={me.isFetching} onPress={() => { void refresh(); }} />}
     </View>
@@ -201,21 +206,53 @@ export default function Profile() {
           await api("/health");
         }, "Backend connection verified.")} />
       </Accordion>}
-      {!session.user && <AccountRow icon="settings-outline" title="Settings" onPress={() => open("Settings")} />}
+      {!session.user && <><AccountRow icon="contrast-outline" title="Appearance" onPress={() => open("Appearance")} /><AccountRow icon="cash-outline" title="Currency" onPress={() => open("Currency")} /></>}
       <Button title="View the product reference" variant="ghost" icon="open-outline" onPress={() => { void Linking.openURL("https://campaign-one-pearl.vercel.app/").catch(() => { setFailed(true); setMessage("The product reference could not be opened. Check your connection and try again."); }); }} />
       <Text style={[styles.muted, { fontSize: 12, textAlign: "center", paddingVertical: 12 }]}>Campaign · Prototype 1.0</Text>
     </View>
   );
 
   if (!session.ready) return <Screen><Loading /></Screen>;
-  if (!session.user) return <Screen scroll={false} androidKeyboardAvoidance={section === "Help"}>
-    <View style={{ flex: 1, display: section === "Help" || section === "Settings" ? "none" : "flex" }}>
-      <AuthForm active={section !== "Help" && section !== "Settings"} onHelp={() => open("Help")} onModeChange={() => { if (!failed) setMessage(""); }} />
-      {(!!message || !!appearanceError) && <View style={{ padding: 16 }}><Notice tone={appearanceError || failed ? "error" : "success"}>{appearanceError || message}</Notice></View>}
+  if (showingAuth) return <Screen scroll={false} androidKeyboardAvoidance={section !== "Overview"}>
+    <View style={{ flex: 1, display: section === "Overview" ? "flex" : "none" }}>
+      <AuthForm key={entry} initialMode={entry} active={section === "Overview"}
+        onExit={session.onboarding === "complete" ? closeAuth : undefined}
+        onHelp={() => open("Help")} onModeChange={() => setMessage("")} />
     </View>
-    {(section === "Help" || section === "Settings") && <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 18, gap: 18 }}>
-      {heading}{!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}{section === "Settings" ? <View style={{ gap: 20 }}><AppearanceSettings /><CurrencySettings /></View> : help}
+    {section !== "Overview" && <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 18, gap: 18 }}>
+      {heading}{!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}
+      {section === "Appearance" ? <AppearanceSettings /> : section === "Currency" ? <CurrencySettings /> : help}
     </ScrollView>}
+  </Screen>;
+
+  if (!session.user) return <Screen key={section}>
+    {section === "Overview" ? <View style={{ gap: 22 }}>
+      <Text accessibilityRole="header" style={styles.title}>Profile</Text>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 15 }}>
+        <View accessible={false} style={{ width: 68, height: 68, borderRadius: 34, backgroundColor: colors.subtle, alignItems: "center", justifyContent: "center" }}><Ionicons name="person-outline" size={31} color={colors.muted} /></View>
+        <View style={{ flex: 1, gap: 4 }}><Text style={[styles.h2, { fontSize: 21, lineHeight: 29 }]}>Guest profile</Text><Text style={styles.muted}>Your space to explore and create.</Text></View>
+      </View>
+      <View style={{ gap: 10 }}>
+        <Text style={styles.muted}>Sign in to save to your account, upload media and submit a campaign. Your device drafts stay here.</Text>
+        <Button title="Sign in" onPress={() => beginAuth("login")} />
+        <Button title="Create account" variant="secondary" onPress={() => beginAuth("register")} />
+      </View>
+      {!!message && failed && <Notice tone="error">{message}</Notice>}
+      <View style={{ gap: 1 }}>
+        <AccountRow icon="create-outline" title="My drafts" onPress={() => router.push("/create")} />
+        <AccountRow icon="contrast-outline" title="Appearance" onPress={() => open("Appearance")} />
+        <AccountRow icon="cash-outline" title="Currency" onPress={() => open("Currency")} />
+        <AccountRow icon="help-circle-outline" title="Help & Support" onPress={() => open("Help")} />
+      </View>
+    </View> : <>{heading}{section === "Appearance" ? <AppearanceSettings /> : section === "Currency" ? <CurrencySettings /> : help}</>}
+  </Screen>;
+
+  if (section === "Created") return <Screen scroll={false}>
+    <View style={{ flex: 1, paddingHorizontal: 18, paddingTop: 10, gap: 12 }}>
+      {heading}{!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}
+      {me.isPending ? <Loading /> : me.isError ? <ErrorState error={me.error} retry={() => me.refetch()} /> : <MyCampaigns key={session.user.id} campaigns={own} onCreate={() => router.push("/create")}
+        renderCampaign={c => <DashboardCard c={c} config={config.data} busy={busy} owner={c.ownerId === session.user!.id} revision={() => run(async () => { await api(`/campaigns/${c.id}/revision`, { method: "POST" }); router.push(`/create?draft=${c.id}`); }, "Editable revision prepared. The approved public version stays visible until review.")} />} />}
+    </View>
   </Screen>;
 
   return <Screen key={`${section}:${focusedPayment?.id || ""}`}>
@@ -230,14 +267,6 @@ export default function Profile() {
           finally { setBusy(false); }
         })(); }} />
       </View>}
-      <View style={{ minHeight: 48, flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }}>
-        <Pressable accessibilityRole="button" accessibilityLabel={appearanceLabel} accessibilityHint="Choose Light, Dark or System appearance." accessibilityState={{ disabled: !appearanceReady }} disabled={!appearanceReady} onPress={() => open("Appearance")}
-          style={({ pressed }) => ({ minHeight: 48, paddingHorizontal: 12, flexDirection: "row", gap: 8, alignItems: "center", justifyContent: "center", borderRadius: 24, backgroundColor: colors.mint, opacity: pressed ? 0.7 : 1 })}>
-          <Ionicons name={preference === "system" ? "phone-portrait-outline" : scheme === "dark" ? "moon-outline" : "sunny-outline"} size={18} color={colors.green} />
-          <Text style={{ fontSize: 12, lineHeight: 18, fontWeight: "600", color: colors.green }}>{preference === "system" ? "System" : scheme === "dark" ? "Dark" : "Light"}</Text>
-          <Ionicons name="chevron-down" size={14} color={colors.green} />
-        </Pressable>
-      </View>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 14, paddingHorizontal: 3, paddingBottom: 2 }}>
         <Pressable accessibilityRole="button" accessibilityLabel="Edit profile photo" onPress={() => open("Edit")}><ProfilePhoto user={me.data?.user || session.user} /></Pressable>
         <View style={{ flex: 1, gap: 4 }}>
@@ -266,25 +295,16 @@ export default function Profile() {
         <AccountRow icon="card-outline" title="Payment History" onPress={() => open("Payments")} />
         <AccountRow icon="bookmark-outline" title="Saved Campaigns" onPress={() => open("Saved")} />
         <AccountRow icon="notifications-outline" title="Notifications" onPress={() => open("Notifications")} />
-        <AccountRow icon="settings-outline" title="Settings" onPress={() => open("Settings")} />
+        <AccountRow icon="contrast-outline" title="Appearance" onPress={() => open("Appearance")} />
+        <AccountRow icon="cash-outline" title="Currency" onPress={() => open("Currency")} />
         <AccountRow icon="help-circle-outline" title="Help & Support" onPress={() => open("Help")} />
         {session.user.role === "reviewer" && <AccountRow icon="shield-checkmark-outline" title="Campaign Review" onPress={() => open("Review")} />}
       </View>
+      <Button title="Sign out" variant="secondary" icon="log-out-outline" loading={busy} onPress={() => { void signOut(); }} />
     </View> : <>
       {heading}
       {!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}
-      {section === "Help" ? help : section === "Appearance" ? <AppearanceSettings /> : section === "Settings" ? <View style={{ gap: 20 }}>
-        <AppearanceSettings />
-        <CurrencySettings />
-        <View>
-          <AccountRow icon="person-outline" title="Account details" onPress={() => open("Edit")} />
-          <AccountRow icon="notifications-outline" title="Notification preferences" onPress={() => open("Notifications")} />
-          <AccountRow icon="help-circle-outline" title="Help, terms & privacy" onPress={() => open("Help")} />
-        </View>
-        <Text style={styles.muted}>{session.user.email}</Text>
-        <Button title="Sign out" variant="secondary" loading={busy} onPress={() => run(() => session.logout(), "Signed out.")} />
-        <Text style={[styles.muted, { fontSize: 12, lineHeight: 19 }]}>Your device appearance and currency are kept when you sign out.</Text>
-      </View> : section === "Review" ? <Reviewer /> : me.isPending ? <Loading /> : me.isError ? <ErrorState error={me.error} retry={() => me.refetch()} /> : section === "Edit" ? <View style={{ gap: 20 }}>
+      {section === "Help" ? help : section === "Appearance" ? <AppearanceSettings /> : section === "Currency" ? <CurrencySettings /> : section === "Review" ? <Reviewer /> : me.isPending ? <Loading /> : me.isError ? <ErrorState error={me.error} retry={() => me.refetch()} /> : section === "Edit" ? <View style={{ gap: 20 }}>
         <ProfilePhotoEditor key={`${getApiUrl()}:${session.user.id}`} user={me.data.user} />
         <Text style={styles.muted}>Your name appears on the campaigns you create. Backer names stay private by default.</Text>
         <Field label="Display name" value={name} onChangeText={setName} placeholder={me.data.user.name} autoComplete="name" maxLength={150} editable={!busy} />
@@ -309,8 +329,7 @@ export default function Profile() {
           </View>
         ))}
       </View> : <View style={{ gap: 16 }}>
-        {section === "Created" && <><Text style={styles.muted}>{own.length} {own.length === 1 ? "campaign" : "campaigns"} in your account. Drafts also resume from Create.</Text><ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingBottom: 4 }}>{Object.keys(groups).map(f => <Pill key={f} title={f} selected={filter === f} onPress={() => { setFilter(f); void me.refetch(); }} />)}</ScrollView></>}
-        {section !== "Created" && campaigns.isPending ? <Loading /> : section !== "Created" && campaigns.isError ? <ErrorState error={campaigns.error} retry={() => campaigns.refetch()} /> : !list.length ? <Empty title={section === "Created" ? emptyGroupTitles[filter] : `No ${section.toLowerCase()} campaigns yet`} body={section === "Created" ? "Give your next idea a bigger audience. Your saved drafts will be here when you return." : `Explore campaigns to build your ${section.toLowerCase()} collection.`} action={<Button title={section === "Created" ? "Create a campaign" : "Explore campaigns"} onPress={() => router.push(section === "Created" ? "/create" : "/explore")} />} /> : list.map(c => <DashboardCard key={c.id} c={c} config={config.data} busy={busy} owner={c.ownerId === session.user!.id} revision={() => run(async () => { await api(`/campaigns/${c.id}/revision`, { method: "POST" }); router.push(`/create?draft=${c.id}`); }, "Editable revision prepared. The approved public version stays visible until review.")} />)}
+        {campaigns.isPending ? <Loading /> : campaigns.isError ? <ErrorState error={campaigns.error} retry={() => campaigns.refetch()} /> : !list.length ? <Empty title={`No ${section.toLowerCase()} campaigns yet`} body={`Explore campaigns to build your ${section.toLowerCase()} collection.`} action={<Button title="Explore campaigns" onPress={() => router.push("/explore")} />} /> : list.map(c => <DashboardCard key={c.id} c={c} config={config.data} busy={busy} owner={c.ownerId === session.user!.id} revision={() => run(async () => { await api(`/campaigns/${c.id}/revision`, { method: "POST" }); router.push(`/create?draft=${c.id}`); }, "Editable revision prepared. The approved public version stays visible until review.")} />)}
       </View>}
     </>}
   </Screen>;

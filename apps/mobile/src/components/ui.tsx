@@ -445,10 +445,12 @@ export function Accordion({
   title,
   children,
   initiallyOpen = false,
+  keepMounted = false,
 }: {
   title: string;
   children: React.ReactNode;
   initiallyOpen?: boolean;
+  keepMounted?: boolean;
 }) {
   const { colors, styles } = useTheme();
   const [open, setOpen] = useState(initiallyOpen);
@@ -482,8 +484,8 @@ export function Accordion({
           color={colors.green}
         />
       </Pressable>
-      {open && (
-        <View style={{ paddingBottom: 18, gap: 10 }}>
+      {(open || keepMounted) && (
+        <View importantForAccessibility={open ? "auto" : "no-hide-descendants"} style={{ display: open ? "flex" : "none", paddingBottom: 18, gap: 10 }}>
           {typeof children === "string" ? (
             <Text style={styles.body}>{children}</Text>
           ) : (

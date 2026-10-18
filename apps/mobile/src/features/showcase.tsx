@@ -20,7 +20,8 @@ export function CampaignStats({ campaign, config, showTime = false }: { campaign
   const { colors } = useTheme();
   const report = useQuery({ queryKey: ["report", campaign.id], queryFn: () => api<Record<string, unknown>>(`/campaigns/${campaign.id}/report`), enabled: !!campaign.publishedAt });
   const count = report.data?.contributionCount;
-  const days = campaign.deadline ? Math.max(0, Math.ceil((new Date(campaign.deadline).getTime() - Date.now()) / 86400000)) : null;
+  const fundingOpen = (campaign.campaignState || campaign.status) === "Available for Funding";
+  const days = fundingOpen && campaign.deadline ? Math.max(0, Math.ceil((new Date(campaign.deadline).getTime() - Date.now()) / 86400000)) : null;
   const items: { icon: React.ComponentProps<typeof Ionicons>["name"]; value: string; label: string }[] = [
     { icon: "megaphone-outline", value: config ? number(estimate(campaign.goal, config)) : "—", label: "Est. at goal" },
     { icon: "people-outline", value: typeof count === "number" ? number(count) : "—", label: count === 1 ? "Contribution" : "Contributions" },

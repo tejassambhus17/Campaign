@@ -89,13 +89,53 @@ test('latest tab and contextual route request win over prior native settle callb
 test('measured header collapse gates inner vertical scrolling and tab changes never reset native reading offsets', async () => {
   const h = navigationHarness(); let state = await h.ready(); state.onPageSelected(0);
   state.recordViewport(800); state.recordTabs(70); state.recordHeader(1000); state.recordScroll(995);
-  state = h.render(); assert.equal(state.pageHeight, 730); assert.equal(state.contentScrollEnabled, false);
+  state = h.render(); assert.equal(state.readingHeight, 800); assert.equal(state.pageHeight, 730); assert.equal(state.contentScrollEnabled, false);
   state.recordScroll(998); state = h.render(); assert.equal(state.contentScrollEnabled, true);
   state.selectSection('Updates'); state.onPageSelected(1); state = h.render();
   assert.equal(state.contentScrollEnabled, true); assert.deepEqual(h.offsets, [], 'Section selection must not scroll/reset shared overview or native per-page scroll views');
   state.recordScroll(400); state = h.render(); assert.equal(state.contentScrollEnabled, false);
   state.recordHeader(300); state = h.render(); assert.equal(state.contentScrollEnabled, true, 'A measured header change recalculates collapse against current offset');
   state.recordViewport(200); state.recordTabs(80); assert.equal(h.render().pageHeight, 120, 'Pager must fit the measured viewport even with keyboard or large text');
+});
+
+test('viewport-height reading surface makes the collapse gate reachable across dock and font geometry changes', async () => {
+  const h = navigationHarness(); let state = await h.ready(); state.onPageSelected(0);
+  for (const { header, viewport, tabs } of [
+    { header: 615, viewport: 725, tabs: 48 }, // B199 repro: the old native range stopped around446 instead of615.
+    { header: 780, viewport: 659, tabs: 69 }, // larger text and a visible funding dock
+    { header: 180, viewport: 800, tabs: 48 }, // short overview; pages must still occupy the viewport
+    { header: 900, viewport: 420, tabs: 86 }, // constrained usable height
+  ]) {
+    state.recordViewport(viewport); state.recordTabs(tabs); state.recordHeader(header); state = h.render();
+    assert.equal(state.readingHeight, viewport);
+    assert.equal(state.pageHeight, viewport - tabs);
+    // The actual hierarchy test below establishes two direct outer children:
+    // overview + this full-height sticky reading surface. Tab height is inside
+    // that surface, so it cannot shorten the parent's native scroll range.
+    const maximumOuterOffset = header + state.readingHeight - viewport;
+    assert.equal(maximumOuterOffset, header);
+    state.recordScroll(maximumOuterOffset - 3, viewport); state = h.render();
+    assert.equal(state.contentScrollEnabled, false);
+    state.recordScroll(maximumOuterOffset, viewport); state = h.render();
+    assert.equal(state.contentScrollEnabled, true, 'The native maximum must unlock page scrolling');
+    state.recordScroll(Math.max(0, maximumOuterOffset - 30), viewport); state = h.render();
+    assert.equal(state.contentScrollEnabled, false, 'A downward parent gesture restores the overview handoff');
+  }
+  assert.deepEqual(h.offsets, [], 'Layout changes must not reset native page reading offsets');
+});
+
+test('native scroll viewport updates correct stale initial measurements and invalid layout events cannot collapse the surface', async () => {
+  const h = navigationHarness(); let state = await h.ready(); state.onPageSelected(0);
+  state.recordViewport(800); state.recordTabs(70); state.recordHeader(1000);
+  state.recordScroll(1000, 620); state = h.render();
+  assert.equal(state.readingHeight, 620); assert.equal(state.pageHeight, 550); assert.equal(state.contentScrollEnabled, true);
+  state.recordHeader(1150); state = h.render();
+  assert.equal(state.contentScrollEnabled, false, 'A growing overview needs its real additional native scroll range');
+  state.recordScroll(1150, 620); state = h.render(); assert.equal(state.contentScrollEnabled, true);
+  for (const value of [0, -1, NaN, Infinity]) { state.recordViewport(value); state.recordTabs(value); state.recordHeader(value); }
+  state.recordScroll(NaN, 0); state = h.render();
+  assert.equal(state.readingHeight, 620); assert.equal(state.pageHeight, 550); assert.equal(state.contentScrollEnabled, true);
+  state.recordScroll(0, 620); state = h.render(); assert.equal(state.contentScrollEnabled, false);
 });
 
 test('campaign identity change resets only shared overview and native requested page', async () => {
@@ -125,8 +165,9 @@ test('failed native motion query retains safe default; cleanup rejects late quer
 function nativeDetailComposition(selected = 'Story', enabled = false) {
   const jsx = (type, props, key) => ({ type, props: props || {}, key });
   const events = [], pager = { current: null };
-  const navigation = { section: selected, pager, initialPage: 0, pageHeight: 650, contentScrollEnabled: enabled,
-    selectSection: value => events.push(['tab', value]), onPageSelected: value => events.push(['selected', value]), onPageScrollStateChanged: value => events.push(['state', value]), recordViewport() {}, recordHeader() {}, recordScroll() {}, recordTabs() {} };
+  const navigation = { section: selected, pager, initialPage: 0, readingHeight: 720, pageHeight: 650, contentScrollEnabled: enabled,
+    selectSection: value => events.push(['tab', value]), onPageSelected: value => events.push(['selected', value]), onPageScrollStateChanged: value => events.push(['state', value]),
+    recordViewport: value => events.push(['viewport', value]), recordHeader() {}, recordScroll: (y, height) => events.push(['scroll', y, height]), recordTabs: value => events.push(['tabs', value]) };
   const campaign = { id: 'qa-native-detail', title: 'Native QA', creatorName: 'Campaign QA', category: 'Environment', createdAt: '2026-10-17T00:00:00Z', goal: 100, raised: 25, summary: 'Isolated render fixture', status: 'Available for Funding', sources: [] };
   const ui = Object.fromEntries(['Text', 'Button', 'ErrorState', 'Loading', 'Notice', 'Progress', 'Screen'].map(name => [name, name]));
   const { default: Detail } = load('../src/app/(tabs)/explore/[id]/index.tsx', {
@@ -138,6 +179,8 @@ function nativeDetailComposition(selected = 'Story', enabled = false) {
     '../../../../features/detail-sections': model, '../../../../features/useDetailSections': { useDetailSections: () => navigation }, '../../../../lib/public-campaign': { audienceCampaign: c => c },
     '../../../../lib/session': { useRefreshOnFocus() {}, useSession: () => ({}), useConfig: () => ({}), useMe: () => ({}) }, '../../../../features/creation/model': {},
     '../../../../features/updates': { CampaignUpdates: 'CampaignUpdates' }, '../../../../components/ui': { ...ui, fonts: {}, useTheme: () => ({ colors: {} }) },
+    '../../../../features/transparency/CampaignTransparency': { CampaignTransparency: 'CampaignTransparency' },
+    '../../../../features/reports/ImpactDashboard': { ImpactDashboard: 'ImpactDashboard' },
     '../../../../features/campaign': Object.fromEntries(['CampaignCover', 'CampaignStats', 'Disclosures', 'ShareButton', 'Story', 'CampaignJourney'].map(name => [name, name])),
   });
   return { tree: Detail(), events, pager };
@@ -148,16 +191,35 @@ test('actual detail composition uses persistent four-page LTR native hierarchy w
   assert.equal(pager.key, 'qa-native-detail'); assert.equal(pager.props.orientation, 'horizontal'); assert.equal(pager.props.layoutDirection, 'ltr');
   assert.equal(pager.props.offscreenPageLimit, 3); assert.equal(pager.props.overScrollMode, 'never');
   assert.deepEqual(pager.props.children.map(page => page.key), model.detailSections);
-  for (const page of pager.props.children) { assert.equal(page.type, 'View'); assert.equal(page.props.collapsable, false); const body = page.props.children; assert.equal(body.type, 'ScrollView'); assert.equal(body.props.nestedScrollEnabled, true); assert.equal(body.props.scrollEnabled, false); assert.equal(page.props.style.display, undefined); }
+  for (const page of pager.props.children) { assert.equal(page.type, 'View'); assert.equal(page.props.collapsable, false); const body = page.props.children; assert.equal(body.type, 'ScrollView'); assert.equal(body.props.nestedScrollEnabled, true); assert.equal(body.props.scrollEnabled, false); assert.equal(body.props.style.flex, 1); assert.equal(body.props.contentContainerStyle.flexGrow, 1); assert.equal(page.props.style.display, undefined); }
   const outer = tree.find(node => node.type === 'ScrollView'); assert.deepEqual(outer.props.stickyHeaderIndices, [1]); assert.equal(outer.props.nestedScrollEnabled, true);
+  assert.notEqual(outer.props.scrollEnabled, false, 'A short inner page must still allow downward native scrolling back to the overview');
+  assert.equal(outer.props.children.length, 2, 'Only overview and the complete sticky reading surface determine outer height');
+  const reading = outer.props.children[1];
+  assert.equal(reading.type, 'View'); assert.equal(reading.props.style.height, 720);
+  assert.equal(reading.props.children[1], pager, 'The native pager belongs inside the viewport-height sticky child');
+  assert.equal(pager.props.style.flex, 1); assert.equal(pager.props.style.height, undefined, 'Native flex layout, not measured sticky-height feedback, bounds the pager');
+  assert.equal(reading.props.children[0].props.style.flexDirection, 'row', 'The true row retains its layout below RN’s sticky wrapper');
+  assert.equal(reading.props.onLayout, undefined, 'Sticky wrapper geometry must not be mistaken for tab row height');
   assert.equal(nodes(pager).some(node => node.props.accessibilityRole === 'tab'), false);
   const selected = tree.filter(node => node.props.accessibilityRole === 'tab' && node.props.accessibilityState.selected); assert.equal(selected.length, 1); assert.equal(selected[0].props.accessibilityLabel, 'Story');
   const changed = nativeDetailComposition('Impact', true), changedPager = nodes(changed.tree).find(node => node.type === 'PagerView');
   assert.equal(changedPager.key, pager.key); assert.deepEqual(changedPager.props.children.map(page => page.key), pager.props.children.map(page => page.key));
   assert.ok(changedPager.props.children.every(page => page.props.children.props.scrollEnabled));
+  assert.equal(nodes(changedPager).find(node => node.type === 'ImpactDashboard').props.active, true);
+  assert.equal(nodes(pager).find(node => node.type === 'ImpactDashboard').props.active, false);
   pager.props.onPageSelected({ nativeEvent: { position: 2 } }); pager.props.onPageScrollStateChanged({ nativeEvent: { pageScrollState: 'dragging' } });
   tree.find(node => node.props.accessibilityRole === 'tab' && node.props.accessibilityLabel === 'Sources').props.onPress();
   assert.deepEqual(first.events, [['selected', 2], ['state', 'dragging'], ['tab', 'Sources']]);
+});
+
+test('actual layout callbacks measure the nested tab row and current native viewport independently', () => {
+  const { tree, events } = nativeDetailComposition(), outer = nodes(tree).find(node => node.type === 'ScrollView');
+  const row = outer.props.children[1].props.children[0];
+  row.props.onLayout({ nativeEvent: { layout: { height: 70 } } });
+  outer.props.onLayout({ nativeEvent: { layout: { height: 720 } } });
+  outer.props.onScroll({ nativeEvent: { contentOffset: { y: 100 }, layoutMeasurement: { height: 650 } } });
+  assert.deepEqual(events, [['tabs', 70], ['viewport', 720], ['scroll', 100, 650]]);
 });
 
 function rowFixture(read, presentation, scheme = 'dark') {

@@ -2,7 +2,7 @@ param(
   [ValidateSet('arm64-v8a','x86_64','arm64-v8a,x86_64')]
   [string]$Architecture = 'arm64-v8a',
   [ValidateRange(1,4)][int]$Workers = 2,
-  [ValidateSet('Debug','InternalTest','CloudTest')]
+  [ValidateSet('Debug','InternalTest','CloudTest','Release')]
   [string]$Mode = 'Debug',
   [string]$ApiUrl = 'http://10.0.2.2:8787',
   [ValidatePattern('^$|^[a-z0-9][a-z0-9-]{0,63}$')]
@@ -51,13 +51,14 @@ $jdkRoot = Join-Path $sdkRoot 'jdk17'
 $nativeRoot = Join-Path $mobileRoot 'android'
 $artifactRoot = Join-Path $campaignRoot 'artifacts/android'
 if ($ArtifactTag) { $artifactRoot = Join-Path $artifactRoot $ArtifactTag }
-# Both standalone variants reuse the existing Debug certificate. Only the
-# local InternalTest variant permits HTTP or editable backend addresses.
+# InternalTest/CloudTest retain the existing Debug certificate. Release uses
+# only the dedicated private Campaign key; local HTTP is InternalTest-only.
 $internalTest = $Mode -ne 'Debug'
 $allowLocalHttp = $Mode -eq 'InternalTest'
-$cloudTest = $Mode -eq 'CloudTest'
+$releaseSigning = $Mode -eq 'Release'
+$cloudTest = $Mode -in @('CloudTest','Release')
 $variant = if ($internalTest) { 'release' } else { 'debug' }
-$artifactLabel = if ($cloudTest) { 'CLOUD-TEST' } elseif ($internalTest) { 'INTERNAL-TEST' } else { 'debug' }
+$artifactLabel = if ($releaseSigning) { 'RELEASE' } elseif ($cloudTest) { 'CLOUD-TEST' } elseif ($internalTest) { 'INTERNAL-TEST' } else { 'debug' }
 $nativeConfigStamp = Join-Path $buildRoot 'native-config.json'
 if ($cloudTest) {
   . (Join-Path $PSScriptRoot 'android-cloud-url.ps1')
@@ -70,6 +71,11 @@ if ($cloudTest) {
     throw 'InternalTest requires a complete HTTP/HTTPS API URL without credentials, a query, or a fragment.'
   }
   $ApiUrl = $parsedApi.AbsoluteUri.TrimEnd('/')
+}
+$releaseCredentials = $null
+if ($releaseSigning) {
+  . (Join-Path $PSScriptRoot 'android-release-signing.ps1')
+  $releaseCredentials = Read-CampaignReleaseSigning
 }
 $mobilePackage = Get-Content -LiteralPath (Join-Path $mobileRoot 'package.json') -Raw | ConvertFrom-Json
 if ($mobilePackage.dependencies.expo -notmatch '55\.') { throw 'Review the SDK/toolchain configuration before building an Expo SDK other than 55.' }
@@ -127,6 +133,10 @@ $temporaryEnvironment = @{
   CAMPAIGN_INTERNAL_TEST = if ($allowLocalHttp) { '1' } else { '0' }
   EXPO_PUBLIC_INTERNAL_TEST = if ($allowLocalHttp) { '1' } else { '0' }
   EXPO_PUBLIC_CLOUD_BUILD = if ($cloudTest) { '1' } else { '0' }
+  CAMPAIGN_RELEASE_SIGNING = if ($releaseSigning) { '1' } else { '0' }
+}
+if ($releaseSigning) {
+  foreach ($name in $releaseCredentials.environment.Keys) { $temporaryEnvironment[$name] = $releaseCredentials.environment[$name] }
 }
 if ($internalTest) {
   $temporaryEnvironment.EXPO_PUBLIC_API_URL = $ApiUrl
@@ -145,12 +155,21 @@ $buildLog = Join-Path $buildRoot "assemble-$artifactLabel-$architectureLabel$log
 $buildExitCode = 1
 Push-Location -LiteralPath $mobileRoot
 try {
+  # npm ci can be invoked with --ignore-scripts. Verify/apply the exact reviewed
+  # Expo lifecycle patch on every build, even when the CNG stamp is unchanged.
+  & $campaignNode 'plugins/campaignActivityResultsPatch.cjs'
+  if ($LASTEXITCODE -ne 0) { throw 'The pinned Expo activity-results patch could not be verified. No Android build was started.' }
+  & $campaignNode 'plugins/campaignPrintPatch.cjs'
+  if ($LASTEXITCODE -ne 0) { throw 'The pinned Expo PDF rendering patch could not be verified. No Android build was started.' }
   # Regenerate through CNG when native configuration changes or switches modes.
   # In particular, a later Debug build must remove InternalTest's main-manifest
   # HTTP allowance instead of silently retaining the previous generated value.
   $nativeInputs = @('app.json','app.config.ts','package.json','package-lock.json','assets/fonts/Manrope-OFL.txt','assets/fonts/Newsreader-OFL.txt') + @(
     Get-ChildItem -LiteralPath (Join-Path $mobileRoot 'plugins') -File |
       Sort-Object Name | ForEach-Object { 'plugins/' + $_.Name }
+  ) + @(
+    Get-ChildItem -LiteralPath (Join-Path $mobileRoot 'native-patches') -File -Recurse |
+      Sort-Object FullName | ForEach-Object { $_.FullName.Substring($mobileRoot.Length + 1).Replace('\','/') }
   ) + @(
     # Icon/splash source changes must invalidate native resources even when
     # their configured paths stay the same. Keep the original files intact.
@@ -226,17 +245,44 @@ try {
     if ($badgingExitCode -ne 0 -or $badging -match '^application-debuggable') {
       throw 'InternalTest must be a valid, non-debuggable release-variant APK.'
     }
-    if ($certificateExitCode -ne 0 -or !($certificate -match 'certificate DN: CN=Android Debug,')) {
-      throw 'InternalTest signing verification failed: the expected Android Debug certificate was not found.'
-    }
+    if ($certificateExitCode -ne 0) { throw 'APK signature verification failed.' }
     $digestLine = $certificate | Where-Object { $_ -match 'certificate SHA-256 digest: ([a-fA-F0-9]{64})' } | Select-Object -First 1
     if (!$digestLine -or $digestLine -notmatch 'certificate SHA-256 digest: ([a-fA-F0-9]{64})') {
       throw 'Could not read the InternalTest signing certificate fingerprint.'
     }
     $certificateHash = $Matches[1].ToLowerInvariant()
+    if ($releaseSigning) {
+      if ($certificateHash -ne $releaseCredentials.certificateSha256 -or $certificate -match 'certificate DN:.*Android Debug') {
+        throw 'Release signing verification failed: the APK must use the exact dedicated Campaign release certificate, never Android Debug.'
+      }
+    } elseif (!($certificate -match 'certificate DN: CN=Android Debug,')) {
+      throw 'InternalTest signing verification failed: the expected Android Debug certificate was not found.'
+    }
     Add-Type -AssemblyName System.IO.Compression.FileSystem
     $archive = [IO.Compression.ZipFile]::OpenRead($apk)
     try {
+      if ($releaseSigning) {
+        foreach ($entry in $archive.Entries) {
+          if ($entry.FullName -match '(?i)(?:^|/)(?:[^/]+\.(?:jks|keystore|p12|pfx)|release-signing\.clixml|\.env(?:\.[^/]*)?)$') {
+            throw 'Release APK contains a prohibited signing/environment file.'
+          }
+          if (!$entry.Length) { continue }
+          $entryStream = $entry.Open()
+          $memory = [IO.MemoryStream]::new()
+          try {
+            $entryStream.CopyTo($memory)
+            $entryBytes = $memory.ToArray()
+            $entryText = [Text.Encoding]::ASCII.GetString($entryBytes)
+            foreach ($secretName in @('CAMPAIGN_RELEASE_STORE_PASSWORD','CAMPAIGN_RELEASE_KEY_PASSWORD')) {
+              if ($entryText.Contains($releaseCredentials.environment[$secretName])) { throw 'Release APK contains prohibited signing credential bytes.' }
+            }
+          } finally {
+            if ($entryBytes) { [Array]::Clear($entryBytes, 0, $entryBytes.Length) }
+            $entryText = $null
+            $entryStream.Dispose(); $memory.Dispose()
+          }
+        }
+      }
       $bundle = $archive.GetEntry('assets/index.android.bundle')
       if (!$bundle -or $bundle.Length -le 0) { throw 'InternalTest has no embedded JavaScript bundle.' }
       $bundleBytes = $bundle.Length
@@ -314,7 +360,7 @@ try {
     $metadata.buildVariant = 'release'
     $metadata.distribution = $artifactLabel
     $metadata.internalTestConnectionControls = $allowLocalHttp
-    $metadata.signingCertificate = 'Android Debug'
+    $metadata.signingCertificate = if ($releaseSigning) { 'Dedicated Campaign release' } else { 'Android Debug' }
     $metadata.signingCertificateSha256 = $certificateHash
     $metadata.apiUrl = $ApiUrl
     $metadata.cloudHttpsOnly = $cloudTest
@@ -332,13 +378,25 @@ try {
     $metadata.expectedToRequireMetro = $false
     $metadata.metroIndependentLaunchVerified = $false
     $metadata.productionReady = $false
+    $metadata.dedicatedReleaseSigned = $releaseSigning
+    $metadata.signingSecretsScanPassed = $releaseSigning
+    if ($releaseSigning) { $metadata.publicCertificate = $releaseCredentials.public }
+    $metadata.versionName = $version
+    $metadata.versionCode = (Get-Content -LiteralPath (Join-Path $mobileRoot 'app.json') -Raw | ConvertFrom-Json).expo.android.versionCode
+    $metadata.package = 'com.campaignamplification.mobile'
+    $metadata.developmentOnly = !$releaseSigning
   }
   $metadata | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath "$artifact.json" -Encoding UTF8
   Write-Host "$artifactLabel APK: $artifact"
   Write-Host "SHA-256: $checksum"
   if ($internalTest) {
-    Write-Host "${artifactLabel}: release variant with embedded JavaScript, signed by the Android Debug certificate."
-    Write-Host 'Installed launch without Metro and a reachable demo API still need verification. This is not a production-signed delivery.'
+    if ($releaseSigning) {
+      Write-Host 'RELEASE: non-debuggable variant with embedded JavaScript, signed by the dedicated Campaign release certificate.'
+      Write-Host 'Compilation/signature checks are separate from installed functional acceptance. This certificate cannot update the existing Debug-signed phone app.'
+    } else {
+      Write-Host "${artifactLabel}: release variant with embedded JavaScript, signed by the Android Debug certificate."
+      Write-Host 'Installed launch without Metro and a reachable demo API still need verification. This is not a production-signed delivery.'
+    }
   } else {
     Write-Host 'Development build only: requires the local Metro server. This is not a standalone release APK.'
   }

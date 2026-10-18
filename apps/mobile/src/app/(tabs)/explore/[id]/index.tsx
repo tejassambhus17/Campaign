@@ -15,7 +15,10 @@ import { refresh, useConfig, useMe, useRefreshOnFocus, useSession } from "../../
 import { isPublicUrl } from "../../../../features/creation/model";
 import { CampaignUpdates } from "../../../../features/updates";
 import { Text, Button, fonts, ErrorState, Loading, Notice, Progress, Screen, useTheme } from "../../../../components/ui";
-import { CampaignCover, CampaignStats, Disclosures, ShareButton, Story, CampaignJourney } from "../../../../features/campaign";
+import { CampaignCover, CampaignStats, Disclosures, ShareButton, Story } from "../../../../features/campaign";
+import { ImpactDashboard } from "../../../../features/reports/ImpactDashboard";
+import { CampaignTransparency } from "../../../../features/transparency/CampaignTransparency";
+import { PublicAssessment } from "../../../../lib/assessments";
 
 function CampaignSources({ campaign }: { campaign: Campaign }) {
   const { colors, styles } = useTheme();
@@ -67,6 +70,8 @@ export default function CampaignDetail() {
   const { user } = useSession();
   const q = useQuery({ queryKey: ["campaign", id, user?.id], queryFn: () => api<Campaign>(`/campaigns/${id}`) });
   useRefreshOnFocus(q.refetch);
+  const assessment = useQuery({ queryKey: ["assessment", id, user?.id], queryFn: () => api<PublicAssessment>(`/campaigns/${id}/assessment`), enabled: !!q.data });
+  useRefreshOnFocus(assessment.refetch);
   const config = useConfig();
   const me = useMe();
   const [message, setMessage] = useState("");
@@ -78,7 +83,7 @@ export default function CampaignDetail() {
   const navigation = useDetailSections(id, requestedSection, scroll);
   const { section, selectSection } = navigation;
   async function toggle(kind: "save" | "follow") {
-    if (!user) { router.push("/profile"); return; }
+    if (!user) { router.push("/profile?auth=login"); return; }
     setBusy(true);
     try {
       const result = await api<{ active: boolean }>(`/campaigns/${id}/${kind}`, { method: "POST" });
@@ -113,7 +118,7 @@ export default function CampaignDetail() {
         scrollEventThrottle={32}
         onLayout={event => navigation.recordViewport(event.nativeEvent.layout.height)}
         onScroll={(event) => {
-          navigation.recordScroll(event.nativeEvent.contentOffset.y);
+          navigation.recordScroll(event.nativeEvent.contentOffset.y, event.nativeEvent.layoutMeasurement.height);
           const visible = event.nativeEvent.contentOffset.y > Math.max(120, overviewHeight.current - 80);
           if (visible !== dockVisible.current) {
             dockVisible.current = visible;
@@ -161,12 +166,11 @@ export default function CampaignDetail() {
             {!!c.feedback && <Notice>Review feedback: {c.feedback}</Notice>}
           </View>
         </View>
-        <View>
+        <View style={{ height: navigation.readingHeight }}>
         <View onLayout={event => navigation.recordTabs(event.nativeEvent.layout.height)} style={{ flexDirection: "row", backgroundColor: colors.paper, borderBottomWidth: 1, borderColor: colors.line, paddingHorizontal: 12 }}>
           {sections.map((item) => <Pressable key={item} accessibilityRole="tab" accessibilityLabel={item} accessibilityState={{ selected: section === item }} onPress={() => selectSection(item)} style={({ pressed }) => ({ minHeight: 48, flex: 1, paddingHorizontal: 3, paddingVertical: 13, alignItems: "center", justifyContent: "center", borderBottomWidth: 2, borderBottomColor: section === item ? colors.ink : "transparent", opacity: pressed ? 0.6 : 1 })}>
             <Text style={{ fontSize: 12, lineHeight: 19, fontWeight: section === item ? "700" : "500", color: section === item ? colors.ink : colors.muted }}>{item}</Text>
           </Pressable>)}
-        </View>
         </View>
         <PagerView
           key={id}
@@ -176,12 +180,13 @@ export default function CampaignDetail() {
           layoutDirection="ltr"
           overScrollMode="never"
           offscreenPageLimit={3}
-          style={{ height: navigation.pageHeight, width: "100%" }}
+          style={{ flex: 1, width: "100%" }}
           onPageSelected={event => navigation.onPageSelected(event.nativeEvent.position)}
           onPageScrollStateChanged={event => navigation.onPageScrollStateChanged(event.nativeEvent.pageScrollState)}
         >
           {sections.map(item => <View key={item} collapsable={false} style={{ width: "100%", height: "100%" }} accessibilityElementsHidden={section !== item} importantForAccessibility={section === item ? "auto" : "no-hide-descendants"}>
             <ScrollView
+              style={{ flex: 1 }}
               nestedScrollEnabled
               scrollEnabled={navigation.contentScrollEnabled}
               keyboardShouldPersistTaps="handled"
@@ -189,9 +194,9 @@ export default function CampaignDetail() {
             >
               {item === "Story" && <Story campaign={c} />}
               {item === "Updates" && <CampaignUpdates campaign={c} />}
-              {item === "Impact" && <View style={{ gap: 18 }}><CampaignJourney campaign={c} /><Button title="View progress & report" variant="secondary" icon="bar-chart-outline" onPress={() => router.push(`/explore/${id}/report`)} /></View>}
+              {item === "Impact" && <ImpactDashboard id={id} active={section === "Impact"} />}
               {item === "Sources" && <CampaignSources campaign={c} />}
-              <Disclosures campaign={c} config={config.data} />
+              <Disclosures campaign={c} config={config.data} details={item === "Story" ? <CampaignTransparency campaign={c} config={config.data} assessment={assessment.data} loading={assessment.isPending} error={assessment.isError} retry={() => { void q.refetch(); void assessment.refetch(); }} /> : undefined} />
               <View style={{ gap: 8 }}>
                 <Button title={followed ? "Following updates" : "Follow campaign updates"} variant="secondary" icon={followed ? "notifications" : "notifications-outline"} disabled={busy} onPress={() => { void toggle("follow"); }} />
                 <ShareButton campaign={c} />
@@ -199,6 +204,7 @@ export default function CampaignDetail() {
             </ScrollView>
           </View>)}
         </PagerView>
+        </View>
       </ScrollView>
       {showDock && <View style={{ paddingHorizontal: 16, paddingVertical: 9, borderTopWidth: 1, borderColor: colors.line, backgroundColor: colors.paper }}>
         <View style={{ width: "100%", maxWidth: 608, alignSelf: "center", gap: 8, flexDirection: fontScale > 1.3 || width < 350 ? "column" : "row", alignItems: "center" }}>

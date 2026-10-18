@@ -1,0 +1,35 @@
+--- a/android/src/main/java/expo/modules/kotlin/AppContext.kt
++++ b/android/src/main/java/expo/modules/kotlin/AppContext.kt
+@@ -66,6 +66,10 @@
+ 
+   private var hostWasDestroyed = false
+ 
++  // Campaign: ReactActivityDelegateWrapper can defer the old host's destruction
++  // until after its replacement resumed. Track identity, not only that callback.
++  private var lastResumedActivity: WeakReference<Activity>? = null
++
+   private val modulesQueueDispatcher = HandlerThread("expo.modules.AsyncFunctionQueue")
+     .apply { start() }
+     .looper.let { Handler(it) }
+@@ -293,13 +297,18 @@
+       "Current Activity is of incorrect class, expected AppCompatActivity, received ${currentActivity?.localClassName}"
+     }
+ 
+-    // We need to re-register activity contracts when reusing AppContext with new Activity after host destruction.
+-    if (hostWasDestroyed) {
++    val activityChanged = lastResumedActivity?.let { it.get() !== activity } ?: false
++    lastResumedActivity = WeakReference(activity)
++    // Publish the live host before any contract registration can observe it.
++    activityResultsManager.onHostResume(activity)
++
++    // Rebind surviving modules even if the old host's delayed destroy callback
++    // was ignored by ReactHost after currentActivity had already changed.
++    if (hostWasDestroyed || activityChanged) {
+       hostWasDestroyed = false
+       registry.registerActivityContracts()
+     }
+ 
+-    activityResultsManager.onHostResume(activity)
+     registry.post(EventName.ACTIVITY_ENTERS_FOREGROUND)
+   }
+ 

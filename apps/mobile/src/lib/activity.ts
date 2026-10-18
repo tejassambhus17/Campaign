@@ -81,7 +81,7 @@ export function notificationAction(item: Notification) {
   const campaignId = destination?.campaignId || item.campaignId;
   const id = campaignId ? encodeURIComponent(campaignId) : "";
   if (destination?.type === "profile") {
-    return { title: "Account settings", href: "/profile?section=Settings" };
+    return { title: "Account details", href: "/profile?section=Edit" };
   }
   if (
     destination?.type === "payments" ||
@@ -102,7 +102,7 @@ export function notificationAction(item: Notification) {
     return { title: "View progress & report", href: `/explore/${id}/report` };
   }
   if (!id) {
-    return { title: "Account settings", href: "/profile?section=Settings" };
+    return { title: "Account details", href: "/profile?section=Edit" };
   }
   return { title: "Read campaign", href: `/explore/${id}` };
 }

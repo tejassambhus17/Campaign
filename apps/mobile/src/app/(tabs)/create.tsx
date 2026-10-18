@@ -611,7 +611,7 @@ export default function CreateScreen() {
     try {
       await localNow();
       if (!user && activeRef.current) setGuestHandoff(activeRef.current);
-      router.push("/profile");
+      router.push("/profile?auth=login");
     } catch {
       setFailure(
         "Save your draft on this device before leaving. Retry Save as Draft.",

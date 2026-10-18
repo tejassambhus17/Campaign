@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "../lib/api";
 import { Campaign } from "../lib/types";
 import { refresh, useRefreshOnFocus } from "../lib/session";
+import { AssessmentEditor } from "./transparency/AssessmentEditor";
 import {
   Accordion,
   Button,
@@ -97,6 +98,7 @@ export function Reviewer() {
                   key={c.id}
                   title={`${c.title} · ${c.status}`}
                   initiallyOpen={c.status === "Submitted for Review"}
+                  keepMounted
                 >
                   <View style={{ gap: 14, paddingTop: 2 }}>
                     <Text style={[styles.muted, { color: colors.green }]}>
@@ -106,11 +108,12 @@ export function Reviewer() {
                         : ""}
                     </Text>
                     <Button
-                      title="Inspect campaign"
+                      title={c.revisionPending ? "Inspect published campaign" : "Inspect campaign"}
                       variant="secondary"
                       icon="arrow-forward"
                       onPress={() => router.push(`/explore/${c.id}`)}
                     />
+                    <AssessmentEditor campaignId={c.id} published={!!c.publishedAt} revisionPending={!!c.revisionPending} />
                     {c.revisionPending && (
                       <Notice>
                         The approved public version remains visible. Delivery

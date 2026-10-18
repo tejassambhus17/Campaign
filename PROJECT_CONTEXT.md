@@ -1,13 +1,276 @@
 # Campaign Amplification Hackathon: project context
 
-**D37 — October17 clean guest Welcome/auth footer:** The later user screenshot
+<!-- current-code6-evidence -->
+**D42 — October18 guarded PDF rendering and release1.2.3/code6:**
+The existing architecture/business rules remain. A demonstrated repeated native
+PDF export stall required a pinned expo-print55.0.19 cleanup/terminal/cancellation
+patch in `apps/mobile/native-patches`, applied through postinstall/CNG/build
+guards. `expo.autolinking.android.buildFromSource` includes expo-print and
+expo-modules-core so published AARs cannot bypass the patches. Actual SDK36
+compilation and packaged DEX inspection verify the implementation; a prebuilt
+candidate that omitted it was rejected. This does not alter shared report HTML,
+accounting, UI source or cloud deployment.
+
+Current APKs and bounded324-source/69-package/native evidence are in
+[release readiness](RELEASE_READINESS.md). Current x86 repeat/cancel/INR/recreation
+PDF deliveries and18 campaign-section scroll cases pass. Code5 connected-journey
+evidence remains code5, with byte-identical UI/Hermes provenance; changed native
+report behavior has current-code6 evidence. Phone/human/public delivery gates
+remain explicit. No live payment, ad integration or new service was added.
+<!-- /current-code6-evidence -->
+
+**D41 — October18 native lifecycle correction and current 1.2.2 / code 5 evidence:**
+The established Expo 55 / React Native / TypeScript, FastAPI, Neon/psycopg and
+Cloudinary architecture remains. The same Free backend stays at
+`04e206a177a2450ec68bb3dae20f487b75847493`; no migration, seed or redeployment was
+needed for this native correction. Preserve the completed Trust/library rollout.
+
+The guarded `expo-modules-core` 55.0.26 Activity-result patch compares weak host
+identity and rebinds the registry for a replaced Activity. It replaces the rejected
+code 4 MainActivity `fontScale` override, preserving ordinary Android recreation
+and live text scaling. Actual font 1.3 Story/Impact/Create reflow and cover/ad picker
+opening/cancellation after recreation pass within the named native cases. Normal
+recreation returns Create to its entry; Resume restores the saved Visuals step.
+This is durable draft recovery, not ephemeral route or mounted-editor preservation.
+
+The current dedicated ARM64 APK is 49,453,767 bytes, SHA-256
+`BB7E889F4299E0534B8EF95F349CF1E8474FA7CA0877BEFDB4F5C14BE1BB65DF`;
+x86_64 is 50,872,694 bytes, SHA-256
+`11755A1675CCD0264ADB661DD4D3EF916B220CA686599333891414AD02A2BC9A`.
+Both are 1.2.2 / code 5 with the existing package/certificate, approved branding,
+embedded Hermes and HTTPS backend. [60 package checks](artifacts/final-completion-20261017/activity-lifecycle-fix/RELEASE_BUILD_VERIFICATION.json),
+314 frontend tests, TypeScript/lint, 25 branding-pixel/15 launcher-byte checks and
+bounded known-secret scans pass. [Freeze](artifacts/final-completion-20261017/activity-lifecycle-fix/RELEASE_SOURCE_INPUTS.inspection-final2.json):
+123 runtime / 36 test / 6 build / 161 native dependency / 9 inspection inputs,
+zero recorded drift. Earlier code 3 and rejected code 4 evidence keeps its own scope.
+
+Exact x86 scoped scroll/paging/font/picker acceptance and [24 fresh Welcome/guest checks](artifacts/final-completion-20261017/activity-lifecycle-fix/fresh-native/FINAL_FRESH_QA_SUMMARY.json)
+are separate from the later actual native connected journey: resumed fictional
+draft, five creation steps, distinct cover/ad previews, creator-entered $25 at
+Submit, submission, restricted approval, separate opening of funding, one
+simulated payment and deliberately controlled demo distribution/completion.
+Off-camera saving/restarts and edited lifecycle time jumps must stay explicit.
+The UI payment confirms before its initially stale funding bar refreshes; this is
+not evidence of an instant update or real money/advertising delivery.
+
+Native [USD](artifacts/final-completion-20261017/activity-lifecycle-fix/pdf/render-usd/PDF_REVIEW.md)
+and [INR](artifacts/final-completion-20261017/activity-lifecycle-fix/pdf/render-inr/PDF_REVIEW.md)
+PDFs reached a local QA receiver by temporary URI grant; all four pages of each
+have bounded visual/accounting review. Canonical $25 reconciles as $22.56 simulated
+spend + $1.25 retained fee + $1.19 completed refund, with zero remaining/pending.
+Estimated 641 and simulated 548 reach stay distinct from unavailable measured reach.
+INR is a dated cached display conversion, with independent-rounding limits disclosed.
+
+The current final film/package remains in production, not accepted merely from
+raw captures or a build. Physical ARM64 is pending because the preserved POCO has
+a different Debug signer. No wipe/incompatible install is authorized. Human
+usability/listening (no unfamiliar tester available), encrypted off-device key
+recovery, broader accessibility/device checks, external-recipient access and exact
+submission package/destination approval remain separate. No whole-app verification
+or external submission is claimed. This decision supersedes stale current-version,
+recording-held and hosting-deferred descriptions below without erasing their history.
+
+**D40 — October18 consistent reports and final release candidate:** The existing
+Impact tab and report route now share `campaign-report-v1`, an additive response
+from the authorized report endpoint. A repeatable-read transaction supplies the
+legacy accounting values, approved public identity, recorded lifecycle events,
+proposed distribution and explicit metric availability together. Unpublished
+working content and private reviewer/backer/session data are excluded from
+exports. A stable content snapshot hash is distinct from generation time;
+missing finalized channel data and earlier observation times remain disclosed.
+No accounting, lifecycle, schema or provider rule changed.
+
+Native PDF sharing uses SDK55-compatible expo-print/expo-sharing/file-system.
+The report view captures one data/currency snapshot; local HTML escapes text and
+loads no remote resources. Focus/session guards suppress late sharing after
+navigation or identity changes. Only approved public reports are shareable;
+temporary PDFs remain in a narrowly scoped cache for recipient access and age
+out after 24 hours. Web states that PDF sharing is available in Android.
+
+The same Free backend runs reviewed commit
+`04e206a177a2450ec68bb3dae20f487b75847493`; fresh protected backup restoration,
+all15-table preservation and12 HTTPS/legacy checks passed. No migration or seed
+was replayed. The first report candidate was version 1.2.0 / code 3; D41 records
+its same-key successor. Native final-candidate acceptance, report rendering and submission
+package production are tracked in PROGRESS rather than inferred from builds.
+
+Campaign details retain the native four-page pager. The tabs and pager now form
+one measured viewport-height reading surface after the overview, avoiding the
+unreachable collapse threshold that disabled vertical section scrolling in
+the preceding binary. Page reading positions remain mounted. The latest final
+brief authorizes app-only demo recording; external submission still requires
+approval of the exact package and destination. Human usability is pending
+because the user explicitly reports no unfamiliar tester is available.
+
+**D39 — October17 explainable assessments, explicit demo library and dedicated
+Android release signing:** Preserve the approved Expo55/React Native/TypeScript,
+FastAPI/psycopg, themes, five tabs, five creation steps and canonical USD ledger.
+Campaign's `campaign-review-v1` prototype rubric is documented in
+[TRUST_RUBRIC.md](docs/TRUST_RUBRIC.md): sources 30, claims 20, creator 20,
+funding 15 and policy 15, through 13 anchored none/partial/met checks. The server
+validates performed checks, evidence, reasons and limitations and calculates
+the total/coverage band. A score is neither an accuracy probability nor an
+independent fact/identity check. Policy approval, assessment, advertising
+readiness and actual delivery remain separate; scores introduce no eligibility
+threshold or funding/lifecycle/payment transition.
+
+Additive migration 007 stores `campaign_assessments` and
+`campaign_seed_registry`. Records bind campaign ID, exact canonical content hash,
+stored snapshot, version, rubric, server policy context, provenance, revision
+and actual timestamps. Only the existing reviewer role can create/save/publish;
+HTTP clients cannot choose demo provenance. Publication is immutable and
+repeat-idempotent, with private evidence/drafts excluded from public reads.
+Public history includes only snapshots actually associated with an approved
+public version. Private working edits preserve an unchanged public assessment;
+changed approved content needs another assessment. Public campaign responses
+provide `publicContentHash`; independently cached assessment responses may show
+a score only when their hash matches it. Reviewer inspection renders the exact
+authorized workspace snapshot, including its sources/story/ad/audience/goal,
+instead of substituting a public query result or mixing revisions.
+
+Campaign details order estimated reach, a reference-style native outlined
+shield/assessment, then audience/distribution. Real completed reviews and
+illustrative demo assessments have distinct headings/provenance; unassessed,
+in-progress, superseded, loading and unavailable states have no invented total.
+Details link to criterion evidence/limitations and the same assessment history.
+The audience route uses the approved public snapshot, existing ad previews and
+actual configured geography/interests/channels/allocation/duration. Reach uses
+the existing fee/net-advertising model; USD/INR conversion changes display only.
+Existing reports retain totals, fees, advertising budget/spend/unspent/refunds
+and policies, with estimated/simulated/measured delivery labels kept distinct.
+
+The first native comparison rejected an oversized heavy shield and a
+classification crossing its outline. One correction uses the licensed Lucide
+shield through `lucide-react-native/icons/shield`, backed by Expo55-compatible
+`react-native-svg` 15.15.3 and pinned `lucide-react-native` 1.59.0. Its fine native
+vector stroke, constrained wrapped classification and normal-flow enlarged-text
+fallback preserve the reference hierarchy without a raster/cropped shield or
+handmade path. Full ISC/MIT license files are bundled through CNG and checked
+against the installed packages. The [single final comparison](artifacts/trust-release-20261017/VISUAL_REVIEW.final.md)
+resolves both findings in fresh Dark/Light and font scale 1.3 captures; this is bounded
+visual acceptance, not whole-app or physical-device acceptance.
+
+[DEMO_LIBRARY.md](docs/DEMO_LIBRARY.md) defines explicit
+`campaign-library-v1`: 6 exact original built-ins plus 14 new fictional campaigns,
+targeting 2 per actual category across 10 categories. Stable IDs, reserved fixture
+owner, actorless seed provenance, registry and inspected content hash establish
+ownership; titles are insufficient. The reviewed seed CLI requires an explicit
+database, dry-run and matching plan digest before apply. It preserves subsequent
+edits, funding, timestamps/activity and unrelated records, never runs at app
+launch and exposes no seed admin endpoint. New demos begin at $0 with original
+stories, separate cover/ad creative, proposals and inspected institutional
+background sources; stock artwork supports illustration rather than factual
+proof. Individual automated-demo assessments retain missing verification and
+prominent labels. Existing Free backend commit
+`cbd4f90d5108f40beb8474813cc42d475f095354` is live with additive migration 007;
+the approved explicit apply inserted 14 new demos and 20 demo assessments.
+[Cloud acceptance](artifacts/trust-release-20261017/cloud-rollout/CLOUD_ACCEPTANCE.json)
+passes 243/243 checks: 20 built-ins (2 per category), 22 public campaigns at rollout
+verification, exact preservation of original rows across 13 tables, current HTTPS,
+Free plan and auto-deploy off. Later disposable native QA is a separate scope.
+[TRUST_ROLLOUT.md](docs/TRUST_ROLLOUT.md) owns backup, restoration, deployment,
+seed and rollback evidence. The final shield correction is frontend-only and
+requires no additional deployment; APK compilation is not cloud evidence.
+
+Dedicated Android **Release** mode is now reproducible through the local CNG
+plugin/build launcher. It requires the private Campaign key and rejects missing
+credentials or a Debug certificate; CloudTest/InternalTest retain their prior
+compatible test signing. Version 1.1.0 / code 2, package
+`com.campaignamplification.mobile`, Campaign label/approved icon/splash,
+minimum API 24 / target 36 and embedded HTTPS/Hermes are preserved. Credentials use
+ignored protected `tmp/android-signing/campaign-release.jks` and
+`release-signing.clixml` (Windows DPAPI CurrentUser), owner/SYSTEM-only ACLs and
+verified same-machine backups. The key is RSA3072, `CN=Campaign`, valid through
+2054-03-04; public certificate SHA256
+`ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07`.
+The manual hidden-password same-key PKCS12 export/off-device backup remains
+pending; [signing runbook](docs/ANDROID_RELEASE_SIGNING.md) owns recovery steps.
+
+[Campaign-1.1.0-release-arm64.apk](Campaign-1.1.0-release-arm64.apk) is
+49,393,005 bytes (47.10 MiB), SHA256
+`2BC46C23E395C8BA5DEFC72EC1B92C09EFBFDEF6767A7AAAB1B5518D7485DAB9`.
+The old Debug-signed Campaign.apk 966E…F47D remains unchanged. Final
+[freeze](artifacts/trust-release-20261017/RELEASE_SOURCE_INPUTS.visual-final.json)
+captures 111 runtime / 33 test / 6 build-script inputs with zero drift. 279 frontend
+tests, TypeScript/lint and ARM64/x86_64 builds pass; 44 package checks bind 77 compiled
+modules, valid dedicated signatures, exact HTTPS, branding and necessary
+permissions. Six local fonts, both font licenses, full ISC/MIT licenses and
+identical 2,374,232-byte Hermes are packaged. Exact x86 release B199…0D5C accepted
+a data-preserving same-key update on 5574, cold launch 2106ms, and fresh installation
+on separate 5576. The fresh 16/16 bounded checks cover Welcome and real carousel
+swipes/dots without account/cloud mutations. Its initial 5908ms launch encountered
+a System UI ANR overlay; one observed Wait recovered it. Three app screenshots
+were inspected, 450 app-process log lines have 0 listed fatal/JS/native-view markers,
+and 5576 was stopped gracefully with userdata preserved. This documented emulator
+limitation prevents a general smoothness/stability claim. The initial signed
+E555/D8EB candidates and their earlier proofs are preserved as historical; their
+acceptance is not reused for this visual binary. The POCO's
+existing Debug signer differs: physical release installation/acceptance is
+pending and must not be forced through uninstall/data clear or package rename.
+Release signing does not guarantee warning-free Android sideloading. No video,
+paid resource, Play publication or organizer submission is authorized.
+
+**Historical D38 — October17 Profile/navigation and focused native refinements:** The user
+now removes the Settings screen entirely, superseding D37's Help→Settings
+presentation. Completed guests see Guest profile with explicit Sign in/Create
+account, device Appearance/Currency and the five tabs. Fresh ordinary entry
+still uses Welcome; explicit `auth=login|register` and private section intents
+select authentication without redefining guest identity or onboarding. Saved
+guest-draft handoff remains. Direct Profile Appearance/Currency replace the top
+appearance chip and Settings selectors; Notifications remains one destination.
+Sign out sits after all rows and returns cleanly to guest Profile without a
+success strip. An in-memory section history preserves nested Back parents;
+legacy Settings query links normalize to Overview, and account notifications
+now open Account details. Authentication forms remain mounted during Help.
+
+The installed native pager is reused for Activity's five existing visual
+filters and My Campaigns' six status groups. Left advances/right returns;
+mounted lists, identity boundaries, read actions and campaign status membership
+retain their existing semantics. Contribution presets use actual native label
+measurements to choose four/two/one columns while keeping scalable complete
+USD/INR values and unchanged canonical USD checkout. Home loses its filter
+shortcut; Explore uses a transparent, safe-area-bounded floating filter card
+over mounted results, with staged sort/funding, explicit Apply and dismissible
+pending choices. Existing search/category state and native paging stay intact.
+
+Implementation/source verification: 259 frontend tests pass in 6,179.7936 ms,
+TypeScript/full-source ESLint exit 0; [freeze](artifacts/profile-flow-fixes-20261017/SOURCE_INPUTS.json)
+captures 100 runtime and 28 test files. ARM64/x86_64 Gradle builds pass47s/1m31s
+with vital lint; [30/30 independent source/package checks](artifacts/profile-flow-fixes-20261017/BUILD_VERIFICATION.json)
+verify zero drift, matching compiled sources, branding, compatible Debug signing,
+ABI and HTTPS. ARM64 candidate47,718,998bytes/SHA966E…F47D and x86_64 share
+identical2,210,024-byte Hermes. Emulator native checks pass73/73effective cases;
+two invalid assertions are annotated/superseded.31screenshots are registered,
+27independently opened, with no material visual blocker in that packet. Both
+native pagers, clean QA logout, staged filters and complete INRfont1.0/1.3 labels
+have bounded interaction evidence. Initial install recovery used one targeted
+userdata-preserving emulator reboot. A late unclassified emulator/automation
+stall leaves final UI/font readback and older-draft reread unverified;119PID
+lines have0fatal/JS markers but46Choreographer warnings(max546skipped frames),
+so smoothness/crash-free acceptance is not inferred. Authorized POCO checks now
+pass55/55 on existingADB5039: compatible old1D36→exact966E update,977ms Metro-free
+launch, guest/auth/Back/Help/filter flows, full INR2×2 labels, all6/5My Campaigns/
+Activity pages and clean QA sign-out. Original guest/Dark/USD/font1.17/density440
+restored; eight unread remain eight, no read/campaign/draft/payment mutation.
+19registered phone captures;35independently reviewed images overall(27emu/8phone).
+Phone152PID lines have0fatal/JS/skipped-frame markers, a bounded sample only.
+Delivered [Campaign.apk](Campaign.apk) is47,718,998bytes/45.51MiB,
+SHA256 `966E629B902555102A490816DDB1932330E8E41BADC1B23DC20894BF21F1F47D`;
+prior1D36 is preserved. [Scoped report](artifacts/profile-flow-fixes-20261017/COMPLETION_REPORT.md)
+owns evidence/limits. Recoverable source ref:
+`refs/checkpoints/profile-flow-fixes-20261017`;
+[SOURCE_CHECKPOINT.json](artifacts/profile-flow-fixes-20261017/SOURCE_CHECKPOINT.json)
+stores the generated commit and preservation proof. No backend/dependency/provider/signing change,
+cloud redeployment, palette replacement or five-step/business-rule change.
+
+**Historical D37 — October17 clean guest Welcome/auth footer:** The later user screenshot
 rejects the standalone Settings control under Welcome/Login. Remove only the
 guest-Profile footer shared by Welcome/Login/Register, plus unused auth
 appearance callback/types. Device Settings remains inside Help and signed-in
 Profile. Existing routes, form state, guest browsing, saved appearance/currency,
 safe areas, design and cloud business logic remain. No backend redeploy needed.
 
-Current [Campaign.apk](Campaign.apk) is47,705,118 bytes, SHA256
+Historical [auth-clean APK](artifacts/android/final-campaign-auth-clean-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk) is47,705,118 bytes, SHA256
 `1D36B4C1BF8BDAEB1E5D773FF8E20641499561FB323D0A793366F856E672344C`, fresh
 `final-campaign-auth-clean-20261017` ARM64 CloudTest, existing Debug v2 certificate
 and HTTPS origin. ARM64/x86_64 builds pass1m57s/1m56s; both embed identical

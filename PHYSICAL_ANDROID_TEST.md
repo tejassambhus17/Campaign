@@ -1,8 +1,198 @@
 # Physical Android test
 
-## October17 final Campaign delivery and clean authentication — current
+<!-- current-code6-evidence -->
+## Current 1.2.3 / code6 — physical test still pending
 
-Current [Campaign.apk](Campaign.apk): **47,705,118 bytes (45.50 MiB)**, SHA256
+The current release has not been installed on the POCO. Its existing Debug
+certificate differs from the unchanged dedicated release certificate. No phone
+commands, uninstall, data clear or signer bypass were performed for this pass.
+ARM64 Campaign.apk is49,470,159bytes, SHA256
+`19E7A02C19956A08CD2DD4896006A4C23A418AADAD132822EC384E08CB0FA75A`.
+
+The actual code6 checks used the isolated Campaign_Release_36 x86 emulator:
+compatible update,2136ms cold Activity start without Metro/reverse,18 scroll/
+font cases and six local-recipient native PDF deliveries plus chooser cancel.
+[Current bounded acceptance](artifacts/final-completion-20261017/pdf-render-fix/FINAL_RELEASE_FOR_CAPTURE.json).
+Current screenshot/PDF review and packaged ARM checks do not establish physical
+ARM64, disconnected mobile-data, all-device accessibility or human usability.
+Use a separate clean authorized device or obtain one concrete safe migration
+approval; never remove the existing phone installation to make a test pass.
+<!-- /current-code6-evidence -->
+
+## Historical October18 release 1.2.2 / code 5 — physical acceptance pending
+
+The current [ARM64 release](artifacts/android/final-completion-lifecycle-20261017/campaign-1.2.2-RELEASE-arm64.apk)
+is 49,453,767 bytes, SHA-256
+`BB7E889F4299E0534B8EF95F349CF1E8474FA7CA0877BEFDB4F5C14BE1BB65DF`.
+The dedicated certificate remains
+`ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07`.
+It differs from the authorized POCO `tkkrlvqklzydbuh6`'s preserved Debug signer
+`fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c`.
+Consequently this release has **not been installed or tested on that physical phone**.
+No new phone preflight, installation, uninstall, data clear, signer bypass or
+package rename was performed for code 5. Existing phone data and Debug APK remain
+preserved; a clean authorized device or separately approved safe migration is
+needed. This report does not authorize removing the existing installation.
+
+The current x86_64 APK is 50,872,694 bytes, SHA-256
+`11755A1675CCD0264ADB661DD4D3EF916B220CA686599333891414AD02A2BC9A`.
+Its [60 package checks](artifacts/final-completion-20261017/activity-lifecycle-fix/RELEASE_BUILD_VERIFICATION.json),
+25 branding-pixel/15 launcher-byte matches, 314 frontend tests, TypeScript/lint
+and zero recorded freeze drift are source/package evidence, not phone evidence.
+
+Actual emulator evidence is bounded and distinct: current section scroll/paging,
+font 1.3 reflow and native cover/ad picker recreation; [24 fresh Welcome/guest checks](artifacts/final-completion-20261017/activity-lifecycle-fix/fresh-native/FINAL_FRESH_QA_SUMMARY.json);
+and the native resumed-fictional-draft creation → review → funding → one $25
+simulated payment → deliberately controlled distribution/completion journey.
+Ordinary font recreation returns Create to its entry; actual Resume restores
+saved Visuals. It does not preserve an ephemeral editor route. The rejected code 4
+`fontScale` override is removed in favor of the guarded weak-host Activity-result
+rebind for `expo-modules-core` 55.0.26.
+
+Current [USD](artifacts/final-completion-20261017/activity-lifecycle-fix/pdf/render-usd/PDF_REVIEW.md)
+and [INR](artifacts/final-completion-20261017/activity-lifecycle-fix/pdf/render-inr/PDF_REVIEW.md)
+native PDFs reached the local QA receiver with a temporary URI grant; all four
+pages of each have bounded visual/accounting review. These are emulator/local
+recipient results, not physical hardware, external delivery or screen-reader proof.
+The current film is in production; raw footage and screenshots do not verify a
+final edited video or the entire application. Code 3 PDFs/code 4 checks and all
+older POCO results below retain their exact historical build scope.
+
+Physical ARM64/disconnected mobile-data access, human usability/listening,
+broader device/accessibility testing, encrypted off-device key recovery and exact
+submission package/destination approval remain open. No unfamiliar tester is
+available. No backend deployment, provider/data change, phone-data reset or
+external submission occurred in this documentation reconciliation. Dedicated
+signing does not guarantee the disappearance of sideload/Play Protect warnings.
+
+## Historical October18 dedicated release 1.2.0 — physical acceptance pending
+
+The current [ARM64 release candidate](artifacts/android/final-completion-20261017/campaign-1.2.0-RELEASE-arm64.apk)
+is version1.2.0/code3,49,453,755bytes, SHA256
+`FAF23F19D375BF6B78B3F2706DFCBFED5F4CAD1312D26E3F47CA9710C0696F69`.
+[56/56 package/source checks](artifacts/final-completion-20261017/RELEASE_BUILD_VERIFICATION.json)
+pass for both final ABIs; they do not establish physical installation.
+
+The unchanged dedicated Campaign certificate is
+`ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07`.
+It differs from the authorized POCO's preserved historical Debug signer
+`fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c`.
+That installation cannot accept this release as a data-preserving update.
+No new physical preflight, phone installation, uninstall, data clear, package
+rename or signing bypass was performed for this final release. Existing phone
+data/Debug APK and previous artifacts remain preserved. A clean authorized
+device or separately approved safe migration is needed for physical acceptance;
+do not treat this documentation as permission to remove the existing app.
+
+Exact x86_64`BF6DA803F43721A4380336A622D8943CB880730D591CC1BFB3904456979C04E4`
+was compatibly installed only on the owned API36 release emulator5574. Its
+[1271ms cold Activity launch/noMetro/noReverse receipt](artifacts/final-completion-20261017/NATIVE_INSTALL.json),
+[18 named scroll checks](artifacts/final-completion-20261017/native/NATIVE_CHECKS.json)
+and [independent screenshot/XML review](artifacts/final-completion-20261017/SCROLL_REVIEW.md)
+cover four section bottoms, native forward/reverse paging, reading retention,
+long/short downward return and font1.3 Story/Impact bottom actions. Actual
+[USD](artifacts/final-completion-20261017/pdf/completed-science-inspection/PDF_REVIEW.md)/
+[INR](artifacts/final-completion-20261017/pdf/completed-science-inr-inspection/PDF_REVIEW.md)
+PDFs from this emulator passed all-page rendering and public financial/snapshot
+checks after local QA-recipient URI grants. These are emulator/file results,
+not POCO, external-recipient, disconnected mobile-data or whole-app acceptance.
+
+Physical ARM64, USB-disconnected/cloud access, actual idle-host wakeup, human
+comprehension/listening and broader final journey/demo/package remain pending.
+No unfamiliar human tester is available; agent QA cannot close that result.
+Release signing alone cannot guarantee removal of sideload/Play Protect warnings.
+The older physical checks below retain their exact Debug build/device scope.
+
+## Historical October17 dedicated Trust release1.1.0 — physical installation pending
+
+The new [release ARM64 APK](Campaign-1.1.0-release-arm64.apk) is version1.1.0/code2,
+49,393,005bytes, SHA256
+`2BC46C23E395C8BA5DEFC72EC1B92C09EFBFDEF6767A7AAAB1B5518D7485DAB9`.
+It uses dedicated Campaign certificate
+`ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07`,
+which differs from the authorized POCO's historical Debug signer
+`fac61745dc0903786fb9ede62a962b399f7348f0bb6f899b8332667591033b9c`.
+No phone commands, installation, uninstall, data clear or signer bypass were
+performed for this release. Existing phone data and Debug Campaign.apk remain.
+A normal compatible phone update is therefore blocked; a separate safe migration
+or clean authorized device is required before physical ARM64 acceptance.
+
+[44/44 package checks](artifacts/trust-release-20261017/RELEASE_BUILD_VERIFICATION.visual-final.json)
+and exact final x86_64 native checks are separate evidence. Native test receipts
+bind B199…0D5C on isolated API36 Campaign emulators; they are not POCO evidence.
+Fresh Welcome/carousel checking recovered one observed System UI ANR with Wait;
+bounded process logs do not prove general smoothness/crash freedom. See the
+[current release report](artifacts/trust-release-20261017/COMPLETION_REPORT.md)
+for actual scoped results and signing-key backup instructions. The older55 phone
+checks below apply only to historical966E…F47D, not this release. Android/Play
+Protect sideload warnings cannot be eliminated by release signing alone.
+
+## Historical October17 Profile, paging and floating filters — scoped native verification
+
+Current [Campaign.apk](Campaign.apk), built from
+[profile-flow-fixes-20261017](artifacts/android/profile-flow-fixes-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk):
+47,718,998 bytes, SHA256
+`966E629B902555102A490816DDB1932330E8E41BADC1B23DC20894BF21F1F47D`.
+It preserves package/signing, the approved Campaign launcher/splash, embedded
+Hermes and the current HTTPS backend. Frontend259/259, TypeScript, ESLint,
+normal Gradle vital lint and the independent30/30 package audit pass.
+
+The user reconnected and unlocked the authorized POCO `tkkrlvqklzydbuh6`.
+Its authenticated transport was on existing ADB5039, not5037; the5037 version
+mismatch guard stopped before a client command, and exact-serial queries found
+the phone on5039. No server/device was restarted or reconfigured. Read-only
+preflight confirmed Android15/API35/ARM64, font1.17/density440 and prior installed
+1D36…344C with compatible signing. Standard `install -r` returned Success;
+the installed new ARM64 SHA exactly matches966E…F47D. Cold native launch returned
+Status:ok, TotalTime977ms/WaitTime1017ms; the phone has no USB reverse.
+[Preflight](artifacts/profile-flow-fixes-20261017/PHYSICAL_PREFLIGHT.json),
+[actual phone receipt](artifacts/profile-flow-fixes-20261017/NATIVE_PHYSICAL.json).
+
+Actual phone checks pass **55/55**: preserved completed guest Profile/five tabs;
+blank explicit Sign in/Register and native Back; direct Appearance/Currency and
+nested Help→Currency→Help→Profile; Home filter absence; floating Explore filters
+with Cancel/Back/Clear+Apply and category-preserving left/right swipes; complete
+INR2×2 presets/first-last selection at unchanged font1.17; all six My Campaigns
+pages forward/reverse and last boundary/Back; all five Activity pages forward/
+reverse; bottom Sign out returning directly to Guest Profile without a strip.
+The existing fictional QA owner alone was temporarily signed in through native
+UI and then signed out. Its ordinary sign-in created a security notification;
+unread stayed8 across paging. No read action, new campaign/draft/payment, delete,
+upload or actual checkout was used. Original guest/Dark/USD/font1.17/density440
+were confirmed at the end. Its current PID sample contains152 lines,0listed
+fatal/JS markers and0skipped-frame warnings; this is a bounded sample.
+
+Nineteen registered app-only phone captures accompany the receipt. Actual images
+were opened, including [Guest Profile](artifacts/profile-flow-fixes-20261017/phone/guest-profile.png),
+[floating filters](artifacts/profile-flow-fixes-20261017/phone/explore-floating-filters.png),
+[complete INR amounts](artifacts/profile-flow-fixes-20261017/phone/inr-presets-last-selected.png),
+[Activity](artifacts/profile-flow-fixes-20261017/phone/activity-returned-all.png)
+and [clean sign-out](artifacts/profile-flow-fixes-20261017/phone/signed-out-guest.png).
+[Independent visual review](artifacts/profile-flow-fixes-20261017/VISUAL_REVIEW.md)
+opened27 emulator and8phone captures; stills alone do not prove gestures.
+
+The owned API36/x86_64 `Campaign_FourArea_36` emulator passes73/73 effective
+checks, with two invalid helper assertions retained and corrected. Its exact
+installed hash and Metro-independent launch match the x86 build; font1.0/1.3
+INR labels, all pager directions/bounds/taps, auth/Back/logout and staged filters
+were checked. Initial stalled installation recovered after one targeted emulator
+reboot, preserving userdata/server. A later optional font1.3 overlay attempt
+stalled again:119PID lines show0fatal/JS markers but46skipped-frame warnings
+(maximum546). Cause remains unclassified. Original System/INR and QA logout were
+confirmed; the font1.0 restore write completed, but final font/UI/draft readback
+remains unverified. [Emulator receipt](artifacts/profile-flow-fixes-20261017/NATIVE_EMULATOR.json).
+
+This frontend-only task does not redeploy or reconfigure Render, Neon or
+Cloudinary. No user records are deleted, no video is recorded, and the old
+working APK remains preserved. Root Campaign.apk now holds the new47,718,998-byte
+build ([delivery receipt](artifacts/profile-flow-fixes-20261017/CAMPAIGN_APK.json)).
+This is compatible Android Debug-signed CloudTest, not production/Play signing.
+Whole-app, TalkBack, other devices/API levels, full font/orientation matrices,
+media/payment regression and sustained-performance acceptance are not inferred.
+
+## Historical October17 final Campaign delivery and clean authentication
+
+Prior [auth-clean APK](artifacts/android/final-campaign-auth-clean-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk): **47,705,118 bytes (45.50 MiB)**, SHA256
 `1D36B4C1BF8BDAEB1E5D773FF8E20641499561FB323D0A793366F856E672344C`.
 Fresh ARM64 CloudTest release variant, package `com.campaignamplification.mobile`
 1.0.0/code1, embedded Hermes/current Render HTTPS and preserved Android Debug v2

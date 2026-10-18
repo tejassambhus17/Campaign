@@ -146,6 +146,14 @@ function checkoutHarness() {
   const config = { data: { feeRate: 0.05, peoplePerAdDollar: 27, policies: {} }, isError: false };
   const campaign = { id: 'qa-campaign', title: 'Disposable QA', creatorName: 'QA', campaignState: 'Available for Funding', goal: 100, raised: 0 };
   const ui = Object.fromEntries(['Text', 'Button', 'IconButton', 'PageHeader', 'ErrorState', 'Loading', 'Notice', 'Pill', 'Screen'].map(name => [name, name]));
+  const presetState = hooks(), presetRefs = []; let presetRefIndex = 0;
+  const { ContributionPresets } = load('../src/features/contributions/ContributionPresets.tsx', {
+    react: { useState: presetState.useState, useRef: initial => { const i = presetRefIndex++; if (!(i in presetRefs)) presetRefs[i] = { current: initial }; return presetRefs[i]; } },
+    'react/jsx-runtime': { jsx, jsxs: jsx },
+    'react-native': { View: 'View', ScrollView: 'ScrollView', Pressable: 'Pressable', useWindowDimensions: () => ({ width: 393, fontScale: 1.17 }) },
+    '../../components/ui': { Text: 'Text', fonts: { bold: 'ManropeBold' }, useTheme: () => ({ colors: new Proxy({}, { get: () => '#121212' }) }) },
+    './presetLayout': load('../src/features/contributions/presetLayout.ts'),
+  });
   const component = load('../src/app/(tabs)/explore/[id]/back.tsx', {
     react: { useState: state.useState, useCallback: fn => fn, useRef: initial => { const i = refIndex++; if (!(i in refs)) refs[i] = { current: initial }; return refs[i]; } },
     'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { View: 'View', ScrollView: 'ScrollView', TextInput: 'TextInput', Pressable: 'Pressable', Keyboard: { dismiss() {} } },
@@ -155,9 +163,13 @@ function checkoutHarness() {
     '../../../../lib/types': types, '../../../../lib/session': { useConfig: () => config, refresh: async () => { refreshes++; } }, '../../../../lib/public-campaign': { audienceCampaign: c => c },
     '../../../../components/ui': { ...ui, fonts: {}, useTheme: () => ({ colors: new Proxy({}, { get: () => '#121212' }), styles: {}, scheme: 'dark' }) },
     '../../../../features/campaign': { CampaignCover: 'CampaignCover', Disclosures: 'Disclosures', Funding: 'Funding', ShareButton: 'ShareButton' },
+    '../../../../features/contributions/ContributionPresets': { ContributionPresets },
     '../../../../lib/CurrencyProvider': { useCurrency: () => preference }, '../../../../lib/currency': fx,
   });
-  const render = () => { state.reset(); refIndex = 0; return flatten(component.default()); };
+  const render = () => {
+    state.reset(); refIndex = 0; presetState.reset(); presetRefIndex = 0;
+    return flatten(component.default()).flatMap(node => node.type === ContributionPresets ? flatten(ContributionPresets(node.props)) : [node]);
+  };
   const text = tree => tree.filter(n => n.type === 'Text' || n.type === 'Notice').flatMap(n => n.props.children).filter(v => typeof v === 'string').join(' ');
   return { render, text, calls, config, refreshes: () => refreshes, resolvePayment: payment => resolvePayment(payment), preference: value => { preference = value; } };
 }
@@ -165,6 +177,10 @@ test('actual checkout converts presets and custom INR once, freezes reference/fe
   const h = checkoutHarness(); let tree = h.render();
   assert.equal(tree.find(n => n.type === 'TextInput').props.value, '2081.25'); assert.match(tree.find(n => n.type === 'TextInput').props.accessibilityLabel, /INR/);
   assert.ok(tree.some(n => n.props.accessibilityLabel === '₹416.25 contribution'));
+  tree.find(n => n.props.accessibilityLabel === '₹416.25 contribution').props.onPress();
+  tree = h.render(); assert.equal(tree.find(n => n.type === 'TextInput').props.value, '416.25');
+  tree.find(n => n.props.accessibilityLabel === '₹2,081.25 contribution').props.onPress();
+  tree = h.render(); assert.equal(tree.find(n => n.type === 'TextInput').props.value, '2081.25');
   tree.find(n => n.props.title === 'Continue to payment').props.onPress();
   h.preference({ snapshot: usd, preference: 'USD', rate: null });
   tree = h.render(); assert.match(h.text(tree), /₹2,081.25/); assert.match(h.text(tree), /Platform fee \(5% included\)/); assert.match(h.text(tree), /641 people/);

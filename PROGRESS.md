@@ -1,8 +1,449 @@
 # Development progress
 
-## October17 final delivery: deployed backend and Campaign.apk
+<!-- current-code6-evidence -->
+## October18 — 1.2.3 fixes verified; local delivery prepared
 
-**Current delivery:** [Campaign.apk](Campaign.apk), **47,705,118 bytes (45.50 MiB)**,
+The campaign-section cutoff is fixed. Exact code6 x86 native testing passes
+18 named cases: all four section bottoms, three left-next and three right-back
+transitions, Story reading-position retention, first boundary, long/short
+downward return to overview and Story/Impact reach at font1.3. Nine fresh
+PNG/XML states were independently opened. [Scroll review](artifacts/final-completion-20261017/pdf-render-fix/SCROLL_VISUAL_REVIEW.md).
+
+The later repeated-PDF-export defect is corrected by a guarded expo-print
+55.0.19 native patch: main-thread once-only completion, resource cleanup,
+renderer/load/layout/write failures, cancellation ownership and a45-second
+watchdog. Expo Print and core are explicitly built from source; an initial
+prebuilt-AAR candidate that omitted the patch was rejected before installation.
+Source2 compiles against Android36, and actual APK DEX inspection verifies it.
+
+Six actual PDF deliveries (repeat USD, INR and after Activity recreation) plus
+displayed-chooser cancellation pass in one app process; the next share recovers.
+All eight pages of representative USD/INR reports were opened, with all six
+documents parsed and compared. A seventh public PDF was received off-camera
+after the actual demo capture. [PDF review](artifacts/final-completion-20261017/pdf-render-fix/pdf/review-current/PDF_REVIEW.md).
+Real forced renderer-death/watchdog/mid-render interruption is not claimed;
+those terminal paths have bounded native fixture/SDK tests.
+
+324/324 frontend tests, TypeScript/full-source ESLint,24 renderer scenario groups,
+14 module/coroutine groups and actual SDK compile controls pass. Both release
+ABIs pass69/69 package/source checks with no drift, approved branding, HTTPS,
+Hermes and the unchanged dedicated certificate. ARM64 is49,470,159bytes,
+SHA256 `19E7A02C19956A08CD2DD4896006A4C23A418AADAD132822EC384E08CB0FA75A`.
+[Package handoff](artifacts/final-completion-20261017/pdf-render-fix/FINAL_PACKAGE_HANDOFF.json).
+
+Exact x86 was installed with `-r`, cold-launched in2136ms without Metro/reverse,
+and tested on the isolated API36 emulator. Current-process542-line log sample
+has zero listed fatal/JS/print errors and no renderer-exit line. This is bounded
+evidence, not a whole-app crash-free or performance claim.
+
+The code5 connected fictional creator/reviewer/backer journey retains its build
+identity. Its108 UI source/assets and actual Hermes bytes match code6 exactly;
+the changed native PDF flow was retested and recaptured on code6. No cloud
+redeployment, seed, migration or record cleanup was needed. Existing15-table
+read-only preservation audit and backend135 SQLite/76 PostgreSQL results stand.
+
+Current local APK: [Campaign.apk](artifacts/delivery/Campaign-1.2.3/Campaign.apk).
+The actual 4m08.43 narrated MP4 passed full decode, bounded frame/privacy
+review and continuous muted 1× playback. Final source/package evidence is in
+[the local delivery guide](artifacts/delivery/Campaign-1.2.3/README.md) and
+[video acceptance](artifacts/final-completion-20261017/demo/FINAL_VIDEO_ACCEPTANCE.json).
+Physical ARM64/mobile-data, unfamiliar-human usability, final human listening,
+encrypted off-device key backup, recipient downloads and exact submission
+approval remain pending. The phone's Debug installation/data were preserved.
+<!-- /current-code6-evidence -->
+
+## Historical October18 — Connected journey passed on code5; repeat PDF export needs recovery
+
+Exact 1.2.2/code5 completed the designated fictional native journey for
+**Small questions, shared discoveries** (`cmp_1d8c15bbfb1f9b32513ab5c5`). The
+ordinary account used all five creation steps, distinct cover/ad uploads,
+save/restart/resume and a deliberate $25 Submit goal. A separate reviewer
+approved it, then opened funding. One native simulated $25 payment produced
+receipt `pay_808f99b234c84c2df6556baa` and Activity. Separate reviewer actions
+prepared distribution, started promotion, recorded demo progress and completed
+it. No lifecycle/payment API or database injection was used.
+
+The user's four-section cutoff correction retains its bounded code5 scroll/font
+evidence below. The [20-check connected-journey receipt](artifacts/final-completion-20261017/activity-lifecycle-fix/NATIVE_CONNECTED_JOURNEY.json)
+passes its recorded build/text/hash checks. Independent [additional screenshot review](artifacts/final-completion-20261017/activity-lifecycle-fix/NATIVE_JOURNEY_VISUAL_REVIEW.md)
+opened eight more Light report/accounting, submission/receipt and Trust/rubric/
+audience states, finding no new blocking visible layout defect. Prior Impact
+and report states remain separately linked in the PDF reviews. Static pixels
+do not establish every scroll range, gesture smoothness or whole-app acceptance.
+
+Impact records $22.56 simulated spend + $1.25 fees + $1.19 completed simulated
+refund + $0 remaining = $25. Estimated reach 641 is distinct from simulated
+reach 548, impressions 822, clicks 18 and unavailable measured reach. Actual
+Android USD/INR PDFs reached the isolated local receiver through the native
+chooser. All eight rendered pages were independently inspected; figures,
+snapshot and simulation labels agree. INR has a disclosed ₹0.01 component
+rounding difference. [USD review](artifacts/final-completion-20261017/activity-lifecycle-fix/pdf/render-usd/PDF_REVIEW.md),
+[INR review](artifacts/final-completion-20261017/activity-lifecycle-fix/pdf/render-inr/PDF_REVIEW.md).
+The final [read-only preservation audit](artifacts/final-completion-20261017/backend/cloud-rollout/FINAL_NATIVE_PRESERVATION.json)
+passed: all original rows across 15 tables match; every addition belongs to the
+designated QA journey, and its single payment/contribution/refund ledger agrees.
+No new assessment or migration was added.
+
+**New release blocker:** a third repeat export stayed on “Preparing report…”
+through a 39.99-second capture. Android Back left the report; no late chooser
+was observed. App-only logs have two earlier Chromium renderer-exit entries
+and no listed fatal/JS/Activity-result errors, without establishing causation.
+Installed expo-print 55.0.19 lacks renderer-exit/watchdog handling and file-render
+WebView/descriptor cleanup. A narrow guarded native correction and replacement
+build are in progress. Final video/package acceptance is held for this fix and
+affected retesting; two successful exports do not close repeat reliability.
+[Finding](artifacts/final-completion-20261017/activity-lifecycle-fix/native/REPEAT_EXPORT_FINDING.json),
+[source investigation](artifacts/final-completion-20261017/activity-lifecycle-fix/PDF_REPEAT_EXPORT_REVIEW.md).
+
+Reviewer Inspect opens Explore, so a test expecting one Android Back to return
+to Review was incorrect; testing resumed through Profile. One automated Home
+query missed input while its keyboard opened; verifying settled “ocean” text
+before Enter passed the Home-to-Explore handoff. These findings do not justify
+unrelated navigation changes. Failed raw clips remain preserved and excluded
+from success evidence. No phone data clearing or additional deployment occurred.
+
+## Historical October18 build checkpoint — 1.2.2 bounded font reflow passed
+
+The user's four-section vertical-cutoff correction now passes its named current
+native matrix. Exact 1.2.2/code5
+x86_64 SHA256 `11755A1675CCD0264ADB661DD4D3EF916B220CA686599333891414AD02A2BC9A`
+now resolves the prior code4 P1 in six independently opened font 1.3 PNG/XML
+states: complete section labels/Story text, proposal and finance actions, full
+review-card heading/disclaimer, Impact metrics/caveat and resumed Create Visuals
+guidance/actions/Back/Next. Story/Impact final actions have 50/49px dock clearance.
+[Bounded actual-pixel review](artifacts/final-completion-20261017/activity-lifecycle-fix/FONT_SCALE_VISUAL_REVIEW.md).
+This closes the named visual clipping examples, not every paragraph/device or
+the complete application. The normal-size rerun now passes all four final-action
+bottoms, three left-next/three right-previous transitions, retained Story offset,
+boundary and long/short downward returns. Independent actual PNG/XML review
+confirms all four bottoms clear of the dock and the short Updates full-top return
+with Back to Explore starting at 94px. [Capture acceptance](artifacts/final-completion-20261017/activity-lifecycle-fix/FINAL_RELEASE_FOR_CAPTURE.json)
+permits continued exact-build QA/demo capture within that scope; it is not a
+completed connected journey or whole-product approval.
+
+The replacement uses a guarded Expo Activity-result rebind for a replaced host
+and removes the rejected MainActivity `fontScale` override, retaining ordinary
+Android font-change recreation/scaling. Current native receipts record cover/ad
+picker opening and cancellation after normal recreation and actual saved-draft
+resume, with empty media collections preserved. Create may return to its entry
+on recreation; the real Resume path was used. A helper's assumption of the same
+mounted editor and its alternate assessment-label locator were corrected test
+expectations, not evidence of missing app controls/content. These named results
+do not establish every lifecycle/media/upload path.
+
+Both same-key 1.2.2/code5 candidates are built:
+ARM64 is 49,453,767 bytes/SHA256
+`BB7E889F4299E0534B8EF95F349CF1E8474FA7CA0877BEFDB4F5C14BE1BB65DF`;
+x86_64 is 50,872,694 bytes. [60/60 package/source checks](artifacts/final-completion-20261017/activity-lifecycle-fix/RELEASE_BUILD_VERIFICATION.json)
+pass with no frozen-source drift, including actual packaged weak-host rebind,
+normal font-scale recreation flags, unchanged certificate/HTTPS/Hermes and a
+passing bounded known-secret scan. [314/314 frontend tests](artifacts/final-completion-20261017/activity-lifecycle-fix/frontend-supported-node.log)
+pass on supported Node, plus the documented focused native-patch/signing cases;
+TypeScript and corrected full-source lint pass. Earlier failed tooling runs and
+rejected code4 evidence remain historical. Source/package checks are not whole
+native acceptance.
+
+The existing Free backend/records/provider configuration remain unchanged.
+Earlier code4 idle-host evidence (zero instances→new RUNNING instance, API data
+visible by 30.891 seconds) and its fresh 24/24 Welcome/guest checks retain that
+exact-binary scope below; they are not new code5 measurements. BF6D USD/INR PDFs
+also remain pre-final until repeated on the accepted build.
+
+**Final delivery remains IN PROGRESS:** finish exact-binary connected
+creation/review/backing/distribution/report/PDF checks, actual complete
+demo/full playback/privacy/audio review, package/manifest and recipient access.
+Physical ARM64/disconnected mobile data, human usability/listening (no unfamiliar
+tester available), encrypted off-device key recovery and exact package/destination
+approval remain separate. No phone wipe/incompatible update, public upload or
+organizer submission is authorized by these bounded checks.
+
+## Historical October18 — 1.2.1 rejected for larger-text clipping
+
+**Current checkpoint: release BLOCKED by a reproduced P1.** The latest user's
+Story/Updates/Impact/Sources vertical-cutoff concern has current native evidence
+on exact1.2.1/code4 x86 SHA256
+`8DE64E6E6B500B7A042C75A89FF54276969F0E43B482DB459FFE83F7722C0515`:
+all four final actions are reachable at font1.0, with clear dock/safe areas.
+Native left-next/right-previous paging, retained Story position and long/short
+downward handoffs pass the named geometry/navigation cases. The short return
+capture is partial expansion, not proof of full-top return. Font1.3 Story/Impact
+final controls remain reachable, but **multiple labels and paragraphs clip
+inside retained smaller text bounds**. Independent actual PNG/XML review
+separates these results in
+[FONT_SCALE_SCROLL_REVIEW](artifacts/final-completion-20261017/fontscale-fix/FONT_SCALE_SCROLL_REVIEW.md).
+Reachable footers do not establish complete readable content.
+
+The same P1 is visible in Create → Visuals after the live font change: step
+labels, media guidance/actions and Back/Next text truncate at1.3, while the
+font1.0 captures show their full strings. Six performed picker/open/cancel
+checks pass without process restart and preserve the empty separate cover/ad
+collections, but the `fontScale` manifest workaround is insufficient for
+release because typography/layout regresses. Code4 is held. A direct Expo
+Activity-result registration correction and removal of that override are under
+investigation; no replacement implementation or native acceptance is claimed.
+Final connected-journey filming is held until this blocker is resolved.
+
+The code4 candidate has
+[58/58 package/source checks](artifacts/final-completion-20261017/fontscale-fix/RELEASE_BUILD_VERIFICATION.json),
+no recorded frozen-source drift and a passing bounded known-secret scan.
+ARM64 is49,453,763bytes/SHA256
+`F69E2D9DD0ADD6A38ABD4CA0F425AD4AE075682D8E551A9DB9319E4DF1B6AB52`;
+the package and dedicated signer remain unchanged. Source checks record
+[312/312 frontend tests](artifacts/final-completion-20261017/fontscale-fix/frontend-tests.log),
+including five targeted manifest-mod tests, with TypeScript/full-source lint
+passing. These automated checks did not catch the native font clipping.
+
+One actual idle-host case completed on exactcode4:1,102.7seconds without agent
+application traffic, cold Android Activity launch1,217ms, and server-fed Ocean
+data visible by30.891seconds. Saved read-only provider snapshots show zero
+instances before launch and a new RUNNING instance created20:00:12Z afterward
+on the same Free service with auto-deploy off. See
+[native observation](artifacts/final-completion-20261017/fontscale-fix/HOST_IDLE_NATIVE.json),
+[before](artifacts/final-completion-20261017/fontscale-fix/PROVIDER_before-cold-open.json)
+and [after](artifacts/final-completion-20261017/fontscale-fix/PROVIDER_after-cold-open.json).
+The API-ready value is a sampled upper bound, separate from Activity launch;
+third-party traffic cannot be excluded. This is not universal latency or
+physical/mobile-data acceptance.
+
+A separate fresh API36 emulator accepted exactcode4 and passes
+[24/24 installation/Welcome/carousel/Guest Home/Profile checks](artifacts/final-completion-20261017/fontscale-fix/fresh-native/FINAL_FRESH_QA_SUMMARY.json).
+Its1,597ms first Activity launch and264-line/zero-listed-error-marker sample are
+bounded evidence. The short silent discovery clip and all code4 captures are
+historical candidate evidence once the replacement changes; they are not the
+complete final demo or a font-scale pass. Earlier BF6D USD/INR native PDFs and
+connected-workflow evidence below remain pre-final, not replacement-build proof.
+
+The same approved backend remains live;135SQLite/76isolated PostgreSQL and
+12HTTPS/15-table preservation receipts retain their existing scope. No migration,
+seed, provider, secret or billing change is part of this blocker investigation.
+Still pending: corrected exact-binary font/recreation/picker and connected
+journey/PDF checks, final film/full playback/privacy/audio review, package/manifest
+and recipient access, physical ARM64/disconnected mobile data, human usability
+(no unfamiliar tester available), encrypted off-device key recovery and exact
+package/destination approval before submission. No phone wipe/incompatible
+update or whole-app verification claim.
+
+## Historical October18 — release1.2.0 built; bounded scroll and PDF checks passed
+
+Final1.2.0/code3 candidates are built with the same dedicated release key:
+ARM64 is49,453,755 bytes, SHA256
+`FAF23F19D375BF6B78B3F2706DFCBFED5F4CAD1312D26E3F47CA9710C0696F69`;
+x86_64 is50,872,682 bytes,
+`BF6DA803F43721A4380336A622D8943CB880730D591CC1BFB3904456979C04E4`.
+[56/56 package/source checks](artifacts/final-completion-20261017/RELEASE_BUILD_VERIFICATION.json)
+and the bounded known-secret scan pass with no frozen-source drift. Both contain
+identical2,417,328-byte Hermes, the current HTTPS API and native report modules.
+
+The B199 vertical-scroll failure is corrected on exact BF6D. The owned release
+emulator passes18 named scrolling checks: all four final actions reachable,
+three left-next/three right-previous transitions, retained Story reading offset,
+long/short downward returns and Story/Impact bottom reach at font1.3. Independent
+PNG/XML review confirms unobscured actions/dock/safe areas in those cases.
+[Scroll evidence](artifacts/final-completion-20261017/SCROLL_REVIEW.md).
+The compatible emulator update preserved data; cold Activity launch1271ms had
+no Metro or USB reverse. That timing is not a hosted-API wakeup measurement.
+
+Actual native Print→Android chooser→local QA-recipient read grants produced two
+public Completed/science PDFs. All four pages of each were rendered/opened;
+USD/INR amounts, reference2026-10-17 at₹94.94, canonical USD and snapshot/content
+hashes agree with the public cloud response and visible native funding samples.
+[USD review](artifacts/final-completion-20261017/pdf/completed-science-inspection/PDF_REVIEW.md),
+[INR review](artifacts/final-completion-20261017/pdf/completed-science-inr-inspection/PDF_REVIEW.md).
+No clipping/blank page/missing currency/financial mismatch was demonstrated.
+Sparse continuation pages and explicit seed-state chronology remain nonblocking
+documented limits; the seed date is not the actual period-completion timestamp.
+
+Current checks: 299/299 frontend tests plus 8/8 focused report-sharing tests,
+TypeScript and full-source ESLint pass. Backend checks pass 135 SQLite and 76
+actual isolated PostgreSQL cases, without failures/skips. The compatible
+four-file report update `04e206a177a2450ec68bb3dae20f487b75847493` is live on the
+same Render Free service, auto-deploy off. A fresh protected backup was restored
+locally and compared across all 15 tables; post-deployment fingerprints are
+unchanged and all 12 HTTPS/compatibility checks pass. No migrations, seeds,
+provider settings or billing changed.
+
+The broader final connected creation/review/backing/distribution/report journey,
+other report/failure variants, final demo/playback/package/recipient access and
+actual idle-host wakeup remain pending. The brief authorizes Campaign-only
+recording; external submission still needs exact package/destination approval.
+Human usability remains unverified because no unfamiliar tester is available.
+Physical ARM64/USB-disconnected mobile-data acceptance remains pending: the
+POCO's preserved historical Debug installation cannot accept the different
+dedicated release signer as a data-preserving update. No phone wipe or signing
+bypass; existing APKs/data remain preserved. These bounded emulator/PDF checks
+do not establish whole-app, physical, screen-reader or human acceptance.
+
+## October17 Trust, expanded demos and dedicated release 1.1.0 — delivered
+
+**IMPLEMENTED, TESTED LOCALLY, DEPLOYED and VERIFIED ON CLOUD within this scope.**
+The approved rollout uses the same Render Free service and current HTTPS origin,
+commit `cbd4f90d5108f40beb8474813cc42d475f095354`, deploy
+`dep-db9q15ijnfac73d7gu1g`, with auto-deploy off. Additive migration 007, fourteen
+new $0 demos and twenty individually documented illustrative assessments passed
+243/243 HTTPS checks. The library grew from six to twenty built-ins: two in each
+of the ten existing topics. Public campaigns were 22 at rollout and 23 after
+publication of the isolated QA campaign. No provider, billing or secret change.
+
+The protected production backup restored exactly to an isolated local database.
+After both native QA writers stopped, a final SQL-only read transaction at
+17:59:08 UTC found every original row across all thirteen baseline tables exact.
+All twenty demo assessment IDs, hashes, scores and publication times remained
+unchanged. Seed rerun: zero inserts, conflicts or skipped edits; deadlines were
+not extended. Actual final counts and QA attribution are in
+[POST_NATIVE_READ_ONLY.json](artifacts/trust-release-20261017/cloud-rollout/POST_NATIVE_READ_ONLY.json).
+Two fictional QA accounts/campaigns and four uploaded assets are distinct from
+the library. The main QA record has one reconciled simulated $5 contribution.
+A separate guest $25 Ocean contribution during the window is **unattributed** and
+preserved: derived Ocean funding increased $2,465 → $2,490 (two → three payments),
+while original rows, content and assessment stayed exact. It is not labelled as
+our QA or deleted; all new payments cannot be attributed to our test actors.
+
+The versioned `campaign-review-v1` prototype rubric has 30/20/20/15/15 weights and
+thirteen anchored checks with recorded evidence, reasons, gaps and limitations.
+Server totals, reviewer authorization, public/private content hashes and immutable
+publication preserve separate assessment, policy approval, funding and delivery.
+Story order is reach → Trust → audience, using the existing net-ad-budget model.
+New user campaigns remain unassessed; demo provenance is prominent. The exact
+reviewer snapshot, cache-race guard and unsaved-editor preservation are included.
+
+**Source and package checks:** 279 frontend, 126 SQLite and 67 actual isolated
+PostgreSQL tests pass; TypeScript/ESLint exit 0 with no warnings. ARM64/x86 Release
+builds pass in 1m16s/2m17s with normal vital lint. The current 44/44 package audit
+binds 77 compiled modules, 111 runtime inputs, 33 tests and six scripts with zero
+drift, approved brand assets, embedded Hermes, HTTPS, permissions and signatures.
+Ten known server/signing values had zero matches across every APK member. This
+is bounded package evidence, not comprehensive security certification.
+
+**Exact final x86 native checks:** 27 main cases, 16 fresh Welcome/carousel cases
+and 21 effective fresh registration/create/media/save-resume cases pass. Two
+incorrect fresh-workflow harness assumptions remain preserved and superseded.
+Both native media uploads, picker cancellation, five creation steps, creator goal
+at Submit, account resume and submission passed. Reviewer save, incomplete-publication
+rejection and an honest thirteen-check 0/100 publication passed; that campaign
+remained submitted until separate approval and funding actions. Simulated $5
+checkout ($0.25 fee/$4.75 ads/~128 estimated people), actual receipt, Activity and
+offline → retry → live HTTPS recovery passed. Original network settings restored;
+main emulator ended Guest/Dark/font 1.0. Only task-owned emulators were stopped,
+with userdata retained. Main/fresh process logs: 661/702 lines and zero listed
+fatal, JS, native SVG or skipped-frame markers; main crash buffer empty.
+
+Independent visual confirmation passed Dark, Light, font 1.3 and Story context
+after one correction batch: licensed Lucide/SVG replaced the heavy shield and
+fixed classification fit. Product Design and Impeccable guidance were applied;
+the unavailable Impeccable context engine used its documented native/manual
+fallback. Neon/Postgres guidance preserved psycopg. The initial fresh launch had
+a System UI ANR recovered with Wait; its cause is unestablished. Later fresh
+startup had no observed ANR. No universal smoothness/crash-free claim follows.
+Older D8EB checks remain historical and are not promoted to the final build.
+
+**Delivery:** [Campaign-1.1.0-release-arm64.apk](Campaign-1.1.0-release-arm64.apk),
+49,393,005 bytes (47.10 MiB), SHA256
+`2BC46C23E395C8BA5DEFC72EC1B92C09EFBFDEF6767A7AAAB1B5518D7485DAB9`.
+Campaign / com.campaignamplification.mobile, version 1.1.0/code 2, ARM64,
+min API 24/target 36. Dedicated certificate SHA256:
+`ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07`.
+Original Debug Campaign.apk and prior signed candidates remain preserved.
+Physical release testing is pending because the POCO's Debug signer differs;
+no phone command, installation, uninstall or clear was performed. Human-operated
+encrypted off-device key backup is pending; the protected same-PC backup does
+not protect against disk loss. Signing does not eliminate sideload warnings.
+
+**Local-only credential incident:** the initial isolated seed test omitted its
+reviewer fixture environment and legacy code replaced ignored
+services/api/.demo-credentials.json. No existing local reviewer DB hash or cloud
+credential changed. The replacement does not authenticate the old local reviewer;
+no matching prior password backup was found and no reset/rotation was attempted.
+Tests now explicitly isolate credentials and guard the shared writer. Cloud
+reviewer login passed; default-local credential recovery remains pending.
+
+[Full completion report](artifacts/trust-release-20261017/COMPLETION_REPORT.md)
+contains all requested fifteen deliverables, screenshots and remaining limits.
+Source ref: `refs/checkpoints/trust-release-complete-20261017`; normal HEAD/index
+preserved. No paid resources, recording, Play publication or organizer submission.
+
+## October17 Profile, paging, contribution and discovery corrections — delivered
+
+**VERIFIED within the scoped native checks; updated APK delivered.** The latest user
+correction supersedes D37's retained Help/Profile Settings screen. Completed
+guests now get a real Guest profile with Sign in/Create account and the five
+tabs; fresh ordinary entry still shows Welcome. Explicit private-action sign-in
+uses `/profile?auth=login`, preserving the existing saved-draft handoff. Settings
+is removed; Appearance and Currency are direct Profile sections, Notifications
+has one destination, and Sign out follows all account rows. The top appearance
+selector and signed-out success strip are removed. Section history returns Back
+to the actual parent; old `section=Settings` links resolve safely to Profile.
+
+Activity has five mounted native pages (All, Updates, Contributions, Unread,
+Account); My Campaigns has its six existing status groups. Left advances/right
+returns, with synchronized pills, measured strip reveal, reduced-motion taps,
+per-page vertical lists and existing privacy/read/business rules preserved.
+Contribution presets measure complete USD/INR labels and reflow into four, two
+or one columns without shrinking text; canonical amounts and checkout snapshots
+are unchanged. Home's filter shortcut is removed. Explore's transparent floating
+filter card keeps its page visible and mounted, stages sorting/funding until
+Apply, and retains pending choices when Cancel/close/outside/Back dismiss it.
+
+**Source checks pass:** [259/259 frontend tests](artifacts/profile-flow-fixes-20261017/frontend.log)
+in 6,179.7936 ms; TypeScript/full-source ESLint exit 0. The [source freeze](artifacts/profile-flow-fixes-20261017/SOURCE_INPUTS.json)
+contains 100 runtime inputs and 28 test files, based on checkpoint
+`5e327fa88a5f1c2b0f675faff1ed925fab164d73`. These are source-level checks, not
+new native gesture, appearance, installed-package or performance acceptance.
+
+**Build/package verification:** ARM64/x86_64 Gradle builds pass in 47s/1m31s
+with normal vital lint. The [ARM64 candidate](artifacts/android/profile-flow-fixes-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk)
+is 47,718,998 bytes, SHA256
+`966E629B902555102A490816DDB1932330E8E41BADC1B23DC20894BF21F1F47D`.
+Both ABIs embed identical 2,210,024-byte Hermes. Independent [30/30 source/package
+checks](artifacts/profile-flow-fixes-20261017/BUILD_VERIFICATION.json) verify zero
+source drift, compiled modules, Campaign label/approved icons/splash, existing
+Debug certificate, ABI and current HTTPS initialization. These checks do not
+establish native behavior or production signing.
+
+**Current delivery:** [Campaign.apk](Campaign.apk), **47,718,998 bytes (45.51 MiB)**,
+SHA256 `966E629B902555102A490816DDB1932330E8E41BADC1B23DC20894BF21F1F47D`.
+[Delivery receipt](artifacts/profile-flow-fixes-20261017/CAMPAIGN_APK.json) binds
+the root file to the built/installed ARM64 candidate. Prior1D36 remains preserved
+in its auth-clean artifact folder. Campaign name, approved logo, compatible
+Android Debug certificate, embedded Hermes and current HTTPS remain.
+The owned emulator passes **73/73 effective native checks**; two invalid QA
+assertions are explicitly superseded (below-fold Help content and an incorrectly
+encoded expected INR label). Guest/auth Back, consolidated Profile, clean QA
+logout, both native pager directions/bounds/taps, unchanged seven unread events,
+staged Explore filters and complete INR labels at font1.0/1.3 are covered.
+[Receipt](artifacts/profile-flow-fixes-20261017/NATIVE_EMULATOR.json) records31
+screenshots; [independent visual review](artifacts/profile-flow-fixes-20261017/VISUAL_REVIEW.md)
+opened27 and found no material visual blocker in those states. Initial install
+tooling required one targeted userdata-preserving emulator reboot. A later
+unclassified emulator/UI-automation stall leaves final UI/font readback and
+post-QA guest-draft reread pending. Its119PID lines show0fatal/JS markers but46
+Choreographer warnings, largest546skipped frames; no crash-free/smoothness claim.
+
+**Physical verification:** [55/55 checks](artifacts/profile-flow-fixes-20261017/NATIVE_PHYSICAL.json)
+pass on authorized POCO `tkkrlvqklzydbuh6`, Android15/API35/ARM64, through its
+existing ADB5039 transport. Compatible install-r Success updates old1D36 to the
+exact966E candidate, no uninstall/clear/server changes. Cold launch without Metro
+took977ms/wait1017ms, no USB reverse. Actual checks cover guest/auth/Back/nested
+Help, Home filter absence, Explore floating Cancel/Back/Clear→Apply/category
+swipes, full INR2×2 labels and first/last selection, all6My Campaigns and5Activity
+forward/reverse pages, and bottom Sign out→clean Guest profile. Existing fictional
+QA login/sign-out only; its eight unread remain eight, with no read/campaign/
+draft/payment mutations. Original guest/Dark/USD/font1.17/density440 restored.
+19phone screenshots are registered;35images were independently reviewed overall
+(27emulator+8phone), with additional root inspection of phone Activity/sign-out
+states.152current-PID lines show0fatal/JS or skipped-frame markers, a bounded
+sample. No whole-app or performance guarantee follows.
+See the [current scoped report](artifacts/profile-flow-fixes-20261017/COMPLETION_REPORT.md).
+Recoverable source ref: `refs/checkpoints/profile-flow-fixes-20261017`;
+[SOURCE_CHECKPOINT.json](artifacts/profile-flow-fixes-20261017/SOURCE_CHECKPOINT.json)
+stores the generated commit and preservation proof. No backend,
+dependency, provider, signing or theme redesign change; no redeploy
+is needed. The existing HTTPS backend stays live on Free services. Existing
+data, five-step creation and approved branding remain. No recording/publication/
+submission, paid resource or phone-data reset is authorized by these corrections.
+
+## Historical October17 final delivery: deployed backend and Campaign.apk
+
+**Previous delivery:** [auth-clean APK](artifacts/android/final-campaign-auth-clean-20261017/campaign-1.0.0-CLOUD-TEST-arm64.apk), **47,705,118 bytes (45.50 MiB)**,
 SHA256 `1D36B4C1BF8BDAEB1E5D773FF8E20641499561FB323D0A793366F856E672344C`.
 The later screenshot correction removes only the standalone Settings footer
 below guest Welcome/Login/Register; Settings remains inside Help and signed-in

@@ -7,6 +7,7 @@ import { ErrorState, Loading, Screen, useTheme, fonts } from "../../components/u
 import { useActivity, useSession } from "../../lib/session";
 import { UnreadBadge } from "../../components/UnreadBadge";
 import { createOnboardingEntryGate } from "../../lib/onboarding";
+import { profileEntry } from "../../lib/profile-navigation";
 import { WalkthroughProvider, WalkthroughTabButton } from "../../features/walkthrough/Walkthrough";
 const icons: Record<string, React.ComponentProps<typeof Ionicons>["name"]> = {
   index: "home-outline",
@@ -49,7 +50,7 @@ function TabNavigation() {
         tabBarActiveTintColor: colors.green,
         tabBarInactiveTintColor: colors.muted,
         tabBarStyle: {
-          display: route.name === "profile" && !user ? "none" : "flex",
+          display: route.name === "profile" && profileEntry({ signedIn: !!user, onboarding, auth: params.auth, section: params.section }) !== "profile" ? "none" : "flex",
           backgroundColor: colors.paper,
           borderTopColor: colors.line,
           height: 56 + bottom,

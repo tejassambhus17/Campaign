@@ -81,10 +81,6 @@ export default function Home() {
     Keyboard.dismiss();
     router.push({ pathname: "/explore", params: { q: search.trim(), category } });
   };
-  const openFilters = () => {
-    Keyboard.dismiss();
-    router.push({ pathname: "/explore", params: { q: search.trim(), category: "All", openFilters: String(Date.now()) } });
-  };
   const stackPromo = width < 370 || fontScale >= 1.25;
   const searchHeight = Math.max(48, Math.ceil(19 * fontScale + 20));
   return (
@@ -107,9 +103,6 @@ export default function Home() {
                 <Ionicons name="search-outline" size={18} color={colors.muted} />
                 <TextInput accessibilityLabel="Search campaigns" keyboardAppearance={scheme} placeholder="Search campaigns…" placeholderTextColor={colors.muted} value={search} onChangeText={setSearch} returnKeyType="search" onSubmitEditing={() => explore()} selectionColor={colors.focus} style={{ flex: 1, minWidth: 0, height: searchHeight - 2, paddingVertical: 9, fontFamily: fonts.sans, fontSize: 13, lineHeight: 19, color: colors.ink }} />
               </View>
-              <Pressable accessibilityRole="button" accessibilityLabel="Campaign filters and sort" accessibilityHint="Opens Explore with campaign filters and sorting expanded." onPress={openFilters} style={({ pressed }) => ({ width: 48, height: searchHeight, borderRadius: 24, borderWidth: 1, borderColor: colors.outline, backgroundColor: colors.paper, alignItems: "center", justifyContent: "center", opacity: pressed ? 0.7 : 1 })}>
-                <Ionicons name="options-outline" size={21} color={colors.ink} />
-              </Pressable>
             </View>
           </View>
           {!!onboardingError && <View><Notice tone="error">{onboardingError}</Notice><Button title="Retry welcome preference" variant="ghost" onPress={() => { void completeOnboarding().catch(() => undefined); }} /></View>}

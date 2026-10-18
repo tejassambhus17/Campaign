@@ -1,7 +1,7 @@
 import { useCurrency } from "../../../../lib/CurrencyProvider";
 import { formatMoney, formatNativeMoney, inputForUsd, moneyInputWithinLimits, referenceDescription, usdFromInput } from "../../../../lib/currency";
 import { useCallback, useRef, useState } from "react";
-import { BackHandler, Keyboard, Pressable, ScrollView, TextInput, View } from "react-native";
+import { BackHandler, Keyboard, ScrollView, TextInput, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +11,7 @@ import { refresh, useConfig } from "../../../../lib/session";
 import { audienceCampaign } from "../../../../lib/public-campaign";
 import { Text, Button, IconButton, PageHeader, fonts, ErrorState, Loading, Notice, Pill, Screen, useTheme } from "../../../../components/ui";
 import { CampaignCover, Disclosures, Funding, ShareButton } from "../../../../features/campaign";
+import { ContributionPresets } from "../../../../features/contributions/ContributionPresets";
 
 export default function BackCampaign() {
   const { colors, styles, scheme } = useTheme();
@@ -136,19 +137,7 @@ export default function BackCampaign() {
           {publicState !== "Available for Funding" && stage !== "result" && <Notice>This campaign is {publicState.toLowerCase()} and is not accepting contributions.</Notice>}
           {stage === "choose" ? (
             <>
-              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-                {[5, 10, 25, 50].map((preset) => <Pressable
-                  key={preset}
-                  accessibilityRole="button"
-                  accessibilityLabel={`${money(preset)} contribution`}
-                  accessibilityState={{ selected: value === preset, disabled: busy }}
-                  disabled={busy}
-                  onPress={() => { setAmount(inputForUsd(preset, moneySnapshot)); key.current = ""; }}
-                  style={({ pressed }) => ({ flexGrow: 1, flexBasis: "21%", minWidth: 70, minHeight: 48, paddingHorizontal: 6, paddingVertical: 11, borderRadius: 12, borderWidth: 1, borderColor: value === preset ? colors.primary : colors.line, backgroundColor: value === preset ? colors.primary : colors.paper, alignItems: "center", justifyContent: "center", opacity: pressed ? 0.7 : 1 })}
-                >
-                  <Text style={{ fontSize: 15, lineHeight: 22, fontWeight: "700", color: value === preset ? colors.onPrimary : colors.ink }}>{money(preset)}</Text>
-                </Pressable>)}
-              </View>
+              <ContributionPresets selectedUsd={value} formatAmount={money} disabled={busy} onSelect={preset => { setAmount(inputForUsd(preset, moneySnapshot)); key.current = ""; }} />
               <View style={{ gap: 7 }}>
                 <Text style={{ fontSize: 12, lineHeight: 18, color: colors.muted }}>Custom amount · {moneySnapshot.currency}</Text>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 12, borderWidth: 1, borderColor: !valid ? colors.red : amountFocused ? colors.focus : colors.line, backgroundColor: colors.paper, borderRadius: 12, paddingHorizontal: 16 }}>

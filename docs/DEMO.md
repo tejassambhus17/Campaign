@@ -1,6 +1,39 @@
 # Complete product demonstration
 
-## Active reference redesign
+## Current final demo — October18
+
+The actual [Campaign-demo.mp4](../artifacts/delivery/Campaign-1.2.3/Campaign-demo.mp4)
+is 248.433333 seconds (4m08.43), 12,780,503 bytes, H.264/AAC, 1080×1920.
+SHA256: `8D9A30295AA1EB36394964249888E320CF92C263997CBF69109C0356EF83D9BC`.
+It follows one fictional creation/review/backing/distribution/report journey.
+The original PDF requires a complete demonstration; 3–4 minutes is the user's
+presentation target, not a verified organizer cap.
+
+Sixteen scenes use thirteen actual raw clips. The film explicitly identifies
+unchanged UI footage from code5 and the corrected native PDF flow from code6.
+The 108 UI source/assets and packaged Hermes are byte-identical; changed native
+print behavior was separately retested. Complete real loading intervals are
+retained at 1×; off-camera sign-in, save/restart/resume and controlled simulated
+distribution jumps are disclosed. No recipient selection or private credentials
+are shown. The actual captured PDF was received off-camera by a local-only QA
+recipient and is included separately as the public sample.
+
+Full final and source decode checks passed. Continuous muted browser playback
+at 1× reached the end without a playback error or seek. Encoded samples and
+key frames were independently reviewed for legibility, role/data truth and
+visible privacy. PCM checks found no clipped samples. Offline synthetic Zira
+speech is used; **human listening remains pending**.
+
+[Final evidence](../artifacts/final-completion-20261017/demo/FINAL_VIDEO_ACCEPTANCE.json),
+[playback](../artifacts/final-completion-20261017/demo/playback-final-123-01/PLAYBACK.json).
+This is a local review package, not organizer submission or whole-app approval.
+Physical ARM64/mobile-data, unfamiliar-user feedback, recipient downloads and
+the exact external destination/approval remain pending.
+
+## Historical reference-redesign checkpoint — superseded
+
+The following checkpoint language and its earlier recording/hosting holds are
+historical. It does not override the current authorization/status above.
 
 The subsequent product-quality pass has implemented the connected creation/correction/backing/receipt/report flow and completed selected source/native verification. Its current artifacts and exact verification scope are in [PROGRESS.md](../PROGRESS.md) and [PRODUCT_QUALITY.md](PRODUCT_QUALITY.md). Functional QA screenshots do not resume filming; no current-quality video is claimed.
 

@@ -9,9 +9,9 @@ function load(path, modules = {}) {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, jsx: ts.JsxEmit.ReactJSX },
   }).outputText;
   const loaded = { exports: {} };
-  new Function('require', 'exports', 'module', source)(name => {
+  new Function('require', 'exports', 'module', 'requestAnimationFrame', source)(name => {
     assert.ok(name in modules, `Unexpected dependency ${name}`); return modules[name];
-  }, loaded.exports, loaded);
+  }, loaded.exports, loaded, callback => { callback(); return 1; });
   return loaded.exports;
 }
 const { categories } = load('../src/lib/types.ts');
@@ -52,16 +52,18 @@ function harness({ campaigns = [forest, books], pending = false, error = false }
   const component = load('../src/app/(tabs)/explore/index.tsx', {
     react, 'react/jsx-runtime': { jsx, jsxs: jsx },
     'react-native': {
-      AccessibilityInfo: { isReduceMotionEnabled: () => ({ then: callback => { callback(false); return { catch: () => {} }; } }), addEventListener: (_name, listener) => { motionListener = listener; return { remove: () => {} }; } },
+      AccessibilityInfo: { isReduceMotionEnabled: () => ({ then: callback => { callback(false); return { catch: () => {} }; } }), addEventListener: (_name, listener) => { motionListener = listener; return { remove: () => {} }; }, setAccessibilityFocus: () => {} },
+      findNodeHandle: () => null,
       FlatList: 'FlatList', Keyboard: { dismiss: () => {} }, Pressable: 'Pressable', ScrollView: 'ScrollView', Switch: 'Switch', TextInput: 'TextInput', View: 'View', useWindowDimensions: () => ({ width: 393, height: 850, fontScale: 1.17 }),
     },
     '../../../components/NativePager': { default: 'PagerView' },
     '@expo/vector-icons/Ionicons': { default: 'Icon' },
-    'expo-router': { useLocalSearchParams: () => params },
+    'expo-router': { useLocalSearchParams: () => params, useFocusEffect: () => {} },
     '../../../lib/discovery': discovery,
     '../../../lib/types': { categories },
     '../../../lib/session': { useCampaigns: () => ({ data: campaigns, isPending: pending, isError: error, error: new Error('fixture unavailable'), refetch: () => refetches++ }), useConfig: () => ({ data: { fixture: true } }) },
     '../../../features/campaign': { CampaignCard: 'CampaignCard' },
+    '../../../features/explore/FilterOverlay': { FilterOverlay: 'FilterOverlay' },
     '../../../components/ui': { Text: 'Text', Button: 'Button', Empty: 'Empty', ErrorState: 'ErrorState', Loading: 'Loading', Pill: 'Pill', Screen: 'Screen', fonts: { sans: 'Manrope' }, useTheme: () => ({ colors: new Proxy({}, { get: () => '#121212' }), styles: { row: {}, muted: {}, body: {}, title: {} }, scheme: 'dark' }) },
   }).default;
   let currentTree, currentPager, currentHeader;
@@ -76,7 +78,7 @@ function harness({ campaigns = [forest, books], pending = false, error = false }
     effects.filter(effect => effect.changed).forEach(effect => effect.callback());
     return currentPager;
   }
-  return { render, header: () => nodes(currentHeader), pager: () => currentPager, pages: () => currentPager.props.children,
+  return { render, header: () => nodes(currentHeader), overlay: () => nodes(currentTree).find(node => node.type === 'FilterOverlay'), pager: () => currentPager, pages: () => currentPager.props.children,
     list: index => nodes(currentPager.props.children[index]).find(node => node.type === 'FlatList'),
     selected: () => nodes(currentHeader).find(node => node.type === 'Pill' && node.props.selected)?.props.title,
     swipe: index => currentPager.props.onPageSelected({ nativeEvent: { position: index } }),
@@ -122,10 +124,11 @@ test('all native category pages share search/sort/funding settings and remain mo
   const h = harness(); h.render(); h.render(); const keys = h.pages().map(page => page.key);
   h.header().find(node => node.type === 'TextInput').props.onChangeText('forest');
   h.header().find(node => node.props.accessibilityLabel === 'Campaign filters and sort').props.onPress(); h.render();
-  h.header().find(node => node.type === 'Switch').props.onValueChange(true); h.render();
+  h.overlay().props.onChange({ sort: 'Featured', funding: true }); h.render();
+  h.overlay().props.onApply(); h.render();
   h.drag(); h.swipe(1); h.render();
   assert.equal(h.header().find(node => node.type === 'TextInput').props.value, 'forest');
-  assert.equal(h.header().find(node => node.type === 'Switch').props.value, true);
+  assert.equal(h.overlay().props.draft.funding, true);
   assert.deepEqual(h.list(0).props.data.map(campaign => campaign.id), ['forest']);
   assert.deepEqual(h.list(1).props.data.map(campaign => campaign.id), ['forest']); assert.deepEqual(h.list(4).props.data, []);
   assert.deepEqual(h.pages().map(page => page.key), keys);
@@ -135,6 +138,41 @@ test('all native category pages share search/sort/funding settings and remain mo
   }
   h.header().find(node => node.props.title === 'Reset').props.onPress(); h.render();
   assert.equal(h.selected(), 'All'); assert.deepEqual(h.list(0).props.data.map(campaign => campaign.id), ['forest', 'books']);
+});
+
+test('Explore overlays staged options without changing results until Apply and preserves dismissed choices', () => {
+  const h = harness(); h.render(); h.render();
+  const pages = h.pages().map(page => page.key);
+  const open = () => { h.header().find(node => node.props.accessibilityLabel === 'Campaign filters and sort').props.onPress(); h.render(); };
+  open();
+  assert.equal(h.overlay().props.visible, true);
+  assert.equal(h.header()[0].props.importantForAccessibility, 'no-hide-descendants');
+  assert.equal(h.pages().every(page => page.props.pointerEvents === 'none'), true);
+  h.overlay().props.onChange({ sort: 'Most funded', funding: true }); h.render();
+  assert.deepEqual(h.list(0).props.data.map(c => c.id), ['forest', 'books'], 'unapplied edits leave the visible results unchanged');
+  h.overlay().props.onClose(); h.render();
+  assert.equal(h.overlay().props.visible, false);
+  assert.equal(h.pages()[0].props.pointerEvents, 'auto');
+  open(); assert.deepEqual(h.overlay().props.draft, { sort: 'Most funded', funding: true });
+  h.overlay().props.onApply(); h.render();
+  assert.equal(h.overlay().props.visible, false);
+  assert.deepEqual(h.list(0).props.data.map(c => c.id), ['forest']);
+  assert.deepEqual(h.pages().map(page => page.key), pages, 'overlay does not remount or replace category pages');
+  open(); h.overlay().props.onChange({ sort: 'Featured', funding: false }); h.render();
+  assert.deepEqual(h.list(0).props.data.map(c => c.id), ['forest'], 'Clear is staged until Apply too');
+  h.overlay().props.onApply(); h.render();
+  assert.deepEqual(h.list(0).props.data.map(c => c.id), ['forest', 'books']);
+});
+
+test('legacy openFilters intent opens the overlay while keeping its route search/category and native pages intact', () => {
+  const h = harness(); h.route({ q: 'forest', category: 'Environment', openFilters: 'fixture-open' }); h.render(); h.render();
+  assert.equal(h.overlay().props.visible, true);
+  assert.equal(h.header().find(node => node.type === 'TextInput').props.value, 'forest');
+  assert.equal(h.selected(), 'Environment');
+  assert.deepEqual(h.commands.at(-1), ['instant', 1]);
+  h.overlay().props.onClose(); h.render();
+  assert.equal(h.overlay().props.visible, false, 'unchanged route intent cannot reopen a dismissed overlay');
+  assert.equal(h.selected(), 'Environment');
 });
 
 test('selected native page pills auto-reveal from measured bounds in either direction and after layout changes', () => {

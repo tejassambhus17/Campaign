@@ -10,10 +10,12 @@ import { WelcomeCarousel } from "./auth/WelcomeCarousel";
 
 type AuthMode = "welcome" | "login" | "register";
 
-export function AuthForm({ initialMode = "welcome", onHelp, onModeChange, active = true }: {
+export function AuthForm({ initialMode = "welcome", onHelp, onModeChange, onExit, active = true }: {
   initialMode?: AuthMode;
   onHelp?: () => void;
   onModeChange?: () => void;
+  /** Returning guests can close authentication back to their Profile. */
+  onExit?: () => void;
   active?: boolean;
 }) {
   const { colors } = useTheme();
@@ -45,11 +47,11 @@ export function AuthForm({ initialMode = "welcome", onHelp, onModeChange, active
   useFocusEffect(useCallback(() => {
     if (!active || mode === "welcome") return;
     const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
-      if (!busy) changeMode("welcome");
+      if (!busy) { if (onExit) onExit(); else changeMode("welcome"); }
       return true;
     });
     return () => subscription.remove();
-  }, [active, busy, changeMode, mode]));
+  }, [active, busy, changeMode, mode, onExit]));
 
   async function submit() {
     if (busy) return;
@@ -105,7 +107,7 @@ export function AuthForm({ initialMode = "welcome", onHelp, onModeChange, active
       contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 22, paddingTop: mode === "welcome" ? 20 : 0, paddingBottom: 20 }}>
       <View style={{ width: "100%", maxWidth: 420, alignSelf: "center", flexGrow: 1 }}>
         {mode !== "welcome" && <View style={{ flexDirection: "row", alignItems: "center", minHeight: 48, marginHorizontal: -10 }}>
-          <IconButton label="Back to welcome" icon="arrow-back" onPress={() => changeMode("welcome")} disabled={busy} />
+          <IconButton label={onExit ? "Back to Profile" : "Back to welcome"} icon="arrow-back" onPress={() => onExit ? onExit() : changeMode("welcome")} disabled={busy} />
         </View>}
 
         {mode === "welcome" ? <>

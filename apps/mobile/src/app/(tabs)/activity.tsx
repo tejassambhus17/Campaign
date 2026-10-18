@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   Platform,
   Pressable,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Href, router } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
+import PagerView from "../../components/NativePager";
 import { api } from "../../lib/api";
 import { Campaign } from "../../lib/types";
 import {
@@ -24,6 +25,7 @@ import {
 } from "../../lib/session";
 import { NotificationRow } from "../../features/notifications/NotificationRow";
 import { useNotificationActions } from "../../features/notifications/useNotificationActions";
+import { activityPages, useActivityPages } from "../../features/notifications/useActivityPages";
 import {
   Text,
   useTheme,
@@ -44,7 +46,8 @@ export default function Activity() {
   const me = useMe();
   const q = useActivity();
   const actions = useNotificationActions();
-  const [filter, setFilter] = useState<ActivityFilter>("All");
+  const navigation = useActivityPages(user?.id);
+  const { filter } = navigation;
   const campaigns = useQuery({
     queryKey: ["campaigns"],
     queryFn: () => api<Campaign[]>("/campaigns"),
@@ -52,13 +55,10 @@ export default function Activity() {
   });
   useRefreshOnFocus(q.refetch, !!user);
   useRefreshOnFocus(campaigns.refetch, !!user && !!me.data?.followed.length);
-  useEffect(() => {
-    setFilter("All");
-  }, [user?.id]);
   const byId = useMemo(() => new Map(
     [...(campaigns.data || []), ...(me.data?.campaigns || [])].map((c) => [c.id, c]),
   ), [campaigns.data, me.data?.campaigns]);
-  const sections = useMemo(() => activitySections(q.data || [], filter), [q.data, filter]);
+  const pageSections = useMemo(() => activityPages.map(page => activitySections(q.data || [], page.value)), [q.data]);
 
   const heading = (
     <Text
@@ -75,7 +75,7 @@ export default function Activity() {
         <Empty
           title="Your updates, in one place"
           body="Sign in for review decisions, funding milestones and receipts. Your activity stays private."
-          action={<Button title="Sign in" onPress={() => router.push("/profile")} />}
+          action={<Button title="Sign in" onPress={() => router.push("/profile?auth=login")} />}
         />
       </Screen>
     );
@@ -109,27 +109,33 @@ export default function Activity() {
         </View>
       </View>
       <ScrollView
+        ref={navigation.strip}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 8, paddingBottom: 2 }}
+        style={{ flexGrow: 0 }}
+        contentContainerStyle={{ paddingBottom: 2 }}
+        onLayout={event => navigation.recordStrip(event.nativeEvent.layout.width)}
+        onContentSizeChange={navigation.recordContent}
+        onScroll={event => navigation.recordOffset(event.nativeEvent.contentOffset.x)}
+        scrollEventThrottle={16}
       >
-        {([
-          ["All", "All"],
-          ["Campaigns", "Updates"],
-          ["Payments", "Contributions"],
-          ["Unread", "Unread"],
-          ["Account", "Account"],
-        ] as const).map(([value, label]) => (
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        {activityPages.map(({ value, title }) => (
+          <View key={value} onLayout={event => {
+            const { x, width } = event.nativeEvent.layout;
+            navigation.recordFilter(value, x, width);
+          }}>
           <Pill
-            key={value}
-            title={label}
+            title={title}
             selected={filter === value}
             onPress={() => {
               actions.clearError();
-              setFilter(value);
+              navigation.selectFilter(value);
             }}
           />
+          </View>
         ))}
+        </View>
       </ScrollView>
       <View
         style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8, flexWrap: "wrap", minHeight: 48 }}
@@ -194,21 +200,21 @@ export default function Activity() {
       </Accordion>
     </View>
   );
-  const empty = q.isPending ? (
+  const empty = (pageFilter: ActivityFilter) => q.isPending ? (
     <ActivityLoading />
   ) : q.isError && !q.data ? (
     <ErrorState error={q.error} retry={() => void q.refetch()} />
   ) : (
     <View style={{ paddingTop: 16 }}>
       <Empty
-        title={filter === "Unread" || filter === "All"
+        title={pageFilter === "Unread" || pageFilter === "All"
           ? "You're all caught up."
-          : `No ${filter === "Campaigns" ? "campaign" : filter === "Payments" ? "contribution" : "account"} updates yet`}
-        body={filter === "Unread"
+          : `No ${pageFilter === "Campaigns" ? "campaign" : pageFilter === "Payments" ? "contribution" : "account"} updates yet`}
+        body={pageFilter === "Unread"
           ? "You've read your updates. New ones will appear here."
           : "Review decisions, contributions and campaign progress appear here as they happen."}
-        action={filter !== "All" ? (
-          <Button title="See all activity" variant="secondary" onPress={() => setFilter("All")} />
+        action={pageFilter !== "All" ? (
+          <Button title="See all activity" variant="secondary" onPress={() => navigation.selectFilter("All")} />
         ) : (
           <Button title="Explore campaigns" onPress={() => router.push("/explore")} />
         )}
@@ -218,16 +224,44 @@ export default function Activity() {
 
   return (
     <Screen scroll={false}>
+      <ScrollView
+        style={{ flexGrow: 0, maxHeight: "55%" }}
+        contentContainerStyle={{ width: "100%", maxWidth: 640, alignSelf: "center", paddingHorizontal: 18, paddingTop: 18, paddingBottom: 4 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        {header}
+      </ScrollView>
+      <PagerView
+        key={user.id}
+        ref={navigation.pager}
+        style={{ flex: 1 }}
+        initialPage={0}
+        orientation="horizontal"
+        layoutDirection="ltr"
+        overScrollMode="never"
+        overdrag={false}
+        offscreenPageLimit={4}
+        onPageSelected={event => navigation.onPageSelected(event.nativeEvent.position)}
+        onPageScrollStateChanged={event => navigation.onPageScrollStateChanged(event.nativeEvent.pageScrollState)}
+      >
+      {activityPages.map((page, index) => <View
+        key={page.value}
+        collapsable={false}
+        style={{ width: "100%", height: "100%" }}
+        accessibilityElementsHidden={navigation.selectedIndex !== index}
+        importantForAccessibility={navigation.selectedIndex === index ? "auto" : "no-hide-descendants"}
+        pointerEvents={navigation.selectedIndex === index ? "auto" : "none"}
+      >
       <SectionList
-        style={{ backgroundColor: colors.bg }}
-        sections={sections}
+        style={{ flex: 1, backgroundColor: colors.bg }}
+        sections={pageSections[index]}
+        nestedScrollEnabled
         keyExtractor={(item) => item.id}
         stickySectionHeadersEnabled={false}
         initialNumToRender={8}
         maxToRenderPerBatch={8}
         windowSize={7}
-        contentContainerStyle={{ width: "100%", maxWidth: 640, alignSelf: "center", padding: 18, paddingBottom: 28, flexGrow: 1 }}
-        ListHeaderComponent={header}
+        contentContainerStyle={{ width: "100%", maxWidth: 640, alignSelf: "center", paddingHorizontal: 18, paddingBottom: 28, flexGrow: 1 }}
         ListFooterComponent={following || null}
         refreshControl={Platform.OS === "web" ? undefined : (
           <RefreshControl
@@ -243,7 +277,7 @@ export default function Activity() {
             {section.title}
           </Text>
         )}
-        ListEmptyComponent={empty}
+        ListEmptyComponent={empty(page.value)}
         renderItem={({ item }) => (
           <NotificationRow
             presentation="history"
@@ -259,6 +293,8 @@ export default function Activity() {
           />
         )}
       />
+      </View>)}
+      </PagerView>
     </Screen>
   );
 }
