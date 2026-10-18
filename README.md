@@ -31,7 +31,7 @@
 ## Download Android APK
 
 <p>
-  <a href="/tejassambhus17/Campaign/releases"><img alt="Download Android APK — open GitHub Releases" src="https://img.shields.io/badge/Download_Android_APK-GitHub_Releases-98F1CA?style=for-the-badge&amp;logo=android&amp;logoColor=98F1CA&amp;labelColor=202624"></a>
+  <a href="https://github.com/tejassambhus17/Campaign/releases/tag/1.4.0"><img alt="Download Android APK — open GitHub Releases" src="https://img.shields.io/badge/Download_Android_APK-GitHub_Releases-98F1CA?style=for-the-badge&amp;logo=android&amp;logoColor=98F1CA&amp;labelColor=202624"></a>
 </p>
 
 **Latest prepared build: 1.4.0 · build 10 · 68.8 MB** — dedicated release signing, the Campaign logo, bundled JavaScript/Hermes, and the configured HTTPS backend. Supports **ARM64 Android phones** and **x86_64 Android emulators**, Android 7.0 or later; Metro is not required.
