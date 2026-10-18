@@ -1,134 +1,195 @@
-# Campaign Amplification
+<p align="center">
+  <img src="docs/screenshots/campaign-logo.png" alt="Campaign mint megaphone logo" width="112" height="112">
+</p>
 
-**Current cloud deployment (October17):** The existing FastAPI API is live on
-[Render Free](https://campaign-api-cw8y.onrender.com) using the existing Neon
-Free production database and Cloudinary Free authenticated media. The private
-GitHub branch `codex/cloud-deployment` deploys manually; no paid plan or card
-was selected for this work. The full fictional API journey and restart
-persistence passed; [live evidence](PROGRESS.md) and [runbook](docs/CLOUD_DEPLOYMENT.md)
-record the scope. The Android CloudTest APK has a scoped physical pass with
-Metro and USB reverse absent; unplugged acceptance remains open. Recording
-remains held. Older local-only
-statements below describe their historical checkpoints.
+<h1 align="center">Campaign</h1>
+<p align="center"><strong>Ideas. People. Real Impact.</strong></p>
+<p align="center">
+  Good ideas deserve to be heard.<br>
+  Create a campaign, bring people together, and fund the reach of a message beyond your network.
+</p>
 
-**October17 update:** Neon PostgreSQL is connected to the existing FastAPI app.
-From this root,`npm run build` checks TypeScript, exports Android JavaScript/assets
-and compiles FastAPI;`npm start` runs the Neon-backed local API on8879. The original
-SQLite launcher remains unchanged. See [Neon setup](docs/NEON_SETUP.md),
-[current progress](PROGRESS.md) and [release readiness](RELEASE_READINESS.md).
-Database hosting does not yet provide a public API or independent Android APK.
-After the API starts, `npm run preview:neon` serves the isolated app preview at
-`http://localhost:19006`. Database workflow checks passed; the current preview
-has bundle/network verification, with browser visual and new native QA pending.
+<p align="center">
+  <a href="https://reactnative.dev/"><img alt="React Native 0.83" src="https://img.shields.io/badge/React_Native-0.83-202624?style=flat&amp;logo=react&amp;logoColor=98F1CA"></a>
+  <a href="https://expo.dev/"><img alt="Expo SDK 55" src="https://img.shields.io/badge/Expo-55-202624?style=flat&amp;logo=expo&amp;logoColor=98F1CA"></a>
+  <a href="https://www.typescriptlang.org/"><img alt="TypeScript 5.9" src="https://img.shields.io/badge/TypeScript-5.9-202624?style=flat&amp;logo=typescript&amp;logoColor=98F1CA"></a>
+  <a href="https://fastapi.tiangolo.com/"><img alt="FastAPI backend" src="https://img.shields.io/badge/FastAPI-Python-202624?style=flat&amp;logo=fastapi&amp;logoColor=98F1CA"></a>
+  <a href="https://www.postgresql.org/"><img alt="PostgreSQL on Neon" src="https://img.shields.io/badge/PostgreSQL-Neon-202624?style=flat&amp;logo=postgresql&amp;logoColor=98F1CA"></a>
+  <a href="https://www.android.com/"><img alt="Android 7.0 and newer, 64-bit" src="https://img.shields.io/badge/Android-7.0%2B-202624?style=flat&amp;logo=android&amp;logoColor=98F1CA"></a>
+</p>
 
-A React Native / Expo prototype for community-funded message distribution. Contributions fund advertising reach, rather than direct donations to the campaign's cause. All payments, advertising delivery and report figures are explicitly simulated.
+<p align="center">
+  <a href="#download-android-apk">Download APK</a> &nbsp;·&nbsp;
+  <a href="#screenshots">Screenshots</a> &nbsp;·&nbsp;
+  <a href="#how-campaign-works">The journey</a> &nbsp;·&nbsp;
+  <a href="#technology--architecture">Architecture</a> &nbsp;·&nbsp;
+  <a href="#demo-video">Demo video</a>
+</p>
 
-The active October 16 redesign uses compact Manrope typography, campaign photography, mint-and-charcoal surfaces and complete System/Light/Dark appearance. The user's latest reference replaces the previous civic-publication visual result while preserving the working Expo/FastAPI architecture and workflows. [Design system](DESIGN.md), [native redesign evidence](UI_REDESIGN_PROGRESS.md) and [current delivery status](RELEASE_READINESS.md) distinguish source checks, fresh installed Android acceptance and historical evidence.
+> **Hackathon prototype:** contributions fund message distribution, not direct donations. Payments and advertising delivery are simulated. Demo Trust Scores are illustrative assessments, not independent verification.
 
-Later user steering preserves Light and corrects Dark to pure black/neutral-charcoal surfaces, with mint restricted to small accents/actions. Current source uses `#000000` background, `#121212` surfaces and `#1C1C1C` raised surfaces. The subsequent [product-quality addendum pass](docs/PRODUCT_QUALITY.md) refines existing creation, persistence, previews, receipts and reports within that design. Black pass2 and its 12-surface automated verdict are historical checkpoints, not current approval. The updated demo remains incomplete and user-held; recording and production require explicit human authorization. Current verification is in [PROGRESS.md](PROGRESS.md).
+## Download Android APK
 
-The quality pass adds an actionable Submit checklist, distinct device/account save feedback, separate campaign/ad previews, payment-specific private receipts and clearer refund accounting. Current source passes 62 frontend and 31 backend tests; corrected x86_64 and ARM64 INTERNAL-TEST APKs are preserved under `artifacts/android/quality-addendum-pass2-20261016/`. Exact installed checks and remaining physical-device, human-test and reachable-backend gates are in [release readiness](RELEASE_READINESS.md).
+<p>
+  <a href="/tejassambhus17/Campaign/releases"><img alt="Download Android APK — open GitHub Releases" src="https://img.shields.io/badge/Download_Android_APK-GitHub_Releases-98F1CA?style=for-the-badge&amp;logo=android&amp;logoColor=98F1CA&amp;labelColor=202624"></a>
+</p>
 
-The quality pass adds an actionable Submit checklist, distinct device/account save feedback, separate campaign/ad previews, payment-specific private receipts and clearer refund accounting. Current source passes 62 frontend and 31 backend tests; corrected x86_64 and ARM64 INTERNAL-TEST APKs are preserved under `artifacts/android/quality-addendum-pass2-20261016/`. Exact installed checks and remaining physical-device, human-test and reachable-backend gates are in [release readiness](RELEASE_READINESS.md).
+**Latest prepared build: 1.4.0 · build 10 · 68.8 MB** — dedicated release signing, the Campaign logo, bundled JavaScript/Hermes, and the configured HTTPS backend. Supports **ARM64 Android phones** and **x86_64 Android emulators**, Android 7.0 or later; Metro is not required.
 
-## Architecture and source backup
+**Release download awaiting confirmation.** The button opens this repository’s Releases page. Publish or confirm the prepared `Campaign.apk` there; release availability could not be checked while GitHub CLI is signed out. Private repository downloads require repository access. [Installation steps](#install-on-android) · [Release and media handoff](docs/README_MEDIA.md).
 
-- `apps/mobile`: Expo SDK 55, React Native 0.83, React 19.2 and TypeScript, with Expo Router and TanStack Query. Native sessions use SecureStore; scoped drafts use AsyncStorage. One semantic theme provider sits above session/query/navigation; a separate AsyncStorage device preference defaults to System and persists Light/Dark overrides through sign-out.
-- `services/api`: FastAPI with SQLite, numbered migrations, server validation, account/reviewer permissions and transactional simulated payment accounting. The API remains a separate running service.
-- `scripts`: Windows launch, verification and local Android build helpers. `docs` and the root Markdown files preserve requirements, design decisions and verification limits.
+---
 
-This repository is a **source-only backup**. Dependencies, local databases/uploads, generated credentials, native build directories, SDK/JDK toolchains, `tmp` and `artifacts` stay local. Links below to APKs, videos, screenshots and other `artifacts/` evidence refer to the original workspace and will not resolve in a fresh clone. The source includes dependency locks, migrations, cached seed photographs and bundled font licenses; it does not include existing accounts or recorded campaign data.
+## Screenshots
 
-See [GitHub backup boundaries](docs/GITHUB_BACKUP.md) for excluded organizer material, preserved history and future commit precautions.
+Real native Android captures, optimized for this gallery. Select any image to view it larger. Sample campaigns, contribution totals, and the QA profile shown here are demonstration data.
 
-## First setup on Windows
+### Discover a message
 
-Install Git, Node **20.19.4 or newer** with npm (a supported LTS is preferable), and Python **3.12** available as `python`. Clone or restore the source into the authorized `E:\Campaign` workspace. The local Android build launcher explicitly requires this root; its separately installed SDK/JDK versions are listed in the [local Android guide](docs/ANDROID_LOCAL.md).
+<table>
+  <tr><th width="25%">Welcome¹</th><th width="25%">Home</th><th width="25%">Explore</th><th width="25%">Campaign details²</th></tr>
+  <tr>
+    <td><a href="docs/screenshots/welcome.jpg"><img src="docs/screenshots/welcome.jpg" alt="Welcome with Campaign branding, campaign photo carousel and guest entry" width="220"></a></td>
+    <td><a href="docs/screenshots/home.jpg"><img src="docs/screenshots/home.jpg" alt="Home with search, topic chips and a featured ocean campaign" width="220"></a></td>
+    <td><a href="docs/screenshots/explore.jpg"><img src="docs/screenshots/explore.jpg" alt="Explore with campaign photography, funding and an actual Trust Score badge" width="220"></a></td>
+    <td><a href="docs/screenshots/campaign-details.jpg"><img src="docs/screenshots/campaign-details.jpg" alt="Campaign Story with public sources, assessment and transparency destinations" width="220"></a></td>
+  </tr>
+</table>
 
-From the project root in PowerShell:
+### Shape your campaign
+
+<table>
+  <tr><th width="25%">Five-step overview</th><th width="25%">1 · Basics²</th><th width="25%">2 · Story²</th><th width="25%">3 · Visuals²</th></tr>
+  <tr>
+    <td><a href="docs/screenshots/create.jpg"><img src="docs/screenshots/create.jpg" alt="Create entry with manual and guided demo actions, five steps and resumable drafts" width="220"></a></td>
+    <td><a href="docs/screenshots/create-basics.jpg"><img src="docs/screenshots/create-basics.jpg" alt="Basics with connected step rail, campaign title, category and creator" width="220"></a></td>
+    <td><a href="docs/screenshots/create-story.jpg"><img src="docs/screenshots/create-story.jpg" alt="Story editor with formatting, headline and introduction" width="220"></a></td>
+    <td><a href="docs/screenshots/create-visuals.jpg"><img src="docs/screenshots/create-visuals.jpg" alt="Separate optional campaign cover and advertising image controls" width="220"></a></td>
+  </tr>
+</table>
+
+### Review, then back the message
+
+<table>
+  <tr><th width="25%">4 · Reach²</th><th width="25%">5 · Submit²</th><th width="25%">Trust &amp; Verification²</th><th width="25%">Contribution²</th></tr>
+  <tr>
+    <td><a href="docs/screenshots/create-reach.jpg"><img src="docs/screenshots/create-reach.jpg" alt="Reach with audience locations, interests and an illustrative reach estimate" width="220"></a></td>
+    <td><a href="docs/screenshots/create-submit.jpg"><img src="docs/screenshots/create-submit.jpg" alt="Editable submission summary and Submit for Review action" width="220"></a></td>
+    <td><a href="docs/screenshots/trust-verification.jpg"><img src="docs/screenshots/trust-verification.jpg" alt="Trust shield, score 56, illustrative assessment disclosure and review criteria" width="220"></a></td>
+    <td><a href="docs/screenshots/contribution.jpg"><img src="docs/screenshots/contribution.jpg" alt="Simulated 25-dollar contribution with fee, advertising allocation and estimated reach" width="220"></a></td>
+  </tr>
+</table>
+
+### Follow the journey
+
+<table>
+  <tr><th width="25%">Activity</th><th width="25%">Campaign reports</th><th width="25%">Profile</th><th width="25%">Light appearance</th></tr>
+  <tr>
+    <td><a href="docs/screenshots/activity.jpg"><img src="docs/screenshots/activity.jpg" alt="Activity with filter tabs and private campaign and account notifications" width="220"></a></td>
+    <td><a href="docs/screenshots/campaign-report.jpg"><img src="docs/screenshots/campaign-report.jpg" alt="Report with raised funds, ad spending, estimated reach and native PDF sharing" width="220"></a></td>
+    <td><a href="docs/screenshots/profile.jpg"><img src="docs/screenshots/profile.jpg" alt="Fictional QA profile with campaign lists, payment history, appearance and currency" width="220"></a></td>
+    <td><a href="docs/screenshots/light-theme.jpg"><img src="docs/screenshots/light-theme.jpg" alt="Light theme with the same campaign transparency destinations" width="220"></a></td>
+  </tr>
+</table>
+
+<sub>¹ Welcome is an earlier verified capture of the unchanged screen; a fresh 1.4.0 capture is unavailable. ² Same-version 1.4.0 QA captures precede the final keyboard-sheet correction. These emulator screenshots are not physical-device verification. [Capture provenance](docs/screenshots/README.md).</sub>
+
+---
+
+## What Campaign does
+
+Campaign helps people discover messages, understand their supporting sources, and pool a budget to help those messages reach more people. The same account can read, create, back, and follow campaigns.
+
+### Key features
+
+- **Image-led discovery:** search, topic filters, saved campaigns, and swipeable Explore categories.
+- **Five-step creation:** manual editing or a labelled guided demo, draft saving/resumption, separate story and advertising media, previews, and submission for review.
+- **Explainable review:** public sources, content-bound Trust Scores, detailed assessment criteria, and a role-restricted review demonstration.
+- **Transparent backing:** presets and custom amounts, visible fees and advertising allocation, uncertain reach estimates, simulated checkout, and private payment history.
+- **Connected progress:** updates, Activity filters, quick notifications, lifecycle reports, and native PDF report sharing.
+- **Personal controls:** guest browsing, profile photos, Light/Dark/System appearance, and USD/INR display and entry with canonical USD accounting.
+
+## How Campaign works
+
+**Create → Review → Fund → Amplify → Track**
+
+| Stage | What happens |
+| --- | --- |
+| **Create** | Basics → Story → Campaign & Ad Visuals → Reach → Submit. Save a draft, preview it, and set the goal at Submit. |
+| **Review** | An authorized reviewer can approve, request corrections, or reject. Submission is not immediate publication. |
+| **Fund** | Backers review the amount, fees, ad allocation, and estimated reach before simulated checkout. |
+| **Amplify** | Distribution preparation and authorization are separate from funding. Reaching a goal does not automatically start ads. |
+| **Track** | Follow updates and reports covering funding, spending, remaining funds/refunds, and clearly classified delivery figures. |
+
+## Technology & architecture
+
+```mermaid
+flowchart LR
+    App["Android app<br/>React Native · Expo · TypeScript"] -->|HTTPS REST| API["FastAPI · Python"]
+    API -->|psycopg| DB[("Neon · PostgreSQL")]
+    API --> Media["Cloudinary media"]
+```
+
+| Layer | Implementation |
+| --- | --- |
+| Mobile | React Native 0.83, Expo SDK 55, TypeScript 5.9, Expo Router, native paging, and Hermes |
+| State & device storage | TanStack Query, SecureStore sessions, scoped AsyncStorage drafts/preferences |
+| API | FastAPI, server validation, ownership/reviewer permissions, transactional simulated accounting |
+| Persistence & media | Neon PostgreSQL through psycopg; authenticated Cloudinary media through the API. SQLite remains the local development default. |
+| Hosting | Existing Render-hosted HTTPS API; provider credentials stay server-side |
+
+Source lives in [`apps/mobile`](apps/mobile) and [`services/api`](services/api). Build helpers and runbooks live in [`scripts`](scripts) and [`docs`](docs).
+
+## Prototype disclosures
+
+**No real money is charged and no advertising is purchased or delivered.** Contributions represent an advertising budget, not a transfer to a creator or a donation to the underlying cause. Fees, allocations, refunds, and delivery workflows use simulated accounting.
+
+Reach figures are estimates; simulated delivery figures are not measured real-world results. Demo Trust Scores are illustrative, versioned rubric assessments with recorded evidence and limitations—not endorsements or independent verification of claims. New user campaigns begin unassessed. Guided creation uses an editable demo/manual fallback; live speech, AI image generation, and advertising integrations are not connected.
+
+## Install on Android
+
+1. Open [GitHub Releases](/tejassambhus17/Campaign/releases) and download `Campaign.apk` once it is published.
+2. Use an ARM64 Android device running Android 7.0 or later. Internet is needed for hosted campaigns, sign-in, and uploads.
+3. Open the APK and follow Android’s installation prompts. Expo Go and Metro are not needed.
+4. Launch **Campaign**. Browse as a guest, or create/sign in to an account for account-bound actions.
+
+Updates require the same signing certificate. If Android reports an incompatible signature, preserve the existing installation and local drafts; do not clear data or uninstall to force an update. Release signing does not imply Google Play certification or eliminate sideloading warnings.
+
+<details>
+<summary><strong>Run the source locally</strong></summary>
+
+Use Node 20.19.4+ and Python 3.12. Existing Windows launchers expect `E:\Campaign`.
 
 ```powershell
 Set-Location E:\Campaign
 Push-Location apps/mobile
-npm.cmd ci
+npm ci
 Pop-Location
 python -m venv services/api/.venv
 & .\services\api\.venv\Scripts\python.exe -m pip install -r .\services\api\requirements.txt
 .\start-local.cmd
 ```
 
-Use the checked-in `package-lock.json` and pinned Python dependencies. Initial startup applies migrations, creates fictional seed campaigns and provisions fresh local reviewer credentials. No cloud credentials are required. See the [API guide](services/api/README.md) for account provisioning and persistence details.
+This starts the separate local SQLite API and Expo web preview for development. See the [Android guide](docs/ANDROID_LOCAL.md) for native setup and reachable API configuration, and the [Neon runbook](docs/NEON_SETUP.md) for hosted PostgreSQL. Keep environment files, signing keys, local data, and provider credentials out of Git.
 
-No environment file is needed for local development: web uses `http://127.0.0.1:8787` and Android emulators use `http://10.0.2.2:8787`. [The mobile environment template](apps/mobile/.env.example) contains optional commented URL examples. A phone needs a reachable LAN or hosted API address. `EXPO_PUBLIC_*` values are bundled into the client and must never contain secrets. The backend reads process environment variables; it does not automatically load a `.env` file.
+</details>
 
-## Run locally on Windows
+## Demo video
 
-From `E:\Campaign`, with the installed project dependencies:
+A narrated **4m 08s** end-to-end walkthrough is prepared locally, covering creation, review, simulated backing, distribution, and reporting. **A shareable video link is pending.** The existing recording predates the 1.4.0 visual refinements; the gallery shows the newer interface. [Video and release handoff](docs/README_MEDIA.md).
 
-```powershell
-.\start-local.cmd
-```
+## Hackathon project
 
-Open <http://localhost:8081>. The FastAPI backend listens on <http://127.0.0.1:8787>; its interactive API reference is <http://127.0.0.1:8787/docs>. The startup script reuses verified existing project listeners and never stops an unrelated service.
+Built for the **Campaign Amplification Hackathon**: a native mobile prototype focused on community-funded message amplification, a clear review/funding lifecycle, transparent use of funds, and a polished Android experience. The original 25-page brief remains the product source of truth.
 
-For foreground development, use two terminals:
+The latest build has recorded automated and scoped Android emulator checks. Physical release-build acceptance and unfamiliar-user usability testing remain pending; this README does not claim whole-app verification or organizer submission.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/api.ps1 run
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/mobile.ps1 web
-```
+| Documentation | Purpose |
+| --- | --- |
+| [Requirements](REQUIREMENTS.md) | PDF coverage and implementation evidence |
+| [Release readiness](RELEASE_READINESS.md) | Build-specific checks, limits, and remaining gates |
+| [Android workflow](docs/ANDROID_LOCAL.md) | Local installation, builds, and native QA |
+| [Trust rubric](docs/TRUST_RUBRIC.md) | Assessment criteria, provenance, and limitations |
+| [Design system](DESIGN.md) | Brand, themes, typography, and interactions |
 
-`mobile.ps1` selects a compatible Node executable. This machine's system Node 20.9 is too old for SDK 55; the script can use Codex's bundled Node 24.21.0 or an explicit process-only `CAMPAIGN_NODE` executable. Set the latter when automatic discovery is unavailable under a restricted shell identity. No global Node installation is changed.
-
-## Accounts and demonstration
-
-- Browse Home and Explore without signing in. Search, categories, sorting and funding filters change actual results.
-- Create a prototype account in Profile. Use test credentials that you do not use elsewhere. One account can create, back, save and follow campaigns.
-- Create offers a manual editor and a clearly labelled guided voice/AI fallback. The five steps are Basics, Story, Campaign & Ad Visuals, Reach, Submit. Local drafts survive reload; signed-in drafts also save to the API. A guest can explicitly transfer their current draft after signing in.
-- The funding goal is entered only at Submit. Submission enters review, and cannot publish or launch advertising.
-- A local reviewer account is created by the backend. Its private credentials are in `services/api/.demo-credentials.json` (ignored by version control). Read that file locally and sign in through Profile to access Review. Do not share or bundle it.
-- Approve submitted content, then explicitly make it available for funding. Back it using the simulated checkout. Each outcome is selectable; only confirmed successful transactions add funding.
-- Funding completion is separate from advertising. The reviewer prepares distribution, confirms setup, starts simulated promotion, records progress and completes it. The final report distinguishes funding, allocated budget, spend, estimates, simulated delivery and refunds.
-- Creator updates appear on campaign pages and in follower/backer activity. Profile contains created/backed/saved campaigns, payment history and notification settings. Public backer names remain private.
-- Activity groups recent updates by date, with unread/category filters, clear campaign names and direct editor/report/payment destinations. Preferences control future campaign/payment updates; essential account-security notices remain on.
-- Profile Settings offers System (default), Light and Dark to guests and signed-in users. Appearance is a device preference, separate from account, drafts and checkout. Source tests and selected installed cold-restore, draft-continuity and actual Android System changes pass; exact cases and remaining combinations are tracked in [native results](artifacts/reference-redesign/after-pass2/NATIVE_RESULTS.md).
-
-Six fictional seeded campaigns use locally cached illustrative stock images and public general-context sources. These sources do not independently verify fictional creators or claims.
-
-## Verify
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/api.ps1 test
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/mobile.ps1 typecheck
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/mobile.ps1 lint
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/mobile.ps1 test
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/mobile.ps1 export:web
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/mobile.ps1 export:android
-```
-
-Final-source frontend tests pass 50/50 in 499.9563ms, including appearance, contrast and public-revision safeguards. TypeScript, lint and web/Android exports pass; backend 30/30 remains valid for unchanged API source. Online Expo dependency compatibility and Doctor 20/20 pass. See [PROGRESS.md](PROGRESS.md) for exact results and later evidence. An Android JavaScript/Hermes export is not an installable APK or Android device verification. The separate [local Android guide](docs/ANDROID_LOCAL.md) describes the final tagged INTERNAL-TEST builds, historical artifacts and isolated toolchain.
-
-## Android artifacts and recorded demonstration
-
-Both final black pass2 builds are available under `artifacts/android/black-theme-pass2-20261016/`:
-
-| Build | Bytes / SHA-256 | Runtime evidence |
-| --- | --- | --- |
-| [x86_64 APK](artifacts/android/black-theme-pass2-20261016/campaign-1.0.0-INTERNAL-TEST-x86_64.apk) | 38,437,869 / `45F0D82B23CD9B6C3DAD56E029E56B7F3CAF3CD91F18CF4FC6A8DED7DE7AE187` | Installed on owned Android 16 / API 36 emulator; exact Metro-off/API-backed cold launch with saved Black and ordinary identity passes |
-| [ARM64 APK](artifacts/android/black-theme-pass2-20261016/campaign-1.0.0-INTERNAL-TEST-arm64.apk) | 37,150,011 / `CE69B6139356A578E1E4E9FC80EE01960B8E90F26C4BD7B000C5210DBB8DC166` | Built and inspected; uninstalled |
-
-[Independent binary inspection](artifacts/reference-redesign/BUILD_INSPECTION.json) verifies matching embedded Hermes/fonts/licenses, correct ABIs/API, Android Debug signatures and all 50 frozen app inputs. [Native results](artifacts/reference-redesign/after-pass2/NATIVE_RESULTS.md) cover Home funding above the first fold in both schemes, selected 360dp/font 1.3 docks/Gboard, 411dp/font 1.6 critical screens, draft/theme/cold continuation, actual System appearance and client-address error recovery. The unused port 8788 check changed only the client configuration and intentionally signed out; it was not a physical outage. Metro was restored after the specific cold-launch proof. These are scoped checks, not every workflow or viewport combination. The full new journey/demo and playback remain unfinished and user-held; recording/production requires explicit human authorization to resume. Consult [release readiness](RELEASE_READINESS.md) for subsequent results.
-
-The emulator API defaults to `http://10.0.2.2:8787`. Internal test builds use the Android Debug certificate, not production signing. A phone needs a reachable API address: Profile's internal Demo connection settings can replace the emulator alias, or supply `EXPO_PUBLIC_API_URL` at build time. The API must still run separately; public judging connectivity/hosting are not configured. Embedded JavaScript, installed Metro independence and API reachability are distinct checks. Preserved [ARM64 debug](artifacts/android/campaign-1.0.0-debug-arm64.apk) and [x86_64 debug](artifacts/android/campaign-1.0.0-debug-x86_64.apk) builds require Metro.
-
-Historical [ARM64 INTERNAL-TEST](artifacts/android/campaign-1.0.0-INTERNAL-TEST-arm64.apk) and [x86_64 INTERNAL-TEST](artifacts/android/campaign-1.0.0-INTERNAL-TEST-x86_64.apk) artifacts are preserved. The former remains uninstalled; the latter's prior Android16/API36 Metro-off, offline/draft and large-text checkout evidence belongs to that older build. The historical [9m40s native demonstration](artifacts/demo/campaign-native-demo-INTERNAL-TEST.mp4), [native results](artifacts/demo/NATIVE_RESULTS.md), [bounded review](artifacts/demo/VIDEO_REVIEW.md), [muted playback](artifacts/demo/PLAYBACK_RESULTS.json) and [metadata](artifacts/demo/campaign-native-demo-INTERNAL-TEST.mp4.json) retain their exact former scopes. They do not verify the replacement design or complete appearance. Human listening remains unverified. Share only intended final APK/video files; raw captures and private helpers stay local.
-
-## Scope and documentation
-
-- [AGENTS.md](AGENTS.md): permanent agent and isolation instructions.
-- [INIT.md](INIT.md) / [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md): startup and product/architecture memory.
-- [REQUIREMENTS.md](REQUIREMENTS.md): PDF-derived coverage and evidence matrix.
-- [PROGRESS.md](PROGRESS.md): current work, test evidence, remaining issues and next steps.
-- [docs/DEMO.md](docs/DEMO.md) / [docs/DELIVERY.md](docs/DELIVERY.md): demonstration and release checklists.
-
-The original 25-page PDF remains authoritative; the user's organizer-video summary supplements it. All work stays inside this project; the Prakash Glass Enterprise ERP is untouched. Cloud accounts and hosting remain deferred. Current artifact, Metro/backend dependency and remaining verification status live in [release readiness](RELEASE_READINESS.md) and [demo checklist](DEMO_CHECKLIST.md). Prior [cleanup](artifacts/demo/cleanup/README.md) and [Activity rehearsal](artifacts/android/activity-native-rehearsal.mp4) records are historical; consult current progress for active device/service state. Free services only remains the preference for later hosting. No hackathon submission has been sent.
+<p align="center"><strong>Ideas. People. Real Impact.</strong></p>

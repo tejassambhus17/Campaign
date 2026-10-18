@@ -1,0 +1,205 @@
+{
+  "preparedOn": "2026-10-19",
+  "checks": [
+    {
+      "name": "All README local files and folders exist",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "All README in-page links resolve",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "Release links use only the known GitHub-relative release index",
+      "passed": true,
+      "detail": [
+        "/tejassambhus17/Campaign/releases"
+      ]
+    },
+    {
+      "name": "Rendered HTML tags balance",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "All images have descriptive alt text",
+      "passed": true,
+      "detail": 24
+    },
+    {
+      "name": "Four screenshot rows contain four images each",
+      "passed": true,
+      "detail": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    {
+      "name": "Exactly16 unique screenshot assets in relative docs paths",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "No ignored artifact/APK/video links in README",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Balanced code fences including architecture diagram",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Simulation and illustrative-score disclosures present",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "All16 output/source hashes, dimensions and stripped EXIF verified",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "Screenshot download weight below1.5MB",
+      "passed": true,
+      "detail": 1362427
+    },
+    {
+      "name": "All203 frozen application inputs unchanged",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "Latest APK byte-identical; no rebuild",
+      "passed": true,
+      "detail": "cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397"
+    },
+    {
+      "name": "Welcome-related captured source inputs remain unchanged",
+      "passed": true,
+      "detail": {
+        "compared": 10,
+        "changed": []
+      }
+    }
+  ],
+  "passed": 15,
+  "total": 15,
+  "allLocalChecksPassed": true,
+  "network": [
+    {
+      "url": "https://expo.dev/",
+      "status": 200,
+      "valid": true,
+      "bytes": 326832,
+      "finalUrl": "https://expo.dev/"
+    },
+    {
+      "url": "https://fastapi.tiangolo.com/",
+      "status": 200,
+      "valid": true,
+      "bytes": 154024,
+      "finalUrl": "https://fastapi.tiangolo.com/"
+    },
+    {
+      "url": "https://img.shields.io/badge/Android-7.0%2B-202624?style=flat&logo=android&logoColor=98F1CA",
+      "status": 200,
+      "valid": true,
+      "bytes": 2828,
+      "finalUrl": "https://img.shields.io/badge/Android-7.0%2B-202624?style=flat&logo=android&logoColor=98F1CA"
+    },
+    {
+      "url": "https://img.shields.io/badge/Download_Android_APK-GitHub_Releases-98F1CA?style=for-the-badge&logo=android&logoColor=98F1CA&labelColor=202624",
+      "status": 200,
+      "valid": true,
+      "bytes": 2226,
+      "finalUrl": "https://img.shields.io/badge/Download_Android_APK-GitHub_Releases-98F1CA?style=for-the-badge&logo=android&logoColor=98F1CA&labelColor=202624"
+    },
+    {
+      "url": "https://img.shields.io/badge/Expo-55-202624?style=flat&logo=expo&logoColor=98F1CA",
+      "status": 200,
+      "valid": true,
+      "bytes": 1956,
+      "finalUrl": "https://img.shields.io/badge/Expo-55-202624?style=flat&logo=expo&logoColor=98F1CA"
+    },
+    {
+      "url": "https://img.shields.io/badge/FastAPI-Python-202624?style=flat&logo=fastapi&logoColor=98F1CA",
+      "status": 200,
+      "valid": true,
+      "bytes": 1854,
+      "finalUrl": "https://img.shields.io/badge/FastAPI-Python-202624?style=flat&logo=fastapi&logoColor=98F1CA"
+    },
+    {
+      "url": "https://img.shields.io/badge/PostgreSQL-Neon-202624?style=flat&logo=postgresql&logoColor=98F1CA",
+      "status": 200,
+      "valid": true,
+      "bytes": 8338,
+      "finalUrl": "https://img.shields.io/badge/PostgreSQL-Neon-202624?style=flat&logo=postgresql&logoColor=98F1CA"
+    },
+    {
+      "url": "https://img.shields.io/badge/React_Native-0.83-202624?style=flat&logo=react&logoColor=98F1CA",
+      "status": 200,
+      "valid": true,
+      "bytes": 5312,
+      "finalUrl": "https://img.shields.io/badge/React_Native-0.83-202624?style=flat&logo=react&logoColor=98F1CA"
+    },
+    {
+      "url": "https://img.shields.io/badge/TypeScript-5.9-202624?style=flat&logo=typescript&logoColor=98F1CA",
+      "status": 200,
+      "valid": true,
+      "bytes": 3118,
+      "finalUrl": "https://img.shields.io/badge/TypeScript-5.9-202624?style=flat&logo=typescript&logoColor=98F1CA"
+    },
+    {
+      "url": "https://reactnative.dev/",
+      "status": 200,
+      "valid": true,
+      "bytes": 166275,
+      "finalUrl": "https://reactnative.dev/"
+    },
+    {
+      "url": "https://www.android.com/",
+      "status": 200,
+      "valid": true,
+      "bytes": 332841,
+      "finalUrl": "https://www.android.com/"
+    },
+    {
+      "url": "https://www.postgresql.org/",
+      "status": 200,
+      "valid": true,
+      "bytes": 24779,
+      "finalUrl": "https://www.postgresql.org/"
+    },
+    {
+      "url": "https://www.typescriptlang.org/",
+      "status": 200,
+      "valid": true,
+      "bytes": 258828,
+      "finalUrl": "https://www.typescriptlang.org/"
+    }
+  ],
+  "privateReleaseVerification": "UNVERIFIED: gh auth login required; no account or release changed",
+  "renderScope": "Local markdown-it HTML/GitHub-style preview, not an authenticated github.com render",
+  "noAppBuildTestsDeviceOrCloudActions": true,
+  "readmeSha256": "591110b13e49aef9181821ca569733864dd1c86bc07ffb5431a59db8e66309d4",
+  "visualReview": {
+    "performed": true,
+    "surface": "Local GitHub-style markdown-it preview in the in-app browser",
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "allGalleryRowsInspected": 4,
+    "imagesLoaded": 24,
+    "imagesTotal": 24,
+    "includes": "16 screenshot JPEGs, approved logo, six stack badges and download badge",
+    "finalDownloadBadgeInspected": true,
+    "githubAuthenticatedRender": false,
+    "mobileBrowserRender": false
+  }
+}
