@@ -2,7 +2,7 @@
   "expo": {
     "name": "Campaign",
     "slug": "campaign-amplification",
-    "version": "1.4.0",
+    "version": "1.5.1",
     "orientation": "portrait",
     "icon": "./assets/brand/campaign-megaphone-transparent.png",
     "userInterfaceStyle": "automatic",
@@ -19,7 +19,7 @@
     },
     "android": {
       "predictiveBackGestureEnabled": false,
-      "versionCode": 10,
+      "versionCode": 12,
       "package": "com.campaignamplification.mobile",
       "adaptiveIcon": {
         "foregroundImage": "./assets/brand/campaign-megaphone-transparent.png",

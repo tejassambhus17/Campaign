@@ -1,27 +1,50 @@
 {
+  "schemaVersion": 2,
   "preparedOn": "2026-10-19",
-  "platform": "Android API 36 x86_64 emulator; not physical-device screenshots",
-  "processing": "540px proportional resize; progressive JPEG quality88 4:4:4; no screenshot crop, retouch, recolor, compositing or generated content. Metadata omitted.",
+  "platform": "Two owned isolated Android16/API36 x86_64 emulators: Campaign_Studio_36/emulator-5574 for19 captures and Campaign_Submission_Auth_36/emulator-5578 for fresh Welcome; same exact APK, not physical-device screenshots",
+  "processing": "540px proportional resize; progressive JPEG quality88 4:4:4; no screenshot crop, retouch, recolor, compositing or generated UI. Metadata omitted.",
   "logo": {
     "source": "apps/mobile/assets/brand/campaign-megaphone-transparent.png",
     "sourceSha256": "f6da62459fd81dd47da127b3fa2892ce0855a703a2a76652fc5642ef0f2f6395",
     "file": "docs/screenshots/campaign-logo.png",
-    "processing": "Trim transparent padding and proportionally resize approved mark only."
+    "sha256": "e4a43f47c2ac20cf03c40b29d04f0f9daced772b8696f51245376aeb33e3c300",
+    "processing": "Existing approved transparent megaphone; unchanged by this refresh."
+  },
+  "localBuild": {
+    "version": "1.5.1",
+    "code": 12,
+    "apk": "artifacts/final-submission-20261019/Campaign.apk",
+    "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+    "bytes": 68616866,
+    "buildReceipt": "artifacts/android/final-submission-confirmed-20261019/campaign-1.5.1-RELEASE-arm64-x86_64.apk.json",
+    "buildReceiptSha256": "e202abd54547487e875374de65e973ab1006e61e85ec7d17bb9b395905feef65",
+    "sourceFreeze": "artifacts/final-submission-20261019/SOURCE_INPUTS.json",
+    "sourceFreezeSha256": "6a1c9e74308966e16bb217fa6daf5ca5d2b6f0926ee65a8bfb3b947f99f54b55",
+    "signingCertificateSha256": "ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07",
+    "publication": "Local prepared build; not uploaded or published by this task."
+  },
+  "publishedRelease": {
+    "version": "1.4.0",
+    "evidence": "Owner-provided release URL; private release assets not authenticated by this media task.",
+    "url": "https://github.com/tejassambhus17/Campaign/releases/tag/1.4.0",
+    "downloadRoute": "https://github.com/tejassambhus17/Campaign/releases/latest"
   },
   "buildScopes": {
-    "final": "Exact signed 1.4.0 final CB08.",
-    "candidate": "Same-version 1.4.0 initial QA candidate FF9E, before Information.tsx keyboard-occlusion correction. Not exact-final-binary captures.",
-    "earlier-verified": "Welcome verified 1.2.2 capture; no final1.4.0 Welcome capture available. Auth/carousel and associated image assets unchanged between preserved1.2.3 and1.4.0 checkpoints; not a new runtime test."
+    "exact-final": "All gallery sources are root-captured final1.5.1/code12 screenshots after installing the same dedicated-signed APK; individual screenshot files and XML are preserved. Screenshot appearance does not establish every workflow or gesture."
   },
   "screenshots": [
     {
       "title": "Welcome",
       "file": "docs/screenshots/welcome.jpg",
-      "source": "artifacts/final-completion-20261017/activity-lifecycle-fix/fresh-native/welcome-1-mountains.png",
-      "scope": "earlier-verified",
-      "version": "1.2.2 / code 5",
-      "apkSha256": "11755a1675ccd0264adb661ddd4d3ef916b220ca686599333891414ad02a2bc9a",
-      "sourceSha256": "bfe1c7282ca21ecb2cb40d22cc01494fe262586cc75a58047b4023510b6c8e91",
+      "source": "artifacts/final-submission-20261019/native/final-welcome.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5578",
+      "avd": "Campaign_Submission_Auth_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "89a963cebb3994028a1569bc52204c9cd26b31f804dd003e6523388e7b28751e",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-welcome.xml",
+      "sourceXmlSha256": "55dada18cb26370aa16d2a514f3420178c8fafae4f92df4086387f0c60e101a8",
       "sourceDimensions": [
         1080,
         2280
@@ -30,18 +53,22 @@
         540,
         1140
       ],
-      "sourceBytes": 1462227,
-      "bytes": 80462,
-      "sha256": "f16b93e269e7c4da0b2e93b18d761f0399338a1acbc7f38a255e6670d6209bda"
+      "sourceBytes": 1462567,
+      "bytes": 80510,
+      "sha256": "f78de0e63f061f6636f9abf6b803f749c5277ceb04b3c885e94abab82d7c827b"
     },
     {
       "title": "Home",
       "file": "docs/screenshots/home.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-confirmed/64-final-home.png",
-      "scope": "final",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397",
-      "sourceSha256": "a02eb14a0348c1e9b1723e6cd2608dfcafc59e34a17490f2d5197db757a7b394",
+      "source": "artifacts/final-submission-20261019/native/final-home.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "f976a57fcc1746403e17eb5ff97aae094e9af4743d4b3a224f58d558de8021bd",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-home.xml",
+      "sourceXmlSha256": "f44cf4a73a045175eb23806af5054ee131ebce379f10bb6711351a8d0a757ea6",
       "sourceDimensions": [
         1080,
         2280
@@ -50,18 +77,22 @@
         540,
         1140
       ],
-      "sourceBytes": 1205027,
-      "bytes": 132169,
-      "sha256": "cc73bcdf7e53ee22384ded2f1fbe8a9630dd5950b8d53b366c43a901b5d5a1d8"
+      "sourceBytes": 1187272,
+      "bytes": 128890,
+      "sha256": "99be5cbbed123d5bae79eb9650205baf70913bcbecb167a5f901c4c0437b051a"
     },
     {
       "title": "Explore",
       "file": "docs/screenshots/explore.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-confirmed/45-explore.png",
-      "scope": "final",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397",
-      "sourceSha256": "8e8506e1cf5c5dfa261008961c52975e0cbb59b5e5c6da6fd388ceb154bd48a1",
+      "source": "artifacts/final-submission-20261019/native/final-explore.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "ab92dae938494c7d4f736a3ae7be1f7cd58136779ae45e39b8eab5b52175273c",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-explore.xml",
+      "sourceXmlSha256": "1171b66cb462abcd57d478de315a3dcfd626fe75b296b650e7f16ffdcbd0abdb",
       "sourceDimensions": [
         1080,
         2280
@@ -70,18 +101,22 @@
         540,
         1140
       ],
-      "sourceBytes": 976521,
-      "bytes": 105730,
-      "sha256": "975975b6d4e14ef73d45b0ae07bfbdf60c390b58b9afc6f0570748fc0152c2a1"
+      "sourceBytes": 971423,
+      "bytes": 105392,
+      "sha256": "fd532d0b0a1092b9b642440fb22aa621ac4185fffca142be0fcea7ec00271955"
     },
     {
-      "title": "Campaign details: transparency",
+      "title": "Campaign details",
       "file": "docs/screenshots/campaign-details.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-candidate/01-campaign-transparency.png",
-      "scope": "candidate",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "ff9e305392eb75cc113a63223422cb96b92dfe81269ebcf99e99085fe832db69",
-      "sourceSha256": "52858bd7d4c619f940289d237bb2bfd49d77ab7527ff8d73bfad82d580d1d5c2",
+      "source": "artifacts/final-submission-20261019/native/final-campaign-details.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "7e843f3ffcb077797fbf8e7c3ef2e3a5f3f1c42d8ff923dda70e0377a31a9985",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-campaign-details.xml",
+      "sourceXmlSha256": "9919b6f7f72418bed46837b9faffd5f4a8f7e68c81dbe9ebbb67b011d2e6574b",
       "sourceDimensions": [
         1080,
         2280
@@ -90,18 +125,22 @@
         540,
         1140
       ],
-      "sourceBytes": 311533,
-      "bytes": 100413,
-      "sha256": "6da2fff0b97f389b8bfa66f9a8778016210dc79faa4d8fd02637d97fa07d8ac3"
+      "sourceBytes": 1305396,
+      "bytes": 130741,
+      "sha256": "dc0bf5a0c4d7c348f0a7997a8659fca7c9631bbace3ab4d92cc59149d3ccfa0b"
     },
     {
-      "title": "Five-step overview",
+      "title": "Five-step creation overview",
       "file": "docs/screenshots/create.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-confirmed/03-creation-entry-confirmed.png",
-      "scope": "final",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397",
-      "sourceSha256": "8a296921a93996d94e777e9a04e9eabc26340bced612580f0f569b2cda20dfb1",
+      "source": "artifacts/final-submission-20261019/native/final-create.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "1afc231c8a94413ddaeae82737a904c2a6b0ff5c9a5a298ef22e1e90cd0edfb3",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-create.xml",
+      "sourceXmlSha256": "3862f711f92ffc55201caa59012ad0aa10fca50ea6169d48063b16eabca74bb6",
       "sourceDimensions": [
         1080,
         2280
@@ -110,18 +149,22 @@
         540,
         1140
       ],
-      "sourceBytes": 303121,
-      "bytes": 80914,
-      "sha256": "222ce01ab1b1320b09f7bdcfb5a7717165e20c9682f6c568d318079edc58526a"
+      "sourceBytes": 327147,
+      "bytes": 79872,
+      "sha256": "c1541a2c80cc37e97eb57268382b9efb49d6c91b09196820a6d332c20946b3bb"
     },
     {
       "title": "Basics",
       "file": "docs/screenshots/create-basics.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-candidate/24-basics.png",
-      "scope": "candidate",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "ff9e305392eb75cc113a63223422cb96b92dfe81269ebcf99e99085fe832db69",
-      "sourceSha256": "0c7b6ee57ca70d1769922d6afd197f00c715783af27c280ddb1bdfbced19500b",
+      "source": "artifacts/final-submission-20261019/native/final-create-basics.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "63b1c0c250e83b718d297a6b8ed7d23af7a3d6b07cf446bdad816f61af975fb4",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-create-basics.xml",
+      "sourceXmlSha256": "2e8d74cb00975e52e4c3ae475e96d22fabdf15005b9b32adf8414ac508c9abbd",
       "sourceDimensions": [
         1080,
         2280
@@ -130,18 +173,22 @@
         540,
         1140
       ],
-      "sourceBytes": 256610,
-      "bytes": 76569,
-      "sha256": "0f70f6bff054487a1419c35a6df2542d333088694acee0153ccd88239a38e534"
+      "sourceBytes": 264375,
+      "bytes": 78390,
+      "sha256": "a671de13b9df670bba9d6857a25d932350833844389bad1bd684a2b11fcd1978"
     },
     {
       "title": "Story",
       "file": "docs/screenshots/create-story.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-candidate/27-story.png",
-      "scope": "candidate",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "ff9e305392eb75cc113a63223422cb96b92dfe81269ebcf99e99085fe832db69",
-      "sourceSha256": "f06d8cc74143a830b234acabf368de88bdb437a17fb1600b102d66e3e4223f82",
+      "source": "artifacts/final-submission-20261019/native/final-create-story.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "3506212f2a3bd4614dc41589d7bacfbd8f1c602974ea2333eb977d1931f58d66",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-create-story.xml",
+      "sourceXmlSha256": "d883dff31e6eda45cf90b86a51931e35bd8495c8e843a62f8a5e902e310781b2",
       "sourceDimensions": [
         1080,
         2280
@@ -150,18 +197,22 @@
         540,
         1140
       ],
-      "sourceBytes": 251879,
-      "bytes": 74853,
-      "sha256": "c6c1cb13172d66cd2759f03621abc9ecc34d80afdad2ecf0c96a74efe7e46d60"
+      "sourceBytes": 251927,
+      "bytes": 74050,
+      "sha256": "134295857e6ba55adb33d7fd9a6c5b6b4e8d53e458e8f10d812e5e09180d1ce2"
     },
     {
       "title": "Campaign & Ad Visuals",
       "file": "docs/screenshots/create-visuals.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-candidate/29-visuals.png",
-      "scope": "candidate",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "ff9e305392eb75cc113a63223422cb96b92dfe81269ebcf99e99085fe832db69",
-      "sourceSha256": "5e805ab46491978e851ce9d2ed8eef878a863dca1e70ac7567e0f5fc9b12664b",
+      "source": "artifacts/final-submission-20261019/native/final-create-visuals.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "feeadfcd0d983501e402790de0260547faf5516366f7b0db0aafeaa3e59926c8",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-create-visuals.xml",
+      "sourceXmlSha256": "0923c58d06cc421198e44c3bbea3aca61541efee3d780effb0f0cab188e5356c",
       "sourceDimensions": [
         1080,
         2280
@@ -170,18 +221,22 @@
         540,
         1140
       ],
-      "sourceBytes": 307099,
-      "bytes": 87045,
-      "sha256": "02c51c44f4272e714597d77075fd84f9deb481587146578addb83ca98620a096"
+      "sourceBytes": 306929,
+      "bytes": 87694,
+      "sha256": "bf4443c8631249496ed6871e82b5660c457357e34ec365caff26984de1e6314e"
     },
     {
       "title": "Reach",
       "file": "docs/screenshots/create-reach.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-candidate/32-reach.png",
-      "scope": "candidate",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "ff9e305392eb75cc113a63223422cb96b92dfe81269ebcf99e99085fe832db69",
-      "sourceSha256": "c70ec3e954d0ca09a01d4a4be223604646a975b591c6eff1fc46e56596a94ee3",
+      "source": "artifacts/final-submission-20261019/native/final-create-reach.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "fdd47131ca5017c94befe9f606dd1a49baf6964a64c8d83b1cc0f77c93b23646",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-create-reach.xml",
+      "sourceXmlSha256": "1bdd6a28d0bc35fcc0199e710cb9c78302fd4f19fa87dc4af92c1b5441068b9f",
       "sourceDimensions": [
         1080,
         2280
@@ -190,18 +245,22 @@
         540,
         1140
       ],
-      "sourceBytes": 290272,
-      "bytes": 84546,
-      "sha256": "34b3d419d15bfe395d9a7e64019e2bbfef36a2ca4ef155060dc07d88ddd47759"
+      "sourceBytes": 298353,
+      "bytes": 87353,
+      "sha256": "fc3e790791a02d4596f804f572c720e785bb1f398afd6bd11952198509e1cd3e"
     },
     {
-      "title": "Submit",
-      "file": "docs/screenshots/create-submit.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-candidate/36-submit-summary.png",
-      "scope": "candidate",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "ff9e305392eb75cc113a63223422cb96b92dfe81269ebcf99e99085fe832db69",
-      "sourceSha256": "1fca17144702a84afc5db16f40835b8ca3566c786a7dc33be7965105c61faf68",
+      "title": "Campaign Readiness Assistant",
+      "file": "docs/screenshots/readiness.jpg",
+      "source": "artifacts/final-submission-20261019/native/final-readiness.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "3039e2be2e4db8b91fefb0e55d9930d17d38b828345c1772d93196bfe0a8faed",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-readiness.xml",
+      "sourceXmlSha256": "8f2f5defa364fe8ca78b16e36bc45aa414a88314adaac899f7f6eb6c68720dac",
       "sourceDimensions": [
         1080,
         2280
@@ -210,18 +269,94 @@
         540,
         1140
       ],
-      "sourceBytes": 257943,
-      "bytes": 68427,
-      "sha256": "a7606508289f6cfe3ff5b71d44db5f3e3d6d37062f0e65a0a20690faf1fd510c"
+      "sourceBytes": 302273,
+      "bytes": 87995,
+      "sha256": "b607b8d487955b978814f41482094a7dfcd6f53bfc0517c734b145c002872f18"
+    },
+    {
+      "title": "Rule-based writing suggestions",
+      "file": "docs/screenshots/suggestions.jpg",
+      "source": "artifacts/final-submission-20261019/native/final-suggestions.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "c07e20b9387077330bd830497665b84795c6049dc59977453dfccabd8a7cf7c4",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-suggestions.xml",
+      "sourceXmlSha256": "6fb2a4a2f891365f965a9e9758e56fbea63ab1681662b8206a8c38b7f4149bcc",
+      "sourceDimensions": [
+        1080,
+        2280
+      ],
+      "dimensions": [
+        540,
+        1140
+      ],
+      "sourceBytes": 249748,
+      "bytes": 73480,
+      "sha256": "cc9e75f23bf45d040653071cfe45ef17f4c60a3c330da0814cc36ebd48fc0aad"
+    },
+    {
+      "title": "Instant campaign preview",
+      "file": "docs/screenshots/instant-preview.jpg",
+      "source": "artifacts/final-submission-20261019/native/final-instant-preview.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "a44ca57e984ac5c170e6315cf0a72f715ccb5f1b8a5f033b944e0aca2720fd6c",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-instant-preview.xml",
+      "sourceXmlSha256": "8cb0d674c8e043ed787eab52f5852c71f903d672cc23ad51a8b6a9af7adb0cd7",
+      "sourceDimensions": [
+        1080,
+        2280
+      ],
+      "dimensions": [
+        540,
+        1140
+      ],
+      "sourceBytes": 233931,
+      "bytes": 83289,
+      "sha256": "94a85ddfc00a60fc8ebf46f25863ccad2433fa429b945554582be92d34171bd4"
+    },
+    {
+      "title": "Review & Submit summary",
+      "file": "docs/screenshots/create-submit.jpg",
+      "source": "artifacts/final-submission-20261019/native/final-create-submit.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "e24b72bbf66484582b40af324a87801b794d9a16fcca0ce2dbcd7783f8af857a",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-create-submit.xml",
+      "sourceXmlSha256": "12d9981b57e888b926338818f3a7fcc3b06f9553f750cece255e6a79b7c5c1e0",
+      "sourceDimensions": [
+        1080,
+        2280
+      ],
+      "dimensions": [
+        540,
+        1140
+      ],
+      "sourceBytes": 264952,
+      "bytes": 72955,
+      "sha256": "9533d69671fcc60ca43bf634bbcb7a68d7f41b5cb6eb296b60b6630e16430b57"
     },
     {
       "title": "Trust & Verification",
       "file": "docs/screenshots/trust-verification.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-candidate/11-assessment-overview.png",
-      "scope": "candidate",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "ff9e305392eb75cc113a63223422cb96b92dfe81269ebcf99e99085fe832db69",
-      "sourceSha256": "52f4367b4e038a309617008a644db4c871ab77a786d09377709c43c018f88721",
+      "source": "artifacts/final-submission-20261019/native/final-trust-verification.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "682ed5de2082f7daec38a46361eff4e8f1fba617ed6f52780e7af73d3df1974e",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-trust-verification.xml",
+      "sourceXmlSha256": "f5d729572d6d8347d253d3871c141fae1eb35bd77d2032f02483568112552a2f",
       "sourceDimensions": [
         1080,
         2280
@@ -230,18 +365,22 @@
         540,
         1140
       ],
-      "sourceBytes": 284303,
-      "bytes": 82033,
-      "sha256": "1c43e37898bd4b34e62d61412fffbb63a669e2af4ca31e3a3677f8733a6a8ed9"
+      "sourceBytes": 280410,
+      "bytes": 81676,
+      "sha256": "4c312756debe01afedb3e6c60320b38391562baacff7184d8d03da7389201565"
     },
     {
       "title": "Simulated contribution",
       "file": "docs/screenshots/contribution.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-candidate/19-contribution.png",
-      "scope": "candidate",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "ff9e305392eb75cc113a63223422cb96b92dfe81269ebcf99e99085fe832db69",
-      "sourceSha256": "907e453d560bd0fe0d118a6362c29326367e233cd5af733a96488d7d6a3819bc",
+      "source": "artifacts/final-submission-20261019/native/final-contribution.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "148016bc36a45a276b3080d47158cf10c82dd3a91e8f055ccd14bb504988dc64",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-contribution.xml",
+      "sourceXmlSha256": "9b025c15d0c463531563447179a2216276e9e26179d13264b957261652f6d075",
       "sourceDimensions": [
         1080,
         2280
@@ -250,38 +389,22 @@
         540,
         1140
       ],
-      "sourceBytes": 252750,
-      "bytes": 75500,
-      "sha256": "15b89757249582bec58882cc094a99cfacd4cac40dfa3c0d3ed1054d03668e39"
-    },
-    {
-      "title": "Activity",
-      "file": "docs/screenshots/activity.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-confirmed/support-activity-confirmed-all.png",
-      "scope": "final",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397",
-      "sourceSha256": "f1f508c7a1570ef85a2530a7b2a8462a04a36d6e036a06a854e79adc923c9200",
-      "sourceDimensions": [
-        1080,
-        2280
-      ],
-      "dimensions": [
-        540,
-        1140
-      ],
-      "sourceBytes": 358301,
-      "bytes": 90122,
-      "sha256": "88c7bca7693343b2ad0578a60d01423be6a8a1431df891cacdd8c048141b34a1"
+      "sourceBytes": 248644,
+      "bytes": 75127,
+      "sha256": "669aa06520330b6d7322e230354cbc1d96b7cef49a29af90419a68b560142461"
     },
     {
       "title": "Campaign report",
       "file": "docs/screenshots/campaign-report.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-confirmed/47-report-after-share-cancel.png",
-      "scope": "final",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397",
-      "sourceSha256": "2113c253e424bea1e98a6b78f068cd2a734a0e43dddd9afeb6ef7d99083e4c5a",
+      "source": "artifacts/final-submission-20261019/native/final-campaign-report.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "de3829f5c0a52ecc329a25f736c2037b3d2029f7552e9314cb235b9bb1571e44",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-campaign-report.xml",
+      "sourceXmlSha256": "20cfcd6eb39d575410bc3b361fbecf7fa203f1018c6de548ee128ce3bc823570",
       "sourceDimensions": [
         1080,
         2280
@@ -290,18 +413,70 @@
         540,
         1140
       ],
-      "sourceBytes": 260879,
-      "bytes": 88162,
-      "sha256": "a05521a89b6704928831ea3d6664a859983979227136c205b72901c74b15c789"
+      "sourceBytes": 296015,
+      "bytes": 87783,
+      "sha256": "2bbf12048681c154ae128b51d17260790bbca7cf1b0e45b8e781d7fb1e3feae6"
     },
     {
-      "title": "Fictional QA profile",
+      "title": "Activity",
+      "file": "docs/screenshots/activity.jpg",
+      "source": "artifacts/final-submission-20261019/native/final-activity.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "cbc68cd2177bdda5998190db8263f04c280044abf7747daf5ea0471131c28675",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-activity.xml",
+      "sourceXmlSha256": "d47ec6cdc70bd5c05c6cb6faaa19d6bd06f4e6010654c0b79c170ce4562bf3c1",
+      "sourceDimensions": [
+        1080,
+        2280
+      ],
+      "dimensions": [
+        540,
+        1140
+      ],
+      "sourceBytes": 163240,
+      "bytes": 44954,
+      "sha256": "cbd6770b7ed11aa32885e162c1769b7b10026d2542150ac6c0eaf18ad130b25a"
+    },
+    {
+      "title": "Creator Studio",
+      "file": "docs/screenshots/creator-studio.jpg",
+      "source": "artifacts/final-submission-20261019/native/final-creator-studio.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "f044a17dd6004e1a22a5ff3e8cbc339766758a758f1400797dd1f62ccfcefeac",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-creator-studio.xml",
+      "sourceXmlSha256": "f212489c50ef9e9692bbf3b0739f105a2d92200dbd95ee39c00120fd92c60f41",
+      "sourceDimensions": [
+        1080,
+        2280
+      ],
+      "dimensions": [
+        540,
+        1140
+      ],
+      "sourceBytes": 294855,
+      "bytes": 74092,
+      "sha256": "3e36bab5e5878be985d4386e7843a5a4cd05de9ee93b13198e52e96993aa6962"
+    },
+    {
+      "title": "Profile - Dark",
       "file": "docs/screenshots/profile.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-confirmed/support-profile-confirmed-overview.png",
-      "scope": "final",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397",
-      "sourceSha256": "c427c7771a3c5ae168948f2790bd6fac74eaa657e0245fb6b5156e8047ffb3f9",
+      "source": "artifacts/final-submission-20261019/native/final-profile.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "b208467f7f93adc19d783ff04e51dbfa4ca07cfefafdf08c810a8bb380a8f8c1",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-profile.xml",
+      "sourceXmlSha256": "0a2973c1b73a1807069a304f4d92ed102c20f08548ad1f0a2acedce2677d6d66",
       "sourceDimensions": [
         1080,
         2280
@@ -310,18 +485,22 @@
         540,
         1140
       ],
-      "sourceBytes": 183374,
-      "bytes": 48484,
-      "sha256": "79df3132253f45c3ee92e29ce2d71a5bed7a1eec9893645eb7313adaba403715"
+      "sourceBytes": 419473,
+      "bytes": 83513,
+      "sha256": "39900797d92ad5d8216b34be7ef7a7b691385c89c6f63ce6e0d5cba432332c9a"
     },
     {
-      "title": "Light campaign transparency",
+      "title": "Profile - Light",
       "file": "docs/screenshots/light-theme.jpg",
-      "source": "artifacts/dropdown-hierarchy-20261018/native-confirmed/52-light-transparency.png",
-      "scope": "final",
-      "version": "1.4.0 / code 10",
-      "apkSha256": "cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397",
-      "sourceSha256": "0ca1596b25ff40e4bded01de1d0eac2b85cb48cad739e277749de3f24f7cad4b",
+      "source": "artifacts/final-submission-20261019/native/final-light-theme.png",
+      "scope": "exact-final",
+      "version": "1.5.1 / code 12",
+      "deviceSerial": "emulator-5574",
+      "avd": "Campaign_Studio_36",
+      "apkSha256": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60",
+      "sourceSha256": "8ff61c4dc360b11e63af7ea0d1ab0b804bb1950329260e499e397ffefe5343a5",
+      "sourceXml": "artifacts/final-submission-20261019/native/final-light-theme.xml",
+      "sourceXmlSha256": "b1998716375e67179570ee32077b8498f9bd9876fc707e85fbf2116baed1d9b2",
       "sourceDimensions": [
         1080,
         2280
@@ -330,11 +509,11 @@
         540,
         1140
       ],
-      "sourceBytes": 277167,
-      "bytes": 86998,
-      "sha256": "7bfe78bdd581bfce699526d45c08759218e80148599d5d6679d329bb3de8bd69"
+      "sourceBytes": 349289,
+      "bytes": 81333,
+      "sha256": "b79b3c252959d8279c8541e3f511b4522a4ed94e4d5c5d3b628ff7767ea71070"
     }
   ],
-  "totalImageBytes": 1362427,
-  "totalOriginalBytes": 7239006
+  "totalImageBytes": 1699089,
+  "totalOriginalBytes": 9478219
 }

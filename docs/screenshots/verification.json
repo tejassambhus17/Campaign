@@ -12,11 +12,9 @@
       "detail": []
     },
     {
-      "name": "Release links use only the known GitHub-relative release index",
+      "name": "Release links use the absolute latest-release route",
       "passed": true,
-      "detail": [
-        "/tejassambhus17/Campaign/releases"
-      ]
+      "detail": null
     },
     {
       "name": "Rendered HTML tags balance",
@@ -26,12 +24,13 @@
     {
       "name": "All images have descriptive alt text",
       "passed": true,
-      "detail": 24
+      "detail": 28
     },
     {
-      "name": "Four screenshot rows contain four images each",
+      "name": "Five screenshot rows contain four images each",
       "passed": true,
       "detail": [
+        4,
         4,
         4,
         4,
@@ -39,7 +38,7 @@
       ]
     },
     {
-      "name": "Exactly16 unique screenshot assets in relative docs paths",
+      "name": "Exactly20 unique screenshot assets in relative docs paths",
       "passed": true,
       "detail": null
     },
@@ -59,36 +58,66 @@
       "detail": null
     },
     {
-      "name": "All16 output/source hashes, dimensions and stripped EXIF verified",
+      "name": "Four creation and creator improvements described without an AI claim",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Source/gallery version and release-asset upload clearly distinguished",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "All20 output/source hashes, dimensions and stripped EXIF verified",
       "passed": true,
       "detail": []
     },
     {
-      "name": "Screenshot download weight below1.5MB",
+      "name": "Screenshot download weight below2.25MB",
       "passed": true,
-      "detail": 1362427
+      "detail": 1699089
     },
     {
-      "name": "All203 frozen application inputs unchanged",
+      "name": "README gallery and manifest identify the same20 images",
       "passed": true,
-      "detail": []
+      "detail": null
     },
     {
-      "name": "Latest APK byte-identical; no rebuild",
-      "passed": true,
-      "detail": "cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397"
-    },
-    {
-      "name": "Welcome-related captured source inputs remain unchanged",
+      "name": "Final frozen application inputs unchanged",
       "passed": true,
       "detail": {
-        "compared": 10,
+        "compared": 149,
         "changed": []
       }
+    },
+    {
+      "name": "Gallery APK matches exact final build receipt",
+      "passed": true,
+      "detail": "928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60"
+    },
+    {
+      "name": "All20 screenshots attributed to one final1.5.1/code12 build",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Capture attribution names both owned emulators accurately",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "All20 original native XML captures preserved",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "Approved logo source and output unchanged",
+      "passed": true,
+      "detail": null
     }
   ],
-  "passed": 15,
-  "total": 15,
+  "passed": 21,
+  "total": 21,
   "allLocalChecksPassed": true,
   "network": [
     {
@@ -172,7 +201,7 @@
       "url": "https://www.postgresql.org/",
       "status": 200,
       "valid": true,
-      "bytes": 24779,
+      "bytes": 24759,
       "finalUrl": "https://www.postgresql.org/"
     },
     {
@@ -183,23 +212,9 @@
       "finalUrl": "https://www.typescriptlang.org/"
     }
   ],
-  "privateReleaseVerification": "UNVERIFIED: gh auth login required; no account or release changed",
+  "privateReleaseVerification": "Not authenticated by this media validator; owner reports release1.4.0, recipient asset access remains separate",
   "renderScope": "Local markdown-it HTML/GitHub-style preview, not an authenticated github.com render",
-  "noAppBuildTestsDeviceOrCloudActions": true,
-  "readmeSha256": "591110b13e49aef9181821ca569733864dd1c86bc07ffb5431a59db8e66309d4",
-  "visualReview": {
-    "performed": true,
-    "surface": "Local GitHub-style markdown-it preview in the in-app browser",
-    "viewport": {
-      "width": 1280,
-      "height": 720
-    },
-    "allGalleryRowsInspected": 4,
-    "imagesLoaded": 24,
-    "imagesTotal": 24,
-    "includes": "16 screenshot JPEGs, approved logo, six stack badges and download badge",
-    "finalDownloadBadgeInspected": true,
-    "githubAuthenticatedRender": false,
-    "mobileBrowserRender": false
-  }
+  "networkCheckMode": "Recorded matching public URL evidence retained; no fresh network requests in this run",
+  "networkEvidenceRecordedUtc": "2026-10-18T22:39:18.676240+00:00",
+  "validatorPerformedNoAppBuildTestsDeviceOrCloudActions": true
 }

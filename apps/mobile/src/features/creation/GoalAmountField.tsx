@@ -7,7 +7,7 @@ import { formatMoney, formatNativeMoney, inputForUsd, moneyInputWithinLimits, Mo
 import { TargetField } from "./FieldTarget";
 
 /** The editor persists USD only. Input text and its reference snapshot stay paired. */
-export function GoalAmountField({ value, entry, onChange, editable, error }: { value: number; entry?: MoneyEntryRecord; onChange: (canonicalInput: string, entry: MoneyEntryRecord) => void; editable: boolean; error?: string }) {
+export function GoalAmountField({ value, entry, onChange, editable, saving = false, error }: { value: number; entry?: MoneyEntryRecord; onChange: (canonicalInput: string, entry: MoneyEntryRecord) => void | boolean; editable: boolean; saving?: boolean; error?: string }) {
   const { styles } = useTheme();
   const currency = useCurrency();
   const entryIdentity = JSON.stringify(entry ?? null);
@@ -37,16 +37,17 @@ export function GoalAmountField({ value, entry, onChange, editable, error }: { v
   return <View style={{ gap: 6 }}>
     <TargetField compact target="goal" label={`Your funding goal · ${snapshot.currency} *`} keyboardType="decimal-pad" editable={editable} value={raw}
       onChangeText={text => {
+        if (!editable) return;
         if (!/^\d{0,10}(\.\d{0,2})?$/.test(text)) return;
         const usd = usdFromInput(text, snapshot);
         const valid = moneyInputWithinLimits(text, snapshot, 0.01, 100000);
         const next = { raw: text, canonicalUsd: valid ? usd ?? 0 : 0, snapshot };
+        if (onChange(!valid || usd === null || usd === 0 ? "" : usd.toFixed(2), next) === false) return;
         setField({ ...current, input: next, pending: next });
-        onChange(!valid || usd === null || usd === 0 ? "" : usd.toFixed(2), next);
       }} placeholder="Enter the goal you choose" error={raw && !withinLimits ? `Enter ${formatMoney(0.01, snapshot)}–${formatMoney(100000, snapshot)} with up to two decimals.` : error}
-      hint={editable ? `You choose the goal · ${formatMoney(0.01, snapshot)}–${formatMoney(100000, snapshot)}.` : "Published goal locked to protect backer expectations."} />
+      hint={saving ? "Saving your draft…" : editable ? `You choose the goal · ${formatMoney(0.01, snapshot)}–${formatMoney(100000, snapshot)}.` : "Published goal locked to protect backer expectations."} />
     {snapshot.currency === "INR" && <Text style={[styles.muted, { fontSize: 12, lineHeight: 18 }]}>Canonical USD goal: {converted === null ? "Enter an amount" : `${formatNativeMoney(converted)} USD`}. Conversion rounds once to USD cents.</Text>}
     <InfoAction title="Currency & goal details" summary={`${snapshot.currency} entry · original reference preserved`} icon="cash-outline" testID="creation-goal-currency"><Text style={[styles.muted, { fontSize: 12, lineHeight: 18 }]}>{referenceDescription(snapshot)} Demo limits: USD $0.01–$100,000, up to two decimals. Accounting stays in USD cents; story and creative changes still require review.</Text></InfoAction>
-    {(currency.preference !== snapshot.currency || currency.rate?.date !== snapshot.rate?.date) && editable && <Button title={`Use current ${currency.preference} preference`} variant="ghost" disabled={currency.loading || currency.snapshot.unavailable} onPress={() => { const next = { raw: inputForUsd(value, currency.snapshot), canonicalUsd: value, snapshot: currency.snapshot }; setField({ ...current, input: next, pending: next }); onChange(value ? value.toFixed(2) : "", next); }} />}
+    {(currency.preference !== snapshot.currency || currency.rate?.date !== snapshot.rate?.date) && editable && <Button title={`Use current ${currency.preference} preference`} variant="ghost" disabled={currency.loading || currency.snapshot.unavailable} onPress={() => { const next = { raw: inputForUsd(value, currency.snapshot), canonicalUsd: value, snapshot: currency.snapshot }; if (onChange(value ? value.toFixed(2) : "", next) === false) return; setField({ ...current, input: next, pending: next }); }} />}
   </View>;
 }

@@ -110,11 +110,12 @@ test('actual Submit goal field retains text/rate through preference rerender and
 
 function goalHarness() {
   const state = hooks(), updates = [];
+  let rejectChanges = false;
   let props = { value: 25, entry: undefined, editable: true }, preference = { snapshot: inr, preference: 'INR', rate, loading: false };
   let theme = { styles: { muted: { color: '#aaa' } }, scheme: 'dark' };
   const component = load('../src/features/creation/GoalAmountField.tsx', { react: { useState: state.useState }, 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': { View: 'View' }, '../../components/ui': { Button: 'Button', Text: 'Text', useTheme: () => theme }, '../../lib/CurrencyProvider': { useCurrency: () => preference }, '../../lib/currency': fx, './FieldTarget': { TargetField: 'TargetField' }, '../../components/Information': { InfoAction: 'InfoAction' } });
-  const render = () => { state.reset(); return flatten(component.GoalAmountField({ ...props, onChange: (canonical, entry) => { updates.push({ canonical, entry }); } })); };
-  return { render, updates, replace: next => { props = { ...props, ...next }; }, preference: next => { preference = next; }, theme: next => { theme = next; } };
+  const render = () => { state.reset(); return flatten(component.GoalAmountField({ ...props, onChange: (canonical, entry) => { if (rejectChanges) return false; updates.push({ canonical, entry }); } })); };
+  return { render, updates, replace: next => { props = { ...props, ...next }; }, rejectChanges: value => { rejectChanges = value; }, preference: next => { preference = next; }, theme: next => { theme = next; } };
 }
 test('actual goal field immediately reconciles an external account-version goal replacement on the same mounted editor', () => {
   const h = goalHarness(); assert.equal(h.render().find(n => n.type === 'TargetField').props.value, '2081.25');
@@ -138,6 +139,41 @@ test('own goal edit acknowledgements preserve exact valid/invalid text and froze
   field = h.render().find(n => n.type === 'TargetField'); assert.equal(field.props.value, '4162.'); assert.match(field.props.label, /INR/);
   assert.equal(h.render().find(n => n.type === 'TargetField').props.value, '4162.');
   assert.equal(invalid.entry.snapshot.rate.rate, 83.25); assert.equal(invalid.entry.snapshot.rate.date, '2026-10-16');
+});
+
+test('a rejected queued goal input never buffers local text and failed-save unlock restores the same amount/reference', () => {
+  const h = goalHarness(), before = h.render().find(node => node.type === 'TargetField');
+  const queuedNativeChange = before.props.onChangeText;
+  h.rejectChanges(true); h.replace({ editable: false, saving: true });
+  queuedNativeChange('99999.00');
+  let field = h.render().find(node => node.type === 'TargetField');
+  assert.equal(field.props.value, '2081.25'); assert.equal(field.props.editable, false);
+  assert.match(field.props.hint, /Saving your draft/); assert.doesNotMatch(field.props.hint, /Published/);
+  field.props.onChangeText('88888.00');
+  h.rejectChanges(false); h.replace({ editable: true, saving: false });
+  field = h.render().find(node => node.type === 'TargetField');
+  assert.equal(field.props.value, '2081.25'); assert.match(field.props.label, /INR/);
+  assert.deepEqual(h.updates, [], 'neither queued nor currently disabled input reaches the draft');
+  field.props.onChangeText('4162.50');
+  assert.equal(h.updates.at(-1).canonical, '50.00');
+  assert.equal(h.render().find(node => node.type === 'TargetField').props.value, '4162.50');
+  h.replace({ editable: false, saving: false });
+  assert.match(h.render().find(node => node.type === 'TargetField').props.hint, /Published goal locked/);
+});
+
+test('a rejected queued currency-reference action cannot change goal text or its frozen reference', () => {
+  const h = goalHarness(); h.render();
+  h.preference({ snapshot: usd, preference: 'USD', rate: null, loading: false });
+  const queuedPreference = h.render().find(node => node.props.title === 'Use current USD preference').props.onPress;
+  h.rejectChanges(true); h.replace({ editable: false, saving: true });
+  queuedPreference();
+  let field = h.render().find(node => node.type === 'TargetField');
+  assert.equal(field.props.value, '2081.25'); assert.match(field.props.label, /INR/); assert.deepEqual(h.updates, []);
+  h.rejectChanges(false); h.replace({ editable: true, saving: false });
+  h.render().find(node => node.props.title === 'Use current USD preference').props.onPress();
+  field = h.render().find(node => node.type === 'TargetField');
+  assert.equal(field.props.value, '25'); assert.match(field.props.label, /USD/);
+  assert.equal(h.updates.at(-1).canonical, '25.00');
 });
 
 function checkoutHarness() {

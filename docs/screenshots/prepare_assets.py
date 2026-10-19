@@ -1,77 +1,92 @@
-"""Resize existing native captures for the README. Does not start the app."""
+"""Optimize exact-final Android captures for the README; no app/device actions."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
-from PIL import Image, ImageOps
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
-DEST = ROOT / 'docs/screenshots'
-BASE = 'artifacts/dropdown-hierarchy-20261018/'
-HASHES = {
-    'final': 'cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397',
-    'candidate': 'ff9e305392eb75cc113a63223422cb96b92dfe81269ebcf99e99085fe832db69',
-    'earlier-verified': '11755a1675ccd0264adb661ddd4d3ef916b220ca686599333891414ad02a2bc9a',
-}
+DEST = ROOT / "docs/screenshots"
+BASE = "artifacts/final-submission-20261019/native/"
+VERSION, CODE = "1.5.1", 12
+CERT = "ef0d218676ed3fa4f81033ebd9ec0c6d825017b60505c89f675b31ee6188db07"
 SELECTION = [
-    ('welcome', 'Welcome', 'earlier-verified', 'artifacts/final-completion-20261017/activity-lifecycle-fix/fresh-native/welcome-1-mountains.png'),
-    ('home', 'Home', 'final', BASE + 'native-confirmed/64-final-home.png'),
-    ('explore', 'Explore', 'final', BASE + 'native-confirmed/45-explore.png'),
-    ('campaign-details', 'Campaign details: transparency', 'candidate', BASE + 'native-candidate/01-campaign-transparency.png'),
-    ('create', 'Five-step overview', 'final', BASE + 'native-confirmed/03-creation-entry-confirmed.png'),
-    ('create-basics', 'Basics', 'candidate', BASE + 'native-candidate/24-basics.png'),
-    ('create-story', 'Story', 'candidate', BASE + 'native-candidate/27-story.png'),
-    ('create-visuals', 'Campaign & Ad Visuals', 'candidate', BASE + 'native-candidate/29-visuals.png'),
-    ('create-reach', 'Reach', 'candidate', BASE + 'native-candidate/32-reach.png'),
-    ('create-submit', 'Submit', 'candidate', BASE + 'native-candidate/36-submit-summary.png'),
-    ('trust-verification', 'Trust & Verification', 'candidate', BASE + 'native-candidate/11-assessment-overview.png'),
-    ('contribution', 'Simulated contribution', 'candidate', BASE + 'native-candidate/19-contribution.png'),
-    ('activity', 'Activity', 'final', BASE + 'native-confirmed/support-activity-confirmed-all.png'),
-    ('campaign-report', 'Campaign report', 'final', BASE + 'native-confirmed/47-report-after-share-cancel.png'),
-    ('profile', 'Fictional QA profile', 'final', BASE + 'native-confirmed/support-profile-confirmed-overview.png'),
-    ('light-theme', 'Light campaign transparency', 'final', BASE + 'native-confirmed/52-light-transparency.png'),
+    ("welcome", "Welcome"), ("home", "Home"), ("explore", "Explore"), ("campaign-details", "Campaign details"),
+    ("create", "Five-step creation overview"), ("create-basics", "Basics"), ("create-story", "Story"), ("create-visuals", "Campaign & Ad Visuals"),
+    ("create-reach", "Reach"), ("readiness", "Campaign Readiness Assistant"), ("suggestions", "Rule-based writing suggestions"), ("instant-preview", "Instant campaign preview"),
+    ("create-submit", "Review & Submit summary"), ("trust-verification", "Trust & Verification"), ("contribution", "Simulated contribution"), ("campaign-report", "Campaign report"),
+    ("activity", "Activity"), ("creator-studio", "Creator Studio"), ("profile", "Profile - Dark"), ("light-theme", "Profile - Light"),
 ]
+
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
+
+def project_path(path):
+    result = path.resolve()
+    if not result.is_relative_to(ROOT):
+        raise ValueError("Media inputs must remain inside Campaign.")
+    return result
+
+
 def generate():
-    assert ROOT == Path('E:/Campaign'), 'Use the authorized workspace.'
-    DEST.mkdir(parents=True, exist_ok=True)
+    args = argparse.ArgumentParser(description=__doc__)
+    args.add_argument("--apk", type=Path, required=True)
+    args.add_argument("--build-receipt", type=Path, required=True)
+    args.add_argument("--expected-sha256", required=True)
+    args.add_argument("--source-freeze", type=Path, default=ROOT / "artifacts/final-submission-20261019/SOURCE_INPUTS.json")
+    options = args.parse_args()
+    assert ROOT == Path("E:/Campaign"), "Use the authorized workspace."
+    apk, receipt_path, freeze_path = map(project_path, [options.apk, options.build_receipt, options.source_freeze])
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8-sig"))
+    frozen = json.loads(freeze_path.read_text(encoding="utf-8-sig"))
+    actual_hash = digest(apk)
+    assert actual_hash == options.expected_sha256.lower() == receipt["sha256"].lower(), "Actual APK / confirmed hash / build receipt mismatch."
+    assert apk.stat().st_size == receipt["bytes"], "APK size mismatch."
+    assert receipt["versionName"] == VERSION and receipt["versionCode"] == CODE, "Unexpected build identity."
+    assert receipt["signingCertificateSha256"].lower() == CERT and receipt["dedicatedReleaseSigned"], "Unexpected signer."
+    assert frozen["files"] and all(digest(project_path(ROOT / item["path"])) == item["sha256"].lower() for item in frozen["files"]), "Frozen application source drift."
+    inputs = [(slug, title, ROOT / f"{BASE}final-{slug}.png") for slug, title in SELECTION]
+    missing = [str(source.relative_to(ROOT)) for _, _, source in inputs if not source.is_file() or not source.with_suffix(".xml").is_file()]
+    assert not missing, "Wait for all exact-final PNG/XML captures: " + ", ".join(missing)
+    for _, _, source in inputs:
+        with Image.open(source) as capture:
+            capture.verify()
+    # Validate every input before replacing a published gallery image.
     entries = []
-    for slug, title, scope, source in SELECTION:
-        original, output = ROOT / source, DEST / (slug + '.jpg')
-        with Image.open(original) as capture:
+    for slug, title, source in inputs:
+        output = DEST / (slug + ".jpg")
+        with Image.open(source) as capture:
             size = (540, round(capture.height * 540 / capture.width))
-            capture.convert('RGB').resize(size, Image.Resampling.LANCZOS).save(
-                output, 'JPEG', quality=88, subsampling=0, optimize=True, progressive=True)
+            capture.convert("RGB").resize(size, Image.Resampling.LANCZOS).save(
+                output, "JPEG", quality=88, subsampling=0, optimize=True, progressive=True)
             original_size = list(capture.size)
         entries.append(dict(title=title, file=output.relative_to(ROOT).as_posix(),
-            source=source, scope=scope,
-            version='1.2.2 / code 5' if scope == 'earlier-verified' else '1.4.0 / code 10',
-            apkSha256=HASHES[scope], sourceSha256=digest(original),
-            sourceDimensions=original_size, dimensions=list(size),
-            sourceBytes=original.stat().st_size, bytes=output.stat().st_size,
-            sha256=digest(output)))
-    original_logo = ROOT / 'apps/mobile/assets/brand/campaign-megaphone-transparent.png'
-    with Image.open(original_logo) as image:
-        logo = image.convert('RGBA')
-        logo = ImageOps.contain(logo.crop(logo.getchannel('A').getbbox()), (256, 256), Image.Resampling.LANCZOS)
-        canvas = Image.new('RGBA', (280, 280), (0, 0, 0, 0))
-        canvas.alpha_composite(logo, ((280 - logo.width)//2, (280 - logo.height)//2))
-        canvas.save(DEST / 'campaign-logo.png', optimize=True)
-    manifest = dict(preparedOn='2026-10-19',
-        platform='Android API 36 x86_64 emulator; not physical-device screenshots',
-        processing='540px proportional resize; progressive JPEG quality88 4:4:4; no screenshot crop, retouch, recolor, compositing or generated content. Metadata omitted.',
+            source=source.relative_to(ROOT).as_posix(), scope="exact-final", version=f"{VERSION} / code {CODE}",
+            deviceSerial="emulator-5578" if slug == "welcome" else "emulator-5574",
+            avd="Campaign_Submission_Auth_36" if slug == "welcome" else "Campaign_Studio_36",
+            apkSha256=actual_hash, sourceSha256=digest(source),
+            sourceXml=source.with_suffix(".xml").relative_to(ROOT).as_posix(), sourceXmlSha256=digest(source.with_suffix(".xml")),
+            sourceDimensions=original_size, dimensions=list(size), sourceBytes=source.stat().st_size,
+            bytes=output.stat().st_size, sha256=digest(output)))
+    original_logo = ROOT / "apps/mobile/assets/brand/campaign-megaphone-transparent.png"
+    assert (DEST / "campaign-logo.png").is_file(), "Preserve the existing approved README logo."
+    manifest = dict(schemaVersion=2, preparedOn="2026-10-19",
+        platform="Two owned isolated Android16/API36 x86_64 emulators: Campaign_Studio_36/emulator-5574 for19 captures and Campaign_Submission_Auth_36/emulator-5578 for fresh Welcome; same exact APK, not physical-device screenshots",
+        processing="540px proportional resize; progressive JPEG quality88 4:4:4; no screenshot crop, retouch, recolor, compositing or generated UI. Metadata omitted.",
         logo=dict(source=original_logo.relative_to(ROOT).as_posix(), sourceSha256=digest(original_logo),
-            file='docs/screenshots/campaign-logo.png', processing='Trim transparent padding and proportionally resize approved mark only.'),
-        buildScopes={
-            'final': 'Exact signed 1.4.0 final CB08.',
-            'candidate': 'Same-version 1.4.0 initial QA candidate FF9E, before Information.tsx keyboard-occlusion correction. Not exact-final-binary captures.',
-            'earlier-verified': 'Welcome verified 1.2.2 capture; no final1.4.0 Welcome capture available. Auth/carousel and associated image assets unchanged between preserved1.2.3 and1.4.0 checkpoints; not a new runtime test.'},
-        screenshots=entries, totalImageBytes=sum(e['bytes'] for e in entries),
-        totalOriginalBytes=sum(e['sourceBytes'] for e in entries))
-    (DEST / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
-    print(json.dumps({k: manifest[k] for k in ['totalImageBytes','totalOriginalBytes']}))
+            file="docs/screenshots/campaign-logo.png", sha256=digest(DEST / "campaign-logo.png"), processing="Existing approved transparent megaphone; unchanged by this refresh."),
+        localBuild=dict(version=VERSION, code=CODE, apk=apk.relative_to(ROOT).as_posix(), apkSha256=actual_hash, bytes=apk.stat().st_size,
+            buildReceipt=receipt_path.relative_to(ROOT).as_posix(), buildReceiptSha256=digest(receipt_path),
+            sourceFreeze=freeze_path.relative_to(ROOT).as_posix(), sourceFreezeSha256=digest(freeze_path),
+            signingCertificateSha256=CERT, publication="Local prepared build; not uploaded or published by this task."),
+        publishedRelease=dict(version="1.4.0", evidence="Owner-provided release URL; private release assets not authenticated by this media task.", url="https://github.com/tejassambhus17/Campaign/releases/tag/1.4.0", downloadRoute="https://github.com/tejassambhus17/Campaign/releases/latest"),
+        buildScopes={"exact-final": "All gallery sources are root-captured final1.5.1/code12 screenshots after installing the same dedicated-signed APK; individual screenshot files and XML are preserved. Screenshot appearance does not establish every workflow or gesture."},
+        screenshots=entries, totalImageBytes=sum(item["bytes"] for item in entries), totalOriginalBytes=sum(item["sourceBytes"] for item in entries))
+    (DEST / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({"screenshots": len(entries), "version": VERSION, "code": CODE, "apkSha256": actual_hash, "totalImageBytes": manifest["totalImageBytes"], "totalOriginalBytes": manifest["totalOriginalBytes"]}, indent=2))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     generate()

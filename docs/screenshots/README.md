@@ -1,31 +1,42 @@
 # Campaign screenshot gallery
 
-These are real native **Android API 36 emulator captures**, not mockups or physical-phone screenshots. The README shows them in four groups of four, with descriptive alternative text and links to the 540 px versions.
+These are real native **Android 16 / API 36 x86_64 emulator captures** from the same dedicated-signed **1.5.1 / code 12** local build. They are neither generated mockups nor physical-phone screenshots. The README presents 20 screenshots in five rows of four, with descriptive alt text and links to the 540 px versions.
 
 ## Build provenance
 
-| Gallery images | Capture source |
-| --- | --- |
-| Home, Explore, Create overview, Activity, Report, Profile, Light appearance | Exact final dedicated-signed **1.4.0 / code 10**, APK SHA-256 beginning `cb08edf3` |
-| Campaign details/transparency, Basics, Story, Visuals, Reach, Submit, Trust & Verification, Contribution | **1.4.0 / code 10 initial QA candidate**, SHA-256 beginning `ff9e3053`; before the final shared-sheet keyboard correction. Marked `²` in the gallery, not represented as exact-final captures. |
-| Welcome | Earlier verified **1.2.2 / code 5**, SHA-256 beginning `11755a16`; marked `¹`. No final 1.4.0 Welcome capture exists in the packet. Auth/carousel and associated image sources are unchanged between the preserved 1.2.3 and 1.4.0 checkpoints; this is not a new interaction test. |
+All gallery sources are the `final-*.png` captures under `artifacts/final-submission-20261019/native/`. Each source has a matching native UI XML capture. [manifest.json](manifest.json) records complete source/output hashes, sizes, dimensions, and the exact APK/build-receipt/source-freeze identity. The previous mixture of 1.4.0 candidate/final and earlier Welcome captures is replaced.
 
-Campaign details shows the scrolled Story/transparency region, not a fabricated full-screen composite. Editor captures show an actual fictional local QA draft. Profile/Activity show an existing fictional QA account, without passwords, tokens, email addresses, private receipt links, or provider credentials. Numbers are captured demonstration data, not product-performance claims.
+Nineteen captures use the owned `Campaign_Studio_36` emulator (`emulator-5574`). Fresh Welcome uses the isolated `Campaign_Submission_Auth_36` emulator (`emulator-5578`). Both run Android 16 / API 36 x86_64 with the exact same APK; per-image attribution is recorded in the manifest. No phone screenshots or phone-data reset are implied.
+
+The capture selection includes all five creation steps, the current moving step rail, Readiness Assistant, rule-based writing suggestions, current-draft preview, Creator Studio, and premium Profile in both themes. Sample campaigns, financial amounts, notifications, names, and the fictional QA profile are captured demonstration data, not product-performance claims. No credentials, passwords, provider keys, or private receipt links are intentionally published.
+
+Creation screenshots deliberately show an incomplete fictional draft so missing items, recommendations, optional media and writing guidance remain visible. Its empty story/media states and preview reflect that draft rather than fabricated finished content.
+
+All photographs, controls, text, data and bundled artwork remain as actually rendered. A static illustration inside the app does not make the native screenshot a generated mockup. No screenshot content was composited, regenerated, rewritten or selectively hidden for the gallery.
 
 ## Image processing
 
 - Preserve the complete original screen and aspect ratio; resize proportionally to **540 px wide**.
 - Encode progressive JPEG at quality 88 with 4:4:4 chroma for readable UI text.
-- Do not crop screenshots, replace text, hide controls, edit figures, recolor surfaces, add phone frames, or synthesize any UI.
+- Do not crop screenshots, replace text, change figures, recolor surfaces, add phone frames, or synthesize UI.
 - Strip source metadata during encoding.
-- The logo reuses the approved transparent megaphone: trim transparent padding, resize proportionally, and retain transparency. No new logo was generated.
+- Retain the existing approved transparent megaphone logo unchanged.
 
-The 16 screenshots total **1,362,427 bytes**, down from **7,239,006 bytes** in the original PNGs, about **81% smaller**. The small logo is additional. All images are repository assets, not ignored local-artifact links.
+The 20 JPEGs total **1,699,089 bytes**, reduced from **9,478,219 bytes** of original PNGs (about **82% smaller**). The logo is additional. Exact per-file totals are in the manifest, and validation checks a 2.25 MB gallery budget. Original PNG/XML evidence remains unchanged in the ignored local artifact tree. A normal clone already includes the optimized gallery; regenerating it needs the preserved originals and Pillow.
 
-[manifest.json](manifest.json) contains full source paths, source/output hashes, dimensions, byte sizes, and exact build identities. Original high-resolution PNGs remain unchanged in the local `artifacts/` evidence tree, which is deliberately excluded from Git. Reproduction therefore requires that preserved local evidence and Pillow; a normal clone already includes the optimized gallery.
+## Reproduce and validate
 
-## Checks and limits
+Run from `E:\Campaign`, supplying the root-verified final APK, its build metadata, and its confirmed SHA256:
 
-[verification.json](verification.json) records the performed README path, anchor, gallery, image, frozen-source, and available network checks. A local GitHub-style preview is for document composition only; GitHub's own renderer controls final typography, table scrolling, Mermaid rendering, and image proxying. Private repository/release access requires authenticated verification and was not established by a local preview.
+The supporting scripts use Pillow and `markdown-it-py`; both are available in the bundled workspace Python. A normal clone already contains the prepared JPEGs and does not need to regenerate them.
 
-This documentation task runs no application build, app tests, ADB/emulator session, cloud rollout, or fresh screen capture. Physical release verification and unfamiliar-user testing remain separate pending work.
+```powershell
+python docs/screenshots/prepare_assets.py --apk <final-APK-path> --build-receipt <APK-build-metadata.json> --expected-sha256 <confirmed-SHA256>
+python docs/screenshots/validate_readme.py
+```
+
+The generator also reads `artifacts/final-submission-20261019/SOURCE_INPUTS.json` by default. All inputs must exist and match before gallery replacement. It does not build, sign, install, launch, or capture the app.
+
+[verification.json](verification.json) records the performed README/image/build-source checks. `review/index.html` is a local composition preview; GitHub controls its own typography, tables, Mermaid, and image proxying. Public URL checks do not authenticate access to a private GitHub release.
+
+Screenshots demonstrate appearance only. They do not establish every gesture, financial state, upload, accessibility mode, physical-device behavior, or unfamiliar-user usability. Build-specific native results remain in the main release documentation.

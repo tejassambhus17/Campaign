@@ -14,7 +14,7 @@ require.extensions['.ts'] = (module, filename) => {
   module._compile(outputText, filename);
 };
 const { blankDraft, validateStep, normalizeDraft, campaignBody, isPublicUrl } = require('../src/features/creation/model.ts');
-const { submissionIssues } = require('../src/features/creation/readiness.ts');
+const { submissionIssues, campaignReadiness } = require('../src/features/creation/readiness.ts');
 const { accountDraftToken, localDraftToken, draftSaveLabel, writeLocalSnapshot, mergeAccountSaved } = require('../src/features/creation/persistence.ts');
 if (previousLoader) require.extensions['.ts'] = previousLoader;
 else delete require.extensions['.ts'];
@@ -80,6 +80,45 @@ test('submission checklist preserves existing validation and separates optional 
   assert.equal(JSON.stringify(draft), before);
   const required = submissionIssues(blankDraft(), '', false).filter(issue => issue.required);
   assert.deepEqual(required.map(issue => [issue.step, issue.field]), [[0,'title'],[0,'category'],[0,'creatorName'],[3,'geography'],[4,'goal'],[4,'rules']]);
+});
+
+test('readiness distinguishes complete, missing and recommended items without adding submission rules', () => {
+  const draft = { ...basics, geography: 'Pune', goal: 10 };
+  const before = structuredClone(draft);
+  const readiness = campaignReadiness(draft, '10', true);
+  assert.equal(readiness.missing, 0);
+  assert.equal(readiness.total, 7);
+  assert.deepEqual(readiness.items.map(item => item.status), ['recommended', 'recommended', 'recommended', 'recommended', 'complete', 'complete', 'complete']);
+  assert.equal(readiness.items[0].issues[0].field, 'summary');
+  assert.deepEqual(draft, before);
+  assert.deepEqual(validateStep(draft, 4, '10', true), {});
+});
+
+test('readiness retains every exact validator target including malformed optional content', () => {
+  const draft = { ...blankDraft(), sources: [{ id: 'precise', title: '', url: 'javascript:bad' }], adImages: ['file://bad'] };
+  const readiness = campaignReadiness(draft, '', false);
+  const required = readiness.items.flatMap(item => item.issues).filter(issue => issue.required);
+  assert.deepEqual(required, submissionIssues(draft, '', false).filter(issue => issue.required));
+  assert.equal(readiness.items.find(item => item.id === 'sources').target.field, 'source-title:precise');
+  assert.equal(readiness.items.find(item => item.id === 'visuals').status, 'missing');
+  assert.equal(readiness.items.find(item => item.id === 'basics').target.field, 'title');
+});
+
+test('fully prepared readiness is 100 percent but never implies approval or changes funding', () => {
+  const draft = { ...basics, summary: 'A clear description.', intro: 'Why the message matters.', sources: [{ id: 'context', title: 'Context', url: 'https://example.org/source' }], coverImage: '/media/cover.jpg', adImages: ['/media/ad.jpg'], geography: 'Pune', goal: 20 };
+  const before = JSON.stringify(draft);
+  const readiness = campaignReadiness(draft, '20', true);
+  assert.equal(readiness.percent, 100);
+  assert.equal(readiness.items.every(item => item.status === 'complete'), true);
+  assert.equal(readiness.items.find(item => item.id === 'goal').target.field, 'goal');
+  assert.equal(JSON.stringify(draft), before);
+  assert.equal(campaignReadiness(draft, '20', false).items.find(item => item.id === 'policies').status, 'missing');
+});
+
+test('empty editorial blocks do not mark the optional Story content completed', () => {
+  const draft = { ...basics, sections: [{ id: 'empty', kind: 'text', text: '   ' }] };
+  assert.equal(campaignReadiness(draft, '', false).items.find(item => item.id === 'story').status, 'recommended');
+  assert.equal(validateStep(draft, 1).sections, undefined, 'recommendation adds no new required content rule');
 });
 
 test('added invalid source rows have precise stable title and URL targets', () => {

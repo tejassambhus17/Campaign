@@ -31,35 +31,39 @@
 ## Download Android APK
 
 <p>
+<<<<<<< HEAD
   <a href="https://github.com/tejassambhus17/Campaign/releases/tag/1.4.0"><img alt="Download Android APK — open GitHub Releases" src="https://img.shields.io/badge/Download_Android_APK-GitHub_Releases-98F1CA?style=for-the-badge&amp;logo=android&amp;logoColor=98F1CA&amp;labelColor=202624"></a>
+=======
+  <a href="https://github.com/tejassambhus17/Campaign/releases/tag/1.5.1"><img alt="Download Android APK — open the latest GitHub Release" src="https://img.shields.io/badge/Download_Android_APK-GitHub_Releases-98F1CA?style=for-the-badge&amp;logo=android&amp;logoColor=98F1CA&amp;labelColor=202624"></a>
+>>>>>>> 9111ca6 (New features implemented and readme updated)
 </p>
 
-**Latest prepared build: 1.4.0 · build 10 · 68.8 MB** — dedicated release signing, the Campaign logo, bundled JavaScript/Hermes, and the configured HTTPS backend. Supports **ARM64 Android phones** and **x86_64 Android emulators**, Android 7.0 or later; Metro is not required.
+**Source and gallery: 1.5.1 · build 12 · 68.6 MB.** This version adds campaign readiness guidance, writing suggestions, instant preview, and Creator Studio. The download button opens the latest **published GitHub Release**; check its version there. Pushing source does not upload the APK—attach the new APK separately as a release asset.
 
-**Release download awaiting confirmation.** The button opens this repository’s Releases page. Publish or confirm the prepared `Campaign.apk` there; release availability could not be checked while GitHub CLI is signed out. Private repository downloads require repository access. [Installation steps](#install-on-android) · [Release and media handoff](docs/README_MEDIA.md).
+Dedicated release signing, the Campaign logo, bundled JavaScript/Hermes, and the configured HTTPS backend are preserved. Supports **ARM64 Android phones** and **x86_64 Android emulators**, Android 7.0 or later; Metro is not required. Select the APK under **Assets**. Private repository downloads require repository access. [Installation steps](#install-on-android) · [Release and media handoff](docs/README_MEDIA.md).
 
 ---
 
 ## Screenshots
 
-Real native Android captures, optimized for this gallery. Select any image to view it larger. Sample campaigns, contribution totals, and the QA profile shown here are demonstration data.
+Real native Android captures from **1.5.1 / build 12**, optimized for this gallery. Select an image to view it larger. Sample campaigns, contribution totals, and the QA profile shown here are demonstration data.
 
 ### Discover a message
 
 <table>
-  <tr><th width="25%">Welcome¹</th><th width="25%">Home</th><th width="25%">Explore</th><th width="25%">Campaign details²</th></tr>
+  <tr><th width="25%">Welcome</th><th width="25%">Home</th><th width="25%">Explore</th><th width="25%">Campaign details</th></tr>
   <tr>
     <td><a href="docs/screenshots/welcome.jpg"><img src="docs/screenshots/welcome.jpg" alt="Welcome with Campaign branding, campaign photo carousel and guest entry" width="220"></a></td>
     <td><a href="docs/screenshots/home.jpg"><img src="docs/screenshots/home.jpg" alt="Home with search, topic chips and a featured ocean campaign" width="220"></a></td>
     <td><a href="docs/screenshots/explore.jpg"><img src="docs/screenshots/explore.jpg" alt="Explore with campaign photography, funding and an actual Trust Score badge" width="220"></a></td>
-    <td><a href="docs/screenshots/campaign-details.jpg"><img src="docs/screenshots/campaign-details.jpg" alt="Campaign Story with public sources, assessment and transparency destinations" width="220"></a></td>
+    <td><a href="docs/screenshots/campaign-details.jpg"><img src="docs/screenshots/campaign-details.jpg" alt="Campaign imagery, story, funding and backing with swipeable detail sections" width="220"></a></td>
   </tr>
 </table>
 
 ### Shape your campaign
 
 <table>
-  <tr><th width="25%">Five-step overview</th><th width="25%">1 · Basics²</th><th width="25%">2 · Story²</th><th width="25%">3 · Visuals²</th></tr>
+  <tr><th width="25%">Five-step overview</th><th width="25%">1 · Basics</th><th width="25%">2 · Story</th><th width="25%">3 · Visuals</th></tr>
   <tr>
     <td><a href="docs/screenshots/create.jpg"><img src="docs/screenshots/create.jpg" alt="Create entry with manual and guided demo actions, five steps and resumable drafts" width="220"></a></td>
     <td><a href="docs/screenshots/create-basics.jpg"><img src="docs/screenshots/create-basics.jpg" alt="Basics with connected step rail, campaign title, category and creator" width="220"></a></td>
@@ -68,31 +72,43 @@ Real native Android captures, optimized for this gallery. Select any image to vi
   </tr>
 </table>
 
-### Review, then back the message
+### Refine before you submit
 
 <table>
-  <tr><th width="25%">4 · Reach²</th><th width="25%">5 · Submit²</th><th width="25%">Trust &amp; Verification²</th><th width="25%">Contribution²</th></tr>
+  <tr><th width="25%">4 · Reach</th><th width="25%">Readiness assistant</th><th width="25%">Writing suggestions</th><th width="25%">Instant preview</th></tr>
   <tr>
     <td><a href="docs/screenshots/create-reach.jpg"><img src="docs/screenshots/create-reach.jpg" alt="Reach with audience locations, interests and an illustrative reach estimate" width="220"></a></td>
-    <td><a href="docs/screenshots/create-submit.jpg"><img src="docs/screenshots/create-submit.jpg" alt="Editable submission summary and Submit for Review action" width="220"></a></td>
-    <td><a href="docs/screenshots/trust-verification.jpg"><img src="docs/screenshots/trust-verification.jpg" alt="Trust shield, score 56, illustrative assessment disclosure and review criteria" width="220"></a></td>
-    <td><a href="docs/screenshots/contribution.jpg"><img src="docs/screenshots/contribution.jpg" alt="Simulated 25-dollar contribution with fee, advertising allocation and estimated reach" width="220"></a></td>
+    <td><a href="docs/screenshots/readiness.jpg"><img src="docs/screenshots/readiness.jpg" alt="Readiness checklist with completed, missing and recommended items linking to editor fields" width="220"></a></td>
+    <td><a href="docs/screenshots/suggestions.jpg"><img src="docs/screenshots/suggestions.jpg" alt="Contextual rule-based writing suggestions with expandable details and individual dismissal controls" width="220"></a></td>
+    <td><a href="docs/screenshots/instant-preview.jpg"><img src="docs/screenshots/instant-preview.jpg" alt="Instant campaign preview reflecting the current draft without account saving or submission" width="220"></a></td>
   </tr>
 </table>
 
-### Follow the journey
+### Review, back, and track
 
 <table>
-  <tr><th width="25%">Activity</th><th width="25%">Campaign reports</th><th width="25%">Profile</th><th width="25%">Light appearance</th></tr>
+  <tr><th width="25%">5 · Review &amp; Submit</th><th width="25%">Trust &amp; Verification</th><th width="25%">Contribution</th><th width="25%">Campaign reports</th></tr>
   <tr>
-    <td><a href="docs/screenshots/activity.jpg"><img src="docs/screenshots/activity.jpg" alt="Activity with filter tabs and private campaign and account notifications" width="220"></a></td>
+    <td><a href="docs/screenshots/create-submit.jpg"><img src="docs/screenshots/create-submit.jpg" alt="Editable campaign summary, creator-set funding goal and submission for review" width="220"></a></td>
+    <td><a href="docs/screenshots/trust-verification.jpg"><img src="docs/screenshots/trust-verification.jpg" alt="Trust shield with actual illustrative assessment, review criteria and limitations" width="220"></a></td>
+    <td><a href="docs/screenshots/contribution.jpg"><img src="docs/screenshots/contribution.jpg" alt="Simulated contribution with transparent fee, advertising allocation and estimated reach" width="220"></a></td>
     <td><a href="docs/screenshots/campaign-report.jpg"><img src="docs/screenshots/campaign-report.jpg" alt="Report with raised funds, ad spending, estimated reach and native PDF sharing" width="220"></a></td>
-    <td><a href="docs/screenshots/profile.jpg"><img src="docs/screenshots/profile.jpg" alt="Fictional QA profile with campaign lists, payment history, appearance and currency" width="220"></a></td>
-    <td><a href="docs/screenshots/light-theme.jpg"><img src="docs/screenshots/light-theme.jpg" alt="Light theme with the same campaign transparency destinations" width="220"></a></td>
   </tr>
 </table>
 
-<sub>¹ Welcome is an earlier verified capture of the unchanged screen; a fresh 1.4.0 capture is unavailable. ² Same-version 1.4.0 QA captures precede the final keyboard-sheet correction. These emulator screenshots are not physical-device verification. [Capture provenance](docs/screenshots/README.md).</sub>
+### Your campaigns, together
+
+<table>
+  <tr><th width="25%">Activity</th><th width="25%">Creator Studio</th><th width="25%">Profile · Dark</th><th width="25%">Profile · Light</th></tr>
+  <tr>
+    <td><a href="docs/screenshots/activity.jpg"><img src="docs/screenshots/activity.jpg" alt="Activity with swipeable filters and private campaign and account notifications" width="220"></a></td>
+    <td><a href="docs/screenshots/creator-studio.jpg"><img src="docs/screenshots/creator-studio.jpg" alt="Creator Studio combining scoped drafts, review status, funding progress and quick actions" width="220"></a></td>
+    <td><a href="docs/screenshots/profile.jpg"><img src="docs/screenshots/profile.jpg" alt="Dark Profile with Creator Studio artwork and grouped campaign, account and appearance controls" width="220"></a></td>
+    <td><a href="docs/screenshots/light-theme.jpg"><img src="docs/screenshots/light-theme.jpg" alt="Light Profile with the same Creator Studio entry and grouped account controls" width="220"></a></td>
+  </tr>
+</table>
+
+<sub>All 20 screenshots show the same signed local build on owned Android emulators. Creation screens use an incomplete demo draft to illustrate readiness and writing guidance. They are not physical-device verification. [Capture provenance](docs/screenshots/README.md).</sub>
 
 ---
 
@@ -103,7 +119,11 @@ Campaign helps people discover messages, understand their supporting sources, an
 ### Key features
 
 - **Image-led discovery:** search, topic filters, saved campaigns, and swipeable Explore categories.
-- **Five-step creation:** manual editing or a labelled guided demo, draft saving/resumption, separate story and advertising media, previews, and submission for review.
+- **Five-step creation:** manual editing or a labelled guided demo, a moving step rail, draft saving/resumption, and separate story and advertising media.
+- **Readiness assistant:** completed, missing, and recommended items in Review & Submit, with direct links to the relevant fields.
+- **Writing suggestions:** contextual rules in Basics and Story. Review an edit before applying it, or dismiss the suggestion; no AI API is involved.
+- **Instant preview:** inspect the current draft from any creation step without an account save or submission.
+- **Creator Studio:** drafts and owned campaigns together, with review status, funding progress, resume, and campaign actions.
 - **Explainable review:** public sources, content-bound Trust Scores, detailed assessment criteria, and a role-restricted review demonstration.
 - **Transparent backing:** presets and custom amounts, visible fees and advertising allocation, uncertain reach estimates, simulated checkout, and private payment history.
 - **Connected progress:** updates, Activity filters, quick notifications, lifecycle reports, and native PDF report sharing.
@@ -115,7 +135,7 @@ Campaign helps people discover messages, understand their supporting sources, an
 
 | Stage | What happens |
 | --- | --- |
-| **Create** | Basics → Story → Campaign & Ad Visuals → Reach → Submit. Save a draft, preview it, and set the goal at Submit. |
+| **Create** | Basics → Story → Campaign & Ad Visuals → Reach → Submit. Save/resume a draft, preview current edits, check readiness, and set the goal at Submit. |
 | **Review** | An authorized reviewer can approve, request corrections, or reject. Submission is not immediate publication. |
 | **Fund** | Backers review the amount, fees, ad allocation, and estimated reach before simulated checkout. |
 | **Amplify** | Distribution preparation and authorization are separate from funding. Reaching a goal does not automatically start ads. |
@@ -148,7 +168,7 @@ Reach figures are estimates; simulated delivery figures are not measured real-wo
 
 ## Install on Android
 
-1. Open [GitHub Releases](/tejassambhus17/Campaign/releases) and download `Campaign.apk` once it is published.
+1. Open the [latest GitHub Release](https://github.com/tejassambhus17/Campaign/releases/latest) and download the APK under **Assets**.
 2. Use an ARM64 Android device running Android 7.0 or later. Internet is needed for hosted campaigns, sign-in, and uploads.
 3. Open the APK and follow Android’s installation prompts. Expo Go and Metro are not needed.
 4. Launch **Campaign**. Browse as a guest, or create/sign in to an account for account-bound actions.
@@ -176,7 +196,7 @@ This starts the separate local SQLite API and Expo web preview for development. 
 
 ## Demo video
 
-A narrated **4m 08s** end-to-end walkthrough is prepared locally, covering creation, review, simulated backing, distribution, and reporting. **A shareable video link is pending.** The existing recording predates the 1.4.0 visual refinements; the gallery shows the newer interface. [Video and release handoff](docs/README_MEDIA.md).
+A narrated **4m 08s** end-to-end walkthrough is prepared locally, covering creation, review, simulated backing, distribution, and reporting. **A shareable video link is pending.** The existing recording predates the 1.5.1 interface and Creator Studio improvements; the gallery shows the newer interface. [Video and release handoff](docs/README_MEDIA.md).
 
 ## Hackathon project
 

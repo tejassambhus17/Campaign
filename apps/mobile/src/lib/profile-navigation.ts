@@ -1,6 +1,6 @@
-export type ProfileSection = "Overview" | "Created" | "Backed" | "Saved" | "Payments" | "Notifications" | "Edit" | "Appearance" | "Currency" | "Help" | "Review";
+export type ProfileSection = "Overview" | "Studio" | "Created" | "Backed" | "Saved" | "Payments" | "Notifications" | "Edit" | "Appearance" | "Currency" | "Help" | "Review";
 export type ProfileEntry = "profile" | "welcome" | "login" | "register";
-const sections: readonly ProfileSection[] = ["Overview", "Created", "Backed", "Saved", "Payments", "Notifications", "Edit", "Appearance", "Currency", "Help", "Review"];
+const sections: readonly ProfileSection[] = ["Overview", "Studio", "Created", "Backed", "Saved", "Payments", "Notifications", "Edit", "Appearance", "Currency", "Help", "Review"];
 export function routeValue(value: unknown): string | undefined {
   const first = Array.isArray(value) ? value[0] : value;
   return typeof first === "string" ? first : undefined;

@@ -5,6 +5,7 @@ import html
 import json
 import re
 import urllib.request
+from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor
 from html.parser import HTMLParser
 from pathlib import Path
@@ -66,6 +67,8 @@ def check_url(url):
 def main():
     args = argparse.ArgumentParser()
     args.add_argument('--check-network', action='store_true')
+    args.add_argument('--retain-network-evidence', action='store_true',
+                      help='Reuse matching previously recorded public URL results; perform no network requests.')
     options = args.parse_args()
     assert ROOT == Path('E:/Campaign')
     md = MarkdownIt('commonmark', {'html': True}).enable('table')
@@ -95,18 +98,22 @@ def main():
             missing.append(ref)
     record('All README local files and folders exist', not missing, missing)
     record('All README in-page links resolve', not fragments, fragments)
-    record('Release links use only the known GitHub-relative release index',
-           bool(root_routes) and set(root_routes) == {'/tejassambhus17/Campaign/releases'}, sorted(set(root_routes)))
+    record('Release links use the absolute latest-release route',
+           not root_routes and parser.refs.count('https://github.com/tejassambhus17/Campaign/releases/latest') == 2)
     record('Rendered HTML tags balance', not parser.errors and not parser.stack, parser.errors + parser.stack)
     record('All images have descriptive alt text', all(i.get('alt') for i in parser.images), len(parser.images))
-    record('Four screenshot rows contain four images each', parser.rows[:4] == [4, 4, 4, 4], parser.rows[:4])
+    record('Five screenshot rows contain four images each', parser.rows[:5] == [4, 4, 4, 4, 4], parser.rows[:5])
     image_refs = [i['src'] for i in parser.images if i['src'].endswith('.jpg')]
-    record('Exactly16 unique screenshot assets in relative docs paths',
-           len(image_refs) == len(set(image_refs)) == 16 and all(r.startswith('docs/screenshots/') for r in image_refs))
+    record('Exactly20 unique screenshot assets in relative docs paths',
+           len(image_refs) == len(set(image_refs)) == 20 and all(r.startswith('docs/screenshots/') for r in image_refs))
     record('No ignored artifact/APK/video links in README', not re.search(r'(?:href|src)="[^"]*(?:artifacts/|\.apk|\.mp4)', rendered))
     record('Balanced code fences including architecture diagram', TEXT.count('```') == 4)
     record('Simulation and illustrative-score disclosures present', all(s in TEXT for s in [
         'No real money is charged', 'illustrative', 'not independent verification', 'does not automatically start ads', 'New user campaigns begin unassessed']))
+    record('Four creation and creator improvements described without an AI claim', all(s in TEXT for s in [
+        'Readiness assistant', 'Writing suggestions', 'Instant preview', 'Creator Studio', 'no AI API is involved']))
+    record('Source/gallery version and release-asset upload clearly distinguished', all(s in TEXT for s in [
+        'Source and gallery: 1.5.1', 'build 12', 'published GitHub Release', 'Pushing source does not upload the APK', 'separately as a release asset']))
 
     manifest = json.loads((DEST / 'manifest.json').read_text(encoding='utf-8'))
     problems = []
@@ -119,37 +126,59 @@ def main():
                      and sha(original) == item['sourceSha256'])
         if not valid:
             problems.append(item['file'])
-    record('All16 output/source hashes, dimensions and stripped EXIF verified', not problems, problems)
-    record('Screenshot download weight below1.5MB', manifest['totalImageBytes'] < 1500000, manifest['totalImageBytes'])
-    frozen = json.loads((ROOT / 'artifacts/dropdown-hierarchy-20261018/SOURCE_INPUTS.confirmed.json').read_text(encoding='utf-8-sig'))
-    drift = [f['path'] for f in frozen['files'] if sha(ROOT / f['path']) != f['sha256']]
-    record('All203 frozen application inputs unchanged', len(frozen['files']) == 203 and not drift, drift)
-    apk_hash = sha(ROOT / 'artifacts/dropdown-hierarchy-20261018/Campaign.apk')
-    record('Latest APK byte-identical; no rebuild', apk_hash == 'cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397', apk_hash)
-
-    old = json.loads((ROOT / 'artifacts/final-completion-20261017/activity-lifecycle-fix/RELEASE_SOURCE_INPUTS.inspection-final2.json').read_text(encoding='utf-8-sig'))
-    auth_inputs = [f for f in old['runtime'] if (f['path'].startswith('apps/mobile/src/features/auth')
-                   or f['path'].startswith('apps/mobile/assets/brand/')
-                   or f['path'].startswith('apps/mobile/assets/images/showcase/')
-                   or f['path'].startswith('apps/mobile/assets/images/create/'))]
-    auth_drift = [f['path'] for f in auth_inputs if sha(ROOT / f['path']) != f['sha256']]
-    record('Welcome-related captured source inputs remain unchanged', bool(auth_inputs) and not auth_drift,
-           dict(compared=len(auth_inputs), changed=auth_drift))
+    record('All20 output/source hashes, dimensions and stripped EXIF verified', len(manifest['screenshots']) == 20 and not problems, problems)
+    total_bytes = sum((ROOT / item['file']).stat().st_size for item in manifest['screenshots'])
+    record('Screenshot download weight below2.25MB', total_bytes == manifest['totalImageBytes'] and total_bytes < 2250000, total_bytes)
+    record('README gallery and manifest identify the same20 images', set(image_refs) == {item['file'] for item in manifest['screenshots']})
+    build = manifest['localBuild']
+    freeze_path = ROOT / build['sourceFreeze']
+    frozen = json.loads(freeze_path.read_text(encoding='utf-8-sig'))
+    drift = [f['path'] for f in frozen['files'] if not (ROOT / f['path']).is_file() or sha(ROOT / f['path']) != f['sha256'].lower()]
+    record('Final frozen application inputs unchanged', bool(frozen['files']) and not drift and sha(freeze_path) == build['sourceFreezeSha256'], dict(compared=len(frozen['files']), changed=drift))
+    apk_hash = sha(ROOT / build['apk'])
+    receipt_path = ROOT / build['buildReceipt']
+    receipt = json.loads(receipt_path.read_text(encoding='utf-8-sig'))
+    record('Gallery APK matches exact final build receipt', apk_hash == build['apkSha256'] == receipt['sha256'].lower()
+           and (ROOT / build['apk']).stat().st_size == build['bytes'] == receipt['bytes']
+           and sha(receipt_path) == build['buildReceiptSha256'], apk_hash)
+    record('All20 screenshots attributed to one final1.5.1/code12 build', build['version'] == '1.5.1' and build['code'] == 12
+           and receipt['versionName'] == '1.5.1' and receipt['versionCode'] == 12
+           and all(item['scope'] == 'exact-final' and item['version'] == '1.5.1 / code 12' and item['apkSha256'] == apk_hash for item in manifest['screenshots']))
+    record('Capture attribution names both owned emulators accurately',
+           sum(item.get('deviceSerial') == 'emulator-5578' and item.get('avd') == 'Campaign_Submission_Auth_36' and item['file'].endswith('/welcome.jpg') for item in manifest['screenshots']) == 1
+           and sum(item.get('deviceSerial') == 'emulator-5574' and item.get('avd') == 'Campaign_Studio_36' for item in manifest['screenshots']) == 19)
+    xml_problems = [item['sourceXml'] for item in manifest['screenshots'] if not (ROOT / item['sourceXml']).is_file() or sha(ROOT / item['sourceXml']) != item['sourceXmlSha256']]
+    record('All20 original native XML captures preserved', not xml_problems, xml_problems)
+    logo = manifest['logo']
+    record('Approved logo source and output unchanged', sha(ROOT / logo['file']) == logo['sha256'] and sha(ROOT / logo['source']) == logo['sourceSha256'])
 
     urls = sorted({i['src'] for i in parser.images if i['src'].startswith('https://')}
-                  | {u for u in parser.refs if u.startswith('https://') and 'img.shields.io/' not in u})
+                  | {u for u in parser.refs if u.startswith('https://') and 'img.shields.io/' not in u and not u.startswith('https://github.com/tejassambhus17/Campaign/')})
     previous = DEST / 'verification.json'
     network = []
+    network_mode = 'Not performed in this validator run'
+    network_recorded_utc = None
     if options.check_network:
         with ThreadPoolExecutor(max_workers=7) as pool:
             network = list(pool.map(check_url, urls))
-    elif previous.exists():
-        network = json.loads(previous.read_text(encoding='utf-8')).get('network', [])
+        network_mode = 'Fresh read-only public URL requests'
+        network_recorded_utc = datetime.now(timezone.utc).isoformat()
+    elif options.retain_network_evidence and previous.exists():
+        old_report = json.loads(previous.read_text(encoding='utf-8'))
+        old_network = old_report.get('network', [])
+        if {item['url'] for item in old_network} != set(urls) or not all(item.get('valid') for item in old_network):
+            raise SystemExit('Recorded public URL evidence does not match current URLs or contains failures; no network results were reused.')
+        network = old_network
+        network_mode = 'Recorded matching public URL evidence retained; no fresh network requests in this run'
+        network_recorded_utc = old_report.get('networkEvidenceRecordedUtc') or datetime.fromtimestamp(previous.stat().st_mtime, timezone.utc).isoformat()
+    # Default mode omits network results. Explicit retention preserves matching
+    # prior evidence without relabelling it as fresh requests.
     report = dict(preparedOn='2026-10-19', checks=checks, passed=sum(c['passed'] for c in checks),
                   total=len(checks), allLocalChecksPassed=all(c['passed'] for c in checks), network=network,
-                  privateReleaseVerification='UNVERIFIED: gh auth login required; no account or release changed',
+                  privateReleaseVerification='Not authenticated by this media validator; owner reports release1.4.0, recipient asset access remains separate',
                   renderScope='Local markdown-it HTML/GitHub-style preview, not an authenticated github.com render',
-                  noAppBuildTestsDeviceOrCloudActions=True)
+                  networkCheckMode=network_mode, networkEvidenceRecordedUtc=network_recorded_utc,
+                  validatorPerformedNoAppBuildTestsDeviceOrCloudActions=True)
     previous.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
 
     # Standalone supporting review file; serve only docs, never the project root.

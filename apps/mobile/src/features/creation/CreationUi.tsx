@@ -1,5 +1,5 @@
 import { useCurrency } from "../../lib/CurrencyProvider";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Pressable, ScrollView, TextInput, useWindowDimensions, View, ViewStyle } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { fonts, Picture, Text, useTheme } from "../../components/ui";
@@ -14,8 +14,16 @@ export function CreationProgress({ step }: { step: number }) {
   const { colors } = useTheme();
   const { width, fontScale } = useWindowDimensions();
   const railWidth = Math.max(Math.min(width, 640) - 36, Math.ceil(54 * 5 * Math.max(1, fontScale)));
+  const rail = useRef<ScrollView>(null);
+  const viewport = useRef(0);
+  const alignCurrentStep = useCallback(() => {
+    if (!viewport.current) return;
+    const center = railWidth * (step + 0.5) / 5;
+    rail.current?.scrollTo({ x: Math.max(0, Math.min(railWidth - viewport.current, center - viewport.current / 2)), animated: false });
+  }, [railWidth, step]);
+  useEffect(alignCurrentStep, [alignCurrentStep]);
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, flexShrink: 0 }} contentContainerStyle={{ flexGrow: 1 }}>
+    <ScrollView ref={rail} onLayout={event => { viewport.current = event.nativeEvent.layout.width; alignCurrentStep(); }} onContentSizeChange={alignCurrentStep} horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, flexShrink: 0 }} contentContainerStyle={{ flexGrow: 1 }}>
       <View accessible accessibilityRole="progressbar" accessibilityLabel={`Campaign creation: ${STEPS[step]}`} accessibilityHint={`Five steps: ${STEPS.join(", ")}.`} accessibilityValue={{ min: 1, max: 5, now: step + 1, text: `Step ${step + 1} of 5: ${STEPS[step]}` }} accessibilityLiveRegion="polite" style={{ width: railWidth, flexDirection: "row", paddingTop: 2, paddingBottom: 2 }}>
         <View style={{ position: "absolute", left: "10%", right: "10%", top: 18, height: 1.5, backgroundColor: colors.line }} />
         {step > 0 && <View style={{ position: "absolute", left: "10%", width: `${step * 20}%`, top: 18, height: 1.5, backgroundColor: colors.green }} />}

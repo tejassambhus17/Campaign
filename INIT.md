@@ -1,6 +1,65 @@
 # Campaign Amplification Hackathon: initialization guide
 
-## Current startup — information hierarchy / 1.4.0 / code 10
+## Current startup — final submission release1.5.1 / code 12
+
+Use the retained Expo/native Release workflow and dedicated key in `E:\Campaign`. Current [Campaign.apk](artifacts/final-submission-20261019/Campaign.apk):68,616,866 bytes, ARM64+x86_64, SHA-256 `928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60`.439 frontend/74 isolated backend tests, TypeScript/full ESLint and28 package checks pass;149 inputs remain frozen. See [final checks and delivery limits](docs/FINAL_SUBMISSION_CHECK.md). Existing cloud endpoint/accounting, moving five-step rail and key remain. New builds must use a fresh artifact tag. No backend deployment is necessary for these frontend fixes. Uploading the APK as a Release asset is separate from the owner's source commit.
+
+## Current startup — creator assistance and Profile/Studio / 1.5.0 / code 11
+
+Continue in `E:\Campaign` with the existing Expo/native workflow and dedicated
+signing key. The four frontend improvements are implemented: validator-derived
+readiness, local rule-based writing suggestions, instant unsaved-draft preview,
+and the reference-led Profile/Creator Studio. Keep the moving five-step icon
+rail, 60-character title and creator-set goal at Submit. Recommendations do not
+add submission blockers. No backend/API, AI service, accounting or data change
+is needed. [Implementation and preserved behavior](docs/CREATOR_STUDIO.md).
+
+Current [Campaign.apk](artifacts/creator-studio-20261019/Campaign.apk):
+**1.5.0/code11**, dedicated same-key release with ARM64+x86_64, 68,616,686 bytes.
+SHA-256 `1d641f7126af94962a7da89cf8f06adba3247d4b359ce2417afc6f7c606420c4`.
+**434 frontend tests**, TypeScript and full source/plugin ESLint pass;
+28/28 package checks pass and all 149 frozen inputs match. The exact APK received
+a compatible emulator update and 1517 ms cold launch without Metro or reverse
+forwarding; the existing QA sign-in/device draft remained.
+
+Named final native checks cover Dark/Light Profile, transparent HQ Studio art,
+clean Light header, adaptive 130%/200% text/two-column feature strip, actual
+Studio counts and draft-goal presentation, and Resume to Step 5 readiness (57%,
+goal 125). Consult the task report for the exact scope of additional
+preview/readiness target checks. Broader first-candidate five-step preview, suggestion
+apply/dismiss and field-target checks retain their original binary scope;
+18 creation inputs are identical across all four source freezes. See the
+[task report](artifacts/creator-studio-20261019/README.md),
+[delivery visual review](artifacts/creator-studio-20261019/VISUAL_REVIEW.delivery.md)
+and [source-phase comparison](artifacts/creator-studio-20261019/SOURCE_CHANGE_PHASES.json).
+
+After the earlier cleanup, a fresh owned **Campaign_Studio_36** API36 x86_64 AVD
+was recreated under `tmp/creator-studio-20261019/avd`. Use only its dedicated
+ADB **5039**, serial **emulator-5574**, for this task's emulator QA. The default
+ADB and phone were not part of that recreation. Existing signing, toolchains,
+user data, prior canonical APK and working cloud configuration remain preserved.
+Physical release acceptance remains pending because the POCO's Debug signer is
+incompatible; do not uninstall or clear it. Human usability testing remains
+pending because no unfamiliar tester is available. No backend/cloud rollout,
+AI API, production-data change, push, new recording or submission occurred.
+
+**Earlier October19 emulator cleanup:** Workspace size was 13.893 GiB after the
+owner authorized removing eight virtual-device environments and 75 isolated
+build caches. The SDK/JDK/Gradle tools, dependencies, source, signing keys,
+backups, phone/server data, current APK and screenshots remain. 274 preservation
+checks pass. Future APK compilation uses the same existing build workflow;
+deleted caches regenerate and may need internet. Recreate a clean Campaign AVD
+before the next emulator test; previous emulator sessions/local QA drafts are
+gone. No new build/runtime check was performed. [Cleanup details](docs/WORKSPACE_CLEANUP.md).
+
+**Earlier October19 cleanup:** Unneeded historical APKs/captures and generated build/cache
+output were removed at the user's request. The canonical 1.4.0 APK and current
+screenshots below remain unchanged. Source, installed tools, credentials/backups,
+all emulator/user data, final demo/report media and Git history remain. Gradle
+caches will regenerate on the next build. Historical artifact links may no longer
+exist; see [cleanup and retained paths](docs/WORKSPACE_CLEANUP.md).
+
+## Previous verified startup — information hierarchy / 1.4.0 / code 10
 
 Continue in `E:\Campaign` using the existing Expo/native toolchain, dedicated key,
 package identity and verified HTTPS configuration. This frontend hierarchy pass

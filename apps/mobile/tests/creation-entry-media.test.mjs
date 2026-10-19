@@ -104,6 +104,8 @@ test('account-only drafts resume their stable ID and current step without invent
   const calls = [], account = { ...fixture().draft, id: 'account-owned', currentStep: 3, status: 'Changes Requested' };
   const tree = entry({ signedIn: true, accountDrafts: [account], onResumeAccount: id => calls.push(id) });
   assert.match(text(tree), /Step 4 of 5/); assert.match(text(tree), /Last saved time unavailable/);
+  assert.match(text(tree), /Step 4 of 5 · Reach · Changes requested\s+·\s+Account/);
+  assert.doesNotMatch(text(tree), /Connect to resume/, 'an account-only row must not imply a connection error when the account loaded');
   nodes(tree).find(n => n.props.accessibilityLabel?.startsWith('Resume ')).props.onPress();
   assert.deepEqual(calls, ['account-owned']);
 });
@@ -161,10 +163,11 @@ test('picker validation and upload disclosure use the same existing formats and 
 // Actual CreateScreen event closures, with a native-element/hook adapter. This
 // checks picker cancellation/auth handoff and current draft updates; Android
 // picker gestures and layout remain separate native acceptance.
-function screenHarness({ signedIn = true, picker = { canceled: true }, startInEditor = true, localDrafts = [fixture()] } = {}) {
+function screenHarness({ signedIn = true, picker = { canceled: true }, startInEditor = true, localDrafts = [fixture()], configData, apiResponse, allowSubmissionCleanup = false } = {}) {
   const slots = [], refs = [], apiCalls = [], saved = [], navigation = [], scopes = [];
   const frames = [], nativeScrolls = [], announcements = [];
-  let stateCursor = 0, refCursor = 0, pickerCalls = 0;
+  let stateCursor = 0, refCursor = 0, pickerCalls = 0, keyboardDismissals = 0;
+  const removed = [];
   const user = signedIn ? { id: 'fixture-account', name: 'Fixture Owner', email: 'owner@example.test', role: 'member' } : null;
   const active = { ...fixture(), scope: user?.id || 'guest' };
   const react = {
@@ -182,21 +185,21 @@ function screenHarness({ signedIn = true, picker = { canceled: true }, startInEd
   const { submissionIssues } = load('../src/features/creation/readiness.ts', { './model': model });
   const component = load('../src/app/(tabs)/create.tsx', {
     react, 'react/jsx-runtime': { jsx, jsxs: jsx },
-    'react-native': { View: 'View', Image: 'Image', Pressable: 'Pressable', ScrollView: 'ScrollView', StyleSheet: { create: value => value }, useWindowDimensions: () => ({ width: 393, fontScale: 1.17 }), Platform: { OS: 'android' }, AccessibilityInfo: { announceForAccessibility: value => announcements.push(value), setAccessibilityFocus: () => {} }, findNodeHandle: () => 1 },
+    'react-native': { View: 'View', Image: 'Image', Pressable: 'Pressable', ScrollView: 'ScrollView', Keyboard: { dismiss: () => { keyboardDismissals++; } }, StyleSheet: { create: value => value }, useWindowDimensions: () => ({ width: 393, fontScale: 1.17 }), Platform: { OS: 'android' }, AccessibilityInfo: { announceForAccessibility: value => announcements.push(value), setAccessibilityFocus: () => {} }, findNodeHandle: () => 1 },
     '@expo/vector-icons/Ionicons': { default: 'Icon' },
     'expo-router': { router: { push: value => navigation.push(value), setParams: () => {}, replace: () => {} }, useFocusEffect: () => {}, useLocalSearchParams: () => ({}) },
     'expo-image-picker': { launchImageLibraryAsync: async () => { pickerCalls++; return picker; } },
     '../../components/ui': { ...ui, useTheme: () => theme },
     '../../components/Information': { InfoAction: 'InfoAction', InfoSheet: 'InfoSheet', SummaryLink: 'SummaryLink' },
-    '../../lib/api': { api: async (path, options) => { apiCalls.push({ path, options }); return { url: '/media/new-upload.jpg' }; } },
+    '../../lib/api': { api: async (path, options) => { apiCalls.push({ path, options }); return apiResponse ? apiResponse(path, options) : { url: '/media/new-upload.jpg' }; } },
     '../../features/campaign': { detailPath: id => `/explore/${id}` },
-    '../../lib/session': { useSession: () => ({ user, ready: true }), useConfig: () => ({ data: undefined, isLoading: false, isError: false }), useMe: () => ({ data: { campaigns: [] }, isLoading: false, isError: false }), refresh: () => {} },
+    '../../lib/session': { useSession: () => ({ user, ready: true }), useConfig: () => ({ data: configData, isLoading: false, isError: false, refetch: async () => {} }), useMe: () => ({ data: { campaigns: [] }, isLoading: false, isError: false }), refresh: async () => {} },
     '../../lib/types': types,
     '../../lib/CurrencyProvider': { useCurrency: () => ({ money: types.money }) },
     '../../features/creation/GoalAmountField': { GoalAmountField: 'GoalAmountField' },
     '../../features/creation/Preview': preview,
     '../../features/creation/model': model,
-    '../../features/creation/useDraftLibrary': { useDraftLibrary: scope => { scopes.push(scope); return { entries: localDrafts, loading: false, error: '', canSave: () => true, save: async entry => saved.push(entry), remove: () => assert.fail('must not remove draft'), retry: () => {} }; } },
+    '../../features/creation/useDraftLibrary': { useDraftLibrary: scope => { scopes.push(scope); return { entries: localDrafts, loading: false, error: '', canSave: () => true, save: async entry => saved.push(entry), remove: async id => { if (!allowSubmissionCleanup) assert.fail('must not remove draft'); removed.push(id); }, retry: () => {} }; } },
     '../../features/creation/DraftDeleteDialog': { useDraftDeletion: () => ({ target: null, busy: false }), DraftDeleteDialog: 'DraftDeleteDialog' },
     '../../features/creation/draftDeletion': draftDeletion,
     '../../features/creation/FieldTarget': { CreationTargets: { Provider: 'CreationTargets' }, TargetField: 'TargetField', TargetGroup: 'TargetGroup' },
@@ -206,10 +209,11 @@ function screenHarness({ signedIn = true, picker = { canceled: true }, startInEd
     '../../features/creation/media': media,
     '../../features/creation/readiness': { submissionIssues },
     '../../features/creation/SubmissionChecklist': { SubmissionChecklist: 'SubmissionChecklist' },
+    '../../features/creation/WritingSuggestions': { WritingSuggestions: 'WritingSuggestions', useWritingSuggestionDismissals: key => ({ dismissed: { draftKey: key, ids: [] }, onDismiss() {} }) },
     '../../features/creation/persistence': persistence,
   }, { requestAnimationFrame: callback => { frames.push(callback); return frames.length; }, FormData: class { values = []; append(...value) { this.values.push(value); } } });
   const render = () => { stateCursor = 0; refCursor = 0; return nodes(component.default()); };
-  return { render, active: () => slots[1], saved, navigation, scopes, apiCalls, pickerCalls: () => pickerCalls, nativeScrolls, announcements,
+  return { render, active: () => slots[1], saved, removed, navigation, scopes, apiCalls, pickerCalls: () => pickerCalls, keyboardDismissals: () => keyboardDismissals, nativeScrolls, announcements,
     attachNative: () => { refs[0].current = { scrollTo: value => nativeScrolls.push(value) }; refs[1].current = {}; },
     flushFrames: () => { while (frames.length) frames.shift()(); },
   };
@@ -292,6 +296,49 @@ test('Story keeps headline and introduction immediately editable and its preview
   assert.deepEqual(h.active(), before); assert.deepEqual(h.apiCalls, []);
 });
 
+test('instant preview is available in every editor step and reflects latest unsaved values without a write', () => {
+  const h = screenHarness(); h.render();
+  for (let step = 0; step < 5; step++) {
+    h.active().step = step;
+    let all = h.render();
+    const before = structuredClone(h.active());
+    assert.equal(all.find(n => n.type === 'CreationProgress').props.step, step);
+    all.find(n => n.props.testID === 'creation-instant-preview').props.onPress();
+    all = h.render();
+    assert.equal(all.find(n => n.type === 'CampaignPreview').props.draft, h.active().draft);
+    assert.equal(all.find(n => n.type === 'CreationProgress').props.step, step);
+    all.find(n => n.type === 'CreationActionDock').props.primary.props.onPress();
+    assert.deepEqual(h.active(), before);
+  }
+  h.active().step = 0;
+  let all = h.render();
+  all.find(n => n.props.target === 'title').props.onChangeText('Changed without account save');
+  all = h.render(); all.find(n => n.props.testID === 'creation-instant-preview').props.onPress();
+  all = h.render(); assert.equal(all.find(n => n.type === 'CampaignPreview').props.draft.title, 'Changed without account save');
+  assert.deepEqual(h.apiCalls, []); assert.deepEqual(h.saved, []);
+});
+
+test('writing suggestions integrate only in Basics/Story and apply through existing draft editing', () => {
+  const h = screenHarness(); h.render();
+  for (const step of [0, 1]) {
+    h.active().step = step;
+    const all = h.render(), suggestions = all.find(n => n.type === 'WritingSuggestions');
+    assert.equal(suggestions.props.step, step);
+    assert.match(suggestions.props.draftKey, /^fixture-account:/);
+    const preserved = structuredClone(h.active().draft);
+    suggestions.props.onApply(step === 0 ? { summary: 'Creator-approved suggestion' } : { intro: 'Creator-approved introduction' });
+    assert.equal(h.active().draft.title, preserved.title);
+    assert.deepEqual(h.active().draft.sources, preserved.sources);
+    assert.deepEqual(h.active().draft.adImages, preserved.adImages);
+    assert.equal(h.active().draft.goal, preserved.goal);
+  }
+  for (const step of [2, 3, 4]) {
+    h.active().step = step;
+    assert.equal(h.render().some(n => n.type === 'WritingSuggestions'), false);
+  }
+  assert.deepEqual(h.apiCalls, []);
+});
+
 test('media URL validation reveals its stable contextual editor and focuses the native sheet input directly', () => {
   const h = screenHarness(); h.render(); h.attachNative();
   h.active().draft.coverImage = 'file:///invalid-cover';
@@ -337,17 +384,22 @@ test('Submit edit rows remain visible with actual values and exact five-step edi
   assert.equal(all.some(n => n.type === 'Accordion'), false);
 });
 
-test('required Submit issues are directly visible while optional suggestions retain their nonblocking disclosure', () => {
+test('readiness displays completed/missing/recommended checks with direct existing field destinations', () => {
   const selected = [];
-  const { SubmissionChecklist } = load('../src/features/creation/SubmissionChecklist.tsx', { ...modules, react: {} });
-  const required = { id: 'goal', step: 4, field: 'goal', title: 'Funding goal', message: 'Choose your goal.', required: true };
-  const optional = { id: 'sources', step: 1, field: 'sources', title: 'Sources', message: 'Include supporting context.', required: false };
-  const all = nodes(SubmissionChecklist({ issues: [required, optional], onSelect: issue => selected.push(issue) }));
-  const visible = all.find(n => n.props.testID === 'creation-required-issues'); assert.ok(visible);
-  nodes(visible).find(n => n.type === 'Pressable').props.onPress(); assert.equal(selected[0], required);
-  const disclosure = all.find(n => n.type === 'Accordion'); assert.equal(disclosure.props.title, 'Optional improvements · 1');
-  assert.match(text(disclosure), /do not block submission/);
-  nodes(disclosure).find(n => n.type === 'Pressable').props.onPress(); assert.equal(selected[1], optional);
+  const readiness = load('../src/features/creation/readiness.ts', { './model': model });
+  const { SubmissionChecklist } = load('../src/features/creation/SubmissionChecklist.tsx', { ...modules, './readiness': readiness, 'react-native-svg': { default: 'Svg', Circle: 'Circle' } });
+  const draft = { ...fixture().draft, title: 'Complete basics', category: 'Community', creatorName: 'Creator', geography: 'Pune' };
+  const all = nodes(SubmissionChecklist({ draft, goalInput: '', accepted: false, onSelect: issue => selected.push(issue) }));
+  assert.equal(all.find(n => n.props.accessibilityRole === 'progressbar').props.accessibilityValue.max, 7);
+  const goal = all.find(n => n.props.accessibilityLabel?.startsWith('Funding goal. Missing'));
+  goal.props.onPress(); assert.equal(selected[0].field, 'goal'); assert.equal(selected[0].required, true);
+  const sources = all.find(n => n.props.accessibilityLabel?.startsWith('Supporting sources. Recommended'));
+  sources.props.onPress(); assert.equal(selected[1].field, 'sources'); assert.equal(selected[1].required, false);
+  const completed = all.find(n => n.props.accessibilityLabel?.startsWith('Audience & distribution. Completed'));
+  completed.props.onPress(); assert.equal(selected[2].step, 3);
+  assert.match(text(all), /not a Trust Score or approval/);
+  assert.equal(all.some(n => n.type === 'Accordion'), false);
+  assert.ok(all.filter(n => n.type === 'Pressable').every(n => n.props.style({ pressed: false }).minHeight >= 48));
 });
 
 test('preview policies retain every actual policy and source references remain readable without nested disclosure controls', async () => {
@@ -460,7 +512,7 @@ test('optional Accordion reveal opens on each new validation request and clearin
 test('connected creation progress preserves five icons/labels, full Visuals name and scaled access without navigation controls', () => {
   let dimensions = { width: 393, fontScale: 1 };
   const { CreationProgress } = load('../src/features/creation/CreationUi.tsx', {
-    ...modules, react: {},
+    ...modules, react: { useCallback: cb => cb, useEffect: () => {}, useRef: () => ({ current: null }) },
     'react-native': { View: 'View', ScrollView: 'ScrollView', useWindowDimensions: () => dimensions },
     '../../lib/CurrencyProvider': { useCurrency: () => ({ money: types.money }) },
   });
@@ -477,6 +529,10 @@ test('connected creation progress preserves five icons/labels, full Visuals name
   assert.equal(large.find(n => n.type === 'ScrollView').props.horizontal, true);
   assert.equal(large.filter(n => n.type === 'Text').length, 5);
   assert.equal(large.some(n => n.props.allowFontScaling === false), false);
+  const nativeScrolls = [], scroll = large.find(n => n.type === 'ScrollView');
+  scroll.props.ref.current = { scrollTo: value => nativeScrolls.push(value) };
+  scroll.props.onLayout({ nativeEvent: { layout: { width: 284 } } });
+  assert.equal(nativeScrolls[0].x, 256, 'current Submit stays in the measured horizontal viewport at large text');
 });
 
 test('step navigation waits for the new native page layout and resets once without resetting later reading', () => {
@@ -547,4 +603,79 @@ test('guest upload uses existing durable sign-in handoff without opening picker 
   h.render().find(n => n.type === 'CampaignMediaSections').props.onUpload('cover'); await settle(); h.render();
   assert.equal(h.pickerCalls(), 0); assert.deepEqual(h.apiCalls, []); assert.deepEqual(h.navigation, ['/profile?auth=login']);
   assert.equal(h.saved.length, 1); assert.equal(h.saved[0].localId, 'local-one'); assert.equal(h.saved[0].step, 2); assert.equal(h.saved[0].draft.coverImage, '/media/original-cover.jpg');
+});
+
+// Invoke the screen's real event closures while its actual async operation is
+// suspended. These represent IME events queued before pointerEvents changed;
+// native focus/keyboard behavior is checked separately on Android.
+for (const fails of [false, true]) test(`account save ${fails ? 'failure' : 'success'} rejects queued field/goal edits while locked and permits editing after settlement`, async () => {
+  let settleSave;
+  const h = screenHarness({ apiResponse: (_path, options) => new Promise((resolve, reject) => {
+    settleSave = () => fails ? reject(Error('Isolated account save failure')) : resolve({ ...options.body, id: 'saved-fixture', ownerId: 'fixture-account', status: 'Draft', raised: 0, version: 1 });
+  }) });
+  h.render(); h.active().step = 0;
+  let all = h.render();
+  all.find(node => node.props.target === 'summary').props.onChangeText('Latest creator edit before the request');
+  all = h.render();
+  const queuedSummary = all.find(node => node.props.target === 'summary').props.onChangeText;
+  h.active().step = 4; h.active().draft.goal = 17.5; h.active().goalInput = '17.50';
+  all = h.render();
+  const queuedGoal = all.find(node => node.type === 'GoalAmountField').props.onChange;
+  const frozen = structuredClone(h.active());
+  all.find(node => node.props.accessibilityLabel === 'Save Draft').props.onPress();
+  assert.equal(h.keyboardDismissals(), 1, 'save dismisses focused native input before awaiting persistence');
+  queuedSummary('Queued IME text after lock'); queuedGoal('99.00', { raw: '99', canonicalUsd: 99 });
+  assert.deepEqual(h.active(), frozen, 'ref lock rejects events even before a busy rerender');
+  all = h.render();
+  assert.equal(all.find(node => node.type === 'GoalAmountField').props.editable, false);
+  await settle(); assert.equal(h.apiCalls.length, 1);
+  assert.equal(h.apiCalls[0].options.body.summary, frozen.draft.summary);
+  assert.equal(h.apiCalls[0].options.body.goal, 17.5);
+  settleSave(); await settle(); await settle();
+  all = h.render();
+  const goal = all.find(node => node.type === 'GoalAmountField');
+  assert.equal(goal.props.editable, true, 'settled requests release the UI lock on both success and error');
+  assert.equal(h.active().draft.summary, frozen.draft.summary);
+  assert.equal(h.active().draft.goal, 17.5);
+  goal.props.onChange('18.25', { raw: '18.25', canonicalUsd: 18.25 });
+  assert.equal(h.active().draft.goal, 18.25);
+  assert.equal(h.active().goalInput, '18.25');
+  assert.deepEqual(h.removed, []);
+});
+
+test('submission freezes the accepted draft across both awaited writes, rejecting queued IME and consent events', async () => {
+  let finishAccount, finishSubmission;
+  const configData = { feeRate: 0.05, peoplePerAdDollar: 27, currency: 'USD', categories: types.categories, channels: model.CHANNELS, policies: {} };
+  const h = screenHarness({ configData, allowSubmissionCleanup: true, apiResponse: (path, options) => {
+    if (path === '/campaigns') return new Promise(resolve => { finishAccount = () => resolve({ ...options.body, id: 'submitted-fixture', ownerId: 'fixture-account', status: 'Draft', raised: 0, version: 1 }); });
+    if (path === '/campaigns/submitted-fixture/submit') return new Promise(resolve => { finishSubmission = () => resolve({ ...h.active().draft, status: 'Submitted for Review' }); });
+    assert.fail(`Unexpected isolated request: ${path}`);
+  } });
+  h.render(); h.active().step = 0;
+  const queuedTitle = h.render().find(node => node.props.target === 'title').props.onChangeText;
+  Object.assign(h.active().draft, { title: 'Accepted original message', category: 'Environment', creatorName: 'Fixture creator', geography: 'Global', goal: 125 });
+  h.active().step = 4; h.active().goalInput = '125.00';
+  let all = h.render();
+  all.find(node => node.props.accessibilityRole === 'checkbox').props.onPress();
+  all = h.render();
+  const queuedGoal = all.find(node => node.type === 'GoalAmountField').props.onChange;
+  const queuedConsent = all.find(node => node.props.accessibilityRole === 'checkbox').props.onPress;
+  const frozen = structuredClone(h.active());
+  all.find(node => node.type === 'CreationActionDock').props.primary.props.onPress();
+  assert.equal(h.keyboardDismissals(), 1, 'submission removes native keyboard focus before its first await');
+  queuedTitle('Queued title that was not accepted'); queuedGoal('999.00', { raw: '999', canonicalUsd: 999 }); queuedConsent();
+  assert.deepEqual(h.active(), frozen);
+  all = h.render(); assert.equal(all.find(node => node.type === 'SubmissionChecklist').props.accepted, true);
+  await settle(); assert.equal(h.apiCalls.length, 1);
+  assert.equal(h.apiCalls[0].options.body.title, frozen.draft.title); assert.equal(h.apiCalls[0].options.body.goal, 125);
+  finishAccount(); await settle();
+  assert.equal(h.apiCalls[1].path, '/campaigns/submitted-fixture/submit');
+  assert.deepEqual(h.apiCalls[1].options.body, { rulesAccepted: true });
+  queuedGoal('777.00', { raw: '777', canonicalUsd: 777 }); queuedTitle('Another queued title'); queuedConsent();
+  assert.equal(h.active().draft.goal, 125); assert.equal(h.active().draft.title, frozen.draft.title);
+  all = h.render(); assert.equal(all.find(node => node.type === 'SubmissionChecklist').props.accepted, true);
+  finishSubmission(); await settle(); await settle();
+  assert.equal(h.active().draft.status, 'Submitted for Review');
+  assert.equal(h.active().draft.goal, 125); assert.equal(h.active().draft.title, frozen.draft.title);
+  assert.deepEqual(h.removed, ['local-one'], 'only the successfully submitted disposable draft is cleaned up');
 });

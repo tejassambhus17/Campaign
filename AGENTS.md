@@ -1,5 +1,53 @@
 # Campaign Amplification Hackathon: agent instructions
 
+**October19 final submission QA and documentation:** The user requests a final
+bounded bug/layout/performance audit, necessary fixes, same-key signed APK and
+fresh README/gallery showing current features. Normal source checks, isolated
+local backend tests and owned-emulator gestures/screenshots/rendering statistics
+are authorized. Preserve the approved design, cloud/backend/business rules,
+data, prior APK and dedicated key; no unrelated redesign or deployment. Prepare
+source/documentation/assets for the owner's one commit without committing or
+pushing on their behalf. APKs/signing material remain excluded from Git; release
+asset upload is separate from a source commit. No publication, submission,
+billing, phone wipe/incompatible update or recording is implied. Use current
+exact-binary evidence and distinguish software-emulator, physical and human QA.
+
+**October19 creator assistance and Profile/Studio:** The user authorizes four
+focused frontend additions: validator-derived completed/missing/recommended
+readiness with field navigation; editable/dismissible local writing suggestions;
+current unsaved draft preview from all five editor steps; and the supplied
+premium Profile/Creator Studio composition using existing account/scoped draft
+data. Preserve the connected five-step icon rail, exact PDF flow/title limit,
+creator-set Submit goal, optional asset rules, auth/back navigation and direct
+Profile preferences with no Settings screen. Suggestions use no AI/network and
+must not fabricate claims, sources or funding. Keep existing backend/providers,
+data, signing identity and prior canonical APK. Focused source/native checks and
+same-key local APK compilation are authorized; no cloud rollout, push, recording
+or submission is implied. Separate emulator, physical and human acceptance.
+
+**October19 emulator-cleanup follow-up:** After the retained emulator storage was
+explained, the user authorized its cleanup while preserving future compilation.
+Eight Campaign AVD environments and 75 isolated Metro build-cache directories were
+removed. Only the identified Campaign_Release_36 / emulator-5574 was gracefully
+closed using existing dedicated ADB5039; no phone/default ADB/other device action
+occurred. 274 preservation hashes passed, including the SDK/JDK/Gradle tools and
+dedicated signing files. Source, current APK/screenshots, credentials, backups,
+server/cloud/phone data and Git remain. This supersedes the first cleanup's AVD
+retention only for the reviewed follow-up targets. Future native QA needs a fresh
+AVD; removed emulator sessions/drafts are not retained. Build caches regenerate
+and may need network downloads. No new APK build or native acceptance occurred.
+
+**October19 explicit local cleanup:** The user authorized removal of unnecessary
+local builds, screenshots and generated output, superseding earlier keep-every-APK
+instructions for the reviewed cleanup manifest. Canonical signed 1.4.0 remains at
+`artifacts/dropdown-hierarchy-20261018/Campaign.apk`; current native-confirmed and
+same-version candidate captures, all README image sources, final demo/report PDFs,
+reference inputs and textual evidence remain. Historical generated APK/media paths
+may have been pruned; see `docs/WORKSPACE_CLEANUP.md` and the ignored cleanup receipt.
+Do not infer fresh runtime verification or recreate obsolete binaries. Preserve
+source, all keys/secrets/backups/data, emulator state, toolchains and Git history.
+No cloud, phone, publication or branch-deletion action was part of this cleanup.
+
 **October18 app-wide disclosure hierarchy:** The latest approved
 Before/After reference governs all information dropdowns and related selections.
 Use compact summary destinations for substantial content, bounded contextual

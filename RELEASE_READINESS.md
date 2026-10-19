@@ -1,5 +1,57 @@
 # Android delivery readiness
 
+## Current October19 — final signed 1.5.1 / code 12
+
+[Campaign.apk](artifacts/final-submission-20261019/Campaign.apk), **68,616,866 bytes**, dedicated Campaign release key, ARM64+x86_64; SHA-256 `928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60`. Installer name/logo, embedded Hermes and verified HTTPS endpoint are preserved. 439 frontend tests,74 isolated SQLite API tests, TypeScript, full ESLint, normal vital lint,28 package checks and149 source comparisons pass. The exact APK installed compatibly and cold-launched in 1888ms on the owned API 36 emulator without Metro/reverse.
+
+The final pass corrects editor input races and draft-status copy; the readiness assistant, rule suggestions, instant preview and premium Profile/Studio remain. [Final QA, screenshots, raw performance limits and remaining checks](docs/FINAL_SUBMISSION_CHECK.md). Physical release acceptance and unfamiliar-human testing remain pending. Software rendering contains jank; zero frame drops are not claimed. No production mutation, rollout, commit/push or submission occurred. A source commit does not upload the separate APK Release asset.
+
+## Latest October19 — creator assistance and Profile/Studio, 1.5.0/code 11
+
+[Download Campaign.apk](artifacts/creator-studio-20261019/Campaign.apk):
+68,616,686 bytes, dedicated signed Release, ARM64+x86_64, approved installer/splash
+logo and embedded Hermes/HTTPS. SHA-256
+`1D641F7126AF94962A7DA89CF8F06ADBA3247D4B359CE2417AFC6F7C606420C4`.
+434 tests, TypeScript/full ESLint, normal vital lint and 28/28 package checks pass;
+149 frozen input hashes match. Prior 1.4.0 remains preserved.
+
+Implemented readiness/field links, deterministic apply/dismiss writing advice,
+all-step live draft preview, connected moving five-step rail and the premium
+Profile/Creator Studio with real scoped account/draft data. Follow-up replaces
+the Studio image with high-resolution alpha artwork, removes Light's gray header
+strip and prevents text/art collisions, with a two-column large-text feature row.
+
+A fresh owned API36 x86_64 emulator was recreated after cleanup. Final exact APK
+updated compatibly and cold-launched in 1517 ms without Metro/reverse forwarding,
+preserving QA authentication/device draft. Named final checks cover Profile
+themes/130%/200% text, Studio resume/goal, readiness/source navigation, preview and
+Android Back; a bounded app-process log sample contained no failure markers.
+Broader initial-candidate creation interactions retain their exact binary scope.
+[Build, package, native evidence and limits](artifacts/creator-studio-20261019/README.md).
+
+Physical release testing remains pending: the authorized POCO has a different
+Debug signer; no phone operation/uninstall/data clear occurred. Human usability
+is pending because no unfamiliar tester is available. Full lifecycle, TalkBack,
+all-device/network and sustained-performance acceptance were not repeated.
+No backend/cloud change, AI API, billing, push, recording or submission occurred.
+
+**Earlier October19 emulator retirement:** The owner authorized deleting eight
+Campaign virtual-device environments and isolated build caches. Prior native
+test receipts/screenshots retain their historical scope; there is no currently
+retained installed QA emulator state. The current signed APK is unchanged. 274
+source/tool/key/media preservation checks and 15 README checks pass. Future APKs
+can use the retained SDK/JDK/Gradle/signing workflow; fresh native testing needs
+a recreated AVD. Phone/server data and cloud services were untouched. No new
+build/native acceptance follows from cleanup. [Details](docs/WORKSPACE_CLEANUP.md).
+
+**October19 artifact retention notice:** The owner authorized cleanup of old
+generated builds/captures. The current signed 1.4.0 APK and current screenshots
+below are preserved byte-for-byte; 249 retained hashes and 15 README checks pass.
+Superseded APK/media links later in this document may now describe pruned local
+artifacts. No new native/build acceptance is implied. Source, signing material,
+backups, all user/emulator data and final demo/report files remain. See
+[canonical retained paths and cleanup limits](docs/WORKSPACE_CLEANUP.md).
+
 ## October18 — app-wide information hierarchy / 1.4.0 / code10
 
 Implemented the latest Before/After brief across every source-reviewed dropdown, accordion, sheet and selector:98 prior controls reconciled with105 current source instances. Campaign transparency has Audience & Reach, Funding & Spending and Trust & Verification destinations; short context uses native sheets, while genuine FAQs/functional editor groups retain compact inline expansion. Creation exposes required fields and editable Submit summaries; actual input options, drafts, separate media, public evidence, financial/policy/privacy/simulation information and parent Back remain. No backend change was needed.

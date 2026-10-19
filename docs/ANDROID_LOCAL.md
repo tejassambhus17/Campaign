@@ -1,5 +1,25 @@
 # Local Android build and verification
 
+## Current final release —1.5.1 / code 12
+
+[Campaign.apk](../artifacts/final-submission-20261019/Campaign.apk) is the latest local dedicated-signed ARM64+x86_64 artifact,68,616,866 bytes; SHA-256 `928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60`. Tag `final-submission-confirmed-20261019` is used; never overwrite it. The existing Release workflow completed with normal vital lint and28 package checks;149 inputs match. Same-key owned API 36 emulator update/cold launch 1888ms occurred without Metro/reverse. Preserve the incompatible Debug-signed POCO; do not uninstall/clear its data. [Current QA scope](FINAL_SUBMISSION_CHECK.md). No SDK/key/backend change is needed. APK release upload is separate from source push.
+
+## Latest creator assistance release — 1.5.0/code 11
+
+[Signed APK and scoped evidence](../artifacts/creator-studio-20261019/README.md).
+The existing Release build command produced the dedicated same-key ARM64+x86_64
+APK with normal vital lint, embedded Hermes and unchanged HTTPS. Tag
+`creator-studio-delivery-20261019` already exists; use a fresh tag for any later
+build. No dependency, backend or signing change is required for these features.
+
+After the authorized cleanup, one fresh owned `Campaign_Studio_36` API36 x86_64
+AVD was recreated under task-local `tmp/creator-studio-20261019/avd`, serial
+`emulator-5574`, dedicated ADB5039. Do not confuse it with the previously retired
+AVD or touch default ADB/other devices. The final APK's compatible update,
+1517ms cold launch, focused native checks and source/package checks have separate
+receipts. The Debug-signed POCO remains incompatible: never clear or uninstall
+its data to force a Release update. Physical/human acceptance remains pending.
+
 ## Current hierarchy release — 1.4.0/code10
 
 [Current signed APK and evidence](../artifacts/dropdown-hierarchy-20261018/README.md). Use the established Release ARM64+x86_64 command and verified HTTPS endpoint with a fresh artifact tag; both dropdown-hierarchy-20261018 and dropdown-hierarchy-confirmed-20261018 already exist. Dedicated signing, normal vital lint and pinned native Print/core patches remain. Compilation, package inspection and installed interaction checks have distinct receipts. Never clear/uninstall the Debug-signed POCO to force a release update.

@@ -110,8 +110,10 @@ function profileHarness({ user = { id: 'fixture-owner', name: 'Fixture Owner', e
     '../../lib/currency': { formatNativeMoney: String },
     '../../features/profile/CurrencySettings': { CurrencySettings: 'CurrencySettings' },
     '../../features/profile/MyCampaigns': { MyCampaigns: 'MyCampaigns' },
+    '../../features/profile/CreatorStudio': { CreatorStudio: 'CreatorStudio' },
+    '../../features/profile/ProfileOverview': { ProfileGroup: 'ProfileGroup', ProfileIdentity: 'ProfileIdentity', ProfileMetrics: 'ProfileMetrics', StudioInvitation: 'StudioInvitation' },
     '../../lib/profile-navigation': profileNavigation,
-    '../../lib/session': { useSession: () => session, useMe: () => ({ data: { user: session.user, payments: [], campaigns: [], saved: [] }, refetch: async () => undefined }), useCampaigns: () => ({}), useConfig: () => ({}), refresh: async () => assert.fail('sign-out must not run a stale profile refresh') },
+    '../../lib/session': { useSession: () => session, useMe: () => ({ data: { user: session.user, payments: [], campaigns: [], saved: [] }, refetch: async () => undefined }), useActivity: () => ({ data: [] }), useCampaigns: () => ({}), useConfig: () => ({}), refresh: async () => assert.fail('sign-out must not run a stale profile refresh') },
     '../../components/ui': { ...ui, fonts: {}, useTheme: () => theme },
     '../../components/Information': { InfoAction: 'InfoAction', InfoSheet: 'InfoSheet', SummaryLink: 'SummaryLink' },
     '../../features/auth': { AuthForm: 'AuthForm' }, '../../features/reviewer': { Reviewer: 'Reviewer' },
@@ -158,10 +160,10 @@ test('Profile has one Notifications destination, direct Appearance/Currency and 
   let nodes = h.render();
   assert.equal(nodes.filter(node => node.props.title === 'Notifications').length, 1);
   assert.equal(nodes.some(node => node.props.title === 'Settings' || node.props.accessibilityLabel?.startsWith('Appearance settings,')), false);
-  assert.ok(nodes.findIndex(node => node.props.title === 'Sign out') > nodes.findIndex(node => node.props.title === 'Help & Support'));
+  assert.ok(nodes.findIndex(node => node.props.accessibilityLabel === 'Sign out') > nodes.findIndex(node => node.props.title === 'Help & Support'));
   nodes.find(node => node.props.title === 'Appearance').props.onPress();
   h.render().find(node => node.props.label === 'Back to Profile').props.onPress();
-  nodes = h.render(); nodes.find(node => node.props.title === 'Sign out').props.onPress(); await settle();
+  nodes = h.render(); nodes.find(node => node.props.accessibilityLabel === 'Sign out').props.onPress(); await settle();
   assert.equal(h.session.user, null);
   nodes = h.render();
   assert.ok(nodes.some(node => node.props.children === 'Guest profile'));
@@ -178,6 +180,22 @@ test('profile entry distinguishes completed guests and explicit/private authenti
   assert.equal(entry({ signedIn: true, onboarding: 'complete', auth: 'login' }), 'profile');
   assert.equal(profileNavigation.profileSection('Settings'), 'Overview');
   assert.equal(profileNavigation.profileSection('unknown'), null);
+  assert.equal(entry({ signedIn: false, onboarding: 'complete', section: 'Studio' }), 'login');
+  assert.equal(profileNavigation.profileSection('Studio'), 'Studio');
+});
+
+test('Creator Studio stays within Profile and nested campaign management returns to the Studio parent', () => {
+  const h = profileHarness({ onboardingState: 'complete' });
+  h.render().find(node => node.type === 'StudioInvitation').props.onPress();
+  const studio = h.render().find(node => node.type === 'CreatorStudio');
+  assert.equal(studio.props.userId, 'fixture-owner');
+  studio.props.onMyCampaigns();
+  assert.ok(h.render().some(node => node.type === 'MyCampaigns'));
+  h.render().find(node => node.props.label === 'Back to Creator Studio').props.onPress();
+  assert.ok(h.render().some(node => node.type === 'CreatorStudio'));
+  h.render().find(node => node.props.label === 'Back to Profile').props.onPress();
+  assert.ok(h.render().some(node => node.type === 'StudioInvitation'));
+  assert.deepEqual(h.navigation, [], 'local Profile navigation never starts another tab or a new draft');
 });
 
 test('the actual signed-in Profile recovery waits for saved Welcome completion before navigating', async () => {

@@ -1,5 +1,99 @@
 # Development progress
 
+## October19 — final submission QA and signed 1.5.1
+
+The final pass fixes queued editor/goal/consent changes during asynchronous account writes, rejects child-field buffering when the parent refuses a busy edit, and uses truthful saving/account-draft labels. The four new creator features and the HQ Profile artwork/Light/large-text fixes remain. No backend, provider, schema, account data or business rule changed.
+
+Current [Campaign.apk](artifacts/final-submission-20261019/Campaign.apk) is **1.5.1 / code 12**, 68,616,866 bytes, dedicated same-key ARM64+x86_64 Release. SHA-256 `928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60`. **439 frontend / 74 isolated SQLite API tests**, TypeScript, full ESLint and **28/28 package checks** pass; all 149 frozen source inputs match. Normal Release build succeeded in 1m 40s. Its compatible owned-emulator update cold-launched in 1888ms without Metro/reverse forwarding and retained the QA session/device draft. Earlier candidate 8b40 and 1.5.0 evidence keep their historical scope.
+
+Twenty fresh screenshots from this exact APK now populate the optimized README gallery; all 21 media/README checks pass. Real Welcome paging/dot selection, blank auth forms, correct guest Profile, detail/Explore paging, filter dismissal, contribution amounts and native report share chooser passed on isolated emulators. Both owned emulators were stopped with data preserved. Native findings, package receipts, final scope and pending physical/human checks are recorded in [the final check](docs/FINAL_SUBMISSION_CHECK.md). Software-emulator frame samples contain jank and do not establish phone smoothness. The POCO's incompatible Debug signer remains untouched. No commit/push/release upload/submission or recording occurred. Source/README/media can share one owner commit; the APK must be uploaded separately as a Release asset. The published 1.4 link stays truthful until the owner publishes the new build.
+
+Automatic approval review blocked the optional hosted Save Draft test before execution because it would mutate remote account data beyond this local QA boundary. No hosted draft was saved. Disposable local tests and read-only HTTPS/native checks continued.
+
+## October19 — Creator assistance and premium Profile/Studio delivered
+
+Implemented validator-derived readiness with completed/missing/recommended rows
+and exact field targets; local writing suggestions with explicit apply/dismiss
+and stale-edit protection; visible live preview across all five manual-editor
+steps; and the reference-led grouped Profile/Creator Studio using existing
+account data and scoped device drafts. The connected five-step rail remains and
+tracks the active step at increased text sizes. Empty editorial blocks no longer
+imply completed story content. Backend/cloud/accounting rules are unchanged.
+
+434 frontend tests pass; TypeScript and full src/plugins ESLint pass. Product
+Design reference/context preflight and Impeccable context/craft guidance were
+used; the mechanical detector returned an empty finding list. The design
+sidecar is reported stale; no unrelated token repair was performed. Recoverable
+source checkpoint: `refs/checkpoints/creator-studio-20261019` (`d3a16d32`).
+
+The linked-device metadata finding is corrected: current server review/funding
+metadata informs Studio while local edits and resume state remain intact. Native
+inspection and the user's follow-up also corrected the low-resolution artwork,
+Light header strip, art/copy collision and large-text feature-label wrapping.
+The new transparent 1254px asset has no baked rectangular background; Light's
+identity header is plain. At larger text sizes the image yields reading space
+and feature labels use two columns.
+
+Final [Campaign.apk](artifacts/creator-studio-20261019/Campaign.apk): **1.5.0 /
+code 11**, dedicated signed ARM64+x86_64, 68,616,686 bytes. SHA-256
+`1D641F7126AF94962A7DA89CF8F06ADBA3247D4B359CE2417AFC6F7C606420C4`.
+Normal Release build succeeded in 2m 17s; 28/28 package checks and all 149 frozen
+input hashes pass. Existing logo, package, Hermes, native patches and HTTPS
+configuration remain. The prior 1.4.0 APK is unchanged.
+
+Exact final APK received a compatible update/cold launch 1517 ms on the fresh
+owned API36 emulator, ADB5039/emulator-5574, without Metro or reverse forwarding.
+QA session/device draft persisted. Final native evidence covers Profile in
+Dark/Light and 130%/200% text, clean header/HQ art, lower actions, Studio actual
+counts/draft goal/resume, readiness, preview/Android Back and direct Story-source
+navigation. A bounded 400-line current-process log sample had no failure markers.
+The broader first-candidate five-step previews/suggestion apply-dismiss/required
+field checks retain their own binary scope; all 18 creation inputs are unchanged.
+[Full evidence and screenshots](artifacts/creator-studio-20261019/README.md),
+[visual comparison](artifacts/creator-studio-20261019/COMPARE.profile-delivery.jpg),
+[implementation](docs/CREATOR_STUDIO.md).
+
+Physical release testing remains pending because the POCO's existing Debug
+signer is incompatible; no phone/default ADB action, uninstall or data clear
+occurred. Human testing remains pending because no unfamiliar tester is
+available. These focused checks do not establish whole-app acceptance. No
+backend/cloud deployment, AI API, migration/seed, billing, recording or push.
+
+## October19 — Emulator cleanup and future-build preservation
+
+The owner authorized removal of remaining virtual-device storage after its
+purpose and saved-state consequences were explained. Eight Campaign AVDs and 75
+isolated Metro cache folders were deleted: 105,042 files, 40.153 GiB logical
+contents, 39.931 GiB observed extra free space,0 failed targets. Workspace now
+measures 13.893 GiB. Only the verified Campaign_Release_36 / emulator-5574 was
+gracefully stopped using dedicated ADB5039; no default ADB, phone or unrelated
+device was touched. Small device configurations were retained as local metadata.
+
+All 274 preservation hashes and 15 README checks pass. SDK/JDK/Gradle/build helpers,
+dependencies, dedicated signing keys/backups, source, current APK/screenshots,
+server/phone data and Git remain. Future compilation remains supported by the
+existing workflow; caches regenerate and may need network downloads. A fresh AVD
+must be created for the next emulator QA. No new APK build/runtime test, cloud
+change or push occurred. [Cleanup details](docs/WORKSPACE_CLEANUP.md).
+
+## October19 — Local artifact cleanup completed
+
+At the owner's explicit request, removed 49,875 obsolete/generated files across
+7,441 targets with 0 deletion failures: superseded/duplicate builds, historical
+captures/raw footage, redundant installer archives, Android build/C++ output,
+Gradle cache and generated exports. 16.219 GiB logical contents removed; observed
+E: free space increased 15.126 GiB. 249 retained-file hashes passed, including all 203
+frozen application inputs, current signed APK, README assets/source captures,
+final demo/report files and original requirements PDF. 15 README checks pass.
+
+The canonical APK remains `artifacts/dropdown-hierarchy-20261018/Campaign.apk`,
+1.4.0 / code 10, 68,811,090 bytes, SHA-256 CB08…3397. Final native screenshots and same-version
+candidate provenance remain alongside 16 optimized README images. Source, Git,
+keys/secrets/backups, all emulator/user/server data and installed tools remain.
+No app build/runtime check, new network probe, cloud/device action, push or branch
+deletion occurred. Historical artifact links may have been pruned. See
+[retained files and cleanup evidence](docs/WORKSPACE_CLEANUP.md).
+
 ## October18 — app-wide information hierarchy / 1.4.0 / code10
 
 Implemented the latest Before/After brief across every source-reviewed dropdown, accordion, sheet and selector:98 prior controls reconciled with105 current source instances. Campaign transparency has Audience & Reach, Funding & Spending and Trust & Verification destinations; short context uses native sheets, while genuine FAQs/functional editor groups retain compact inline expansion. Creation exposes required fields and editable Submit summaries; actual input options, drafts, separate media, public evidence, financial/policy/privacy/simulation information and parent Back remain. No backend change was needed.

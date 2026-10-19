@@ -27,7 +27,7 @@ function supportHarness(config) {
   const component = load('../src/app/(tabs)/profile.tsx', {
     react: state.react, 'react/jsx-runtime': { jsx, jsxs: jsx }, 'react-native': {}, 'expo-router': {}, '@expo/vector-icons/Ionicons': {}, '@react-native-async-storage/async-storage': {},
     '../../lib/CurrencyProvider': {}, '../../lib/currency': {}, '../../features/profile/CurrencySettings': {}, '../../lib/api': {}, '../../lib/types': {}, '@tanstack/react-query': {}, '../../lib/session': {},
-    '../../components/ui': ui, '../../components/Information': info, '../../features/auth': {}, '../../features/reviewer': {}, '../../features/profile/Photo': {}, '../../features/walkthrough/Walkthrough': {}, '../../features/profile/MyCampaigns': {}, '../../lib/profile-navigation': {},
+    '../../components/ui': ui, '../../components/Information': info, '../../features/auth': {}, '../../features/reviewer': {}, '../../features/profile/Photo': {}, '../../features/walkthrough/Walkthrough': {}, '../../features/profile/MyCampaigns': {}, '../../features/profile/CreatorStudio': {}, '../../features/profile/ProfileOverview': {}, '../../lib/profile-navigation': {},
   }, 'module.exports.HelpInformation = HelpInformation; module.exports.NotificationPreferences = NotificationPreferences;');
   return { component, render: () => { state.reset(); return nodes(component.HelpInformation({ config })); } };
 }

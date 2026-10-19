@@ -1,5 +1,27 @@
 # Campaign: bounded native design QA
 
+## October19 — final1.5.1 native audit
+
+Fresh exact-build screenshots were captured and inspected for Welcome, Home, Explore, details, all five creation steps, readiness, suggestions, live preview, Trust, contribution, reports, Activity, Profile/Studio and Light. The corrected Profile has high-resolution alpha artwork, a clean Light identity header and no text/art collision. At130% text, decorative art yields space and feature labels reflow. Scrollable content below the viewport is not classified as clipping. Native tab/category gestures and report share chooser were exercised separately from screenshots; no app-only video was made.
+
+Product Design audit and Impeccable craft guidance were used. No new mechanical-detector run or whole-app accessibility verdict is claimed. Source439/frontend74isolatedAPI/28package checks pass. Frame samples show software-emulator jank; sustained physical performance and human acceptance remain pending. [Final evidence](docs/FINAL_SUBMISSION_CHECK.md), [20-screen gallery](docs/screenshots/README.md). APK928e…6e60 is distinct from the historical candidate and prior1.5.0. No new visual blocker was observed in the named captures.
+
+## October19 — creator assistance and Profile follow-up
+
+Final result: passed for the named native Profile samples.
+
+The selected Profile reference, actual Dark/Light screenshots and enlarged-text
+states were inspected. The low-resolution/baked-background Studio crop, Light
+header strip, art/copy crowding and four-column large-text word breaks were
+corrected. Final high-resolution alpha artwork is separated from text; Light's
+identity header is plain; enlarged text uses no decorative art and a two-column
+feature strip. [Independent comparison and scoped review](artifacts/creator-studio-20261019/VISUAL_REVIEW.delivery.md)
+binds to APK `1D641F…420C4`. Root also checked130% text, lower Profile actions,
+Studio resume/goal, readiness and preview/source destinations. Text scaling and
+vertical scrolling remain enabled. Candidate-only interaction checks are
+separate in the [task evidence](artifacts/creator-studio-20261019/README.md).
+Physical, human, whole-app and sustained-performance acceptance is not implied.
+
 ## October18 app-wide hierarchy — bounded native review
 
 The original After reference, actual baseline screenshots and two exact-binary batches were inspected. One P1 URL-sheet/IME occlusion was found and corrected; actual focused input/Close bounds and screenshot confirm closure. [Finding](artifacts/dropdown-hierarchy-20261018/VISUAL_FINDING.keyboard.md); [independent review](artifacts/dropdown-hierarchy-20261018/VISUAL_REVIEW.md); [per-area verification](artifacts/dropdown-hierarchy-20261018/VERIFICATION_MATRIX.md). Normal Dark, selected Light/font1.3 variants and scroll endpoints are scoped evidence, not complete-device/TalkBack/human acceptance. No repeated micro-polish loop or invented visual score was used.

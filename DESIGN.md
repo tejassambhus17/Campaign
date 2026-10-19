@@ -1,5 +1,22 @@
 ---
 
+## Creator assistance and Profile — October 19
+
+The supplied Profile reference guides actual identity/avatar editing, three
+account metrics, a Creator Studio invitation and grouped account destinations.
+Keep the Light identity header plain; only Dark uses the subtle existing
+mountain treatment. The Studio invitation uses a high-resolution transparent
+decorative illustration, separate text/art columns and reserved chevron space.
+Hide decorative art when large text or a compact viewport needs the space;
+never disable font scaling or overlap copy with the image.
+
+Creation retains its connected five-icon rail and active-step tracking. Preview
+is visible alongside Save Draft throughout the editor. Readiness uses a compact
+progress ring and actionable complete/missing/recommended rows; optional advice
+does not become a blocker or imply approval. Local writing proposals require
+explicit application or dismissal. Existing theme tokens, navigation, monetary
+rules and backend remain. [Implementation](docs/CREATOR_STUDIO.md).
+
 ## Current information hierarchy — October 18
 
 The approved After reference guides compact Campaign transparency cards:

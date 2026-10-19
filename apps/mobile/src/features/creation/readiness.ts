@@ -51,7 +51,7 @@ export function submissionIssues(draft: Campaign, goalInput: string, accepted: b
   }
   const optional = (id: string, step: number, field: string, title: string, message: string) => issues.push({ id, step, field, title, message, required: false });
   if (!draft.summary.trim()) optional("summary", 0, "summary", "Introduce your message", "A short summary helps readers decide to explore your campaign. This is optional.");
-  if (!draft.storyHeadline.trim() && !draft.intro.trim() && !draft.sections.length) optional("story", 1, "storyHeadline", "Add story context", "A headline, introduction or story section can explain why the message matters. This is optional.");
+  if (!draft.storyHeadline.trim() && !draft.intro.trim() && !draft.sections.some(section => section.kind === "image" ? !!section.url?.trim() : !!section.text.trim())) optional("story", 1, "storyHeadline", "Add story context", "A headline, introduction or story section can explain why the message matters. This is optional.");
   if (!draft.sources.length) optional("sources", 1, "sources", "Add supporting sources", "Public sources help readers explore factual claims. No source is required to submit; include relevant evidence when available.");
   if (!draft.coverImage) optional("cover", 2, "coverImage", "Choose a campaign cover", "An optional cover helps readers recognize the campaign. It stays separate from advertising creative.");
   if (!draft.adImages.some(Boolean)) optional("advertising", 2, "advertising", "Prepare advertising imagery", "Advertising images are optional at submission. A reviewer may request suitable creative before distribution.");
@@ -59,4 +59,40 @@ export function submissionIssues(draft: Campaign, goalInput: string, accepted: b
     if (section.kind === "image" && !section.url) optional(`empty-image:${section.id}`, 1, `section:${section.id}`, `Story image · section ${index + 1}`, "This optional image section is empty. Add a photograph or remove the unused section before sharing a polished story.");
   });
   return issues;
+}
+
+export type ReadinessItem = {
+  id: string;
+  title: string;
+  status: "complete" | "missing" | "recommended";
+  summary: string;
+  target: DraftIssue;
+  issues: DraftIssue[];
+};
+
+/** Presentation of the existing validator, never a second submission policy. */
+export function campaignReadiness(draft: Campaign, goalInput: string, accepted: boolean) {
+  const issues = submissionIssues(draft, goalInput, accepted);
+  const groups = [
+    { id: "basics", title: "Campaign basics", step: 0, field: "title", match: (issue: DraftIssue) => issue.step === 0 },
+    { id: "story", title: "Story & message", step: 1, field: "storyHeadline", match: (issue: DraftIssue) => issue.step === 1 && !issue.field.startsWith("source") },
+    { id: "sources", title: "Supporting sources", step: 1, field: "sources", match: (issue: DraftIssue) => issue.step === 1 && issue.field.startsWith("source") },
+    { id: "visuals", title: "Campaign & ad visuals", step: 2, field: "coverImage", match: (issue: DraftIssue) => issue.step === 2 },
+    { id: "reach", title: "Audience & distribution", step: 3, field: "geography", match: (issue: DraftIssue) => issue.step === 3 },
+    { id: "goal", title: "Funding goal", step: 4, field: "goal", match: (issue: DraftIssue) => issue.field === "goal" },
+    { id: "policies", title: "Rules & funding policies", step: 4, field: "rules", match: (issue: DraftIssue) => issue.field === "rules" },
+  ];
+  const items: ReadinessItem[] = groups.map(group => {
+    const matched = issues.filter(group.match);
+    const required = matched.filter(issue => issue.required);
+    const target = required[0] || matched[0] || { id: `ready:${group.id}`, step: group.step, field: group.field, title: group.title, message: "Review this part of your campaign.", required: false };
+    return {
+      id: group.id, title: group.title,
+      status: required.length ? "missing" : matched.length ? "recommended" : "complete",
+      summary: required.length ? `${required.length} required ${required.length === 1 ? "item" : "items"} to complete` : matched.length ? "Optional improvements available" : "Ready for review",
+      target, issues: matched,
+    };
+  });
+  const completed = items.filter(item => item.status === "complete").length;
+  return { items, completed, total: items.length, percent: Math.round(completed / items.length * 100), missing: issues.filter(issue => issue.required).length, recommended: issues.filter(issue => !issue.required).length };
 }

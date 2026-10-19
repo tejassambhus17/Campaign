@@ -1,55 +1,53 @@
 # README media and release handoff
 
-Prepared October 19, 2026. This task changes the repository homepage and its documentation/image assets only. No app code, backend, deployment, database, APK, signing material, or user data was changed. Nothing was pushed, published, or submitted.
+Prepared October 19, 2026. This document covers the repository homepage and its supporting screenshot assets. It does not publish a release, upload a video, change repository visibility, or submit the project.
 
 ## Android download
 
-The README uses the GitHub-root-relative route `/tejassambhus17/Campaign/releases` while the latest release download is awaiting confirmation. It reaches this repository's release index without inventing a release tag or asset. Repository access is required while the repository is private. GitHub CLI is signed out on this machine, so existing releases and recipient access could not be authenticated.
+The owner supplied the published [1.4.0 release](https://github.com/tejassambhus17/Campaign/releases/tag/1.4.0). The README button uses `https://github.com/tejassambhus17/Campaign/releases/latest` so it opens the latest published release without guessing an asset filename. Private repository downloads require access. This media pass has not authenticated the release's assets or recipient permissions.
 
-The prepared local artifact is `artifacts/dropdown-hierarchy-20261018/Campaign.apk`, version **1.4.0 / code 10**, **68,811,090 bytes**, ARM64 and x86_64, signed with the dedicated Campaign release certificate. It was not rebuilt or modified.
-
-SHA-256:
+**1.5.1 / code 12 is the new prepared local build**, separate from the published 1.4.0 release. The final handoff is `artifacts/final-submission-20261019/Campaign.apk`, **68,616,866 bytes**. SHA256:
 
 ```text
-cb08edf303ba6eb7b9720f21be4e2879c8179cdb7d19eccfac91024908953397
+928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60
 ```
 
-After the owner publishes or confirms the release with an asset named `Campaign.apk`, change the README download button and installation link to `/tejassambhus17/Campaign/releases/latest/download/Campaign.apk`. A release page link can use `/tejassambhus17/Campaign/releases/latest`. Test access as the intended recipient; private GitHub assets are not public judge downloads. No publication or repository visibility change is authorized by this README task.
+Its build receipt is beside `artifacts/android/final-submission-confirmed-20261019/campaign-1.5.1-RELEASE-arm64-x86_64.apk`. The gallery manifest records the exact APK, dedicated signing fingerprint, build receipt, and source freeze. Source and README changes can be reviewed together; the ignored APK must be uploaded separately as a GitHub Release asset when the owner authorizes publication.
+
+The APK retains package `com.campaignamplification.mobile`, Campaign branding, ARM64+x86_64 support, embedded Hermes, and the configured HTTPS backend. Release signing does not imply Google Play certification. Preserve installed app data if Android reports an incompatible signing certificate; do not uninstall or clear storage to force an update.
+
+For a direct download, use `https://github.com/tejassambhus17/Campaign/releases/latest/download/Campaign.apk` only when the uploaded asset is named exactly `Campaign.apk`. Otherwise copy the actual asset URL. A private GitHub release is not a public judge download. No new release upload or visibility change is included in this handoff.
 
 ## Demo video
 
-A public/shareable video URL is still needed. The existing local film is `artifacts/delivery/Campaign-1.2.3/Campaign-demo.mp4`, duration **248.433333 seconds**, 12,780,503 bytes. It predates the current 1.4.0 interface refinements. No new video was generated, recorded, uploaded, or described as current-build footage.
+A shareable video URL is still needed. The existing local film is `artifacts/delivery/Campaign-1.2.3/Campaign-demo.mp4`, duration 248.433333 seconds, 12,780,503 bytes, SHA256 `8d9a30295aa1eb36394964249888e320cf92c263997cbf69109c0356ef83d9bc`.
 
-SHA-256:
+That film predates the 1.5.1 interface and Creator Studio/readiness/suggestion improvements. The README qualifies it as earlier footage and has no invented video-hosting link. No recording or upload was performed by this media pass.
 
-```text
-8d9a30295aa1eb36394964249888e320cf92c263997cbf69109c0356ef83d9bc
-```
+## Screenshot gallery
 
-Provide a recipient-accessible video URL when ready. The README deliberately has no empty video link, invented hosting address, or link to an ignored local MP4. Keep the earlier-build qualification if using this film.
+The homepage uses **20 actual native Android screenshots** in five galleries of four, plus the unchanged approved logo. All screenshot image paths are relative under `docs/screenshots/`, outside the ignored artifact tree.
 
-## Screenshot evidence
+The final capture set covers Welcome, Home, Explore, campaign details, five creation steps, Readiness Assistant, rule-based suggestions, instant preview, Trust & Verification, simulated contribution, reports, Activity, Creator Studio, and Profile in Dark/Light. All gallery captures are attributed to the exact same signed 1.5.1/code 12 APK; previous1.4.0 and earlier Welcome images are replaced. Nineteen use `Campaign_Studio_36` (`emulator-5574`); fresh Welcome uses `Campaign_Submission_Auth_36` (`emulator-5578`). Both are owned isolated Android 16 / API 36 x86_64 emulators. These captures do not establish physical-device or unfamiliar-user acceptance. Screenshot appearance alone does not prove swipes, saving, submission, or every workflow.
 
-The homepage has **16 actual native Android captures** in four galleries, plus the approved logo. All published image paths are relative and live in [screenshots](screenshots/README.md), outside the ignored `artifacts/` tree. Screenshot content, values, names, notifications, and UI were not retouched.
+Values, notification content, names, and UI are preserved as captured from isolated QA/demo data. Screenshots are proportionally resized, not cropped or retouched. The polished Creator Studio illustration is a bundled decorative asset visible in the actual app, not a generated screenshot or invented dashboard statistic.
 
-- Seven captures are from the exact final 1.4.0 APK.
-- Eight are from its same-version initial QA candidate before the shared information-sheet keyboard fix. Their captions carry `²`.
-- Welcome is an earlier verified 1.2.2 capture, clearly marked `¹`; no 1.4.0 Welcome capture exists in the final evidence packet. Its auth/carousel source and associated brand/photo assets are unchanged in the preserved 1.2.3-to-1.4.0 source comparison. This does not establish new runtime verification.
+The 20 optimized JPEGs total **1,699,089 bytes** versus **9,478,219 bytes** of original PNGs, about 82% smaller. All have been visually opened for gallery review. Documentation validation passes 21/21 checks, including all 149 frozen application inputs with zero drift. All 13 public badge/documentation URL requests pass; private GitHub release assets and recipient access remain unauthenticated by this media check.
 
-The current packet lacks a final-binary Welcome capture and exact-final normal-text editor/checkout/trust captures. Existing verified evidence is used transparently; no screenshots were fabricated and no device was accessed. A fresh capture pass, if requested later, can replace those assets without changing gallery paths.
+## Reproduction and checks
 
-## Verification and reproduction
+- [Capture provenance](screenshots/manifest.json): exact PNG/XML paths and hashes, output dimensions/sizes, APK identity, source freeze and build receipt.
+- [Screenshot guide](screenshots/README.md): processing rules and verification scope.
+- [Validation results](screenshots/verification.json): local links, anchors, gallery structure, output/source hashes, EXIF removal, build/source binding and optional public URL requests.
+- `screenshots/prepare_assets.py`: generates the 20 JPEGs only after every final PNG/XML and matching release receipt exist. It requires explicit confirmed APK hash; no app/device/cloud action.
+- `screenshots/validate_readme.py`: renders a local GitHub-style review HTML and checks documentation/assets. Optional `--check-network` checks public badges/documentation URLs; private release access stays a separate authenticated check.
 
-- [Asset provenance](screenshots/manifest.json) records original paths, source/output hashes, dimensions, sizes, and APK identity.
-- [Validation results](screenshots/verification.json) distinguish local link/image/source checks from network access limitations.
-- `screenshots/prepare_assets.py` reproduces resized images from preserved local evidence with Pillow.
-- `screenshots/validate_readme.py` checks local paths, anchors, gallery structure, image hashes/dimensions, and frozen app source. It uses the bundled `markdown_it` parser for the static review HTML. Optional `--check-network` checks only the README's public badge/documentation URLs.
+A normal Git clone includes the optimized gallery. Reproduction needs the ignored original capture/build evidence preserved on this workstation. Static preview validation does not replace GitHub's own renderer, native QA, physical testing, or release download acceptance.
 
-The Impeccable typography/hierarchy and craft-floor references were followed manually. Its context engine could not run because the installed engine/cache was unavailable; no engine audit or Product Design workflow execution is claimed.
+## Publication items still pending
 
-## Owner-provided links still needed
+1. Owner-authorized upload of the new `Campaign.apk` as a release asset, then recipient download/access verification.
+2. A recipient-accessible demo-video URL with the recorded build clearly identified.
+3. External organizer submission approval and destination.
 
-1. Confirmed latest GitHub Release containing `Campaign.apk`, with recipient download access.
-2. Shareable demo-video URL, clearly identifying the recorded build.
-
-Only documentation and supporting image assets are prepared here. Commit/push, release upload, video publication, and organizer submission remain separate actions.
+No commit, push, release upload, video publication, repository visibility change, or organizer submission is performed by this media pass.

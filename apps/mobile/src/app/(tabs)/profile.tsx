@@ -16,6 +16,7 @@ import {
   useConfig,
   useMe,
   useSession,
+  useActivity,
 } from "../../lib/session";
 import {
   Accordion,
@@ -35,9 +36,11 @@ import {
 } from "../../components/ui";
 import { AuthForm } from "../../features/auth";
 import { Reviewer } from "../../features/reviewer";
-import { ProfilePhoto, ProfilePhotoEditor } from "../../features/profile/Photo";
+import { ProfilePhotoEditor } from "../../features/profile/Photo";
 import { useWalkthrough } from "../../features/walkthrough/Walkthrough";
 import { MyCampaigns } from "../../features/profile/MyCampaigns";
+import { CreatorStudio } from "../../features/profile/CreatorStudio";
+import { ProfileGroup, ProfileIdentity, ProfileMetrics, StudioInvitation } from "../../features/profile/ProfileOverview";
 import { InfoAction, InfoSheet, SummaryLink } from "../../components/Information";
 import { profileEntry, profileSection, publicProfileSection, ProfileSection } from "../../lib/profile-navigation";
 const information: Record<string, string> = {
@@ -62,7 +65,7 @@ const information: Record<string, string> = {
 const sectionTitles: Record<ProfileSection, string> = {
   Overview: "Profile", Created: "My Campaigns", Backed: "Backed Campaigns", Saved: "Saved Campaigns",
   Payments: "Payment History", Notifications: "Notifications", Edit: "Account details",
-  Appearance: "Appearance", Currency: "Currency", Help: "Help & Support", Review: "Campaign Review",
+  Appearance: "Appearance", Currency: "Currency", Help: "Help & Support", Review: "Campaign Review", Studio: "Creator Studio",
 };
 
 export default function Profile() {
@@ -72,6 +75,7 @@ export default function Profile() {
   const session = useSession();
   const tour = useWalkthrough();
   const me = useMe();
+  const activity = useActivity();
   const campaigns = useCampaigns();
   const config = useConfig();
   const [section, setSection] = useState<ProfileSection>("Overview");
@@ -265,44 +269,38 @@ export default function Profile() {
           finally { setBusy(false); }
         })(); }} />
       </View>}
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 3 }}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Edit profile photo" onPress={() => open("Edit")}><ProfilePhoto size={64} user={me.data?.user || session.user} /></Pressable>
-        <View style={{ flex: 1, gap: 4 }}>
-          <Text accessibilityRole="header" style={[styles.h2, { fontSize: 20, lineHeight: 27 }]}>{me.data?.user.name || session.user.name}</Text>
-          <Text style={[styles.muted, { fontSize: 12, lineHeight: 17 }]}>{session.user.role === "reviewer" ? "Reviewer · Creator · Backer" : "Creator · Backer · Changemaker"}</Text>
-          <Pressable accessibilityRole="button" accessibilityLabel="Edit profile" onPress={() => open("Edit")} style={{ minHeight: 48, alignSelf: "flex-start", justifyContent: "center" }}>
-            <Text style={{ color: colors.green, fontFamily: fonts.semibold, fontSize: 13 }}>Edit Profile</Text>
-          </Pressable>
-        </View>
-      </View>
-      <View style={{ flexDirection: "row", gap: 8 }}>
-        {[{ label: "Campaigns", value: own.length, next: "Created" }, { label: "Backed", value: successfulCampaignIds.size, next: "Backed" }, { label: "Saved", value: me.data?.saved.length || 0, next: "Saved" }].map(metric => (
-          <Pressable key={metric.label} accessibilityRole="button" accessibilityLabel={`View ${metric.label.toLowerCase()}`} onPress={() => open(metric.next as ProfileSection)}
-            style={({ pressed }) => ({ flex: 1, minHeight: 56, borderRadius: 10, backgroundColor: pressed ? colors.mint : colors.subtle, alignItems: "center", justifyContent: "center", gap: 2, paddingVertical: 6, paddingHorizontal: 3 })}>
-            <Text style={{ fontFamily: fonts.bold, fontSize: 17, lineHeight: 23, fontVariant: ["tabular-nums"] }}>{me.data ? number(metric.value) : "—"}</Text>
-            <Text style={[styles.muted, { fontSize: 11, lineHeight: 16 }]}>{metric.label}</Text>
-          </Pressable>
-        ))}
-      </View>
+      <ProfileIdentity user={me.data?.user || session.user} onEdit={() => open("Edit")} />
+      <ProfileMetrics loaded={!!me.data} metrics={[
+        { label: "Campaigns", value: own.length, icon: "document-text-outline", onPress: () => open("Created") },
+        { label: "Backed", value: successfulCampaignIds.size, icon: "heart-outline", onPress: () => open("Backed") },
+        { label: "Saved", value: me.data?.saved.length || 0, icon: "bookmark-outline", onPress: () => open("Saved") },
+      ]} />
+      <StudioInvitation onPress={() => open("Studio")} />
       {!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}
       {!!appearanceError && <Notice tone="error">{appearanceError}</Notice>}
       {me.isError && <ErrorState error={me.error} retry={() => me.refetch()} />}
-      <View style={{ gap: 1 }}>
-        <AccountRow icon="people-outline" title="My Campaigns" onPress={() => open("Created")} />
-        <AccountRow icon="heart-outline" title="Backed Campaigns" onPress={() => open("Backed")} />
-        <AccountRow icon="card-outline" title="Payment History" onPress={() => open("Payments")} />
-        <AccountRow icon="bookmark-outline" title="Saved Campaigns" onPress={() => open("Saved")} />
-        <AccountRow icon="notifications-outline" title="Notifications" onPress={() => open("Notifications")} />
-        <AccountRow icon="contrast-outline" title="Appearance" onPress={() => open("Appearance")} />
-        <AccountRow icon="cash-outline" title="Currency" onPress={() => open("Currency")} />
-        <AccountRow icon="help-circle-outline" title="Help & Support" onPress={() => open("Help")} />
-        {session.user.role === "reviewer" && <AccountRow icon="shield-checkmark-outline" title="Campaign Review" onPress={() => open("Review")} />}
-      </View>
-      <Button title="Sign out" variant="secondary" icon="log-out-outline" loading={busy} onPress={() => { void signOut(); }} />
+      <ProfileGroup>
+        <AccountRow icon="document-text-outline" title="My Campaigns" description="View and manage your campaigns" separator onPress={() => open("Created")} />
+        <AccountRow icon="heart-outline" title="Backed Campaigns" description="Campaigns you have supported" tone="red" separator onPress={() => open("Backed")} />
+        <AccountRow icon="bookmark-outline" title="Saved Campaigns" description="Campaigns you want to support" onPress={() => open("Saved")} />
+      </ProfileGroup>
+      <ProfileGroup>
+        <AccountRow icon="card-outline" title="Payment History" description="Your contributions and private receipts" tone="orange" separator onPress={() => open("Payments")} />
+        <AccountRow icon="notifications-outline" title="Notifications" description="Updates on campaigns and activity" badge={activity.data?.filter(item => !item.read).length} onPress={() => open("Notifications")} />
+      </ProfileGroup>
+      <ProfileGroup>
+        <AccountRow icon="contrast-outline" title="Appearance" description="Dark mode, light mode and system" separator onPress={() => open("Appearance")} />
+        <AccountRow icon="cash-outline" title="Currency" description="Your preferred display currency" tone="orange" separator onPress={() => open("Currency")} />
+        <AccountRow icon="help-circle-outline" title="Help & Support" description="Guidance, policies and the app tour" separator={session.user.role === "reviewer"} onPress={() => open("Help")} />
+        {session.user.role === "reviewer" && <AccountRow icon="shield-checkmark-outline" title="Campaign Review" description="Inspect submissions and review decisions" onPress={() => open("Review")} />}
+      </ProfileGroup>
+      <Pressable accessibilityRole="button" accessibilityLabel="Sign out" accessibilityState={{ disabled: busy }} disabled={busy} onPress={() => { void signOut(); }} style={({ pressed }) => ({ minHeight: 48, borderWidth: 1, borderColor: colors.red, backgroundColor: colors.errorSurface, borderRadius: 24, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, opacity: busy ? 0.5 : pressed ? 0.75 : 1 })}>
+        <Ionicons name="log-out-outline" size={20} color={colors.red} /><Text style={{ color: colors.red, fontSize: 13, fontFamily: fonts.semibold }}>{busy ? "Signing out…" : "Sign out"}</Text>
+      </Pressable>
     </View> : <>
       {heading}
       {!!message && <Notice tone={failed ? "error" : "success"}>{message}</Notice>}
-      {section === "Help" ? help : section === "Appearance" ? <AppearanceSettings /> : section === "Currency" ? <CurrencySettings /> : section === "Review" ? <Reviewer /> : me.isPending ? <Loading /> : me.isError ? <ErrorState error={me.error} retry={() => me.refetch()} /> : section === "Edit" ? <View style={{ gap: 20 }}>
+      {section === "Studio" ? <CreatorStudio key={session.user.id} userId={session.user.id} campaigns={own} accountLoading={me.isPending} accountError={me.isError ? me.error : null} onRetry={() => { void me.refetch(); }} onMyCampaigns={() => open("Created")} /> : section === "Help" ? help : section === "Appearance" ? <AppearanceSettings /> : section === "Currency" ? <CurrencySettings /> : section === "Review" ? <Reviewer /> : me.isPending ? <Loading /> : me.isError ? <ErrorState error={me.error} retry={() => me.refetch()} /> : section === "Edit" ? <View style={{ gap: 20 }}>
         <ProfilePhotoEditor key={`${getApiUrl()}:${session.user.id}`} user={me.data.user} />
         <Text style={styles.muted}>Your name appears on the campaigns you create. Backer names stay private by default.</Text>
         <Field label="Display name" value={name} onChangeText={setName} placeholder={me.data.user.name} autoComplete="name" maxLength={150} editable={!busy} />
@@ -333,10 +331,13 @@ export default function Profile() {
   </Screen>;
 }
 
-function AccountRow({ icon, title, onPress }: { icon: React.ComponentProps<typeof Ionicons>["name"]; title: string; onPress: () => void }) {
+function AccountRow({ icon, title, description, tone = "green", badge, separator = false, onPress }: { icon: React.ComponentProps<typeof Ionicons>["name"]; title: string; description?: string; tone?: "green" | "red" | "orange"; badge?: number; separator?: boolean; onPress: () => void }) {
   const { colors } = useTheme();
-  return <Pressable accessibilityRole="button" accessibilityLabel={title} onPress={onPress} style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, minHeight: 48, paddingVertical: 7, paddingHorizontal: 4, borderRadius: 9, backgroundColor: pressed ? colors.mint : "transparent" })}>
-    <Ionicons name={icon} size={20} color={colors.ink} /><Text style={{ flex: 1, fontSize: 13, lineHeight: 20, fontFamily: fonts.medium }}>{title}</Text><Ionicons name="chevron-forward" size={16} color={colors.muted} />
+  return <Pressable accessibilityRole="button" accessibilityLabel={badge ? `${title}, ${badge} unread` : title} onPress={onPress} style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 10, minHeight: description ? 52 : 48, paddingVertical: 6, paddingHorizontal: 1, borderBottomWidth: separator ? 1 : 0, borderColor: colors.line, borderRadius: 4, backgroundColor: pressed ? colors.mint : "transparent" })}>
+    <View accessible={false} style={{ width: 31, height: 34, borderRadius: 10, backgroundColor: colors.subtle, alignItems: "center", justifyContent: "center" }}><Ionicons name={icon} size={19} color={colors[tone]} /></View>
+    <View style={{ flex: 1, minWidth: 0, gap: 2 }}><Text style={{ fontSize: 12, lineHeight: 19, fontFamily: fonts.medium }}>{title}</Text>{!!description && <Text style={{ color: colors.muted, fontSize: 10, lineHeight: 16 }}>{description}</Text>}</View>
+    {!!badge && badge > 0 && <View style={{ backgroundColor: colors.primary, minWidth: 23, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 12, alignItems: "center" }}><Text style={{ color: colors.onPrimary, fontSize: 10, lineHeight: 15, fontFamily: fonts.bold }}>{badge > 99 ? "99+" : badge}</Text></View>}
+    <Ionicons name="chevron-forward" size={16} color={colors.muted} />
   </Pressable>;
 }
 

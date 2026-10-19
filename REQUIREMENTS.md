@@ -1,5 +1,51 @@
 # Requirements and verification matrix
 
+## October19 final QA supplement —1.5.1 / code 12
+
+The PDF baseline and five-step order remain unchanged. Readiness uses existing validation; optional recommendations remain nonblocking. Rule suggestions require explicit apply/dismiss and no AI API. Preview reads unsaved current draft. Profile/Studio uses existing scoped data. Final regressions protect editing snapshots while account writes run, preserve goal display/currency state when edits are refused, and correct draft-status wording.
+
+**VERIFIED within recorded scope:**439 frontend and74 disposable SQLite API tests, TypeScript/full ESLint,28APK package checks and149frozen inputs. Current dedicated-signed [Campaign.apk](artifacts/final-submission-20261019/Campaign.apk) is1.5.1 / code 12,68,616,866 bytes, SHA-256 `928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60`. Fresh native screenshots/interaction cases and performance limitations are tracked in [the final check](docs/FINAL_SUBMISSION_CHECK.md). Whole-app, physical release and human acceptance are not implied. No mandatory PDF information or business rule was removed.
+
+## October19 creator assistance and Profile/Studio — 1.5.0/code11 scoped supplement
+
+The original PDF baseline below is preserved. This frontend update adds the
+requested assistance and dashboard presentation without new backend/API rules,
+AI services, accounting changes or production-data changes. Verification is
+bounded to the recorded source/package and per-binary native cases.
+[Implementation and limits](docs/CREATOR_STUDIO.md),
+[delivery report](artifacts/creator-studio-20261019/README.md) and
+[native visual review](artifacts/creator-studio-20261019/VISUAL_REVIEW.delivery.md).
+
+| Area | Current status | Preserved requirements and verification limits |
+| --- | --- | --- |
+| PDF9–12 Review & Submit readiness | IMPLEMENTED; source VERIFIED | Completed/missing/recommended groups navigate to existing fields. Recommendations add no blockers or Trust Score; existing validation and review gate remain authoritative. |
+| PDF9–10 editable writing assistance | IMPLEMENTED; source VERIFIED | Deterministic Basics/Story rules support explicit apply/dismiss, preserve supplied claims and source links, and refuse stale overwrites. No AI/network integration. |
+| PDF10–12 preview and creation continuity | IMPLEMENTED; source VERIFIED | Preview reads current unsaved draft through existing components. Moving five-step rail, backward state, autosave/resume, title60, separate media and creator-set Submit goal remain. |
+| Existing account/creator workflows | IMPLEMENTED; source VERIFIED | Premium grouped Profile and Studio use actual account/scoped draft data, review states and funding progress; guest/auth isolation, photo editing, direct preferences, parent Back and Sign out remain. New transparent high-resolution Studio art, clean Light header and adaptive text are presentation changes. |
+
+Current source checks: **434 frontend tests pass**, TypeScript and full
+source/plugin ESLint pass. Final dedicated-signed ARM64+x86_64
+[Campaign.apk](artifacts/creator-studio-20261019/Campaign.apk) is 1.5.0/code11,
+68,616,686 bytes; SHA256
+`1d641f7126af94962a7da89cf8f06adba3247d4b359ce2417afc6f7c606420c4`.
+28/28 package checks and 149 frozen-input comparisons pass. The owned
+Campaign_Studio_36 emulator on ADB5039/emulator-5574 received the compatible
+same-key update, cold-launched in 1517 ms without Metro/reverse and retained the QA
+identity/device draft. Named final checks cover Dark/Light Profile/HQ art, clean
+Light header, 130%/200% text/adaptive feature strip, actual Studio counts,
+draft-goal presentation and Resume to Step 5 readiness (57%, goal 125). The task
+report records the exact scope of additional preview/field-target checks.
+
+Broader initial-candidate all-five-step preview, suggestion apply/dismiss and
+readiness goal/policy/source cases remain bound to that APK. The 18 unchanged
+creation inputs across four freezes are documented in
+[SOURCE_CHANGE_PHASES.json](artifacts/creator-studio-20261019/SOURCE_CHANGE_PHASES.json);
+they do not establish repeated final-binary interaction testing. Physical release
+acceptance remains pending because the POCO has an incompatible Debug signer;
+human usability testing remains pending because no unfamiliar tester is
+available. No phone action/data wipe, backend/cloud rollout, AI API, production
+data change, push, new recording or submission is part of this verification.
+
 ## October18 information hierarchy — scoped verification supplement
 
 The PDF baseline is preserved. PDF9 Basics optional cover remains accessible there; exact five steps/title60/creator-set Submit goal, public story sources and editable drafts remain. PDF12–15 financial, audience, review/simulation and source limitations are reorganized into reachable views, without changed values or requirements. IMPLEMENTED and VERIFIED only within [named source/native cases](artifacts/dropdown-hierarchy-20261018/README.md); [per-control verification](artifacts/dropdown-hierarchy-20261018/VERIFICATION_MATRIX.md) identifies retained/conditional/unverified states.398 tests, TypeScript/ESLint and20 package checks pass; physical/human/full-lifecycle acceptance remains pending. No baseline, assessment, database or provider state was regenerated.

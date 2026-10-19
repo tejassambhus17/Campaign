@@ -7,6 +7,7 @@ import {
   BackHandler,
   findNodeHandle,
   Image,
+  Keyboard,
   Platform,
   Pressable,
   ScrollView,
@@ -69,6 +70,7 @@ import { CampaignCoverControls, CampaignMediaSections } from "../../features/cre
 import { IMAGE_UPLOAD_HINT, uploadedMediaPatch, validatePickedImage } from "../../features/creation/media";
 import { DraftIssue, submissionIssues } from "../../features/creation/readiness";
 import { SubmissionChecklist } from "../../features/creation/SubmissionChecklist";
+import { WritingSuggestions, useWritingSuggestionDismissals } from "../../features/creation/WritingSuggestions";
 import { accountDraftToken, AccountSaveState, draftSaveLabel, localDraftToken, LocalSaveState, mergeAccountSaved, writeLocalSnapshot } from "../../features/creation/persistence";
 
 type ActiveDraft = LocalDraft & { scope: string };
@@ -211,7 +213,7 @@ export default function CreateScreen() {
   const { money } = useCurrency();
   const { colors, styles } = useTheme();
   const local = makeLocalStyles(colors);
-  const { fontScale } = useWindowDimensions();
+  const { width, fontScale } = useWindowDimensions();
   const { user, ready } = useSession();
   const config = useConfig();
   const me = useMe();
@@ -538,6 +540,9 @@ export default function CreateScreen() {
   );
 
   function change(patch: Partial<Campaign>) {
+    // Native IME events can already be queued when the visible form locks.
+    // Reject them synchronously before an account request captures its result.
+    if (cloudLock.current) return;
     setActive((previous) =>
       previous
         ? {
@@ -677,6 +682,7 @@ export default function CreateScreen() {
     const snapshot = active;
     const operationScope = scope;
     cloudLock.current = true;
+    Keyboard.dismiss();
     setBusy(true);
     setFailure("");
     setNotice("");
@@ -771,6 +777,7 @@ export default function CreateScreen() {
       return;
     }
     cloudLock.current = true;
+    Keyboard.dismiss();
     setBusy(true);
     setFailure("");
     setNotice("");
@@ -892,6 +899,7 @@ export default function CreateScreen() {
   }
 
   function applyAssistance() {
+    if (cloudLock.current) return;
     if (!active || !assistance.idea.trim()) return;
     const draft = active.draft;
     const text = assistance.idea.trim();
@@ -961,6 +969,7 @@ export default function CreateScreen() {
   }
 
   function updateAssistance(values: Assistance) {
+    if (cloudLock.current) return;
     setAssistance(values);
     setActive((previous) =>
       previous
@@ -973,6 +982,7 @@ export default function CreateScreen() {
     );
   }
   function manualMode() {
+    if (cloudLock.current) return;
     setMode("edit");
     setActive((previous) =>
       previous
@@ -1018,6 +1028,8 @@ export default function CreateScreen() {
 
   const working = active?.scope === scope ? active : null;
   const draft = working?.draft;
+  const writingDraftKey = working ? `${working.scope}:${working.localId}` : `${scope}:none`;
+  const writingDismissals = useWritingSuggestionDismissals(writingDraftKey);
   useEffect(() => setEditingParagraphId(null), [working?.localId]);
   const primaryParagraph = draft?.sections.find((section) => section.kind === "text" && section.id === editingParagraphId) || draft?.sections.find((section) => section.kind === "text");
   const primaryParagraphIndex = primaryParagraph ? draft!.sections.findIndex((section) => section.id === primaryParagraph.id) : -1;
@@ -1129,8 +1141,9 @@ export default function CreateScreen() {
               setPreview(true);
               scroll.current?.scrollTo({ y: 0, animated: false });
             }}
-            style={({ pressed }) => ({ width: 48, height: 48, alignItems: "center", justifyContent: "center", opacity: locked ? 0.45 : pressed ? 0.65 : 1 })}
-          ><Ionicons name="eye-outline" size={21} color={colors.muted} /></Pressable>
+            testID="creation-instant-preview"
+            style={({ pressed }) => ({ minWidth: 48, minHeight: 48, paddingHorizontal: 10, flexDirection: "row", gap: 6, alignItems: "center", justifyContent: "center", opacity: locked ? 0.45 : pressed ? 0.65 : 1 })}
+          ><Ionicons name="eye-outline" size={20} color={colors.green} />{width / fontScale >= 300 && <Text style={{ fontSize: 12, lineHeight: 18, fontWeight: "600", color: colors.green }}>Preview</Text>}</Pressable>
         )}
       </View>
     );
@@ -1433,7 +1446,13 @@ export default function CreateScreen() {
                     onApply={applyAssistance}
                   />
                 ) : preview ? (
-                  <CampaignPreview draft={draft} config={config.data} />
+                  <View testID="creation-live-preview" style={{ gap: 12 }}>
+                    <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 8, padding: 10, backgroundColor: colors.paper, borderRadius: 10 }}>
+                      <Ionicons name="eye-outline" size={18} color={colors.green} />
+                      <Text style={{ flex: 1, fontSize: 12, lineHeight: 18, color: colors.muted }}>Live draft preview · Includes your latest edits. Nothing is submitted or published.</Text>
+                    </View>
+                    <CampaignPreview draft={draft} config={config.data} />
+                  </View>
                 ) : (
                   <>
                     <View style={{ gap: 5, paddingTop: 2, paddingBottom: 2 }}>
@@ -1485,6 +1504,7 @@ export default function CreateScreen() {
                           style={{ minHeight: 88 }}
                           hint={`${draft.summary.length}/2000`}
                         />
+                        <WritingSuggestions draft={draft} step={0} draftKey={writingDraftKey} {...writingDismissals} onApply={change} onNavigate={target => jumpToIssue({ ...target, id: `writing:${target.field}`, title: "Writing suggestion", message: "Refine your message here. This suggestion is optional.", required: false })} disabled={locked} />
                         <SummaryLink compact title="Campaign cover" summary={draft.coverImage ? "Cover added · change or remove" : "Optional · add a campaign image"} icon="image-outline" onPress={() => setShowBasicsCover(true)} testID="creation-basics-cover" />
                         <InfoSheet visible={showBasicsCover} title="Campaign cover" onClose={() => setShowBasicsCover(false)} testID="creation-basics-cover-sheet">
                           <CampaignCoverControls draft={draft} disabled={locked} onUpload={() => { setShowBasicsCover(false); requestAnimationFrame(() => { if (user) void upload("cover"); else void signIn(); }); }} onChange={change} />
@@ -1508,7 +1528,7 @@ export default function CreateScreen() {
                           }
                           placeholder="The headline of your article"
                         />
-                        <Field
+                        <TargetField target="intro"
                           label="Introduction"
                           value={draft.intro}
                           multiline
@@ -1518,6 +1538,7 @@ export default function CreateScreen() {
                         />
                         </View>
                         </View>
+                        <WritingSuggestions draft={draft} step={1} draftKey={writingDraftKey} {...writingDismissals} onApply={change} onNavigate={target => jumpToIssue({ ...target, id: `writing:${target.field}`, title: "Writing suggestion", message: "Refine your story here. Use only details and sources you can support.", required: false })} disabled={locked} />
                         {draft.sections.map((section, index) => section.id === primaryParagraph?.id ? null : (
                           <View
                             key={section.id}
@@ -2033,9 +2054,11 @@ export default function CreateScreen() {
                     )}
                     {step === 4 && (
                       <>
+                        <SubmissionChecklist draft={draft} goalInput={working.goalInput} accepted={accepted} onSelect={jumpToIssue} />
                         <CampaignReviewSummary draft={draft} onEdit={(targetStep) => targetStep === 4 ? jumpToIssue({ id: "review-goal", step: 4, field: "goal", title: "Funding goal", message: "Choose the funding goal for your message.", required: false }) : changeStep(targetStep)} />
-                        <GoalAmountField key={working.localId} value={draft.goal} entry={working.goalEntry} editable={!fundingLocked} error={errors.goal}
+                        <GoalAmountField key={working.localId} value={draft.goal} entry={working.goalEntry} editable={!fundingLocked && !busy} saving={busy} error={errors.goal}
                           onChange={(raw, goalEntry) => {
+                              if (cloudLock.current) return false;
                               setActive((previous) =>
                                 previous
                                   ? {
@@ -2088,7 +2111,6 @@ export default function CreateScreen() {
                           </View>
                           <Text style={local.secondary}>Illustrative reach · {config.data.peoplePerAdDollar} people per advertising dollar after fees. Actual results vary.</Text>
                         </View> : <Notice>Current fees and reach estimates are unavailable. Connect to load funding policies before submitting; your draft can still be edited and saved.</Notice>}
-                        <SubmissionChecklist issues={submissionIssues(draft, working.goalInput, accepted)} onSelect={jumpToIssue} />
                         <SummaryLink compact title="Complete campaign preview" summary="Review the campaign page, ad and funding plan" icon="eye-outline" onPress={() => { setPreview(true); scroll.current?.scrollTo({ y: 0, animated: false }); }} testID="creation-complete-preview" />
                         {config.isLoading ? (
                           <ActivityIndicator
@@ -2118,6 +2140,7 @@ export default function CreateScreen() {
                           accessibilityRole="checkbox"
                           accessibilityState={{ checked: accepted }}
                           onPress={() => {
+                            if (cloudLock.current) return;
                             setAccepted(!accepted);
                             setErrors((previous) => ({
                               ...previous,

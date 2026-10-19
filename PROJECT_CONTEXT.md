@@ -1,5 +1,80 @@
 # Campaign Amplification Hackathon: project context
 
+**D50 — October19: final release QA,1.5.1 / code 12.** The final frontend correction synchronously locks incoming editor/goal/consent changes during accepted asynchronous save/submission requests, dismisses the keyboard and lets child goal state reject a refused parent edit. Existing snapshot/merge/scoping rules remain. Account-only drafts use truthful Account labeling. No new backend architecture, dependency or financial rule is introduced. The four creator features, high-quality alpha Studio artwork and adaptive Light/font layout remain.
+
+Current [signed APK](artifacts/final-submission-20261019/Campaign.apk) is68,616,866 bytes, SHA-256 `928e6690df3f40198dcbd4f4cb3bbeb2cfdb195b2becc2902185a2c6f6006e60`;439 frontend/74 isolated SQLite API tests, TypeScript/full ESLint and28 package checks pass,149 source inputs match. Same-key emulator installation/cold launch 1888ms retains local state without Metro/reverse. [Final evidence and bounded acceptance](docs/FINAL_SUBMISSION_CHECK.md). Physical/human/sustained phone-performance checks remain pending. Source/README/screenshots are prepared for one owner commit; APK publication remains a separate release upload. No live rollout or schema/data change occurred.
+
+**D49 — October19: creation assistance and reference-led Profile/Creator Studio.**
+Four frontend improvements extend the existing editor and account data rather
+than replacing their architecture. Review & Submit derives completed, missing
+and recommended checklist groups from the existing validators and links to
+specific fields. Optional recommendations remain nonblocking; the percentage
+describes drafting checks, not trust or approval. Basics/Story writing rules
+offer explicit apply/dismiss, reuse supplied text, preserve unrelated fields and
+reject stale edits without an AI API or invented factual sources. Instant preview
+uses the current in-memory draft throughout the five manual-editor steps without
+requiring saving or submission. The connected moving icon rail, exact five-step
+order, 60-character title and creator-set Submit goal remain.
+
+Profile adopts the supplied grouped identity/metrics/Studio composition while
+retaining the Guest profile, avatar editing, direct Appearance/Currency,
+Notifications, parent Back and final Sign out. Studio combines existing `/me`
+records with the established account-scoped device draft library, deduplicates
+linked IDs and preserves local editing/resume data while presenting current
+account review/financial metadata. Funding remains separate from ad delivery.
+The invitation uses new high-resolution transparent artwork; Light has a clean
+header and increased text sizes receive adaptive composition. No backend/API,
+AI-service, accounting, deployment or user-data change is part of this work.
+
+Final [Campaign.apk](artifacts/creator-studio-20261019/Campaign.apk) is
+**1.5.0/code11**, 68,616,686 bytes, dedicated same-key ARM64+x86_64 release;
+SHA-256 `1d641f7126af94962a7da89cf8f06adba3247d4b359ce2417afc6f7c606420c4`.
+434 frontend tests, TypeScript/full source-plugin ESLint and 28/28 package checks
+pass; no drift exists among 149 frozen inputs. The recreated owned
+Campaign_Studio_36 API36 x86_64 AVD uses dedicated ADB5039 / emulator-5574.
+Its compatible update/cold launch took 1517 ms without Metro/reverse, preserving
+the QA identity and device draft. Final named native checks confirm Dark/Light
+Profile, HQ art/clean Light header, 130%/200% adaptive text/two-column feature
+strip, actual Studio counts/draft goal and Resume to Step 5 readiness (57%, goal 125).
+The task report records the exact scope of additional preview/target checks separately.
+
+Broader first-candidate five-step preview, suggestion apply/dismiss and readiness
+goal/policy/source interactions retain their original binary scope. All 18
+creation inputs match across four freezes; identical source does not mean every
+case was rerun on the delivery APK.
+[Implementation](docs/CREATOR_STUDIO.md),
+[delivery report](artifacts/creator-studio-20261019/README.md),
+[visual review](artifacts/creator-studio-20261019/VISUAL_REVIEW.delivery.md) and
+[source phases](artifacts/creator-studio-20261019/SOURCE_CHANGE_PHASES.json).
+Physical acceptance remains pending because the preserved POCO has an
+incompatible Debug signer; human testing remains pending with no tester
+available. No phone action/data wipe, backend/cloud/production-data change,
+AI API, push, new recording or external submission occurred.
+
+**D48 — October19: emulator storage cleanup with rebuild capability retained.**
+The user explicitly requested cleanup after the 54 GiB inventory and explanation
+that virtual-device data is unnecessary for APK compilation. Eight Campaign AVDs
+and 75 isolated Metro build-cache folders were removed, 105,042 files/40.153 GiB
+logical contents, with 39.931 GiB observed free-space increase and no failed
+targets. Workspace size is 13.893 GiB. The sole running Campaign_Release_36 emulator
+was identified and gracefully closed on its dedicated 5039/5574 transport. 274
+preserved hashes passed, including build tools and dedicated signing files;
+source/current APK/screenshots/keys/backups/phone/server data/Git remain.
+Existing native checks are historical; a fresh AVD is required for future native
+testing. Future compilation can regenerate caches through the existing build
+workflow, potentially requiring internet. No APK rebuild or new runtime claim.
+
+**D47 — October19: authorized generated-artifact cleanup.** The user's explicit
+cleanup request supersedes prior historical-APK retention for the reviewed local
+manifest. 49,875 generated files were removed, with 16.219 GiB logical contents removed and a 15.126 GiB observed
+free-space increase, with no failed targets. The signed 1.4.0 APK, latest native
+screenshots, README gallery/source captures, final demo/report PDFs, approved
+references, metadata evidence, source and Git history remain. 249 preservation
+hash checks passed, including all 203 frozen application inputs; 15 README checks
+pass. No build, runtime/device check, cloud change, key/data/emulator wipe or push
+occurred. Old generated-artifact links can be historical only; exact retained
+paths and limitations are in `docs/WORKSPACE_CLEANUP.md`.
+
 **D46 — October 18: app-wide information hierarchy.** The newest
 Before/After reference replaces repeated public-information accordion stacks
 with compact icon/summary/chevron destinations and bounded native contextual

@@ -1,5 +1,22 @@
 # Campaign: product contract
 
+## Creator assistance and Studio
+
+Creation exposes current-draft preview across all five steps, optional local
+writing suggestions in Basics/Story, and validator-derived readiness at Submit.
+Readiness distinguishes missing requirements from recommendations and takes the
+creator to the relevant field. It is not a Trust Score or approval prediction.
+Suggestions use deterministic local rules and explicit editable proposals; no AI
+service or generated factual claims are involved.
+
+Profile's Creator Studio combines existing account campaigns with the same
+account-scoped local drafts used by Create. Linked copies count once. Current
+server lifecycle/review/funding metadata informs presentation while local edits
+and resume destinations remain intact. Draft goals are labelled as draft goals;
+funding never implies ad delivery. Profile keeps real identity, photo editing,
+grouped destinations and Sign out, with direct Appearance/Currency and no
+Settings screen. [Details and verification limits](docs/CREATOR_STUDIO.md).
+
 ## Current information hierarchy
 
 Use the approved compact Campaign transparency destinations for Audience & Reach, Funding & Spending and Trust & Verification. Short context/options belong in bounded native sheets; substantial report/evidence/accounting information has focused views. Keep genuine FAQs/guarded editor groupings compact inline. Required fields, complete public sources, policy consent, real selectors and actual financial/simulation/privacy/review qualifications remain. Profile retains direct Appearance/Currency/Notifications, with no Settings screen. See [current evidence and limits](artifacts/dropdown-hierarchy-20261018/README.md).
