@@ -31,11 +31,7 @@
 ## Download Android APK
 
 <p>
-<<<<<<< HEAD
   <a href="https://github.com/tejassambhus17/Campaign/releases/tag/1.4.0"><img alt="Download Android APK — open GitHub Releases" src="https://img.shields.io/badge/Download_Android_APK-GitHub_Releases-98F1CA?style=for-the-badge&amp;logo=android&amp;logoColor=98F1CA&amp;labelColor=202624"></a>
-=======
-  <a href="https://github.com/tejassambhus17/Campaign/releases/tag/1.5.1"><img alt="Download Android APK — open the latest GitHub Release" src="https://img.shields.io/badge/Download_Android_APK-GitHub_Releases-98F1CA?style=for-the-badge&amp;logo=android&amp;logoColor=98F1CA&amp;labelColor=202624"></a>
->>>>>>> 9111ca6 (New features implemented and readme updated)
 </p>
 
 **Source and gallery: 1.5.1 · build 12 · 68.6 MB.** This version adds campaign readiness guidance, writing suggestions, instant preview, and Creator Studio. The download button opens the latest **published GitHub Release**; check its version there. Pushing source does not upload the APK—attach the new APK separately as a release asset.
